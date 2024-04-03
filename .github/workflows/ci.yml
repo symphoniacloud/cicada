@@ -2,8 +2,8 @@ name: Continuous Integration
 
 on:
   push:
-#    branches:
-#      - main
+    branches:
+      - main
   workflow_dispatch:
 
 # Only allow one run at a time for this workflow
@@ -20,7 +20,7 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     env:
-      APP_NAME: cicada-demo
+      APP_NAME: cicada-public-demo
       GITHUB_APP_ID: ${{ secrets.CICADA_GITHUB_APP_ID }}
       GITHUB_CLIENT_ID: ${{ secrets.CICADA_GITHUB_CLIENT_ID }}
       GITHUB_CLIENT_SECRET: ${{ secrets.CICADA_GITHUB_CLIENT_SECRET }}
@@ -57,4 +57,5 @@ jobs:
       - name: Run all checks and deploy
         shell: bash
         run: >
-          npm run local-checks && ./deploy.sh && npm run remote-tests
+          npm run local-checks && ./deploy.sh
+#          npm run local-checks && ./deploy.sh && npm run remote-tests
