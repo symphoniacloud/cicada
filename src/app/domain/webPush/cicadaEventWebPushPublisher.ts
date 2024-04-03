@@ -1,0 +1,59 @@
+import { AppState } from '../../environment/AppState'
+import { logger } from '../../util/logging'
+import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
+import { publishToSubscriptionsForUsers } from './webPushPublisher'
+import { GithubWorkflowRunEvent, isGithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
+import { getRelatedMemberIdsForRunEvent, runWasSuccessful } from '../github/githubWorkflowRunEvent'
+import { isCicadaEventBridgeDetail } from '../../outboundInterfaces/eventBridgeBus'
+import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper'
+
+// TOEventually - these are going to create a lot of queries for subscription lookup for large organizations
+// May be better to have one table / index for this.
+
+export async function handleNewWorkflowRunEvent(appState: AppState, eventDetail: unknown) {
+  if (!isCicadaEventBridgeDetail(eventDetail) || !isGithubWorkflowRunEvent(eventDetail.data)) {
+    logger.error(
+      `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_WORKFLOW_RUN_EVENT} was not of expected format`,
+      { eventDetail }
+    )
+    return
+  }
+
+  const workflowRunEvent = eventDetail.data
+
+  await publishToSubscriptionsForUsers(
+    appState,
+    await getRelatedMemberIdsForRunEvent(appState, workflowRunEvent),
+    generateRunEventNotification(workflowRunEvent)
+  )
+}
+
+function generateRunEventNotification(workflowRunEvent: GithubWorkflowRunEvent): CicadaWebNotification {
+  const success = runWasSuccessful(workflowRunEvent)
+
+  return {
+    title: `${success ? '✅' : '❌'} ${workflowRunEvent.workflowName}`,
+    body: `Workflow ${workflowRunEvent.workflowName} in Repo ${workflowRunEvent.repoName} ${
+      success ? 'succeeded' : 'failed'
+    }`,
+    data: { url: workflowRunEvent.htmlUrl }
+  }
+}
+
+// TOEventually - add this back when notification preferences added
+// export async function handleNewPush(appState: AppState, eventDetail: unknown) {
+//   if (!isCicadaEventBridgeDetail(eventDetail) || !isGithubPush(eventDetail.data)) {
+//     logger.error(
+//       `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_PUSH} was not of expected format`,
+//       { commit: eventDetail }
+//     )
+//     return
+//   }
+//
+//   const push = eventDetail.data
+//
+//   await publishToSubscriptionsForUsers(appState, await getRelatedMemberIdsForPush(appState, push), {
+//     title: 'New Push',
+//     body: `New push to ${push.repoName}:${push.ref} by ${push.actor.login}`
+//   })
+// }

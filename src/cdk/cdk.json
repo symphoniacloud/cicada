@@ -1,0 +1,5 @@
+{
+  "app": "npx ts-node --prefer-ts-exts app.ts",
+  "output": "../../build/cdk.out",
+  "requireApproval": "never"
+}

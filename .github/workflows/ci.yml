@@ -1,0 +1,60 @@
+name: Continuous Integration
+
+on:
+  push:
+#    branches:
+#      - main
+  workflow_dispatch:
+
+# Only allow one run at a time for this workflow
+# See https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#concurrency
+# This workflow will only run once per this workflow name
+concurrency: ${{ github.workflow }}
+
+# Required because we are using OIDC
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: cicada-demo
+      GITHUB_APP_ID: ${{ secrets.CICADA_GITHUB_APP_ID }}
+      GITHUB_CLIENT_ID: ${{ secrets.CICADA_GITHUB_CLIENT_ID }}
+      GITHUB_CLIENT_SECRET: ${{ secrets.CICADA_GITHUB_CLIENT_SECRET }}
+      GITHUB_PRIVATE_KEY: ${{ secrets.CICADA_GITHUB_PRIVATE_KEY }}
+      WEB_PUSH_VAPID_PUBLIC_KEY: ${{ secrets.WEB_PUSH_VAPID_PUBLIC_KEY }}
+      WEB_PUSH_VAPID_PRIVATE_KEY: ${{ secrets.WEB_PUSH_VAPID_PRIVATE_KEY }}
+      WEB_PUSH_SUBJECT: ${{ secrets.WEB_PUSH_SUBJECT }}
+      CONFIG_ALLOWED_INSTALLATION_ACCOUNT_NAME: ${{ secrets.CICADA_CONFIG_ALLOWED_INSTALLATION_ACCOUNT_NAME }}
+      WEB_PARENT_DOMAIN_NAME: ${{ secrets.WEB_PARENT_DOMAIN_NAME }}
+      WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT: ${{ secrets.WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT }}
+      ENVIRONMENT_TYPE: prod
+      NO_HOTSWAP: 'true'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE }}
+          aws-region: us-east-1
+
+      - name: Install dependencies
+        shell: bash
+        run: >
+          npm install
+
+      - name: Run all checks and deploy
+        shell: bash
+        run: >
+          npm run local-checks && ./deploy.sh && npm run remote-tests

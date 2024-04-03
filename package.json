@@ -1,0 +1,63 @@
+{
+  "name": "cicada",
+  "version": "2022.2.0",
+  "homepage": "https://github.com/symphoniacloud/cicada",
+  "license": "MIT",
+  "author": {
+    "email": "mike@symphonia.io",
+    "name": "Mike Roberts",
+    "url": "https://symphonia.io"
+  },
+  "scripts": {
+    "local-checks": "npx tsc && npm run lint && npm run format && npm run local-tests",
+    "lint": "eslint --max-warnings=0 --fix-dry-run \"{src,test}/**/*.{js,ts}\"",
+    "format": "prettier --check \"{src,test}/**/*.{js,ts}\"",
+    "local-tests": "npx vitest run --dir test/local",
+    "remote-tests": "npx vitest run --dir test/remote --config test/remote/vitest.config.mts",
+    "pre-deploy-check": "npx tsc",
+    "deploy-configuration": "ts-node src/tools/deploySSMParams.ts",
+    "deploy-cdk": "cd src/cdk && npx cdk deploy",
+    "--COMMENT--": "-- \"$@\" below passes original parameters through to deploy-cdk",
+    "deploy": "npm run pre-deploy-check && npm run deploy-configuration && npm run deploy-cdk -- \"$@\"",
+    "generate-vapid-keys": "npx web-push generate-vapid-keys"
+  },
+  "devDependencies": {
+    "@tsconfig/node18": "1.x",
+    "@types/aws-lambda": "8.x",
+    "@types/deep-equal": "1.x",
+    "@types/node": "18.x",
+    "@types/web-push": "3.x",
+    "@typescript-eslint/eslint-plugin": "5.x",
+    "@typescript-eslint/parser": "5.x",
+    "aws-cdk": "2.x",
+    "aws-cdk-lib": "2.x",
+    "constructs": "10.x",
+    "deep-equal": "2.x",
+    "eslint": "8.x",
+    "eslint-config-prettier": "8.x",
+    "prettier": "2.x",
+    "ts-node": "10.x",
+    "typescript": "4.x",
+    "vitest": "0.x",
+    "wscat": "5.x"
+  },
+  "dependencies": {
+    "@aws-lambda-powertools/logger": "2.x",
+    "@aws-lambda-powertools/parameters": "2.x",
+    "@aws-lambda-powertools/tracer": "2.x",
+    "@aws-sdk/client-dynamodb": "3.x",
+    "@aws-sdk/client-eventbridge": "3.x",
+    "@aws-sdk/client-lambda": "3.x",
+    "@aws-sdk/client-s3": "3.x",
+    "@aws-sdk/client-ssm": "3.x",
+    "@aws-sdk/lib-dynamodb": "3.x",
+    "@middy/core": "4.x",
+    "@octokit/auth-app": "6.x",
+    "@octokit/rest": "20.x",
+    "@symphoniacloud/dynamodb-entity-store": "1.x",
+    "ajv": "8.x",
+    "dotenv": "16.x",
+    "url-pattern": "1.x",
+    "web-push": "3.x"
+  }
+}

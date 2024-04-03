@@ -1,0 +1,42 @@
+[
+  {
+    "login": "cicada-test-user",
+    "id": 162360409,
+    "node_id": "U_kgDOCa1sWQ",
+    "avatar_url": "https://avatars.githubusercontent.com/u/162360409?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/cicada-test-user",
+    "html_url": "https://github.com/cicada-test-user",
+    "followers_url": "https://api.github.com/users/cicada-test-user/followers",
+    "following_url": "https://api.github.com/users/cicada-test-user/following{/other_user}",
+    "gists_url": "https://api.github.com/users/cicada-test-user/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/cicada-test-user/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/cicada-test-user/subscriptions",
+    "organizations_url": "https://api.github.com/users/cicada-test-user/orgs",
+    "repos_url": "https://api.github.com/users/cicada-test-user/repos",
+    "events_url": "https://api.github.com/users/cicada-test-user/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/cicada-test-user/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  {
+    "login": "mikebroberts",
+    "id": 49635,
+    "node_id": "MDQ6VXNlcjQ5NjM1",
+    "avatar_url": "https://avatars.githubusercontent.com/u/49635?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/mikebroberts",
+    "html_url": "https://github.com/mikebroberts",
+    "followers_url": "https://api.github.com/users/mikebroberts/followers",
+    "following_url": "https://api.github.com/users/mikebroberts/following{/other_user}",
+    "gists_url": "https://api.github.com/users/mikebroberts/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/mikebroberts/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/mikebroberts/subscriptions",
+    "organizations_url": "https://api.github.com/users/mikebroberts/orgs",
+    "repos_url": "https://api.github.com/users/mikebroberts/repos",
+    "events_url": "https://api.github.com/users/mikebroberts/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/mikebroberts/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+]

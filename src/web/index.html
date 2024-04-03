@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>Cicada</title>
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css'
+        integrity='sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu' crossorigin='anonymous'>
+</head>
+<body>
+<div class='container'>
+  <script>
+    const isLoggedIn = document.cookie
+      .split('; ')
+      .find((cookiePart) => cookiePart.startsWith('loggedIn='))
+      ?.split('=')[1] === 'true'
+    if (isLoggedIn) {
+      console.log("Logged in, changing to app page")
+      location.assign("/app.html")
+    }
+  </script>
+  <h2>Welcome to Cicada!</h2>
+  <p>
+    If you are a user for this installation of Cicada you can <a href='https://{{CICADA_WEB_HOST}}/auth/github/login'>login with your GitHub user here</a>.
+  </p>
+  <p>
+    If you are <b>not</b> a user for this installation, you can learn more about Cicada on <a href='https://github.com/symphoniacloud/cicada'>the GitHub project page</a>.
+  </p>
+</div>
+</body>
+</html>

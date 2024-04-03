@@ -1,0 +1,1 @@
+Code in this directory is used across multiple contexts, e.g. both CDK and in Lambda functions.
