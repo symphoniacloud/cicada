@@ -267,7 +267,7 @@ This will load more data from your GitHub account, but consider only GitHub Acti
 On each Cicada screen you'll see a "Manage Web Push Notifications" link - choosing this will allow you to subscribe for notifications.
 
 **IMPORTANT FOR IPHONE USERS** :
-On an iPhone you need to "install" Cicada as a Personal Web Application (PWA) first - you do this by adding it to your home screen via the "share" button. Open the PWA version of Cicada and then you should be able to subscribe for notifications.
+On an iPhone you need to "install" Cicada as a Progressive Web App (PWA) first - you do this by adding it to your home screen via the "share" button. Open the PWA version of Cicada and then you should be able to subscribe for notifications.
 
 At the moment notifications are all-or-nothing - you'll get notified of all GitHub Actions Workflow runs in your account. Eventually I'd like to have this be more configurable.
 
