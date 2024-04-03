@@ -57,5 +57,4 @@ jobs:
       - name: Run all checks and deploy
         shell: bash
         run: >
-          npm run local-checks && ./deploy.sh
-#          npm run local-checks && ./deploy.sh && npm run remote-tests
+          npm run local-checks && ./deploy.sh && npm run remote-tests
