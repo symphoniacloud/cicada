@@ -4,13 +4,14 @@ import { APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
 
 export type MinimalAPIGatewayProxyEvent = Pick<APIGatewayProxyEvent, 'path' | 'httpMethod'>
 
-export type CicadaHandler<TEvent extends MinimalAPIGatewayProxyEvent> = (
-  appState: AppState,
+export type CicadaHandler<TEvent extends MinimalAPIGatewayProxyEvent, TAppState> = (
+  appState: TAppState,
   event: TEvent
 ) => Promise<APIGatewayProxyResult>
 
-export interface Route<TEvent extends MinimalAPIGatewayProxyEvent> {
+// Most routes use the regular "AppState" type for app state, but others use a different type
+export interface Route<TEvent extends MinimalAPIGatewayProxyEvent, TAppState = AppState> {
   path: string
-  target: CicadaHandler<TEvent>
+  target: CicadaHandler<TEvent, TAppState>
   method?: 'GET' | 'POST' | 'DELETE'
 }
