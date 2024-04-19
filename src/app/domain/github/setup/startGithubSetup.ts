@@ -20,7 +20,6 @@ Cicada is already configured. <a href="/">Return to home</a>
 async function generateResponse(appState: GithubSetupAppState) {
   const { appName, webHostname, webhookCode, callbackState } = appState
 
-  // TODO - allow user to configure org name here, and dynamically update post url
   // TODO - CONFIG_ALLOWED_INSTALLATION_ACCOUNT_NAME can go away when we do so
 
   return generateFragmentViewResult(`<p>
@@ -31,7 +30,8 @@ async function generateResponse(appState: GithubSetupAppState) {
  <input type="submit" value="Start GitHub App Creation Process for PERSONAL ACCOUNT">
 </form>
 <h3>Setup Cicada for an <b>ORGANIZATION</b> account</h3>
-<form action="https://github.com/organizations/${appState.allowedAccountName}/settings/apps/new?state=${callbackState}" method="post">
+<input type="text" name="orgNameBox" id="orgNameBox"><br>
+<form id="orgForm" method="post">
  <input type="text" name="manifest" id="orgManifest" hidden="hidden"><br>
  <input type="submit" value="Start GitHub App Creation Process for ORGANIZATION ACCOUNT">
 </form>
@@ -55,7 +55,10 @@ async function generateResponse(appState: GithubSetupAppState) {
     }
   }) 
   document.getElementById("personalManifest").value = manifestConfig 
-  document.getElementById("orgManifest").value = manifestConfig 
+  document.getElementById("orgManifest").value = manifestConfig
+  document.getElementById("orgNameBox").addEventListener("input", () => {
+    document.getElementById("orgForm").action = "https://github.com/organizations/" + document.getElementById("orgNameBox").value + "/settings/apps/new?state=${callbackState}"
+  }) 
 </script>
 </p>`)
 }
