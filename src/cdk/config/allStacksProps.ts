@@ -14,7 +14,7 @@ export interface AllStacksProps extends StackProps, EnvironmentSettings {
   readonly randomizedValues: {
     readonly githubWebhookURLCode: string
     readonly githubWebhookSecret: string
-    readonly githubLoginCallbackState: string
+    readonly githubCallbackState: string
   }
 }
 
@@ -31,7 +31,7 @@ export async function createAllStacksProps(): Promise<AllStacksProps> {
     randomizedValues: {
       githubWebhookURLCode: await readOrGenerateGithubWebhookURLCode(appName),
       githubWebhookSecret: await readOrGenerateGithubWebhookSecret(appName),
-      githubLoginCallbackState: await readOrGenerateGithubLoginCallbackState(appName)
+      githubCallbackState: await readOrGenerateGithubCallbackState(appName)
     },
     ...calculateEnvironmentSettingsWithEnvironmentVariables()
   }
@@ -88,8 +88,8 @@ async function readOrGenerateGithubWebhookSecret(appName: string) {
 
 // We only want to generate this value one time, otherwise it will require resetting every time
 // and that slows down deployment. Consider a better option longer term
-async function readOrGenerateGithubLoginCallbackState(appName: string) {
-  const existingParam = await readFromSSMViaSDKInCDK({ appName }, SSM_PARAM_NAMES.GITHUB_LOGIN_CALLBACK_STATE)
+async function readOrGenerateGithubCallbackState(appName: string) {
+  const existingParam = await readFromSSMViaSDKInCDK({ appName }, SSM_PARAM_NAMES.GITHUB_CALLBACK_STATE)
   if (existingParam) {
     return existingParam
   }

@@ -18,6 +18,6 @@ test('basic web test', async () => {
   })
   expect(loginResponse.status).toEqual(302)
   expect(loginResponse.headers.get('Location')).toEqual(
-    `https://github.com/login/oauth/authorize?client_id=${githubConfig.clientId}&redirect_uri=https://${webHostName}/auth/github/callback&scope=user:email&state=${githubConfig.loginCallbackState}`
+    `https://github.com/login/oauth/authorize?client_id=${githubConfig.clientId}&redirect_uri=https://${webHostName}/auth/github/callback&scope=user:email&state=${githubConfig.githubCallbackState}`
   )
 })
