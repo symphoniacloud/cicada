@@ -122,7 +122,7 @@ test('view-repo', async () => {
   <hr />
   <p><a href='web-push.html'>Manage Web Push Notifications</a></p>
   <p><a href='/'>Back to home</a></p>
-  <p><a href='/auth/github/logout'>Logout</a></p>
+  <p><a href='/github/auth/logout'>Logout</a></p>
 </div>
 </body>
 </html>`)

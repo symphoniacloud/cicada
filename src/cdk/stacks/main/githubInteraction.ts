@@ -26,7 +26,7 @@ export function defineGithubInteraction(scope: Construct, props: GithubInteracti
   const githubApiResource = props.restApi.root.addResource('github')
 
   defineSetup(scope, props, githubApiResource)
-  defineAuth(scope, props)
+  defineAuth(scope, props, githubApiResource)
   defineScheduledCrawler(scope, props)
   defineWebhook(scope, props, githubApiResource)
   defineWebhookFunction(scope, props)
@@ -57,16 +57,15 @@ function defineSetup(scope: Construct, props: GithubInteractionProps, githubApiR
   )
 }
 
-function defineAuth(scope: Construct, props: GithubInteractionProps) {
+function defineAuth(scope: Construct, props: GithubInteractionProps, githubApiResource: Resource) {
   const lambdaFunction = new CicadaFunction(
     scope,
     cicadaFunctionProps(props, 'githubAuth', {
       tablesReadAccess: ['github-users']
     })
   )
-  props.restApi.root
+  githubApiResource
     .addResource('auth')
-    .addResource('github')
     .addResource('{proxy+}')
     .addMethod(HttpMethod.GET, new LambdaIntegration(lambdaFunction))
 }

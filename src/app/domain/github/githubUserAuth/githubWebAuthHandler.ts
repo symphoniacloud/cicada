@@ -9,18 +9,18 @@ import { oauthCallback } from './oauthCallback'
 const router = createRouter([
   {
     // Login means redirecting the user's browser to GitHub, with a few configured values in the URL
-    path: '/auth/github/login',
+    path: '/github/auth/login',
     target: loginResponse
   },
   {
     // Once the user has performed the necessary UX with GitHub, GitHub redirects the user to here
     // A 'code' is provided on the URL which can be swapped by Cicada backend code for a user token
-    path: '/auth/github/callback',
+    path: '/github/auth/callback',
     target: oauthCallback
   },
   {
     // Logout doesn't actually touch Github
-    path: '/auth/github/logout',
+    path: '/github/auth/logout',
     target: logoutResponse
   }
 ])
@@ -35,7 +35,7 @@ export async function handleGitHubWebAuthRequest(
 export async function loginResponse(appState: AppState) {
   const webHostname = `${await appState.config.webHostname()}`
 
-  const redirectUri = `https://${webHostname}/auth/github/callback`
+  const redirectUri = `https://${webHostname}/github/auth/callback`
   const githubConfig = await appState.config.github()
   const githubClientId = githubConfig.clientId
   return foundRedirectResponse(

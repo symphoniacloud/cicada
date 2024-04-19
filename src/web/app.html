@@ -27,7 +27,7 @@
     document.getElementById('toplevel').addEventListener('htmx:responseError', (evt) => {
       if (evt?.detail?.xhr?.status === 403) {
         console.log('Unauthorized')
-        location.assign('/auth/github/logout')
+        location.assign('/github/auth/logout')
       }
       console.log(evt)
     })
@@ -39,7 +39,7 @@
   </div>
   <hr />
   <p><a href='web-push.html'>Manage Web Push Notifications</a></p>
-  <p><a href='/auth/github/logout'>Logout</a></p>
+  <p><a href='/github/auth/logout'>Logout</a></p>
 </div>
 </body>
 </html>

@@ -9,13 +9,13 @@ test('login', async () => {
     new FakeAppState(),
     createStubApiGatewayProxyEvent({
       httpMethod: 'GET',
-      path: '/auth/github/login'
+      path: '/github/auth/login'
     })
   )
 
   expect(response.statusCode).toEqual(302)
   expect(response.headers?.['Location']).toEqual(
-    'https://github.com/login/oauth/authorize?client_id=&redirect_uri=https://fake-cicada.example.com/auth/github/callback&scope=user:email&state=testCallbackState'
+    'https://github.com/login/oauth/authorize?client_id=&redirect_uri=https://fake-cicada.example.com/github/auth/callback&scope=user:email&state=testCallbackState'
   )
 })
 
@@ -66,7 +66,7 @@ test('oauthCallback', async () => {
     appState,
     createStubApiGatewayProxyEvent({
       httpMethod: 'GET',
-      path: '/auth/github/callback',
+      path: '/github/auth/callback',
       queryStringParameters: {
         code: 'testCallbackCode',
         state: 'testCallbackState'
@@ -91,7 +91,7 @@ test('failedOauthCallback', async () => {
     appState,
     createStubApiGatewayProxyEvent({
       httpMethod: 'GET',
-      path: '/auth/github/callback'
+      path: '/github/auth/callback'
     })
   )
 
@@ -115,7 +115,7 @@ test('failedOauthCallback', async () => {
   <hr />
   <p><a href='web-push.html'>Manage Web Push Notifications</a></p>
   <p><a href='/'>Back to home</a></p>
-  <p><a href='/auth/github/logout'>Logout</a></p>
+  <p><a href='/github/auth/logout'>Logout</a></p>
 </div>
 </body>
 </html>`)
@@ -126,7 +126,7 @@ test('logout', async () => {
     new FakeAppState(),
     createStubApiGatewayProxyEvent({
       httpMethod: 'GET',
-      path: '/auth/github/logout'
+      path: '/github/auth/logout'
     })
   )
 
@@ -143,7 +143,7 @@ test('invalidPath', async () => {
   const response = await handleGitHubWebAuthRequest(
     new FakeAppState(),
     createStubApiGatewayProxyEvent({
-      path: '/auth/github/other'
+      path: '/github/auth/other'
     })
   )
 

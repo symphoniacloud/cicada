@@ -137,7 +137,7 @@ You know when I said above that setup was annoyingly complicated? Don't say I di
    Homepage URL is required but only descriptive - so add anything that makes sense. If nothing else you can use
    _https://github.com/symphoniacloud/cicada_ .
     1. Set _Callback
-       URL_ to `https://APP_NAME.PARENT_DOMAIN_NAME/auth/github/callback`, where `APP_NAME` is the name you'll give to the app during deployment (e.g. 'cicada') and `PARENT_DOMAIN_NAME` is the same as that of the Route53 zone described in the prerequisites earlier. E.g. `https://cicada.youraccount.example.com/auth/github/callback`
+       URL_ to `https://APP_NAME.PARENT_DOMAIN_NAME/github/auth/callback`, where `APP_NAME` is the name you'll give to the app during deployment (e.g. 'cicada') and `PARENT_DOMAIN_NAME` is the same as that of the Route53 zone described in the prerequisites earlier. E.g. `https://cicada.youraccount.example.com/github/auth/callback`
     2. Keep "Expire user authorization tokens" as enabled
     3. Ignore _Request user authorization_, _Enable Device Flow_, _Setup URL_, and _Redirect on update_
     4. For now, disable the "Active" checkbox for Webhook - you'll come back to that later
