@@ -17,18 +17,26 @@ const setupAlreadyCompleteResponse = generateFragmentViewResult(`<p>
 Cicada is already configured. <a href="/">Return to home</a>
 </p>`)
 
-// TODO - need different for organization
 async function generateResponse(appState: GithubSetupAppState) {
   const { appName, webHostname, webhookCode, callbackState } = appState
 
+  // TODO - allow user to configure org name here, and dynamically update post url
+  // TODO - CONFIG_ALLOWED_INSTALLATION_ACCOUNT_NAME can go away when we do so
+
   return generateFragmentViewResult(`<p>
+<h2>Cicada Setup</h2>
+<h3>Setup Cicada for a <b>PERSONAL</b> account</h3>
 <form action="https://github.com/settings/apps/new?state=${callbackState}" method="post">
- <input type="text" name="manifest" id="manifest" hidden="hidden"><br>
- <input type="submit" value="Start GitHub App Creation Process">
+ <input type="text" name="manifest" id="personalManifest" hidden="hidden"><br>
+ <input type="submit" value="Start GitHub App Creation Process for PERSONAL ACCOUNT">
+</form>
+<h3>Setup Cicada for an <b>ORGANIZATION</b> account</h3>
+<form action="https://github.com/organizations/${appState.allowedAccountName}/settings/apps/new?state=${callbackState}" method="post">
+ <input type="text" name="manifest" id="orgManifest" hidden="hidden"><br>
+ <input type="submit" value="Start GitHub App Creation Process for ORGANIZATION ACCOUNT">
 </form>
 <script>
-  input = document.getElementById("manifest")
-  input.value = JSON.stringify({
+  manifestConfig = JSON.stringify({
     name: "${appName}",
     url: 'https://github.com/symphoniacloud/cicada',
     hook_attributes: {
@@ -45,7 +53,9 @@ async function generateResponse(appState: GithubSetupAppState) {
       metadata: 'read',
       members: 'read'
     }
-  })
+  }) 
+  document.getElementById("personalManifest").value = manifestConfig 
+  document.getElementById("orgManifest").value = manifestConfig 
 </script>
 </p>`)
 }

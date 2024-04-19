@@ -2,6 +2,7 @@ import { getParametersByName } from '@aws-lambda-powertools/parameters/ssm'
 import { SSM_PARAM_NAMES, SsmParamName, ssmTableNamePath } from '../../multipleContexts/ssmParams'
 import { throwFunction } from '../../multipleContexts/errors'
 import { CICADA_TABLE_IDS, CicadaTableId } from '../../multipleContexts/dynamoDBTables'
+import type { SSMGetParametersByNameOptions } from '@aws-lambda-powertools/parameters/lib/esm/types/SSMProvider'
 
 // Some of these are async because implementations may cache values retrieved from external services
 export interface CicadaConfig {
@@ -76,15 +77,17 @@ export function realCicadaConfig(appName: string): CicadaConfig {
 }
 
 export function paramsForAppName(appName: string) {
-  async function getAppParam(paramName: SsmParamName): Promise<string | undefined> {
+  async function getAppParam(
+    paramName: SsmParamName,
+    overrides?: SSMGetParametersByNameOptions
+  ): Promise<string | undefined> {
     const fullKey = `/${appName}/${paramName}`
     // Powertools will cache this value using the POWERTOOLS_PARAMETERS_MAX_AGE environment variable (see environmentSettings.ts)
-    // If a lower ttl value is used then call powertools library specifically for that key
     const { _errors: errors, ...parameters } = await getParametersByName(
       {
         [fullKey]: {}
       },
-      { decrypt: true, throwOnError: false }
+      { decrypt: true, throwOnError: false, ...overrides }
     )
 
     if (errors && errors.length) {
@@ -104,11 +107,13 @@ export function paramsForAppName(appName: string) {
   }
 
   return {
-    getParam: async (paramName: SsmParamName) => {
-      return (await getAppParam(paramName)) ?? throwFunction(`app param name ${paramName} not found`)()
+    getParam: async (paramName: SsmParamName, overrides?: SSMGetParametersByNameOptions) => {
+      return (
+        (await getAppParam(paramName, overrides)) ?? throwFunction(`app param name ${paramName} not found`)()
+      )
     },
-    getParamOrUndefined: async (paramName: SsmParamName) => {
-      return await getAppParam(paramName)
+    getParamOrUndefined: async (paramName: SsmParamName, overrides?: SSMGetParametersByNameOptions) => {
+      return await getAppParam(paramName, overrides)
     }
   }
 }
