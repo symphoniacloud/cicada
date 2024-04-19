@@ -33,7 +33,7 @@ export class FakeCicadaConfig implements CicadaConfig {
     clientSecret: '',
     privateKey: '',
     webhookSecret: 'fakeWebhookSecret',
-    loginCallbackState: 'testCallbackState'
+    githubCallbackState: 'testCallbackState'
   }
 
   async github(): Promise<GithubConfig> {

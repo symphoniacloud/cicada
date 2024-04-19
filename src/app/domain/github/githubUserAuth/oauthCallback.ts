@@ -36,7 +36,7 @@ async function tryOauthCallback(
   const githubConfig = await appState.config.github()
 
   // See comment in login - would be better to generate this per request
-  if (!state || !(state === githubConfig.loginCallbackState)) {
+  if (!state || !(state === githubConfig.githubCallbackState)) {
     return failedToLoginResult(`Unable to login because there was invalid state on request`)
   }
 

@@ -41,7 +41,7 @@ export async function loginResponse(appState: AppState) {
   return foundRedirectResponse(
     // For now 'state' is just a random value generated during deployment
     // Longer term we can consider using something that updates more frequently
-    `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${redirectUri}&scope=user:email&state=${githubConfig.loginCallbackState}`
+    `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${redirectUri}&scope=user:email&state=${githubConfig.githubCallbackState}`
   )
 }
 

@@ -21,7 +21,7 @@ export type TableNames = Record<CicadaTableId, string>
 export interface GithubConfig {
   readonly appId: string
   readonly clientId: string
-  readonly loginCallbackState: string
+  readonly githubCallbackState: string
   readonly allowedInstallationAccountName: string
   readonly privateKey: string
   readonly clientSecret: string
@@ -46,7 +46,7 @@ export function realCicadaConfig(appName: string): CicadaConfig {
       return {
         appId: await params.getParam(SSM_PARAM_NAMES.GITHUB_APP_ID),
         clientId: await params.getParam(SSM_PARAM_NAMES.GITHUB_CLIENT_ID),
-        loginCallbackState: await params.getParam(SSM_PARAM_NAMES.GITHUB_LOGIN_CALLBACK_STATE),
+        githubCallbackState: await params.getParam(SSM_PARAM_NAMES.GITHUB_CALLBACK_STATE),
         allowedInstallationAccountName: await params.getParam(
           SSM_PARAM_NAMES.CONFIG_ALLOWED_INSTALLATION_ACCOUNT_NAME
         ),

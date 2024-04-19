@@ -48,8 +48,8 @@ function defineAuth(scope: Construct, props: GithubInteractionProps) {
   saveInSSMViaCloudFormation(
     scope,
     props,
-    SSM_PARAM_NAMES.GITHUB_LOGIN_CALLBACK_STATE,
-    props.randomizedValues.githubLoginCallbackState
+    SSM_PARAM_NAMES.GITHUB_CALLBACK_STATE,
+    props.randomizedValues.githubCallbackState
   )
 }
 
