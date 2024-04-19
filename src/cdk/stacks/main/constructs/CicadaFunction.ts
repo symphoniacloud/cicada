@@ -2,7 +2,7 @@ import { NodejsFunction, SourceMapMode } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { Construct } from 'constructs'
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda'
 import { aws_lambda as lambda, Duration } from 'aws-cdk-lib'
-import { PolicyStatement } from 'aws-cdk-lib/aws-iam'
+import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam'
 import { CicadaTableId } from '../../../../multipleContexts/dynamoDBTables'
 import { MainStackProps } from '../mainStackProps'
 
@@ -57,11 +57,9 @@ export class CicadaFunction extends NodejsFunction {
     })
     this.addToRolePolicy(
       new PolicyStatement({
-        actions: ['ssm:GetParameter', 'ssm:GetParametersByPath'],
-        resources: [
-          `arn:aws:ssm:${props.env.region}:${props.env.account}:parameter/${props.appName}`,
-          `arn:aws:ssm:${props.env.region}:${props.env.account}:parameter/${props.appName}/*`
-        ]
+        effect: Effect.ALLOW,
+        actions: ['ssm:GetParameters'],
+        resources: [`arn:aws:ssm:${props.env.region}:${props.env.account}:parameter/${props.appName}/*`]
       })
     )
     for (const tableId of props.tablesReadAccess ?? []) {
