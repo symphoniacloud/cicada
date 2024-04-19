@@ -13,7 +13,6 @@ export interface AllStacksProps extends StackProps, EnvironmentSettings {
   readonly appName: string
   readonly randomizedValues: {
     readonly githubWebhookURLCode: string
-    readonly githubWebhookSecret: string
     readonly githubCallbackState: string
   }
 }
@@ -30,7 +29,6 @@ export async function createAllStacksProps(): Promise<AllStacksProps> {
     appName,
     randomizedValues: {
       githubWebhookURLCode: await readOrGenerateGithubWebhookURLCode(appName),
-      githubWebhookSecret: await readOrGenerateGithubWebhookSecret(appName),
       githubCallbackState: await readOrGenerateGithubCallbackState(appName)
     },
     ...calculateEnvironmentSettingsWithEnvironmentVariables()
@@ -61,29 +59,6 @@ async function readOrGenerateGithubWebhookURLCode(appName: string) {
   }
 
   return newCode
-}
-
-// We only want to generate this value one time
-async function readOrGenerateGithubWebhookSecret(appName: string) {
-  const existingParam = await readFromSSMViaSDKInCDK({ appName }, SSM_PARAM_NAMES.GITHUB_WEBHOOK_SECRET)
-  if (existingParam) {
-    return existingParam
-  }
-
-  const newSecret = randomBytes(64).toString('base64url')
-  if (inGithubActions()) {
-    console.log(
-      `*** DEPLOYING NEW GITHUB_WEBHOOK_SECRET IN SSM PARAM ${createFullParameterName(
-        { appName },
-        SSM_PARAM_NAMES.GITHUB_WEBHOOK_SECRET
-      )} . USE THIS IN YOUR GITHUB APP CONFIGURATION ***`
-    )
-  } else {
-    console.log(
-      `*** DEPLOYING NEW GITHUB_WEBHOOK_SECRET : ${newSecret} . USE THIS IN YOUR GITHUB APP CONFIGURATION ***`
-    )
-  }
-  return newSecret
 }
 
 // We only want to generate this value one time, otherwise it will require resetting every time

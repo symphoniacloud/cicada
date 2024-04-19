@@ -1,9 +1,15 @@
 import { Construct } from 'constructs'
 import { CicadaFunction, cicadaFunctionProps } from './constructs/CicadaFunction'
 import { HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2'
-import { AwsIntegration, LambdaIntegration, PassthroughBehavior, RestApi } from 'aws-cdk-lib/aws-apigateway'
+import {
+  AwsIntegration,
+  LambdaIntegration,
+  PassthroughBehavior,
+  Resource,
+  RestApi
+} from 'aws-cdk-lib/aws-apigateway'
 import { grantLambdaFunctionPermissionToPutEvents } from '../../support/eventbridge'
-import { PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam'
+import { Effect, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam'
 import { Rule, Schedule } from 'aws-cdk-lib/aws-events'
 import * as targets from 'aws-cdk-lib/aws-events-targets'
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets'
@@ -17,10 +23,38 @@ export interface GithubInteractionProps extends MainStackProps {
 }
 
 export function defineGithubInteraction(scope: Construct, props: GithubInteractionProps) {
+  const githubApiResource = props.restApi.root.addResource('github')
+
+  defineSetup(scope, props, githubApiResource)
   defineAuth(scope, props)
   defineScheduledCrawler(scope, props)
-  defineWebhook(scope, props)
+  defineWebhook(scope, props, githubApiResource)
   defineWebhookFunction(scope, props)
+}
+
+function defineSetup(scope: Construct, props: GithubInteractionProps, githubApiResource: Resource) {
+  const lambdaFunction = new CicadaFunction(scope, cicadaFunctionProps(props, 'githubSetup'))
+  githubApiResource
+    .addResource('setup')
+    .addResource('{proxy+}')
+    .addMethod(HttpMethod.GET, new LambdaIntegration(lambdaFunction))
+
+  lambdaFunction.addToRolePolicy(
+    new PolicyStatement({
+      effect: Effect.ALLOW,
+      resources: [`arn:aws:ssm:${props.env.region}:${props.env.account}:parameter/${props.appName}/*`],
+      actions: ['ssm:PutParameter']
+    })
+  )
+
+  // Random state used during callback.
+  // Consider a better option longer term (e.g. DynamoDB value with TTL)
+  saveInSSMViaCloudFormation(
+    scope,
+    props,
+    SSM_PARAM_NAMES.GITHUB_CALLBACK_STATE,
+    props.randomizedValues.githubCallbackState
+  )
 }
 
 function defineAuth(scope: Construct, props: GithubInteractionProps) {
@@ -35,22 +69,6 @@ function defineAuth(scope: Construct, props: GithubInteractionProps) {
     .addResource('github')
     .addResource('{proxy+}')
     .addMethod(HttpMethod.GET, new LambdaIntegration(lambdaFunction))
-
-  saveInSSMViaCloudFormation(
-    scope,
-    props,
-    SSM_PARAM_NAMES.GITHUB_WEBHOOK_SECRET,
-    props.randomizedValues.githubWebhookSecret
-  )
-
-  // Random state used during callback.
-  // Consider a better option longer term (e.g. DynamoDB value with TTL)
-  saveInSSMViaCloudFormation(
-    scope,
-    props,
-    SSM_PARAM_NAMES.GITHUB_CALLBACK_STATE,
-    props.randomizedValues.githubCallbackState
-  )
 }
 
 function defineScheduledCrawler(scope: Construct, props: GithubInteractionProps) {
@@ -80,7 +98,7 @@ function defineScheduledCrawler(scope: Construct, props: GithubInteractionProps)
 
 const EVENTS_BUCKET_GITHUB_WEBHOOK_KEY_PREFIX = 'githubWebhook/'
 
-function defineWebhook(scope: Construct, props: GithubInteractionProps) {
+function defineWebhook(scope: Construct, props: GithubInteractionProps, githubApiResource: Resource) {
   const { eventsBucket } = props
 
   const githubWebhookS3IntegrationRole = new Role(scope, 'GithubWebhookS3IntegrationRole', {
@@ -134,8 +152,7 @@ function defineWebhook(scope: Construct, props: GithubInteractionProps) {
   // Ideally this would be via a Custom Resource
   saveInSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.GITHUB_WEBHOOK_URL_CODE, webhookURLCode)
 
-  props.restApi.root
-    .addResource('github')
+  githubApiResource
     .addResource('webhook')
     .addResource(webhookURLCode)
     .addMethod(HttpMethod.POST, s3Integration, {
