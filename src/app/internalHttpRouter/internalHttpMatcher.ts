@@ -3,7 +3,9 @@ import UrlPattern from 'url-pattern'
 
 export type Matcher<TEvent> = (event: TEvent) => boolean
 
-export function matcherForRoute<TEvent extends MinimalAPIGatewayProxyEvent>(route: Route<TEvent>) {
+export function matcherForRoute<TEvent extends MinimalAPIGatewayProxyEvent, TAppState>(
+  route: Route<TEvent, TAppState>
+) {
   return {
     match: route.method ? methodAndPathMatcher(route.method, route.path) : pathMatcher(route.path),
     route: route
