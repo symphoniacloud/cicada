@@ -35,7 +35,7 @@ async function generateResponse(appState: GithubSetupAppState) {
       url: "https://${webHostname}/github/webhook/${webhookCode}"
     },
     redirect_url: "https://${webHostname}/github/setup/redirect",
-    callback_urls: ["https://${webHostname}/auth/github/callback"],
+    callback_urls: ["https://${webHostname}/github/auth/callback"],
     setup_url: "https://${webHostname}",
     public: false,
     default_events: ['meta', 'organization', 'push', 'repository', 'workflow_job', 'workflow_run'],

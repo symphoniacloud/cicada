@@ -13,7 +13,7 @@ test('basic web test', async () => {
   expect(homePageBody).toContain('Welcome to Cicada')
 
   // Call login - make sure basic API Lambda is working
-  const loginResponse = await fetch(`https://${webHostName}/auth/github/login`, {
+  const loginResponse = await fetch(`https://${webHostName}/github/auth/login`, {
     redirect: 'manual'
   })
   expect(loginResponse.status).toEqual(302)

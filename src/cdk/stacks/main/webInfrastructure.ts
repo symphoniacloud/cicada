@@ -125,10 +125,7 @@ function defineCloudfront(
     },
     additionalBehaviors: {
       // TOEventually - would be nice to put these paths on the sub-modules
-      // TODO - move auth under github
-      'auth/github/*': apiGatewayBehavior,
-      'github/webhook/*': apiGatewayBehavior,
-      'github/setup/*': apiGatewayBehavior,
+      'github/*': apiGatewayBehavior,
       'app/*': apiGatewayBehavior,
       'apia/*': apiGatewayBehavior
     }
