@@ -21,9 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       APP_NAME: cicada-public-demo
-      WEB_PUSH_VAPID_PUBLIC_KEY: ${{ secrets.WEB_PUSH_VAPID_PUBLIC_KEY }}
-      WEB_PUSH_VAPID_PRIVATE_KEY: ${{ secrets.WEB_PUSH_VAPID_PRIVATE_KEY }}
-      WEB_PUSH_SUBJECT: ${{ secrets.WEB_PUSH_SUBJECT }}
       WEB_PARENT_DOMAIN_NAME: ${{ secrets.WEB_PARENT_DOMAIN_NAME }}
       WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT: ${{ secrets.WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT }}
       ENVIRONMENT_TYPE: prod

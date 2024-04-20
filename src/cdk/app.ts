@@ -13,7 +13,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 async function createApp(app: App) {
   const allStacksProps = await createAllStacksProps()
 
-  await buildWebConfig()
+  await buildWebConfig(allStacksProps.webPushConfig.publicKey)
 
   const storageStack = new StorageStack(app, 'Storage', {
     stackName: `${allStacksProps.appName}-storage`,
