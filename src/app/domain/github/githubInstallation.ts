@@ -20,9 +20,8 @@ export async function processInstallation(
   installation: GithubInstallation,
   crawlConfiguration: CrawlConfiguration
 ) {
-  const allowedInstallationAccountName = (await appState.config.github()).allowedInstallationAccountName
-  if (installation.accountLogin !== allowedInstallationAccountName) {
-    logger.warn(`Not processing invalid installation for account name ${installation.accountLogin}`)
+  if (`${installation.appId}` !== (await appState.config.github()).appId) {
+    logger.warn(`Not processing invalid installation - unexpected app ID`)
     return
   }
 

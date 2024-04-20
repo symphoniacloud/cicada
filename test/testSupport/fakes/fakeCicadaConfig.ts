@@ -27,7 +27,6 @@ export class FakeCicadaConfig implements CicadaConfig {
     publicKey: 'fakeWebpushPublicKey'
   }
   public fakeGithubConfig: GithubConfig = {
-    allowedInstallationAccountName: '',
     appId: '',
     clientId: '',
     clientSecret: '',

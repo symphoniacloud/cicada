@@ -1,7 +1,6 @@
 import { CicadaTableId } from './dynamoDBTables'
 
 export const SSM_PARAM_NAMES = {
-  CONFIG_ALLOWED_INSTALLATION_ACCOUNT_NAME: 'cicada/allowed-github-installation-account-name',
   GITHUB_APP_ID: 'github/app-id',
   GITHUB_CLIENT_ID: 'github/client-id',
   GITHUB_PRIVATE_KEY: 'github/private-key',

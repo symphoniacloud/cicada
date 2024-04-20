@@ -23,7 +23,6 @@ export interface GithubConfig {
   readonly appId: string
   readonly clientId: string
   readonly githubCallbackState: string
-  readonly allowedInstallationAccountName: string
   readonly privateKey: string
   readonly clientSecret: string
   readonly webhookSecret: string
@@ -48,9 +47,6 @@ export function realCicadaConfig(appName: string): CicadaConfig {
         appId: await params.getParam(SSM_PARAM_NAMES.GITHUB_APP_ID),
         clientId: await params.getParam(SSM_PARAM_NAMES.GITHUB_CLIENT_ID),
         githubCallbackState: await params.getParam(SSM_PARAM_NAMES.GITHUB_CALLBACK_STATE),
-        allowedInstallationAccountName: await params.getParam(
-          SSM_PARAM_NAMES.CONFIG_ALLOWED_INSTALLATION_ACCOUNT_NAME
-        ),
         privateKey: await params.getParam(SSM_PARAM_NAMES.GITHUB_PRIVATE_KEY),
         clientSecret: await params.getParam(SSM_PARAM_NAMES.GITHUB_CLIENT_SECRET),
         webhookSecret: await params.getParam(SSM_PARAM_NAMES.GITHUB_WEBHOOK_SECRET)

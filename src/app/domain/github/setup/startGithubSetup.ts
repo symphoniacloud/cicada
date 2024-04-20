@@ -20,8 +20,6 @@ Cicada is already configured. <a href="/">Return to home</a>
 async function generateResponse(appState: GithubSetupAppState) {
   const { appName, webHostname, webhookCode, callbackState } = appState
 
-  // TODO - CONFIG_ALLOWED_INSTALLATION_ACCOUNT_NAME can go away when we do so
-
   return generateFragmentViewResult(`<p>
 <h2>Cicada Setup</h2>
 <h3>Setup Cicada for a <b>PERSONAL</b> account</h3>

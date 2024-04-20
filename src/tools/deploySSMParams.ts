@@ -14,14 +14,8 @@ async function run() {
   const appName = process.env['APP_NAME'] ?? `cicada-${userInfo().username}`
   console.log(`Using appName ${appName} - all SSM parameters will be under /${appName}/`)
   await Promise.all([
-    writeParam(
-      appName,
-      SSM_PARAM_NAMES.CONFIG_ALLOWED_INSTALLATION_ACCOUNT_NAME,
-      'CONFIG_ALLOWED_INSTALLATION_ACCOUNT_NAME'
-    ),
     writeParam(appName, SSM_PARAM_NAMES.WEB_PUSH_VAPID_PUBLIC_KEY, 'WEB_PUSH_VAPID_PUBLIC_KEY'),
     writeParam(appName, SSM_PARAM_NAMES.WEB_PUSH_SUBJECT, 'WEB_PUSH_SUBJECT'),
-    // writeSecretParam(appName, SSM_PARAM_NAMES.GITHUB_WEBHOOK_SECRET, 'GITHUB_WEBHOOK_SECRET'),
     writeSecretParam(appName, SSM_PARAM_NAMES.WEB_PUSH_VAPID_PRIVATE_KEY, 'WEB_PUSH_VAPID_PRIVATE_KEY')
   ])
 }
