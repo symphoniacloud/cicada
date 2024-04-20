@@ -66,12 +66,9 @@ Before I get started on how to use Cicada some important...
   In other words any user in your GitHub org will be able to see data about **any repository** in your organization.
   If this isn't appropriate for your organization then do not use Cicada at this time.
 * You're going to need to know a decent amount about running apps in AWS. Please don't try to start using Cicada today if you aren't happy using CloudFormation, CloudWatch, Route53, Certificate Manager, etc.
-* Setup is **annoyingly complicated**, mostly because of lots of configuration
-  with the "App" that needs to be created in GitHub. I hope to make this easier one day, but for now it's, what us Brits like to say, "a bit of a faff".
 * All of the resources that Cicada deploys in AWS should be free or very cheap BUT AS ALWAYS WITH AWS keep an eye on your AWS costs.
   I strongly recommend setting up [billing alarms](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/monitor_estimated_charges_with_cloudwatch.html).
 
-Again, this is early days for Cicada as App, it's definitely **not** "batteries included".
 If you have questions please feel free to email me at [mike@symphonia.io](mailto:mike@symphonia.io) .
 
 ### Prerequisites
@@ -122,52 +119,29 @@ Outputs:
 
 _Local_
 
-A local environment with Node that you can use to deploy to AWS (You can do it from a GitHub Actions workflow too, but honestly you're going to want to run this locally for now, ideally. :) ). The minimum required version of Node is specified in the [~/.nvmrc](.nvmrc) file.
+A local environment with Node that you can use to deploy to AWS. Alternatively you can deploy from GitHub actions - see the example in repository. The minimum required version of Node is specified in the [~/.nvmrc](.nvmrc) file.
 
 ### Prepare to deploy
 
-You know when I said above that setup was annoyingly complicated? Don't say I didn't warn you...
+First - clone this repo, or a fork, to your local machine
 
-1. Clone this repo, or a fork, to your local machine
-1. Copy the [.env-template](./.env-template) file in the project root to a file named
-   _.env_ and open it - you'll be updating all the entries in this file.
-1. Register a new GitHub App for your GitHub account (organization or personal).
-2. **FOLLOW THE GITHUB INSTRUCTIONS [HERE](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app)
-   UP TO AND INCLUDING THE PART ABOUT "HOMEPAGE URL"**.
-   Homepage URL is required but only descriptive - so add anything that makes sense. If nothing else you can use
-   _https://github.com/symphoniacloud/cicada_ .
-    1. Set _Callback
-       URL_ to `https://APP_NAME.PARENT_DOMAIN_NAME/github/auth/callback`, where `APP_NAME` is the name you'll give to the app during deployment (e.g. 'cicada') and `PARENT_DOMAIN_NAME` is the same as that of the Route53 zone described in the prerequisites earlier. E.g. `https://cicada.youraccount.example.com/github/auth/callback`
-    2. Keep "Expire user authorization tokens" as enabled
-    3. Ignore _Request user authorization_, _Enable Device Flow_, _Setup URL_, and _Redirect on update_
-    4. For now, disable the "Active" checkbox for Webhook - you'll come back to that later
-    5. Under "Repository permissions", select the following categories and levels:
-        * _Actions_ : read-only
-        * _Contents_ : read-only
-        * _Metadata_ : read-only (will already be selected)
-    6. Under _Organization permissions_, select _Members_ as read-only
-    7. For _Where can this GitHub App be installed?_, leave as _Only on this account_
-    8. Click "Create GitHub App"
-1. From the resulting page...:
-    1. Copy the short, numeric, _App ID_, and use it for the `GITHUB_APP_ID` variable in your _.env_ file
-    2. Copy _Client ID_ and use it for `GITHUB_CLIENT_ID` in _.env_
-    3. Click the "Generate a new Client Secret" button, copy the value, and use it for `GITHUB_CLIENT_SECRET` in _.env_
-    4. Scroll down and click the "Generate a private key" button. Download the resulting file, open it, copy the contents,
-       **including the '-----' header and footer** and use it for `GITHUB_PRIVATE_KEY` in _.env_ .
-       **MAKE SURE THAT THERE ARE NO LEADING SPACES ON EACH LINE** and **KEEP THE SURROUNDING QUOTES** - you may need to use 'paste as plain text'. Your .env file should now start something like:
+Then copy the [.env-template](./.env-template) file in the project root to a file named _.env_, open it, and update as follows
 
-8. For `WEB_PARENT_DOMAIN_NAME` in _.env_ use the same `PARENT_DOMAIN_NAME` value described earlier
-9. For `WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT` in _.env_ use the **name**
-   of the CloudFormation Export for the certificate described earlier in pre-requisites. If you used the example CloudFormation template I provided it's whatever you replaced `YourCertificateExportName` with.
+* Set `WEB_PARENT_DOMAIN_NAME` to the same as the Route 53 hosted zone name described in the previous section
+* Set `WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT` to the **name**
+  of the CloudFormation Export for the certificate described in the previous section. If you used the example CloudFormation template I provided it's whatever you replaced `YourCertificateExportName` with.
+
+Finally - choose an `APP_NAME` value - this will be used as the prefix for the full web hostname for the app, and will be used as the prefix for CloudFormation stack names. By default you can just use `cicada`.
 
 ### Deploy
 
-Once you've setup _.env_ you can deploy the app.
+If you haven't already done so open a terminal and switch to the home directory for Cicada.
 
-1. Know what your `APP_NAME` value is - it's whatever you chose as the first part of the full web hostname earlier - e.g. `cicada`.
-2. If you haven't already done so open a terminal and switch to the home directory for Cicada
-3. Make sure your terminal is setup with the correct AWS configuration to connect to your desired AWS account and region
-4. Substituting `YOUR_APP_NAME` for whatever your `APP_NAME` is, run `APP_NAME=YOUR_APP_NAME ./deploy.sh`
+Make sure your terminal is setup with the correct AWS configuration to connect to your desired AWS account and region.
+
+Run `npm install` to get Node dependencies if you haven't done so already.
+
+If you're happy to use the default `APP_NAME` of `cicada` then run `./deploy.sh`. Otherwise run `APP_NAME=YOUR_APP_NAME ./deploy.sh` substituting `YOUR_APP_NAME`.
 
 Assuming everything works OK then wait a few minutes. First deployment time is a little variable because Cicada uses CloudFront as a web host, which can take a while sometimes.
 
@@ -187,43 +161,18 @@ arn:aws:cloudformation:us-east-1:123456789012:stack/cicada-main/74....
 ✨  Total time: 324.88s
 ```
 
-### Finish GitHub App setup
+### Setup GitHub App
 
-If you've got this far you're nearly done.
+Cicada has to be **registered** and **installed** as a "GitHub App" in your GitHub account. This process is mostly automated, but you need to perform a few steps:
 
-Deployment will have generated two random strings that you're going to need:
-
-* If you can still see the entire output from the deployment script you'll see values for `GITHUB_WEBHOOK_URL_CODE` and `GITHUB_WEBHOOK_SECRET` - copy them.
-* Otherwise find those values as SSM parameters in your AWS account [here](https://console.aws.amazon.com/systems-manager/parameters/) - they'll be named `/YOUR_APP_NAME/cicada/github-webhook-url-code` and `/YOUR_APP_NAME/github/webhook-secret`
-
-Now head back to the "Developer Settings" configuration for your GitHub App on the GitHub website. Go to the _Webhook_ section:
-
-* Set _Webhook URL_ to `https://APP_NAME.PARENT_DOMAIN_NAME/github/webhook/YOUR_WEBHOOK_URL_CODE`, where APP_NAME and PARENT_DOMAIN_NAME
-  are as you set them for _Callback URL_, and `YOUR_WEBHOOK_URL_CODE` is the webhook **code** generated during deployment
-* Set _Webhook Secret_ to the webhook **secret** generated during deployment
-* Set the _Active_ checkbox to enabled
-
-Press "Save Changes".
-
-Now click on "Advanced" on the GitHub left hand side navigation - it should show "Recent Deliveries", and if you've configured everything OK you'll see a successful "ping" delivery.
-
-![img.png](docs/images/githubPingExample.png)
-
-Now you need to configure the webhook events GitHub will send. Click "Permissions & events", and then under "Subscribe to Events" choose:
-
-* Workflow run
-* Meta
-* Organization
-* Push
-* Repository
-* Workflow job
-
-Then click "save changes"
-
-By this point you've configured the GitHub App, but you still need to "install" it - click "Install App" on the
-left hand side, then click the "Install" button for the target account, and follow the workflow.
-
-Wait for a minute or so, then proceed to the next step.
+* Go to `https://APP_NAME.WEB_PARENT_DOMAIN_NAME/github/setup/start` where `APP_NAME` and `WEB_PARENT_DOMAIN_NAME` are as described already.
+* You should see instructions telling you to press one of two buttons. 
+  To register Cicada into a _Personal_ account just press the first button.
+  To register Cicada into an _Organization_ account type the organization name into the box, and press the second button.
+* Follow the GitHub workflow
+* You should be redirected to a Cicada page that tells you you need to **_install_** the newly registered app - follow the link and do so
+* If all goes well Cicada will now start downloading data from your Github account.
+  Give it a few seconds / minutes (depending on your account size) then go to the next step. 
 
 ### Use Cicada
 
@@ -239,7 +188,7 @@ Depending on how recently you've had activity in your account you may already se
 * Set the _Event JSON_ section to `{"lookbackDays": 90}` (adjust the value to more or few days)
 * Click the "Test" button
 
-This will load more data from your GitHub account, but consider only GitHub Actions Runs will be available more than a couple of weeks in the past.
+This will load more data from your GitHub account, but consider that only GitHub Actions Runs data will be available more than a couple of weeks in the past - you won't see any older Push events
 
 ### Use Push Notifications
 
