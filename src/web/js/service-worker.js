@@ -12,7 +12,11 @@ self.addEventListener('push', (event) => {
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close()
-  const url = event.notification?.data?.url ?? 'https://{{CICADA_WEB_HOST}}/'
-  console.log(`Opening ${url}`)
-  event.waitUntil(self.clients.openWindow(url))
+  const url = event.notification?.data?.url
+  if (url) {
+    console.log(`Opening ${url}`)
+    event.waitUntil(self.clients.openWindow(url))
+  } else {
+    console.log('No notification.data.url field found on event')
+  }
 })

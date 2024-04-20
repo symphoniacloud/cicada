@@ -206,7 +206,10 @@ test('newPushTest', async () => {
   ).toEqual([
     {
       body: 'This is a test for push notifications from Cicada',
-      title: '✅ Web Push Test'
+      title: '✅ Web Push Test',
+      data: {
+        url: 'https://fake-cicada.example.com'
+      }
     }
   ])
 })

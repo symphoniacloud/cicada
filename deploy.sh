@@ -33,11 +33,8 @@ set -euo pipefail
 # ** START OF WEB BUILD **
 
 # Loads required vars - from environment, or using .env file (hence references to dotenv/config)
-read -r PARENT_DOMAIN_NAME VAPID_PUBLIC_KEY <<< "$(npx ts-node -r dotenv/config src/tools/getDeployConfig.ts)"
+read -r VAPID_PUBLIC_KEY <<< "$(npx ts-node -r dotenv/config src/tools/getDeployConfig.ts)"
 
-CICADA_WEB_HOST="$APP_NAME.$PARENT_DOMAIN_NAME"
-
-echo "CICADA_WEB_HOST set to ${CICADA_WEB_HOST}"
 echo "VAPID_PUBLIC_KEY set to ${VAPID_PUBLIC_KEY}"
 
 rm -rf build/web
@@ -46,10 +43,8 @@ cp -rp src/web build/
 
 # Use slightly different sed syntax on Mac
 if [[ $(uname) == "Darwin" ]]; then
-  find build/web -type f -exec sed -i '' "s/{{CICADA_WEB_HOST}}/$CICADA_WEB_HOST/g" {} +
   find build/web -type f -exec sed -i '' "s/{{VAPID_PUBLIC_KEY}}/$VAPID_PUBLIC_KEY/g" {} +
 else
-  find build/web -type f -exec sed -i "s/{{CICADA_WEB_HOST}}/$CICADA_WEB_HOST/g" {} +
   find build/web -type f -exec sed -i "s/{{VAPID_PUBLIC_KEY}}/$VAPID_PUBLIC_KEY/g" {} +
 fi
 

@@ -15,6 +15,9 @@ export async function handleWebPushTest(appState: AppState, eventDetail: unknown
   }
   await publishToSubscriptionsForUser(appState, eventDetail.data.userId, {
     title: '✅ Web Push Test',
-    body: `This is a test for push notifications from Cicada`
+    body: `This is a test for push notifications from Cicada`,
+    data: {
+      url: `https://${await appState.config.webHostname()}`
+    }
   })
 }
