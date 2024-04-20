@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
+// noinspection JSFileReferences
 
-const VAPID_PUBLIC_KEY = '{{VAPID_PUBLIC_KEY}}'
+import { VAPID_PUBLIC_KEY } from '/js/config.js'
+
 const serviceWorkerScript = './js/service-worker.js'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -30,7 +32,6 @@ async function unsubscribeFromPush() {
   await updateUI()
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function testPing() {
   const response = await postToServer('ping', {})
   updateStatus(response.message)
@@ -71,6 +72,8 @@ async function updateUI() {
     updateStatus('You need to subscribe for push notifications')
     updateSubscriptionButton('Subscribe', subscribeToPush)
   }
+
+  document.getElementById('pingButton').onclick = testPing
 }
 
 function updateStatus(s) {

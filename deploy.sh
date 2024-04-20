@@ -31,23 +31,9 @@ fi
 set -euo pipefail
 
 # ** START OF WEB BUILD **
-
-# Loads required vars - from environment, or using .env file (hence references to dotenv/config)
-read -r VAPID_PUBLIC_KEY <<< "$(npx ts-node -r dotenv/config src/tools/getDeployConfig.ts)"
-
-echo "VAPID_PUBLIC_KEY set to ${VAPID_PUBLIC_KEY}"
-
 rm -rf build/web
 mkdir -p build/web
 cp -rp src/web build/
-
-# Use slightly different sed syntax on Mac
-if [[ $(uname) == "Darwin" ]]; then
-  find build/web -type f -exec sed -i '' "s/{{VAPID_PUBLIC_KEY}}/$VAPID_PUBLIC_KEY/g" {} +
-else
-  find build/web -type f -exec sed -i "s/{{VAPID_PUBLIC_KEY}}/$VAPID_PUBLIC_KEY/g" {} +
-fi
-
 # ** END OF WEB BUILD **
 
 set +u
@@ -56,6 +42,8 @@ if [ -n "$ONLY_WEB_CONTENT" ]; then
   BUCKET_NAME=$(aws cloudformation describe-stacks --stack-name $APP_NAME-main --query 'Stacks[0].Outputs[?OutputKey==`WebsiteBucketName`].OutputValue' --output text)
   echo "Writing web content to bucket $BUCKET_NAME"
   aws s3 sync build/web "s3://$BUCKET_NAME"
+  ## NB / TOeventually - config.js won't be included here since directory deleted
+  ## Consider not deleting build/web if ONLY_WEB_CONTENT set
 else
   npm run deploy "${deployParams[@]}"
 fi

@@ -5,12 +5,15 @@ import { createAllStacksProps } from './config/allStacksProps'
 import { MainStack } from './stacks/main/MainStack'
 import { StorageStack } from './stacks/StorageStack'
 import * as dotenv from 'dotenv'
+import { buildWebConfig } from './preSynth/buildWeb'
 import path = require('path')
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 
 async function createApp(app: App) {
   const allStacksProps = await createAllStacksProps()
+
+  await buildWebConfig()
 
   const storageStack = new StorageStack(app, 'Storage', {
     stackName: `${allStacksProps.appName}-storage`,

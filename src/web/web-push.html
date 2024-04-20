@@ -4,7 +4,7 @@
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <script src='js/web-push.js'></script>
+  <script src='js/web-push.js' type="module"></script>
   <title>Cicada Web Push Notifications</title>
   <link rel='manifest' href='/site.webmanifest'>
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css'
@@ -27,7 +27,7 @@
   <p><a href='/app.html'>Back to application</a></p>
   <hr />
   <h3>Advanced</h3>
-  <button id='ping' onclick='testPing()'>Test push notifications</button>
+  <button id='pingButton'>Test push notifications</button>
   <button id='updateServiceWorker' disabled>Update Service Worker</button>
 </div>
 </body>
