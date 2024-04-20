@@ -13,8 +13,6 @@ import { Effect, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws
 import { Rule, Schedule } from 'aws-cdk-lib/aws-events'
 import * as targets from 'aws-cdk-lib/aws-events-targets'
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets'
-import { SSM_PARAM_NAMES } from '../../../multipleContexts/ssmParams'
-import { saveInSSMViaCloudFormation } from '../../support/ssm'
 import { Duration } from 'aws-cdk-lib'
 import { MainStackProps } from './mainStackProps'
 
@@ -45,15 +43,6 @@ function defineSetup(scope: Construct, props: GithubInteractionProps, githubApiR
       resources: [`arn:aws:ssm:${props.env.region}:${props.env.account}:parameter/${props.appName}/*`],
       actions: ['ssm:PutParameter']
     })
-  )
-
-  // Random state used during callback.
-  // Consider a better option longer term (e.g. DynamoDB value with TTL)
-  saveInSSMViaCloudFormation(
-    scope,
-    props,
-    SSM_PARAM_NAMES.GITHUB_CALLBACK_STATE,
-    props.randomizedValues.githubCallbackState
   )
 }
 
@@ -147,9 +136,6 @@ function defineWebhook(scope: Construct, props: GithubInteractionProps, githubAp
   })
 
   const webhookURLCode = props.randomizedValues.githubWebhookURLCode
-  // Save webhook code so that we don't change it every time (see allStacksProps.ts)
-  // Ideally this would be via a Custom Resource
-  saveInSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.GITHUB_WEBHOOK_URL_CODE, webhookURLCode)
 
   githubApiResource
     .addResource('webhook')

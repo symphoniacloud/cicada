@@ -27,7 +27,7 @@ export async function createAllStacksProps(): Promise<AllStacksProps> {
 
 // We have to look this up before deployment because API Gateway CDK Resource / CloudFormation Resource
 // doesn't seem to be able to take parameters in resource names . Ideally would be a custom resource
-// This is saved as a CloudFormation parameter in githubInteraction.ts
+// This is saved as a CloudFormation parameter in MainStack.ts
 async function readOrGenerateGithubWebhookURLCode(appName: string) {
   const existingParam = await readFromSSMViaSDKInCDK({ appName }, SSM_PARAM_NAMES.GITHUB_WEBHOOK_URL_CODE)
   if (existingParam) {
@@ -42,6 +42,7 @@ async function readOrGenerateGithubWebhookURLCode(appName: string) {
 
 // We only want to generate this value one time, otherwise it will require resetting every time
 // and that slows down deployment. Consider a better option longer term
+// This is saved as a CloudFormation parameter in MainStack.ts
 async function readOrGenerateGithubCallbackState(appName: string) {
   const existingParam = await readFromSSMViaSDKInCDK({ appName }, SSM_PARAM_NAMES.GITHUB_CALLBACK_STATE)
   if (existingParam) {
@@ -53,6 +54,7 @@ async function readOrGenerateGithubCallbackState(appName: string) {
 
 // We only want to generate these values on first deployment
 // TOeventually - consider a better way of doing this
+// This are saved as a CloudFormation parameters in MainStack.ts
 async function readOrGenerateWebPushConfig(appName: string) {
   const existingPublicKey = await readFromSSMViaSDKInCDK(
     { appName },
