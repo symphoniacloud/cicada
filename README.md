@@ -171,10 +171,6 @@ AA112233AA112233AA112233AA112233AA112233AA112233AA11223=
    _Private Key_ and use it for `WEB_PUSH_VAPID_PRIVATE_KEY` in _.env_
 6. Set a value for `WEB_PUSH_SUBJECT` in
    _.env_ . I use the same as the "Homepage" value I use when setting up the GitHub App, but it's not too important what it is.
-7. For `CONFIG_ALLOWED_INSTALLATION_ACCOUNT_NAME` in
-   _.env_ use the account name of the GitHub account which you have registered the app in.
-   If it's an organization account make sure to use the organization account name and **NOT**
-   your personal account name. For a personal account the account name and your Github login name are the same thing.
 8. For `WEB_PARENT_DOMAIN_NAME` in _.env_ use the same `PARENT_DOMAIN_NAME` value described earlier
 9. For `WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT` in _.env_ use the **name**
    of the CloudFormation Export for the certificate described earlier in pre-requisites. If you used the example CloudFormation template I provided it's whatever you replaced `YourCertificateExportName` with.

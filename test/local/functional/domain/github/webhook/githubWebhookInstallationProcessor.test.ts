@@ -15,7 +15,7 @@ test('installation-webhook-for-org-account-installation', async () => {
   const appState = new FakeAppState()
   appState.config.fakeGithubConfig = {
     ...appState.config.fakeGithubConfig,
-    allowedInstallationAccountName: 'cicada-test-org'
+    appId: '850768'
   }
   const githubInstallationClient = new FakeGithubInstallationClient()
   appState.githubClient.fakeClientsForInstallation.addResponse(48133709, githubInstallationClient)

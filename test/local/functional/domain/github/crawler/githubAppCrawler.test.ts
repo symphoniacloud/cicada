@@ -13,7 +13,7 @@ test('app-crawler-for-personal-account-installation', async () => {
   const appState = new FakeAppState()
   appState.config.fakeGithubConfig = {
     ...appState.config.fakeGithubConfig,
-    allowedInstallationAccountName: 'cicada-test-user'
+    appId: '849936'
   }
   appState.githubClient.stubInstallations = [example_personal_account_installation]
 
@@ -38,7 +38,7 @@ test('app-crawler-for-org-installation', async () => {
   const appState = new FakeAppState()
   appState.config.fakeGithubConfig = {
     ...appState.config.fakeGithubConfig,
-    allowedInstallationAccountName: 'cicada-test-org'
+    appId: '850768'
   }
   appState.githubClient.stubInstallations = [example_org_installation]
 
