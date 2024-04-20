@@ -14,11 +14,9 @@
     "local-tests": "npx vitest run --dir test/local",
     "remote-tests": "npx vitest run --dir test/remote --config test/remote/vitest.config.mts",
     "pre-deploy-check": "npx tsc",
-    "deploy-configuration": "ts-node src/tools/deploySSMParams.ts",
     "deploy-cdk": "cd src/cdk && npx cdk deploy",
     "--COMMENT--": "-- \"$@\" below passes original parameters through to deploy-cdk",
-    "deploy": "npm run pre-deploy-check && npm run deploy-configuration && npm run deploy-cdk -- \"$@\"",
-    "generate-vapid-keys": "npx web-push generate-vapid-keys"
+    "deploy": "npm run pre-deploy-check && npm run deploy-cdk -- \"$@\""
   },
   "devDependencies": {
     "@tsconfig/node18": "1.x",

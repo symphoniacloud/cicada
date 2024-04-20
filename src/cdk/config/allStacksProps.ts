@@ -8,4 +8,9 @@ export interface AllStacksProps extends StackProps, EnvironmentSettings {
     readonly githubWebhookURLCode: string
     readonly githubCallbackState: string
   }
+  readonly webPushConfig: {
+    readonly publicKey: string
+    readonly privateKey: string
+    readonly subject: string
+  }
 }
