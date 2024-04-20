@@ -6,7 +6,7 @@ import { WebPushVapidConfig } from '../environment/config'
 export interface CicadaWebNotification {
   title: string
   body: string
-  data?: { url: string }
+  data: { url: string }
 }
 
 export interface WebPushWrapper {

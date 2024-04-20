@@ -121,7 +121,7 @@ const urlB64ToUint8Array = (base64String) => {
 }
 
 async function postToServer(urlSuffix, data) {
-  const response = await fetch(`https://{{CICADA_WEB_HOST}}/apia/${urlSuffix}`, {
+  const response = await fetch(`/apia/${urlSuffix}`, {
     method: 'POST',
     credentials: 'include',
     body: JSON.stringify(data)
