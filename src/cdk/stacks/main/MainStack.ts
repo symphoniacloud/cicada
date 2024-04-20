@@ -6,7 +6,7 @@ import { createMainStackProps } from './mainStackProps'
 import { defineWebInfrastructure } from './webInfrastructure'
 import { defineGithubInteraction } from './githubInteraction'
 import { saveInSSMViaCloudFormation } from '../../support/ssm'
-import { SSM_PARAM_NAMES } from '../../../multipleContexts/ssmParams'
+import { SSM_PARAM_NAMES, SsmParamName } from '../../../multipleContexts/ssmParams'
 
 export class MainStack extends Stack {
   constructor(scope: Construct, id: string, props: AllStacksProps) {
@@ -31,17 +31,13 @@ export class MainStack extends Stack {
 }
 
 function savePreGeneratedConfiguration(scope: Construct, props: AllStacksProps) {
-  saveInSSMViaCloudFormation(
-    scope,
-    props,
-    SSM_PARAM_NAMES.WEB_PUSH_VAPID_PUBLIC_KEY,
-    props.webPushConfig.publicKey
-  )
-  saveInSSMViaCloudFormation(
-    scope,
-    props,
-    SSM_PARAM_NAMES.WEB_PUSH_VAPID_PRIVATE_KEY,
-    props.webPushConfig.privateKey
-  )
-  saveInSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.WEB_PUSH_SUBJECT, props.webPushConfig.subject)
+  function saveSSM(key: SsmParamName, value: string) {
+    saveInSSMViaCloudFormation(scope, props, key, value)
+  }
+
+  saveSSM(SSM_PARAM_NAMES.WEB_PUSH_VAPID_PUBLIC_KEY, props.webPushConfig.publicKey)
+  saveSSM(SSM_PARAM_NAMES.WEB_PUSH_VAPID_PRIVATE_KEY, props.webPushConfig.privateKey)
+  saveSSM(SSM_PARAM_NAMES.WEB_PUSH_SUBJECT, props.webPushConfig.subject)
+  saveSSM(SSM_PARAM_NAMES.GITHUB_CALLBACK_STATE, props.randomizedValues.githubCallbackState)
+  saveSSM(SSM_PARAM_NAMES.GITHUB_WEBHOOK_URL_CODE, props.randomizedValues.githubWebhookURLCode)
 }
