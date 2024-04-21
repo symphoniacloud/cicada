@@ -16,11 +16,13 @@ import { ITableV2, TableV2 } from 'aws-cdk-lib/aws-dynamodb'
 export interface MainStackProps extends AllStacksProps {
   allTables: Record<CicadaTableId, ITableV2>
   eventsBucket: IBucket
-  certificate: ICertificate
-  zone: IHostedZone
+  certificate?: ICertificate
+  zone?: IHostedZone
 }
 
 export function createMainStackProps(scope: Construct, props: AllStacksProps): MainStackProps {
+  const parentDomainName = props.web.parentDomainName
+  const certificateExport = props.web.certificateArnCloudformationExport
   return {
     ...props,
     allTables: lookupTables(scope, props),
@@ -29,12 +31,18 @@ export function createMainStackProps(scope: Construct, props: AllStacksProps): M
       'EventsBucket',
       readFromSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.EVENTS_BUCKET_NAME)
     ),
-    certificate: Certificate.fromCertificateArn(
-      scope,
-      'StandardCertificate',
-      Fn.importValue(props.web.certificateArnCloudformationExport)
-    ),
-    zone: HostedZone.fromLookup(scope, 'AccountZone', { domainName: props.web.parentDomainName })
+    ...(certificateExport
+      ? {
+          certificate: Certificate.fromCertificateArn(
+            scope,
+            'StandardCertificate',
+            Fn.importValue(certificateExport)
+          )
+        }
+      : {}),
+    ...(parentDomainName
+      ? { zone: HostedZone.fromLookup(scope, 'AccountZone', { domainName: parentDomainName }) }
+      : {})
   }
 }
 

@@ -4,8 +4,8 @@ import { RemovalPolicy } from 'aws-cdk-lib'
 
 export interface EnvironmentSettings {
   readonly web: {
-    readonly parentDomainName: string
-    readonly certificateArnCloudformationExport: string
+    readonly parentDomainName?: string
+    readonly certificateArnCloudformationExport?: string
   }
   readonly logLevel: LogLevel
   readonly logFullEvents: boolean
