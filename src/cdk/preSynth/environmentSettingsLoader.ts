@@ -1,4 +1,4 @@
-import { getFromLocalEnv, getFromLocalEnvOrUndefined } from '../../multipleContexts/environmentVariables'
+import { getFromLocalEnvOrUndefined } from '../../multipleContexts/environmentVariables'
 import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { RemovalPolicy } from 'aws-cdk-lib'
 import { EnvironmentSettings } from '../config/environmentSettings'
@@ -13,8 +13,11 @@ export function calculateEnvironmentSettingsWithEnvironmentVariables(
 
   return {
     web: {
-      parentDomainName: getFromLocalEnv('WEB_PARENT_DOMAIN_NAME', env),
-      certificateArnCloudformationExport: getFromLocalEnv('WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT', env)
+      parentDomainName: getFromLocalEnvOrUndefined('WEB_PARENT_DOMAIN_NAME', env),
+      certificateArnCloudformationExport: getFromLocalEnvOrUndefined(
+        'WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT',
+        env
+      )
     },
     logFullEvents: !isProd,
     logLevel: isProd ? 'INFO' : 'DEBUG',

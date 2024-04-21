@@ -6,7 +6,7 @@ import { ARecord, RecordTarget } from 'aws-cdk-lib/aws-route53'
 import { AccessLogFormat, EndpointType, LogGroupLogDestination, RestApi } from 'aws-cdk-lib/aws-apigateway'
 import { LogGroup } from 'aws-cdk-lib/aws-logs'
 import { CorsHttpMethod } from 'aws-cdk-lib/aws-apigatewayv2'
-import { ApiGateway, CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets'
+import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets'
 import { HttpOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins'
 import {
   AllowedMethods,
@@ -22,14 +22,15 @@ import { SSM_PARAM_NAMES } from '../../../multipleContexts/ssmParams'
 import { MainStackProps } from './mainStackProps'
 
 export function defineWebInfrastructure(scope: Construct, props: MainStackProps) {
-  const { apiDomainName, restApi } = defineRestApiGateway(scope, props)
+  const { apiDomainName, apiPath, restApi } = defineRestApiGateway(scope, props)
   const websiteBucket = defineWebsiteBucket(scope, props)
-  defineCloudfront(scope, props, websiteBucket, apiDomainName)
+  defineCloudfront(scope, props, websiteBucket, apiDomainName, apiPath)
   return { restApi }
 }
 
 function defineRestApiGateway(scope: Construct, props: MainStackProps) {
-  const apiDomainName = `api-${props.appName}.${props.web.parentDomainName}`
+  const parentDomainName = props.web.parentDomainName
+
   const restApi = new RestApi(scope, 'RestApi', {
     restApiName: `${props.appName}-rest`,
     endpointTypes: [EndpointType.REGIONAL],
@@ -45,28 +46,22 @@ function defineRestApiGateway(scope: Construct, props: MainStackProps) {
         '{"requestTime":"$context.requestTime","requestId":"$context.requestId","httpMethod":"$context.httpMethod","path":"$context.path","resourcePath":"$context.resourcePath","status":$context.status,"responseLatency":$context.responseLatency}'
       )
     },
-    domainName: {
-      domainName: apiDomainName,
-      certificate: props.certificate
-    },
     defaultCorsPreflightOptions: {
       allowHeaders: ['*'],
       allowMethods: [CorsHttpMethod.GET, CorsHttpMethod.HEAD, CorsHttpMethod.OPTIONS, CorsHttpMethod.POST],
-      allowOrigins: ['http://localhost:9000', `https://${props.appName}.${props.web.parentDomainName}`],
+      // TOEventually - reconsider origins here
+      allowOrigins: [
+        'http://localhost:9000',
+        ...(parentDomainName ? [`https://${props.appName}.${parentDomainName}`] : [])
+      ],
       allowCredentials: true,
       maxAge: Duration.days(10)
     }
   })
 
-  new ARecord(scope, 'RestAPIDNSRecord', {
-    zone: props.zone,
-    recordName: apiDomainName,
-    target: RecordTarget.fromAlias(new ApiGateway(restApi)),
-    ttl: Duration.minutes(5)
-  })
-
   return {
-    apiDomainName,
+    apiDomainName: `${restApi.restApiId}.execute-api.${props.env.region}.amazonaws.com`,
+    apiPath: `/${restApi.deploymentStage.stageName}`,
     restApi
   }
 }
@@ -96,10 +91,10 @@ function defineCloudfront(
   scope: Construct,
   props: MainStackProps,
   websiteBucket: Bucket,
-  apiDomainName: string
+  apiDomainName: string,
+  apiPath: string
 ) {
-  // TOEventually - consider scrapping API GW custom domain name since nothing using it
-  const apiOrigin = new HttpOrigin(apiDomainName)
+  const apiOrigin = new HttpOrigin(apiDomainName, { originPath: apiPath })
   const apiGatewayBehavior: BehaviorOptions = {
     origin: apiOrigin,
     viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -109,14 +104,15 @@ function defineCloudfront(
     cachePolicy: CachePolicy.CACHING_DISABLED
   }
 
-  const fullWebHostName = `${props.appName}.${props.web.parentDomainName}`
-  saveInSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.WEB_HOSTNAME, fullWebHostName)
+  const parentDomainName = props.web.parentDomainName
+  const zone = props.zone
+  const certificate = props.certificate
+  const fullCustomHostName =
+    parentDomainName && zone && certificate ? `${props.appName}.${parentDomainName}` : undefined
 
   const cloudfront = new Distribution(scope, 'Cloudfront', {
     defaultRootObject: 'index.html',
     httpVersion: HttpVersion.HTTP2_AND_3,
-    domainNames: [fullWebHostName],
-    certificate: props.certificate,
     defaultBehavior: {
       origin: new S3Origin(websiteBucket),
       viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -128,13 +124,21 @@ function defineCloudfront(
       'github/*': apiGatewayBehavior,
       'app/*': apiGatewayBehavior,
       'apia/*': apiGatewayBehavior
-    }
+    },
+    ...(fullCustomHostName ? { domainNames: [fullCustomHostName] } : {}),
+    ...(fullCustomHostName && certificate ? { certificate } : {})
   })
 
-  new ARecord(scope, 'CloudfrontDNSRecord', {
-    zone: props.zone,
-    recordName: fullWebHostName,
-    target: RecordTarget.fromAlias(new CloudFrontTarget(cloudfront)),
-    ttl: Duration.minutes(5)
-  })
+  const webHostname = fullCustomHostName ? fullCustomHostName : cloudfront.distributionDomainName
+  saveInSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.WEB_HOSTNAME, webHostname)
+  new CfnOutput(scope, 'WebHostname', { value: webHostname })
+
+  if (zone && fullCustomHostName) {
+    new ARecord(scope, 'CloudfrontDNSRecord', {
+      zone,
+      recordName: fullCustomHostName,
+      target: RecordTarget.fromAlias(new CloudFrontTarget(cloudfront)),
+      ttl: Duration.minutes(5)
+    })
+  }
 }
