@@ -12,6 +12,10 @@ import { APIGatewayProxyEvent } from 'aws-lambda'
 import { logoutResponse } from '../../domain/github/githubUserAuth/githubWebAuthHandler'
 import { authorizeUserRequest } from '../../domain/webAuth/userAuthorizer'
 import { notAuthorizedHTMLResponse } from '../../inboundInterfaces/standardHttpResponses'
+import { logger } from '../../util/logging'
+import { generateFragmentViewResult } from '../../web/views/viewResultWrappers'
+import { startSetupRoute } from '../../domain/github/setup/startGithubSetup'
+import { isFailure } from '../../util/structuredResult'
 
 const router = createRouter([showHelloRoute, showLatestActivityRoute, showRepoRoute, showWorkflowRoute])
 
@@ -19,10 +23,21 @@ let appState: AppState
 
 export const baseHandler: CicadaAPIAuthorizedAPIHandler = async (event: APIGatewayProxyEvent) => {
   if (!appState) {
-    appState = await lambdaStartup()
+    const startup = await lambdaStartup()
+    if (isFailure(startup)) {
+      logger.info('Github App not ready, returning boilerplate page')
+      return setupRequiredResponse
+    }
+
+    appState = startup.result
   }
+
   return await handleWebRequest(appState, event)
 }
+
+export const setupRequiredResponse = generateFragmentViewResult(`<p>
+Cicada GitHub app not ready yet. <a href="${startSetupRoute.path}">Go here to start the setup process</a>.
+</p>`)
 
 // TOEventually - top level error handler
 export async function handleWebRequest(appState: AppState, event: APIGatewayProxyEvent) {

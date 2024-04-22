@@ -13,6 +13,7 @@ import {
   generateApiGatewayAuthorizerResult
 } from '../../domain/webAuth/apiGatewayAuthorizer'
 import { WebAuthorizerContext } from '../../inboundInterfaces/lambdaTypes'
+import { isFailure } from '../../util/structuredResult'
 
 let appState: AppState
 
@@ -20,8 +21,16 @@ export const baseHandler: APIGatewayRequestAuthorizerWithContextHandler<WebAutho
   event: APIGatewayRequestAuthorizerEvent
 ): Promise<APIGatewayAuthorizerWithContextResult<WebAuthorizerContext>> => {
   if (!appState) {
-    appState = await lambdaStartup()
+    const startup = await lambdaStartup()
+
+    if (isFailure(startup)) {
+      logger.info('Github App not ready, not authorizing user')
+      return generateApiGatewayAuthorizerResult(event)
+    }
+
+    appState = startup.result
   }
+
   try {
     return await attemptToAuthorize(appState, event)
   } catch (e) {

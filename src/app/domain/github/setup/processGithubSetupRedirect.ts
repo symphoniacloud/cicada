@@ -18,13 +18,8 @@ export const setupRedirectRoute: Route<APIGatewayProxyEvent, GithubSetupAppState
 }
 
 async function setupRedirectHandler(appState: GithubSetupAppState, event: APIGatewayProxyEvent) {
-  if (appState.githubAppId) return setupAlreadyCompleteResponse
   return processRedirect(appState, event)
 }
-
-const setupAlreadyCompleteResponse = generateFragmentViewResult(`<p>
-Cicada is already configured - ignoring redirect. <a href="/">Return to home</a>
-</p>`)
 
 async function processRedirect(appState: GithubSetupAppState, event: APIGatewayProxyEvent) {
   const code = event.queryStringParameters?.['code']

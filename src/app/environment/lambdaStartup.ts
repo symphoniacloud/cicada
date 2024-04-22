@@ -8,9 +8,13 @@ import { realCicadaConfig } from './config'
 import { realS3 } from '../outboundInterfaces/s3Wrapper'
 import { consoleLogger, EntityStoreLogger } from '@symphoniacloud/dynamodb-entity-store'
 import { throwFunction } from '../../multipleContexts/errors'
+import { githubAppIsReady } from '../domain/github/setup/githubAppReadyCheck'
+import { failedWith, Result, successWith } from '../util/structuredResult'
 
-export async function lambdaStartup(): Promise<AppState> {
-  return await createAppStateWithAppName(getEnvVarOrThrow('APP_NAME'), consoleLogger)
+export async function lambdaStartup(): Promise<Result<AppState>> {
+  return (await githubAppIsReady())
+    ? successWith(await createAppStateWithAppName(getEnvVarOrThrow('APP_NAME'), consoleLogger))
+    : failedWith('Github App Not Ready')
 }
 
 export function getEnvVarOrThrow(name: string, env: NodeJS.ProcessEnv = process.env): string {

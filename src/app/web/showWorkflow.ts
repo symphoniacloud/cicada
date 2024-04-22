@@ -5,7 +5,7 @@ import { getRunsForWorkflow } from '../domain/github/githubWorkflowRunEvent'
 import { createShowWorkflowResponse } from './views/showWorkflowView'
 import { JTDSchemaType } from 'ajv/dist/jtd'
 import { validatingPathParser } from '../schema/urlPathParser'
-import { isFailed } from '../util/structuredResult'
+import { isFailure } from '../util/structuredResult'
 import { logger } from '../util/logging'
 import { notFoundHTMLResponse } from '../inboundInterfaces/standardHttpResponses'
 
@@ -32,7 +32,7 @@ const pathParser = validatingPathParser(showWorkflowRoute.path, showWorkflowPath
 
 export async function showWorkflow(appState: AppState, event: CicadaAuthorizedAPIEvent) {
   const parseResult = pathParser(event)
-  if (isFailed(parseResult)) {
+  if (isFailure(parseResult)) {
     logger.warn('Unexpected parse failure in showWorkflow', { reason: parseResult.reason })
     return notFoundHTMLResponse
   }
