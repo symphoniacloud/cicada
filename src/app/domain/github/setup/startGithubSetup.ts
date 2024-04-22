@@ -9,13 +9,8 @@ export const startSetupRoute: Route<APIGatewayProxyEvent, GithubSetupAppState> =
 }
 
 async function startSetupHandler(appState: GithubSetupAppState) {
-  if (appState.githubAppId) return setupAlreadyCompleteResponse
   return generateResponse(appState)
 }
-
-const setupAlreadyCompleteResponse = generateFragmentViewResult(`<p>
-Cicada is already configured. <a href="/">Return to home</a>
-</p>`)
 
 async function generateResponse(appState: GithubSetupAppState) {
   const { appName, webHostname, webhookCode, callbackState } = appState

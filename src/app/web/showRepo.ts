@@ -8,7 +8,7 @@ import { JTDSchemaType } from 'ajv/dist/jtd'
 import { validatingPathParser } from '../schema/urlPathParser'
 import { getRepository } from '../domain/github/githubRepository'
 import { notFoundHTMLResponse } from '../inboundInterfaces/standardHttpResponses'
-import { isFailed } from '../util/structuredResult'
+import { isFailure } from '../util/structuredResult'
 import { logger } from '../util/logging'
 
 export const showRepoRoute: Route<CicadaAuthorizedAPIEvent> = {
@@ -32,7 +32,7 @@ const pathParser = validatingPathParser(showRepoRoute.path, showRepoPathSchema)
 
 export async function showRepo(appState: AppState, event: CicadaAuthorizedAPIEvent) {
   const parseResult = pathParser(event)
-  if (isFailed(parseResult)) {
+  if (isFailure(parseResult)) {
     logger.warn('Unexpected parse failure in showRepo', { reason: parseResult.reason })
     return notFoundHTMLResponse
   }

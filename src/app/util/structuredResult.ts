@@ -1,20 +1,29 @@
 export type Success<T> = { successResult: true; result: T }
-export type Failure = { successResult: false; reason: string }
-export type Result<T> = Success<T> | Failure
+export type Failure<T = unknown> = { successResult: false; reason: string; failureResult: T }
+export type Result<TSuccess, TFailure = unknown> = Success<TSuccess> | Failure<TFailure>
 
-export function isSuccess<T>(result: Result<T>): result is Success<T> {
+export function isSuccess<TSuccess, TFailure>(
+  result: Result<TSuccess, TFailure>
+): result is Success<TSuccess> {
   return result.successResult
 }
 
-export function isFailed<T>(result: Result<T>): result is Failure {
+export function isFailure<TSuccess, TFailure>(
+  result: Result<TSuccess, TFailure>
+): result is Failure<TFailure> {
   return !result.successResult
 }
 
-export const emptySuccess: Success<unknown> = {
-  successResult: true,
-  result: undefined
+export function successWith<T>(result: T): Success<T> {
+  return { successResult: true, result }
 }
 
-export function failedWith(reason: string): Failure {
-  return { successResult: false, reason }
+export const emptySuccess = successWith(undefined)
+
+export function failedWith(reason: string): Failure<unknown> {
+  return failedWithResult(reason, undefined)
+}
+
+export function failedWithResult<T>(reason: string, failureResult: T): Failure<T> {
+  return { successResult: false, reason, failureResult }
 }

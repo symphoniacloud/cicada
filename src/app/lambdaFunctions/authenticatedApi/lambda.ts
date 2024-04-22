@@ -18,6 +18,8 @@ import {
   CicadaAPIAuthorizedAPIEvent,
   CicadaAPIAuthorizedAPIHandler
 } from '../../inboundInterfaces/lambdaTypes'
+import { logger } from '../../util/logging'
+import { isFailure } from '../../util/structuredResult'
 
 const router = createRouter([
   {
@@ -46,7 +48,17 @@ let appState: AppState
 
 export const baseHandler: CicadaAPIAuthorizedAPIHandler = async (event) => {
   if (!appState) {
-    appState = await lambdaStartup()
+    const startup = await lambdaStartup()
+    if (isFailure(startup)) {
+      logger.error(
+        'Lambda function should not have been called - Github App not setup, and request should have been blocked by authorizer'
+      )
+      throw new Error(
+        'Lambda function should not have been called - Github App not setup, and request should have been blocked by authorizer'
+      )
+    }
+
+    appState = startup.result
   }
   return await handleApiMessage(appState, event)
 }

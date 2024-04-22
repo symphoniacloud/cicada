@@ -7,12 +7,22 @@ import {
   processWebhookFromS3Event,
   S3EventDetail
 } from '../../domain/github/webhookProcessor/githubWebhookProcessor'
+import { logger } from '../../util/logging'
+import { isFailure } from '../../util/structuredResult'
 
 let appState: AppState
 
 export const baseHandler: EventBridgeHandler<string, S3EventDetail, unknown> = async (event) => {
   if (!appState) {
-    appState = await lambdaStartup()
+    const startup = await lambdaStartup()
+    if (isFailure(startup)) {
+      logger.error(
+        'Github App not ready - not processing webhook event from GitHub. Did something go wrong with setup process?'
+      )
+      return
+    }
+
+    appState = startup.result
   }
   await processWebhookFromS3Event(appState, event)
 }

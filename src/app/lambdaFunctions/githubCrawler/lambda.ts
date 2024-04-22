@@ -4,12 +4,20 @@ import { lambdaStartup } from '../../environment/lambdaStartup'
 import middy from '@middy/core'
 import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { crawlGithubApp } from '../../domain/github/crawler/githubAppCrawler'
+import { logger } from '../../util/logging'
+import { isFailure } from '../../util/structuredResult'
 
 let appState: AppState
 
 export const baseHandler: Handler<unknown, void> = async (event) => {
   if (!appState) {
-    appState = await lambdaStartup()
+    const startup = await lambdaStartup()
+    if (isFailure(startup)) {
+      logger.info('Github App not ready, not crawling yet')
+      return
+    }
+
+    appState = startup.result
   }
 
   await crawlGithubApp(appState, {
