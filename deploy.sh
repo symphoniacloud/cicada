@@ -4,9 +4,9 @@
 # If the calling process already set the APP_NAME env var then just use it
 if [ -n "$APP_NAME" ]; then
   echo "Using pre-set APP_NAME for app name"
-# Otherwise if an argument was passed when this script was called then use that as the suffix of the app name
+# Otherwise if an argument was passed when this script was called then use that as the app name
 elif [ "$#" -gt 0 ]; then
-  APP_NAME="cicada-$1"
+  APP_NAME="$1"
 # Otherwise use the local username as the app name suffix (THIS WON'T WORK ON WINDOWS - THERE IS NO SHORT USERNAME)
 elif [ -n "$USER" ]; then
   APP_NAME="cicada-${USER}"
