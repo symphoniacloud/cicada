@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       APP_NAME: cicada-public-demo
-      WEB_PARENT_DOMAIN_NAME: ${{ secrets.WEB_PARENT_DOMAIN_NAME }}
+      PARENT_DOMAIN_NAME: ${{ secrets.PARENT_DOMAIN_NAME }}
       WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT: ${{ secrets.WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT }}
       ENVIRONMENT_TYPE: prod
       NO_HOTSWAP: 'true'
