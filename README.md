@@ -29,7 +29,7 @@ I first used the technique of Continuous Integration (CI) over 20 years ago, and
 using and/or building CI and CD (Continuous Delivery or Continous Deployment) tools and processes. My current tooling preference for CI and CD
 automation is GitHub Actions - however one of the areas I don't love about GitHub Actions is its UI - especially for notifications and cross-repository status.
 
-Cicada is an application that you can attach to your GitHub account and get useful data about your GitHub Actions workflows, and other
+Cicada is an application that you can attach to your GitHub account and use to get useful data about your GitHub Actions workflows, and other
 Github activity.
 
 Here is an example of Cicada's home screen:
@@ -47,11 +47,9 @@ Here's what a notification looks like on my iPhone:
 
 ![img.png](docs/images/webPushiPhoneExample.png)
 
-You might be able to realize why Cicada has its name when you see it written as CICaDa. :)
-
 ## Setting up Cicada
 
-Please see [Setting Up Cicada](docs/SettingUpCicada.md) for Setup instructions.
+See [Setting Up Cicada](docs/SettingUpCicada.md) for Setup instructions.
 
 ## Using Cicada
 
@@ -67,7 +65,8 @@ Now try logging in - click the "login with your GitHub user" link. You'll go thr
 On each Cicada screen you'll see a "Manage Web Push Notifications" link - choosing this will allow you to subscribe for notifications.
 
 **IMPORTANT FOR IPHONE USERS** :
-On an iPhone you need to "install" Cicada as a Progressive Web App (PWA) first - you do this by adding it to your home screen via the "share" button. Open the PWA version of Cicada and then you should be able to subscribe for notifications.
+On an iPhone you need to "install" Cicada as a Progressive Web App (PWA) first - you do this by adding it to your home screen via the "share" button in Safari.
+Open the PWA version of Cicada from your home screen and then you should be able to subscribe for notifications.
 
 At the moment notifications are all-or-nothing - you'll get notified of all GitHub Actions Workflow runs in your account. Eventually I'd like to have this be more configurable.
 

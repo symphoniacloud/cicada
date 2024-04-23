@@ -72,7 +72,7 @@ You **must** have a publicly reachable Route53 DNS zone for `PARENT_DOMAIN_NAME`
 
 #### 3 - Certificate
 
-You **must** have an AWS Certificate Manager Certificate in same AWS account as you are deploying Cicada to. This certificate must cover your full custom domain name.
+You **must** have an AWS Certificate Manager Certificate in the same AWS account as you are deploying Cicada to. This certificate must cover your full custom domain name.
 
 #### Example
 
@@ -102,10 +102,10 @@ Outputs:
 
 A few things to note about this example:
 
-* You'll need to make sure the Route 53 hosted zone is publicly reachable
+* You'll need to separately make sure the Route 53 hosted zone is publicly reachable
 * In this example I'm using a wildcard certificate - this allows using the same certificate for multiple deployments of Cicada with different hostnames
 * I'm outputting the Certificate's ARN as a CloudFormation Export. 
-  This is very-much optional, but Cicada can use this CloudFormation Export of you've created one.
+  This is very-much optional, but Cicada can use this CloudFormation Export if you've created one.
 
 ## Prepare to deploy
 
@@ -122,7 +122,7 @@ Choose an `APP_NAME` value - this is used to prefix / namespace the names of dep
 
 By default when deploying from Unix or Mac environments `APP_NAME` will be `cicada-USER_NAME`, where `USER_NAME` is the name of the user running the deployment process. 
 
-You can override APP_NAME either via environment variable, or when calling the deployment script.  
+You can override `APP_NAME` either via environment variable, or when calling the deployment script.  
 
 ### Environment variables 
 
@@ -166,7 +166,7 @@ arn:aws:cloudformation:us-east-1:123456789012:stack/cicada-main/74....
 ✨  Total time: 324.88s
 ```
 
-The value of the `Main.CicadaHomePage` Output is useful - that's the home page for running this deployment of Cicada.
+**The value of the `Main.CicadaHomePage` Output is important** - that's the home page for running this installation of Cicada.
 
 ## Set up GitHub App
 
