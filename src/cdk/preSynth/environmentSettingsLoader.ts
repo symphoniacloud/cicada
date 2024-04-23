@@ -14,6 +14,7 @@ export function calculateEnvironmentSettingsWithEnvironmentVariables(
   return {
     web: {
       parentDomainName: getFromLocalEnvOrUndefined('WEB_PARENT_DOMAIN_NAME', env),
+      certificateArn: getFromLocalEnvOrUndefined('WEB_CERTIFICATE_ARN', env),
       certificateArnCloudformationExport: getFromLocalEnvOrUndefined(
         'WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT',
         env

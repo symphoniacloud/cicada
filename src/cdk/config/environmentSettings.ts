@@ -5,6 +5,7 @@ import { RemovalPolicy } from 'aws-cdk-lib'
 export interface EnvironmentSettings {
   readonly web: {
     readonly parentDomainName?: string
+    readonly certificateArn?: string
     readonly certificateArnCloudformationExport?: string
   }
   readonly logLevel: LogLevel
