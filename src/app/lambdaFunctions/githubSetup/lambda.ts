@@ -4,7 +4,7 @@ import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { handleGithubSetupRequest } from '../../domain/github/setup/appSetupHandler'
 import { GithubSetupAppState, githubSetupStartup } from '../../domain/github/setup/githubSetupAppState'
 import { githubAppIsReady } from '../../domain/github/setup/githubAppReadyCheck'
-import { generateFragmentViewResult } from '../../web/views/viewResultWrappers'
+import { generatePageViewResultWithoutHtmx } from '../../web/views/viewResultWrappers'
 
 let appState: GithubSetupAppState
 
@@ -18,8 +18,8 @@ export const baseHandler: APIGatewayProxyHandler = async (event) => {
   return await handleGithubSetupRequest(appState, event)
 }
 
-const setupAlreadyCompleteResponse = generateFragmentViewResult(`<p>
-Cicada is already configured. <a href="/">Return to home</a>
+const setupAlreadyCompleteResponse = generatePageViewResultWithoutHtmx(`<p>
+Cicada is already configured.
 </p>`)
 
 // Entry point - usage is defined by CDK

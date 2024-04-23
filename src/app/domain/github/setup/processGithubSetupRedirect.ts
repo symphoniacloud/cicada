@@ -1,7 +1,7 @@
 import { Route } from '../../../internalHttpRouter/internalHttpRoute'
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import { GithubSetupAppState } from './githubSetupAppState'
-import { generateFragmentViewResult } from '../../../web/views/viewResultWrappers'
+import { generatePageViewResultWithoutHtmx } from '../../../web/views/viewResultWrappers'
 import { Octokit } from '@octokit/rest'
 import { ParameterType, PutParameterCommand, SSMClient } from '@aws-sdk/client-ssm'
 import {
@@ -40,11 +40,14 @@ async function processRedirect(appState: GithubSetupAppState, event: APIGatewayP
       ? `https://github.com/organizations/${appDetails.ownerLogin}/settings/apps/${appDetails.appName}/installations`
       : `https://github.com/settings/apps/${appDetails.appName}/installations`
 
-  return generateFragmentViewResult(`<p>
+  return generatePageViewResultWithoutHtmx(
+    `<p>
 Github app ${appDetails.appName} has been successsfully created.
 You now need to install it in GitHub <a href="${installationsPath}">here</a>.
-Once you've installed the GitHub app Cicada will start loading your GitHub data.
-</p>`)
+Once you've installed the GitHub app Cicada will start loading your GitHub data - <b>this can take a minute or more</b>.
+</p>`,
+    false
+  )
 }
 
 export async function callGithubToFinishAppCreation(code: string) {
@@ -122,10 +125,17 @@ async function writeSSMParameter(
   )
 }
 
-const noCodeResponse = generateFragmentViewResult(`<p>Unexpected redirect from GitHub - no code on URL</p>`)
+const noCodeResponse = generatePageViewResultWithoutHtmx(
+  `<p>Unexpected redirect from GitHub - no code on URL</p>`,
+  false
+)
 
-const noStateResponse = generateFragmentViewResult(`<p>Unexpected redirect from GitHub - no state on URL</p>`)
+const noStateResponse = generatePageViewResultWithoutHtmx(
+  `<p>Unexpected redirect from GitHub - no state on URL</p>`,
+  false
+)
 
-const invalidStateResponse = generateFragmentViewResult(
-  `<p>Unexpected redirect from GitHub - invalid state on URL</p>`
+const invalidStateResponse = generatePageViewResultWithoutHtmx(
+  `<p>Unexpected redirect from GitHub - invalid state on URL</p>`,
+  false
 )
