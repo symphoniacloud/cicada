@@ -131,7 +131,7 @@ function defineCloudfront(
 
   const webHostname = fullCustomHostName ? fullCustomHostName : cloudfront.distributionDomainName
   saveInSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.WEB_HOSTNAME, webHostname)
-  new CfnOutput(scope, 'WebHostname', { value: webHostname })
+  new CfnOutput(scope, 'CicadaHomePage', { value: `https://${webHostname}` })
 
   if (zone && fullCustomHostName) {
     new ARecord(scope, 'CloudfrontDNSRecord', {

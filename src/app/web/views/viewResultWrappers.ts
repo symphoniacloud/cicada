@@ -17,13 +17,17 @@ ${bodyContents}
 </html>`)
 }
 
-export function generatePageViewResultWithoutHtmx(bodyContents: string) {
+export function generatePageViewResultWithoutHtmx(bodyContents: string, loggedIn = true) {
+  const footer = loggedIn
+    ? `  <p><a href='web-push.html'>Manage Web Push Notifications</a></p>
+  <p><a href='/'>Back to home</a></p>
+  <p><a href='/github/auth/logout'>Logout</a></p>`
+    : `  <p><a href='/'>Back to home</a></p>`
+
   return generateFragmentViewResult(`<div class='container' id='toplevel'>
   <h2>Cicada</h2>
 ${bodyContents}
   <hr />
-  <p><a href='web-push.html'>Manage Web Push Notifications</a></p>
-  <p><a href='/'>Back to home</a></p>
-  <p><a href='/github/auth/logout'>Logout</a></p>
+${footer}
 </div>`)
 }
