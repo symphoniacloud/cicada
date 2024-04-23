@@ -20,9 +20,20 @@ export interface MainStackProps extends AllStacksProps {
   zone?: IHostedZone
 }
 
+function locateCertificate(scope: Construct, props: AllStacksProps) {
+  const { certificateArn, certificateArnCloudformationExport: certificateExport } = props.web
+  const arn = certificateArn
+    ? certificateArn
+    : certificateExport
+    ? Fn.importValue(certificateExport)
+    : undefined
+  return arn ? Certificate.fromCertificateArn(scope, 'StandardCertificate', arn) : undefined
+}
+
 export function createMainStackProps(scope: Construct, props: AllStacksProps): MainStackProps {
   const parentDomainName = props.web.parentDomainName
-  const certificateExport = props.web.certificateArnCloudformationExport
+  const certificate = locateCertificate(scope, props)
+
   return {
     ...props,
     allTables: lookupTables(scope, props),
@@ -31,13 +42,9 @@ export function createMainStackProps(scope: Construct, props: AllStacksProps): M
       'EventsBucket',
       readFromSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.EVENTS_BUCKET_NAME)
     ),
-    ...(certificateExport
+    ...(certificate
       ? {
-          certificate: Certificate.fromCertificateArn(
-            scope,
-            'StandardCertificate',
-            Fn.importValue(certificateExport)
-          )
+          certificate
         }
       : {}),
     ...(parentDomainName
