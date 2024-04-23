@@ -4,7 +4,7 @@ import { throwFunction } from './errors'
 export const LOCAL_ENV_VARS = [
   'APP_NAME',
   'ENVIRONMENT_TYPE',
-  'WEB_PARENT_DOMAIN_NAME',
+  'PARENT_DOMAIN_NAME',
   'WEB_CERTIFICATE_ARN',
   'WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT'
 ] as const

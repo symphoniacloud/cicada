@@ -127,7 +127,7 @@ First - clone this repo, or a fork, to your local machine
 
 Then copy the [.env-template](./.env-template) file in the project root to a file named _.env_, open it, and update as follows
 
-* Set `WEB_PARENT_DOMAIN_NAME` to the same as the Route 53 hosted zone name described in the previous section
+* Set `PARENT_DOMAIN_NAME` to the same as the Route 53 hosted zone name described in the previous section
 * Set `WEB_CERTIFICATE_ARN_CLOUDFORMATION_EXPORT` to the **name**
   of the CloudFormation Export for the certificate described in the previous section. If you used the example CloudFormation template I provided it's whatever you replaced `YourCertificateExportName` with.
 
@@ -165,7 +165,7 @@ arn:aws:cloudformation:us-east-1:123456789012:stack/cicada-main/74....
 
 Cicada has to be **registered** and **installed** as a "GitHub App" in your GitHub account. This process is mostly automated, but you need to perform a few steps:
 
-* Go to `https://APP_NAME.WEB_PARENT_DOMAIN_NAME/github/setup/start` where `APP_NAME` and `WEB_PARENT_DOMAIN_NAME` are as described already.
+* Go to `https://APP_NAME.PARENT_DOMAIN_NAME/github/setup/start` where `APP_NAME` and `PARENT_DOMAIN_NAME` are as described already.
 * You should see instructions telling you to press one of two buttons. 
   To register Cicada into a _Personal_ account just press the first button.
   To register Cicada into an _Organization_ account type the organization name into the box, and press the second button.
