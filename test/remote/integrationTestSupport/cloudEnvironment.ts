@@ -1,13 +1,9 @@
 import { userInfo } from 'node:os'
-import * as dotenv from 'dotenv'
-import path from 'path'
 import { createAppStateWithAppName } from '../../../src/app/environment/lambdaStartup'
 import { AppState } from '../../../src/app/environment/AppState'
 import { SsmParamName } from '../../../src/multipleContexts/ssmParams'
 import { noopLogger } from '@symphoniacloud/dynamodb-entity-store'
 import { readFromSSMInTests } from './ssm'
-
-dotenv.config({ path: path.resolve(__dirname, '../../../.env') })
 
 let appState: AppState
 
