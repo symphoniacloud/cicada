@@ -172,8 +172,7 @@ arn:aws:cloudformation:us-east-1:123456789012:stack/cicada-main/74....
 
 Cicada has to be **registered** and **installed** as a "GitHub App" in your GitHub account. This process is mostly automated, but you need to perform a few steps:
 
-* Go to `Main.CicadaHomePage` from the previous section.
-* Follow the link to start GitHub App setup
+* Go to `https://YOUR_WEB_HOST_NAME/github/setup/start`, where `YOUR_WEB_HOST_NAME` is the value of `Main.CicadaHomePage` from the previous section.
 * You should see instructions telling you to press one of two buttons.
   To register Cicada into a _Personal_ account just press the first button.
   To register Cicada into an _Organization_ account type the organization name into the box, and press the second button.
@@ -182,7 +181,7 @@ Cicada has to be **registered** and **installed** as a "GitHub App" in your GitH
 * If all goes well Cicada will now start downloading data from your Github account.
   **Wait a few seconds / minutes (depending on your account size)** - it will take a little while for Cicada to crawl your account resources.
 
-Finally you can go back to the Cicada Home Page and login, at which point setup is complete.
+Finally you can go back to the Cicada Home Page (`https://YOUR_WEB_HOST_NAME`) and login, at which point setup is complete.
 
 ## Load older data
 
