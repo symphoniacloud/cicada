@@ -4,31 +4,18 @@ import { GithubInstallationEntity } from '../entityStore/entities/GithubInstalla
 import { logger } from '../../util/logging'
 import deepEqual from 'deep-equal'
 import { RawGithubInstallation } from '../types/rawGithub/RawGithubInstallation'
-import { crawlInstallation } from './crawler/githubInstallationCrawler'
-import { calculateCrawlChildren, CrawlConfiguration } from './crawler/crawlConfiguration'
 
-export async function processRawInstallation(
-  appState: AppState,
-  rawInstallation: RawGithubInstallation,
-  crawlConfiguration: CrawlConfiguration
-) {
-  await processInstallation(appState, fromRawGithubInstallation(rawInstallation), crawlConfiguration)
+export async function processRawInstallation(appState: AppState, rawInstallation: RawGithubInstallation) {
+  return await processInstallation(appState, fromRawGithubInstallation(rawInstallation))
 }
 
-export async function processInstallation(
-  appState: AppState,
-  installation: GithubInstallation,
-  crawlConfiguration: CrawlConfiguration
-) {
+export async function processInstallation(appState: AppState, installation: GithubInstallation) {
   if (`${installation.appId}` !== (await appState.config.github()).appId) {
     logger.warn(`Not processing invalid installation - unexpected app ID`)
-    return
+    return null
   }
 
-  const { installationStateChanged } = await saveInstallation(appState, installation)
-  if (calculateCrawlChildren(crawlConfiguration, installationStateChanged)) {
-    await crawlInstallation(appState, installation, crawlConfiguration)
-  }
+  return await saveInstallation(appState, installation)
 }
 
 async function saveInstallation(appState: AppState, installation: GithubInstallation) {
@@ -56,9 +43,7 @@ async function saveInstallation(appState: AppState, installation: GithubInstalla
     await installationsStore.put(installation)
   }
 
-  return {
-    installationStateChanged
-  }
+  return installation
 }
 
 export function installationsEqual(x: GithubInstallation, y: GithubInstallation) {

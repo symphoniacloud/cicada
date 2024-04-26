@@ -39,3 +39,7 @@ export function arrayDifferenceDeep<T>(xs: T[], ys: T[]): T[] {
 }
 
 export type NonEmptyArray<T> = [T, ...T[]]
+
+export function removeNullAndUndefined<T>(xs: (T | undefined | null)[]) {
+  return xs.filter((x) => x !== null && x !== undefined) as T[]
+}

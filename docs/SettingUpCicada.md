@@ -183,14 +183,4 @@ Cicada has to be **registered** and **installed** as a "GitHub App" in your GitH
 
 Finally you can go back to the Cicada Home Page (`https://YOUR_WEB_HOST_NAME`) and login, at which point setup is complete.
 
-## Load older data
-
-Depending on how recently you've had activity in your GitHub account you may already see some data from the logged-in home screen. If not then:
-
-* Go to the Lambda Console in your account
-* Go to the _githubCrawler_ function for your installation
-* Go to the "Test" tab
-* Set the _Event JSON_ section to `{"lookbackDays": 90}` (adjust the value to more or few days)
-* Click the "Test" button
-
-This will load more data from your GitHub account. NB: only GitHub Actions Runs data will be available more than a couple of weeks in the past - you won't see any older Push events than that because they're not available from GitHub.
+On installation, Cicada loads the past 30 days of workflow run events, and however many pushes GitHub will provide - usually a few days.

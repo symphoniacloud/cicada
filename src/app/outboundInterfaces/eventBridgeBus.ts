@@ -6,8 +6,13 @@ import { AppState } from '../environment/AppState'
 import { GithubPush } from '../domain/types/GithubPush'
 import { GithubWorkflowRunEvent } from '../domain/types/GithubWorkflowRunEvent'
 import { WebPushTestEvent } from '../domain/webPush/WebPushTestEvent'
+import { GithubInstallation } from '../domain/types/GithubInstallation'
 
-export type CicadaEventBridgeData = GithubPush | GithubWorkflowRunEvent | WebPushTestEvent
+export type CicadaEventBridgeData =
+  | GithubPush
+  | GithubWorkflowRunEvent
+  | WebPushTestEvent
+  | GithubInstallation
 
 // This exists since eventually would be nice to add metadata (see https://community.aws/posts/eventbridge-schema-registry-best-practices)
 export interface CicadaEventBridgeDetail {

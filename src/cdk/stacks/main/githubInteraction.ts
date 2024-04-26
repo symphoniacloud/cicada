@@ -10,10 +10,8 @@ import {
 } from 'aws-cdk-lib/aws-apigateway'
 import { grantLambdaFunctionPermissionToPutEvents } from '../../support/eventbridge'
 import { Effect, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam'
-import { Rule, Schedule } from 'aws-cdk-lib/aws-events'
+import { Rule } from 'aws-cdk-lib/aws-events'
 import * as targets from 'aws-cdk-lib/aws-events-targets'
-import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets'
-import { Duration } from 'aws-cdk-lib'
 import { MainStackProps } from './mainStackProps'
 
 export interface GithubInteractionProps extends MainStackProps {
@@ -25,7 +23,6 @@ export function defineGithubInteraction(scope: Construct, props: GithubInteracti
 
   defineSetup(scope, props, githubApiResource)
   defineAuth(scope, props, githubApiResource)
-  defineScheduledCrawler(scope, props)
   defineWebhook(scope, props, githubApiResource)
   defineWebhookFunction(scope, props)
 }
@@ -57,31 +54,6 @@ function defineAuth(scope: Construct, props: GithubInteractionProps, githubApiRe
     .addResource('auth')
     .addResource('{proxy+}')
     .addMethod(HttpMethod.GET, new LambdaIntegration(lambdaFunction))
-}
-
-function defineScheduledCrawler(scope: Construct, props: GithubInteractionProps) {
-  const lambdaFunction = new CicadaFunction(
-    scope,
-    cicadaFunctionProps(props, 'githubCrawler', {
-      memorySize: 512,
-      timeoutSeconds: 600,
-      tablesReadWriteAccess: [
-        'github-installations',
-        'github-users',
-        'github-account-memberships',
-        'github-repositories',
-        'github-repo-activity',
-        'github-latest-workflow-runs',
-        'github-latest-pushes-per-ref'
-      ]
-    })
-  )
-  grantLambdaFunctionPermissionToPutEvents(lambdaFunction, props)
-  new Rule(scope, 'ScheduleRule', {
-    description: 'Scheduled Github Crawler',
-    schedule: Schedule.rate(Duration.days(1)),
-    targets: [new LambdaFunction(lambdaFunction)]
-  })
 }
 
 const EVENTS_BUCKET_GITHUB_WEBHOOK_KEY_PREFIX = 'githubWebhook/'
