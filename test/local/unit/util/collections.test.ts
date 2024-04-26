@@ -3,6 +3,7 @@ import {
   arrayDifferenceDeep,
   excludeKeys,
   mergeOrderedLists,
+  removeNullAndUndefined,
   selectKeys
 } from '../../../../src/app/util/collections'
 
@@ -50,4 +51,11 @@ test('array difference', () => {
     { x: 1 },
     { x: 3 }
   ])
+})
+
+test('removeNullAndUndefined', () => {
+  expect(removeNullAndUndefined([])).toEqual([])
+  expect(removeNullAndUndefined([null, undefined])).toEqual([])
+  expect(removeNullAndUndefined([1, null, undefined, 1])).toEqual([1, 1])
+  expect(removeNullAndUndefined([null, 1, undefined, 1])).toEqual([1, 1])
 })

@@ -7,6 +7,7 @@ import { defineWebInfrastructure } from './webInfrastructure'
 import { defineGithubInteraction } from './githubInteraction'
 import { saveInSSMViaCloudFormation } from '../../support/ssm'
 import { SSM_PARAM_NAMES, SsmParamName } from '../../../multipleContexts/ssmParams'
+import { defineGithubCrawlers } from './githubCrawlers'
 
 export class MainStack extends Stack {
   constructor(scope: Construct, id: string, props: AllStacksProps) {
@@ -25,6 +26,8 @@ export class MainStack extends Stack {
       ...mainStackProps,
       restApi
     })
+
+    defineGithubCrawlers(this, mainStackProps)
 
     savePreGeneratedConfiguration(this, props)
   }

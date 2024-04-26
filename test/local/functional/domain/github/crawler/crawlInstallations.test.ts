@@ -1,12 +1,12 @@
 import { expect, test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
-import { crawlGithubApp } from '../../../../../../src/app/domain/github/crawler/githubAppCrawler'
 import {
   testOrgInstallation,
   testPersonalInstallation
 } from '../../../../../examples/cicada/githubDomainObjects'
 import example_personal_account_installation from '../../../../../examples/github/personal-account/api/installation.json'
 import example_org_installation from '../../../../../examples/github/org/api/installation.json'
+import { crawlInstallations } from '../../../../../../src/app/domain/github/crawler/crawlInstallations'
 
 test('app-crawler-for-personal-account-installation', async () => {
   // A
@@ -18,7 +18,7 @@ test('app-crawler-for-personal-account-installation', async () => {
   appState.githubClient.stubInstallations = [example_personal_account_installation]
 
   // A
-  await crawlGithubApp(appState, { crawlChildObjects: 'never', lookbackDays: 7 })
+  const result = await crawlInstallations(appState)
 
   // A
   expect(appState.dynamoDB.puts.length).toEqual(1)
@@ -31,6 +31,7 @@ test('app-crawler-for-personal-account-installation', async () => {
     },
     TableName: 'fakeGithubInstallationsTable'
   })
+  expect(result).toEqual([testPersonalInstallation])
 })
 
 test('app-crawler-for-org-installation', async () => {
@@ -43,7 +44,7 @@ test('app-crawler-for-org-installation', async () => {
   appState.githubClient.stubInstallations = [example_org_installation]
 
   // A
-  await crawlGithubApp(appState, { crawlChildObjects: 'never', lookbackDays: 7 })
+  const result = await crawlInstallations(appState)
 
   // A
   expect(appState.dynamoDB.puts.length).toEqual(1)
@@ -56,4 +57,5 @@ test('app-crawler-for-org-installation', async () => {
     },
     TableName: 'fakeGithubInstallationsTable'
   })
+  expect(result).toEqual([testOrgInstallation])
 })
