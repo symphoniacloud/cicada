@@ -1,14 +1,17 @@
 import { RawGithubRepository } from './rawGithub/RawGithubRepository'
 import { fromRawAccountType, GithubAccountType } from './githubCommonTypes'
 
-export interface GithubRepository {
+export interface GithubRepositorySummary {
   id: number
   name: string
-  fullName: string
-  private: boolean
   ownerId: number
   ownerName: string
   ownerType: GithubAccountType
+}
+
+export interface GithubRepository extends GithubRepositorySummary {
+  fullName: string
+  private: boolean
   htmlUrl: string
   description: string
   fork: boolean
@@ -23,15 +26,23 @@ export interface GithubRepository {
   defaultBranch: string
 }
 
-export function isGithubRepository(x: unknown): x is GithubRepository {
-  const candidate = x as GithubRepository
+export function isGithubRepositorySummary(x: unknown): x is GithubRepositorySummary {
+  const candidate = x as GithubRepositorySummary
   return (
     candidate.id !== undefined &&
     candidate.name !== undefined &&
-    candidate.fullName !== undefined &&
-    candidate.private !== undefined &&
     candidate.ownerName !== undefined &&
     candidate.ownerId !== undefined &&
+    (candidate.ownerType === 'organization' || candidate.ownerType === 'user')
+  )
+}
+
+export function isGithubRepository(x: unknown): x is GithubRepository {
+  const candidate = x as GithubRepository
+  return (
+    isGithubRepositorySummary(x) &&
+    candidate.fullName !== undefined &&
+    candidate.private !== undefined &&
     candidate.htmlUrl !== undefined &&
     candidate.description !== undefined &&
     candidate.fork !== undefined &&

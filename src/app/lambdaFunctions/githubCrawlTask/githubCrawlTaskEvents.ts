@@ -1,17 +1,17 @@
 import { GithubInstallation, isGithubInstallation } from '../../domain/types/GithubInstallation'
-import { GithubRepository, isGithubRepository } from '../../domain/types/GithubRepository'
+import { GithubRepositorySummary, isGithubRepositorySummary } from '../../domain/types/GithubRepository'
 import { throwError } from '@symphoniacloud/dynamodb-entity-store'
 import {
   CRAWLABLE_RESOURCES,
   CrawlableResource,
   isCrawlableResource
-} from '../../../multipleContexts/githubCrawler'
+} from '../../../multipleContexts/githubCrawler' // TOEventually - safer type checking here
 
 // TOEventually - safer type checking here
 
 export type CrawlEvent = { resourceType: CrawlableResource }
 type CrawlEventWithInstallation = CrawlEvent & { installation: GithubInstallation }
-type CrawlEventWithRepository = CrawlEvent & { repository: GithubRepository }
+type CrawlEventWithRepositorySummary = CrawlEvent & { repository: GithubRepositorySummary }
 
 export function isCrawlEvent(x: unknown): x is CrawlEvent {
   return x !== undefined && isCrawlableResource((x as CrawlEvent).resourceType)
@@ -22,21 +22,21 @@ export function isCrawlEventWithInstallation(x: CrawlEvent): x is CrawlEventWith
   return candidate.installation && isGithubInstallation(candidate.installation)
 }
 
-export function isCrawlEventWithRepository(x: CrawlEvent): x is CrawlEventWithRepository {
-  const candidate = x as CrawlEventWithRepository
-  return candidate.repository && isGithubRepository(candidate.repository)
+export function isCrawlEventWithRepositorySummary(x: CrawlEvent): x is CrawlEventWithRepositorySummary {
+  const candidate = x as CrawlEventWithRepositorySummary
+  return candidate.repository && isGithubRepositorySummary(candidate.repository)
 }
 
 export type CrawlInstallationsEvent = { resourceType: 'installations' }
 export type CrawlUsersEvent = { resourceType: 'users' } & CrawlEventWithInstallation
 export type CrawlRepositoriesEvent = { resourceType: 'repositories' } & CrawlEventWithInstallation
 export type CrawlPushesEvent = { resourceType: 'pushes' } & CrawlEventWithInstallation &
-  CrawlEventWithRepository
+  CrawlEventWithRepositorySummary
 export type CrawlWorkflowRunEventsEvent = {
   resourceType: 'pushes'
   lookbackDays: number
 } & CrawlEventWithInstallation &
-  CrawlEventWithRepository
+  CrawlEventWithRepositorySummary
 
 export function isCrawlInstallationsEvent(x: CrawlEvent): x is CrawlInstallationsEvent {
   return x.resourceType === CRAWLABLE_RESOURCES.INSTALLATIONS
@@ -61,7 +61,7 @@ export function isCrawlRepositoriesEvent(x: CrawlEvent): x is CrawlRepositoriesE
 export function isCrawlPushesEvent(x: CrawlEvent): x is CrawlPushesEvent {
   if (x.resourceType !== CRAWLABLE_RESOURCES.PUSHES) return false
   return (
-    (isCrawlEventWithInstallation(x) && isCrawlEventWithRepository(x)) ||
+    (isCrawlEventWithInstallation(x) && isCrawlEventWithRepositorySummary(x)) ||
     throwError(`Invalid object for ${CRAWLABLE_RESOURCES.PUSHES} : ${JSON.stringify(x)}`)()
   )
 }
@@ -70,7 +70,7 @@ export function isCrawlWorkflowRunEventsEvent(x: CrawlEvent): x is CrawlWorkflow
   if (x.resourceType !== CRAWLABLE_RESOURCES.WORKFLOW_RUN_EVENTS) return false
   const hasLookBackDays = typeof (x as CrawlWorkflowRunEventsEvent).lookbackDays !== undefined
   return (
-    (hasLookBackDays && isCrawlEventWithInstallation(x) && isCrawlEventWithRepository(x)) ||
+    (hasLookBackDays && isCrawlEventWithInstallation(x) && isCrawlEventWithRepositorySummary(x)) ||
     throwError(`Invalid object for ${CRAWLABLE_RESOURCES.WORKFLOW_RUN_EVENTS} : ${JSON.stringify(x)}`)()
   )
 }

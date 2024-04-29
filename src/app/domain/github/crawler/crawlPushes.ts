@@ -1,5 +1,5 @@
 import { AppState } from '../../../environment/AppState'
-import { GithubRepository } from '../../types/GithubRepository'
+import { GithubRepositorySummary } from '../../types/GithubRepository'
 import { isRawGithubPushEventEvent } from '../../types/rawGithub/RawGithubAPIPushEventEvent'
 import { fromRawGithubPushEventEvent, GithubPush } from '../../types/GithubPush'
 import { processPushes } from '../githubPush'
@@ -11,7 +11,7 @@ export async function crawlPushes(
   appState: AppState,
   // the owner ID on repo isn't sufficient when we are crawling public repos from other accounts
   installation: GithubInstallation,
-  repo: GithubRepository
+  repo: GithubRepositorySummary
 ) {
   const githubClient = appState.githubClient.clientForInstallation(installation.installationId)
   const allEventsForRepo = await githubClient.listMostRecentEventsForRepo(repo.ownerName, repo.name)

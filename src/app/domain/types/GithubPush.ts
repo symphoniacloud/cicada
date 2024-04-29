@@ -5,7 +5,7 @@ import {
   RawGithubAPIPushEventEventCommit
 } from './rawGithub/RawGithubAPIPushEventEvent'
 import { fromRawAccountType } from './githubCommonTypes'
-import { GithubRepository } from './GithubRepository'
+import { GithubRepositorySummary } from './GithubRepository'
 import { NonEmptyArray } from '../../util/collections'
 import { GithubRepositoryElement } from './GithubRepositoryElement'
 import { timestampToIso } from '../../util/dateAndTime'
@@ -99,7 +99,7 @@ function fromRawGithubWebhookPushCommit(commit: RawGithubWebhookPushCommit) {
 }
 
 export function fromRawGithubPushEventEvent(
-  { ownerId, ownerName, name: repoName, id: repoId, ownerType }: GithubRepository,
+  { ownerId, ownerName, name: repoName, id: repoId, ownerType }: GithubRepositorySummary,
   raw: RawGithubAPIPushEventEvent
 ): GithubPush | undefined {
   if (raw.payload.commits.length < 1) {
