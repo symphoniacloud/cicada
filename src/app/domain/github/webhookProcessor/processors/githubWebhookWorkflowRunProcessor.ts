@@ -1,9 +1,8 @@
 import { WebhookProcessor } from '../WebhookProcessor'
 import { AppState } from '../../../../environment/AppState'
 import { logger } from '../../../../util/logging'
-import { fromRawGithubWorkflowRunEvent } from '../../../types/GithubWorkflowRunEvent'
 import { isRawGithubWorkflowRunEvent } from '../../../types/rawGithub/RawGithubWorkflowRunEvent'
-import { processRunEvents } from '../../githubWorkflowRunEvent'
+import { processRawRunEvents } from '../../githubWorkflowRunEvent'
 
 export const githubWebhookWorkflowRunProcessor: WebhookProcessor = async (
   appState: AppState,
@@ -14,7 +13,7 @@ export const githubWebhookWorkflowRunProcessor: WebhookProcessor = async (
   if (!parsed) {
     return
   }
-  await processRunEvents(appState, [parsed], true)
+  await processRawRunEvents(appState, [parsed], true)
 }
 
 function parse(body: string) {
@@ -41,5 +40,5 @@ function parse(body: string) {
     return
   }
 
-  return fromRawGithubWorkflowRunEvent(workflowRun)
+  return workflowRun
 }

@@ -21,17 +21,10 @@ export async function processRawRunEvents(
   rawRunEvents: RawGithubWorkflowRunEvent[],
   publishNotifications: boolean
 ) {
-  await processRunEvents(appState, rawRunEvents.map(fromRawGithubWorkflowRunEvent), publishNotifications)
-}
-
-export async function processRunEvents(
-  appState: AppState,
-  runEvents: GithubWorkflowRunEvent[],
-  publishNotifications: boolean
-) {
-  // TOEventually - eventually get in progress too
   // TOEventually - this might not be sufficient - docs are ambiguous
-  const eventsToKeep = runEvents.filter(({ status }) => status === 'completed')
+  const eventsToKeep = rawRunEvents
+    .map(fromRawGithubWorkflowRunEvent)
+    .filter(({ status }) => status === 'completed')
   logger.debug(`Found ${eventsToKeep.length} interesting events`)
 
   const newEvents = await saveEvents(appState, eventsToKeep)
