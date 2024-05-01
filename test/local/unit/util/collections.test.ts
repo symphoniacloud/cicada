@@ -4,7 +4,8 @@ import {
   excludeKeys,
   mergeOrderedLists,
   removeNullAndUndefined,
-  selectKeys
+  selectKeys,
+  sortBy
 } from '../../../../src/app/util/collections'
 
 test('selectKeys', () => {
@@ -41,6 +42,27 @@ test('merge ordered lists', () => {
   expect(mergeOrderedLists([{ a: 1, b: 'oo' }], [], () => true)).toEqual([{ a: 1, b: 'oo' }])
   expect(mergeOrderedLists([], [{ a: 1, b: 'oo' }], () => true)).toEqual([{ a: 1, b: 'oo' }])
   expect(mergeOrderedLists([], [], () => true)).toEqual([])
+})
+
+test('sortBy', () => {
+  expect(sortBy([2, 1, 4, 3, 1], (x) => x)).toEqual([1, 1, 2, 3, 4])
+  expect(sortBy([2, 1, 4, 3, 1], (x) => x, true)).toEqual([1, 1, 2, 3, 4])
+  expect(sortBy([2, 1, 4, 3, 1], (x) => x, false)).toEqual([4, 3, 2, 1, 1])
+  expect(
+    sortBy(
+      [
+        { n: 0.3, x: 'a' },
+        { n: 0.2, x: 'b' },
+        { n: -0.1, x: 'c' }
+      ],
+      ({ n }) => n,
+      true
+    )
+  ).toEqual([
+    { n: -0.1, x: 'c' },
+    { n: 0.2, x: 'b' },
+    { n: 0.3, x: 'a' }
+  ])
 })
 
 test('array difference', () => {

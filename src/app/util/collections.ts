@@ -30,6 +30,10 @@ export function mergeOrderedLists<T>(xs: T[], ys: T[], comparator: (x: T, y: T) 
   return merged
 }
 
+export function sortBy<T>(xs: T[], toValue: (x: T) => number, sortAscending = true) {
+  return xs.sort((x, y) => (toValue(x) - toValue(y)) * (sortAscending ? 1 : -1))
+}
+
 /**
  * Returns elements of xs not in ys, using deepEqual equality over each element
  * Set.prototype.difference() isn't implemented in Node
