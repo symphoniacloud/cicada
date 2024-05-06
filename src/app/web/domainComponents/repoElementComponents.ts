@@ -1,5 +1,4 @@
 import { GithubRepositoryElement } from '../../domain/types/GithubRepositoryElement'
-import { inlineChildren, withOptions } from '../hiccough/hiccoughElement'
 import { a, td } from '../hiccough/hiccoughElements'
 import { githubAnchor } from './genericComponents'
 
@@ -11,10 +10,7 @@ export function repoCell({
 }: GithubRepositoryElement & {
   repoHtmlUrl: string
 }) {
-  return withOptions(
-    inlineChildren,
-    td(a(`/app/account/${ownerId}/repo/${repoId}`, repoName), '&nbsp;&nbsp;', githubAnchor(repoHtmlUrl))
-  )
+  return td(a(`/app/account/${ownerId}/repo/${repoId}`, repoName), '&nbsp;', githubAnchor(repoHtmlUrl))
 }
 
 export function githubRepoUrl({
@@ -32,12 +28,9 @@ export function commitCell(
   }
 ) {
   const { repoHtmlUrl, message, sha } = event
-  return withOptions(
-    inlineChildren,
-    td(
-      message.length < 40 ? message : `${message.substring(0, 40)}...`,
-      '&nbsp;&nbsp;',
-      githubAnchor(`${repoHtmlUrl ?? githubRepoUrl(event)}/commit/${sha}`)
-    )
+  return td(
+    message.length < 40 ? message : `${message.substring(0, 40)}...`,
+    '&nbsp;',
+    githubAnchor(`${repoHtmlUrl ?? githubRepoUrl(event)}/commit/${sha}`)
   )
 }

@@ -1,6 +1,5 @@
 import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
 import { GithubRepositoryElement } from '../../domain/types/GithubRepositoryElement'
-import { inlineChildren, withOptions } from '../hiccough/hiccoughElement'
 import { a, td, tr } from '../hiccough/hiccoughElements'
 import { Clock, displayDateTime } from '../../util/dateAndTime'
 import { githubAnchor } from './genericComponents'
@@ -55,16 +54,13 @@ export function workflowCell(
     Pick<GithubWorkflowRunEvent, 'workflowHtmlUrl' | 'workflowId' | 'workflowName' | 'path'>
 ) {
   const workflowPath = `${event.path.substring(event.path.indexOf('/') + 1)}`
-  return withOptions(
-    inlineChildren,
-    td(
-      a(
-        `/app/account/${event.ownerId}/repo/${event.repoId}/workflow/${event.workflowId}`,
-        event.workflowName ?? workflowPath
-      ),
-      '&nbsp;&nbsp;',
-      githubAnchor(event.workflowHtmlUrl ?? `${githubRepoUrl(event)}/actions/${workflowPath}`)
-    )
+  return td(
+    a(
+      `/app/account/${event.ownerId}/repo/${event.repoId}/workflow/${event.workflowId}`,
+      event.workflowName ?? workflowPath
+    ),
+    '&nbsp;',
+    githubAnchor(event.workflowHtmlUrl ?? `${githubRepoUrl(event)}/actions/${workflowPath}`)
   )
 }
 
@@ -77,10 +73,7 @@ const successfulRunResultCell = td('Success')
 const failedRunResultCell = td('Failed')
 
 export function workflowRunCell(clock: Clock, event: GithubWorkflowRunEvent) {
-  return withOptions(
-    inlineChildren,
-    td(displayDateTime(clock, event.updatedAt), '&nbsp;&nbsp;', githubAnchor(event.htmlUrl))
-  )
+  return td(displayDateTime(clock, event.updatedAt), '&nbsp;', githubAnchor(event.htmlUrl))
 }
 
 export function commitCellForWorkflowRunEvent(event: GithubWorkflowRunEvent) {

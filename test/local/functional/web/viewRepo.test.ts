@@ -92,7 +92,11 @@ test('view-repo', async () => {
   <body>
     <div class="container" id="toplevel">
       <h2>Cicada</h2>
-      <h3>Repository: cicada-test-org/org-test-repo-one&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a></h3>
+      <h3>
+Repository: cicada-test-org/org-test-repo-one
+&nbsp;
+        <a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a>
+      </h3>
       <h4>GitHub Actions Status</h4>
       <table class="table">
         <thead>
@@ -120,10 +124,26 @@ test('view-repo', async () => {
         <tbody>
           <tr class="success">
             <td>Successful Run</td>
-            <td><a href="/app/account/162483619/repo/768206479/workflow/88647110">Test Repo One Workflow</a>&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/actions/workflows/test.yml"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-            <td>2024-03-06T19:25:42Z&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-            <td>mikebroberts&nbsp;&nbsp;<a href="https://github.com/mikebroberts"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-            <td>Test Repo One Workflow&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/commit/8c3aa1cb0316ea23abeb2612457edb80868f53c8"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+            <td>
+              <a href="/app/account/162483619/repo/768206479/workflow/88647110">Test Repo One Workflow</a>
+&nbsp;
+              <a href="https://github.com/cicada-test-org/org-test-repo-one/actions/workflows/test.yml"><i class='bi bi-github' style='color: #6e5494'></i></a>
+            </td>
+            <td>
+2024-03-06T19:25:42Z
+&nbsp;
+              <a href="https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236"><i class='bi bi-github' style='color: #6e5494'></i></a>
+            </td>
+            <td>
+mikebroberts
+&nbsp;
+              <a href="https://github.com/mikebroberts"><i class='bi bi-github' style='color: #6e5494'></i></a>
+            </td>
+            <td>
+Test Repo One Workflow
+&nbsp;
+              <a href="https://github.com/cicada-test-org/org-test-repo-one/commit/8c3aa1cb0316ea23abeb2612457edb80868f53c8"><i class='bi bi-github' style='color: #6e5494'></i></a>
+            </td>
           </tr>
         </tbody>
       </table>

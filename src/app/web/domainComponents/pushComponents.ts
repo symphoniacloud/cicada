@@ -5,7 +5,6 @@ import { latestCommitInPush } from '../../domain/github/githubPush'
 import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents'
 import { userCell } from './userComponents'
 import { GithubRepositoryElement } from '../../domain/types/GithubRepositoryElement'
-import { inlineChildren, withOptions } from '../hiccough/hiccoughElement'
 import { githubAnchor } from './genericComponents'
 
 export type PushRowOptions = {
@@ -39,13 +38,10 @@ export function repoCellForPush(push: GithubPush) {
 }
 
 function branchCell(push: GithubRepositoryElement & Pick<GithubPush, 'ref'>) {
-  return withOptions(
-    inlineChildren,
-    td(
-      push.ref.split('/')[2],
-      `&nbsp;&nbsp;`,
-      githubAnchor(`${githubRepoUrl(push)}/tree/${push.ref.split('/')[2]}`)
-    )
+  return td(
+    push.ref.split('/')[2],
+    `&nbsp;`,
+    githubAnchor(`${githubRepoUrl(push)}/tree/${push.ref.split('/')[2]}`)
   )
 }
 

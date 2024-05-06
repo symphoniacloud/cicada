@@ -4,7 +4,6 @@ import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEven
 import { githubAnchor } from '../domainComponents/genericComponents'
 import { GithubRepository } from '../../domain/types/GithubRepository'
 import { h3, h4, table, tbody, th, thead, tr } from '../hiccough/hiccoughElements'
-import { inlineChildren, withOptions } from '../hiccough/hiccoughElement'
 import { pageViewResultWithoutHtmx } from './viewResultWrappers'
 import { workflowRow } from '../domainComponents/workflowComponents'
 import { pushRow } from '../domainComponents/pushComponents'
@@ -17,17 +16,14 @@ export function createShowRepoResponse(
   activity: GithubActivity[]
 ) {
   const contents = [
-    withOptions(
-      inlineChildren,
-      h3(
-        `Repository: ${repo.ownerName}/${repo.name}`,
-        `&nbsp;&nbsp;`,
-        githubAnchor(
-          githubRepoUrl({
-            ...repo,
-            repoName: repo.name
-          })
-        )
+    h3(
+      `Repository: ${repo.ownerName}/${repo.name}`,
+      `&nbsp;`,
+      githubAnchor(
+        githubRepoUrl({
+          ...repo,
+          repoName: repo.name
+        })
       )
     ),
     h4('GitHub Actions Status'),

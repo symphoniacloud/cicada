@@ -114,12 +114,32 @@ test('latest-activity', async () => {
       </thead>
       <tbody>
         <tr class="success">
-          <td><a href="/app/account/162483619/repo/768206479">org-test-repo-one</a>&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-          <td><a href="/app/account/162483619/repo/768206479/workflow/88647110">Test Repo One Workflow</a>&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/actions/workflows/test.yml"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+          <td>
+            <a href="/app/account/162483619/repo/768206479">org-test-repo-one</a>
+&nbsp;
+            <a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a>
+          </td>
+          <td>
+            <a href="/app/account/162483619/repo/768206479/workflow/88647110">Test Repo One Workflow</a>
+&nbsp;
+            <a href="https://github.com/cicada-test-org/org-test-repo-one/actions/workflows/test.yml"><i class='bi bi-github' style='color: #6e5494'></i></a>
+          </td>
           <td>Success</td>
-          <td>2024-03-06T19:25:42Z&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-          <td>mikebroberts&nbsp;&nbsp;<a href="https://github.com/mikebroberts"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-          <td>Test Repo One Workflow&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/commit/8c3aa1cb0316ea23abeb2612457edb80868f53c8"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+          <td>
+2024-03-06T19:25:42Z
+&nbsp;
+            <a href="https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236"><i class='bi bi-github' style='color: #6e5494'></i></a>
+          </td>
+          <td>
+mikebroberts
+&nbsp;
+            <a href="https://github.com/mikebroberts"><i class='bi bi-github' style='color: #6e5494'></i></a>
+          </td>
+          <td>
+Test Repo One Workflow
+&nbsp;
+            <a href="https://github.com/cicada-test-org/org-test-repo-one/commit/8c3aa1cb0316ea23abeb2612457edb80868f53c8"><i class='bi bi-github' style='color: #6e5494'></i></a>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -136,11 +156,27 @@ test('latest-activity', async () => {
       </thead>
       <tbody>
         <tr class="info">
-          <td><a href="/app/account/162483619/repo/768206479">org-test-repo-one</a>&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-          <td>main&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/tree/main"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+          <td>
+            <a href="/app/account/162483619/repo/768206479">org-test-repo-one</a>
+&nbsp;
+            <a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a>
+          </td>
+          <td>
+main
+&nbsp;
+            <a href="https://github.com/cicada-test-org/org-test-repo-one/tree/main"><i class='bi bi-github' style='color: #6e5494'></i></a>
+          </td>
           <td>2024-03-06T17:00:40Z</td>
-          <td>mikebroberts&nbsp;&nbsp;<a href="https://github.com/mikebroberts"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-          <td>test workflow&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/commit/8c3aa1cb0316ea23abeb2612457edb80868f53c8"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+          <td>
+mikebroberts
+&nbsp;
+            <a href="https://github.com/mikebroberts"><i class='bi bi-github' style='color: #6e5494'></i></a>
+          </td>
+          <td>
+test workflow
+&nbsp;
+            <a href="https://github.com/cicada-test-org/org-test-repo-one/commit/8c3aa1cb0316ea23abeb2612457edb80868f53c8"><i class='bi bi-github' style='color: #6e5494'></i></a>
+          </td>
         </tr>
       </tbody>
     </table>
