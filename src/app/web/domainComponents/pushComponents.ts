@@ -8,22 +8,22 @@ import { GithubRepositoryElement } from '../../domain/types/GithubRepositoryElem
 import { githubAnchor } from './genericComponents'
 
 export type PushRowOptions = {
-  showDescriptionCell?: boolean
-  showRepoCell?: boolean
+  showDescription?: boolean
+  showRepo?: boolean
 }
 
 export function pushRow(clock: Clock, push: GithubPush, options?: PushRowOptions) {
-  const { showDescriptionCell, showRepoCell } = {
-    showDescriptionCell: false,
-    showRepoCell: false,
+  const { showDescription, showRepo } = {
+    showDescription: false,
+    showRepo: false,
     ...options
   }
 
   const { dateTime }: { dateTime: string } = push
   return tr(
     { class: 'info' },
-    showDescriptionCell ? pushDescriptionCell : undefined,
-    showRepoCell ? repoCellForPush(push) : undefined,
+    showDescription ? pushDescriptionCell : undefined,
+    showRepo ? repoCellForPush(push) : undefined,
     branchCell(push),
     td(displayDateTime(clock, dateTime)),
     userCell(push.actor),
@@ -33,16 +33,13 @@ export function pushRow(clock: Clock, push: GithubPush, options?: PushRowOptions
 
 const pushDescriptionCell = td('Push')
 
-export function repoCellForPush(push: GithubPush) {
+function repoCellForPush(push: GithubPush) {
   return repoCell({ ...push, repoHtmlUrl: githubRepoUrl(push) })
 }
 
 function branchCell(push: GithubRepositoryElement & Pick<GithubPush, 'ref'>) {
-  return td(
-    push.ref.split('/')[2],
-    `&nbsp;`,
-    githubAnchor(`${githubRepoUrl(push)}/tree/${push.ref.split('/')[2]}`)
-  )
+  const branchName = push.ref.split('/')[2]
+  return td(branchName, `&nbsp;`, githubAnchor(`${githubRepoUrl(push)}/tree/${branchName}`))
 }
 
 function commitCellForPush(push: GithubPush) {

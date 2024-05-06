@@ -16,15 +16,13 @@ export function createShowLatestActivityResponse(
     table(
       { class: 'table' },
       thead(tr(...['Repo', 'Workflow', 'Status', 'When', 'By', 'Commit'].map((x) => th(x)))),
-      tbody(
-        ...workflowStatus.map((e) => workflowRow(clock, e, { showRepoCell: true, showWorkflowCell: true }))
-      )
+      tbody(...workflowStatus.map((e) => workflowRow(clock, e, { showRepo: true, showWorkflow: true })))
     ),
     h3('Recent Branch Activity'),
     table(
       { class: 'table' },
       thead(tr(...['Repo', 'Branch', 'When', 'By', 'Commit'].map((x) => th(x)))),
-      tbody(...recentPushes.map((x) => pushRow(clock, x, { showRepoCell: true })))
+      tbody(...recentPushes.map((x) => pushRow(clock, x, { showRepo: true })))
     )
   ]
 

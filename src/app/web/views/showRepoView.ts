@@ -33,7 +33,7 @@ export function createShowRepoResponse(
       tbody(
         ...workflowStatus.map((event) =>
           workflowRow(clock, event, {
-            showWorkflowCell: true
+            showWorkflow: true
           })
         )
       )
@@ -46,10 +46,10 @@ export function createShowRepoResponse(
         ...activity.map((event) =>
           activityIsWorkflowRunActivity(event)
             ? workflowRow(clock, event.event, {
-                showDescriptionCell: true,
-                showWorkflowCell: true
+                showDescription: true,
+                showWorkflow: true
               })
-            : pushRow(clock, event.event, { showDescriptionCell: true })
+            : pushRow(clock, event.event, { showDescription: true })
         )
       )
     )
