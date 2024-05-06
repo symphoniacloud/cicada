@@ -1,22 +1,14 @@
 import { Clock } from '../../util/dateAndTime'
 import { activityIsWorkflowRunActivity, GithubActivity } from '../../domain/github/githubActivity'
 import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
-import {
-  branchCell,
-  commitCellForPush,
-  commitCellForWorkflowRunEvent,
-  githubAnchor,
-  githubRepoUrl,
-  plainDateTimeCell,
-  userCell,
-  workflowCell,
-  workflowRow
-} from './pageElements'
-import { runWasSuccessful } from '../../domain/github/githubWorkflowRunEvent'
+import { githubAnchor } from '../domainComponents/genericComponents'
 import { GithubRepository } from '../../domain/types/GithubRepository'
-import { h3, h4, table, tbody, td, th, thead, tr } from '../hiccough/hiccoughElements'
+import { h3, h4, table, tbody, th, thead, tr } from '../hiccough/hiccoughElements'
 import { inlineChildren, withOptions } from '../hiccough/hiccoughElement'
 import { pageViewResultWithoutHtmx } from './viewResultWrappers'
+import { workflowRow } from '../domainComponents/workflowComponents'
+import { pushRow } from '../domainComponents/pushComponents'
+import { githubRepoUrl } from '../domainComponents/repoElementComponents'
 
 export function createShowRepoResponse(
   clock: Clock,
@@ -45,7 +37,6 @@ export function createShowRepoResponse(
       tbody(
         ...workflowStatus.map((event) =>
           workflowRow(clock, event, {
-            showRepoCell: false,
             showWorkflowCell: true
           })
         )
@@ -55,34 +46,18 @@ export function createShowRepoResponse(
     table(
       { class: 'table' },
       thead(tr(...['Type', 'Activity', 'When', 'By', 'Commit'].map((x) => th(x)))),
-      tbody(...activity.map((event) => activityRow(clock, event)))
+      tbody(
+        ...activity.map((event) =>
+          activityIsWorkflowRunActivity(event)
+            ? workflowRow(clock, event.event, {
+                showDescriptionCell: true,
+                showWorkflowCell: true
+              })
+            : pushRow(clock, event.event, { showDescriptionCell: true })
+        )
+      )
     )
   ]
 
   return pageViewResultWithoutHtmx(contents)
-}
-
-function activityRow(clock: Clock, event: GithubActivity) {
-  if (activityIsWorkflowRunActivity(event)) {
-    const workflowRun = event.event
-    const wasSuccessful = runWasSuccessful(workflowRun)
-    return tr(
-      { class: wasSuccessful ? 'success' : 'danger' },
-      td(wasSuccessful ? 'Successful Run' : 'Failed Run'),
-      workflowCell(workflowRun),
-      plainDateTimeCell(clock, { dateTime: workflowRun.updatedAt }),
-      userCell(workflowRun.actor),
-      commitCellForWorkflowRunEvent(workflowRun)
-    )
-  } else {
-    const push = event.event
-    return tr(
-      { class: 'info' },
-      td('Push'),
-      branchCell(push),
-      plainDateTimeCell(clock, push),
-      userCell(push.actor),
-      commitCellForPush(push)
-    )
-  }
 }

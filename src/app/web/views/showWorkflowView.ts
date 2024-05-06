@@ -1,8 +1,8 @@
 import { Clock } from '../../util/dateAndTime'
 import { pageViewResultWithoutHtmx } from './viewResultWrappers'
 import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
-import { workflowRow } from './pageElements'
 import { h3, p, table, tbody, th, thead, tr } from '../hiccough/hiccoughElements'
+import { workflowRow } from '../domainComponents/workflowComponents'
 
 export function createShowWorkflowResponse(clock: Clock, runs: GithubWorkflowRunEvent[]) {
   const structure =
@@ -14,9 +14,7 @@ export function createShowWorkflowResponse(clock: Clock, runs: GithubWorkflowRun
           table(
             { class: 'table' },
             thead(tr(...['Result', 'When', 'By', 'Commit'].map((x) => th(x)))),
-            tbody(
-              ...runs.map((run) => workflowRow(clock, run, { showRepoCell: false, showWorkflowCell: false }))
-            )
+            tbody(...runs.map((run) => workflowRow(clock, run)))
           )
         ]
 

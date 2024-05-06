@@ -100,52 +100,50 @@ test('latest-activity', async () => {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   </head>
   <body>
-    <div id="latestActivity" class="container-fluid">
-      <h3>GitHub Actions Status</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Repo</th>
-            <th>Workflow</th>
-            <th>Status</th>
-            <th>When</th>
-            <th>By</th>
-            <th>Commit</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="success">
-            <td><a href="/app/account/162483619/repo/768206479">org-test-repo-one</a>&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-            <td><a href="/app/account/162483619/repo/768206479/workflow/88647110">Test Repo One Workflow</a>&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/actions/workflows/test.yml"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-            <td>Success</td>
-            <td>2024-03-06T19:25:42Z&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-            <td>mikebroberts&nbsp;&nbsp;<a href="https://github.com/mikebroberts"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-            <td>Test Repo One Workflow&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/commit/8c3aa1cb0316ea23abeb2612457edb80868f53c8"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-          </tr>
-        </tbody>
-      </table>
-      <h3>Recent Branch Activity</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Repo</th>
-            <th>Branch</th>
-            <th>When</th>
-            <th>By</th>
-            <th>Commit</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="info">
-            <td><a href="/app/account/162483619/repo/768206479">org-test-repo-one</a>&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-            <td>main&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/tree/main"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-            <td>2024-03-06T17:00:40Z</td>
-            <td>mikebroberts&nbsp;&nbsp;<a href="https://github.com/mikebroberts"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-            <td>test workflow&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/commit/8c3aa1cb0316ea23abeb2612457edb80868f53c8"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <h3>GitHub Actions Status</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Repo</th>
+          <th>Workflow</th>
+          <th>Status</th>
+          <th>When</th>
+          <th>By</th>
+          <th>Commit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="success">
+          <td><a href="/app/account/162483619/repo/768206479">org-test-repo-one</a>&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+          <td><a href="/app/account/162483619/repo/768206479/workflow/88647110">Test Repo One Workflow</a>&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/actions/workflows/test.yml"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+          <td>Success</td>
+          <td>2024-03-06T19:25:42Z&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+          <td>mikebroberts&nbsp;&nbsp;<a href="https://github.com/mikebroberts"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+          <td>Test Repo One Workflow&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/commit/8c3aa1cb0316ea23abeb2612457edb80868f53c8"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Recent Branch Activity</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Repo</th>
+          <th>Branch</th>
+          <th>When</th>
+          <th>By</th>
+          <th>Commit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="info">
+          <td><a href="/app/account/162483619/repo/768206479">org-test-repo-one</a>&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+          <td>main&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/tree/main"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+          <td>2024-03-06T17:00:40Z</td>
+          <td>mikebroberts&nbsp;&nbsp;<a href="https://github.com/mikebroberts"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+          <td>test workflow&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/commit/8c3aa1cb0316ea23abeb2612457edb80868f53c8"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+        </tr>
+      </tbody>
+    </table>
   </body>
 </html>`
   )
