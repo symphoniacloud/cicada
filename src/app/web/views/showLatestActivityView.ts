@@ -1,4 +1,4 @@
-import { generateFragmentViewResult } from './viewResultWrappers'
+import { fragmentViewResult } from './viewResultWrappers'
 import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
 import { GithubPush } from '../../domain/types/GithubPush'
 import { Clock } from '../../util/dateAndTime'
@@ -10,40 +10,39 @@ import {
   userCell,
   workflowRow
 } from './pageElements'
+import { div, h3, table, tbody, th, thead, tr } from '../hiccough/hiccoughElements'
 
 export function createShowLatestActivityResponse(
   clock: Clock,
   workflowStatus: GithubWorkflowRunEvent[],
   recentPushes: GithubPush[]
 ) {
-  return generateFragmentViewResult(`  <div id='latestActivity' class='container-fluid'>
-    <h3>GitHub Actions Status</h3>
-    <table class='table'>
-      <thead>
-        <tr><th>Repo</th><th>Workflow</th><th>Status</th><th>When</th><th>By</th><th>Commit</th></tr>
-      </thead>
-      <tbody>
-      ${workflowStatus.map((event) => workflowRow(clock, event)).join('')}
-      </tbody>
-    </table>
-    <h3>Recent Branch Activity</h3>
-    <table class='table'>
-      <thead>
-        <tr><th>Repo</th><th>Branch</th><th>When</th><th>By</th><th>Commit</th></tr>
-      </thead>
-      <tbody>
-      ${recentPushes.map((event) => pushRow(clock, event)).join('')}
-      </tbody>
-    </table>
-  </div>`)
+  const contents = div(
+    { id: 'latestActivity', class: 'container-fluid' },
+    h3('GitHub Actions Status'),
+    table(
+      { class: 'table' },
+      thead(tr(...['Repo', 'Workflow', 'Status', 'When', 'By', 'Commit'].map((x) => th(x)))),
+      tbody(...workflowStatus.map((e) => workflowRow(clock, e)))
+    ),
+    h3('Recent Branch Activity'),
+    table(
+      { class: 'table' },
+      thead(tr(...['Repo', 'Branch', 'When', 'By', 'Commit'].map((x) => th(x)))),
+      tbody(...recentPushes.map((x) => pushRow(clock, x)))
+    )
+  )
+
+  return fragmentViewResult(contents)
 }
 
 function pushRow(clock: Clock, push: GithubPush) {
-  return `<tr class='info'>
-        ${repoCellForPush(push)}
-        ${branchCell(push)}
-        ${plainDateTimeCell(clock, push)}
-        ${userCell(push.actor)}
-        ${commitCellForPush(push)}
-      </tr>`
+  return tr(
+    { class: 'info' },
+    repoCellForPush(push),
+    branchCell(push),
+    plainDateTimeCell(clock, push),
+    userCell(push.actor),
+    commitCellForPush(push)
+  )
 }

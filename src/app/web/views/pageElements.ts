@@ -3,6 +3,8 @@ import { GithubPush } from '../../domain/types/GithubPush'
 import { Clock, displayDateTime } from '../../util/dateAndTime'
 import { GithubRepositoryElement } from '../../domain/types/GithubRepositoryElement'
 import { latestCommitInPush } from '../../domain/github/githubPush'
+import { a, td, tr } from '../hiccough/hiccoughElements'
+import { inlineChildren, withOptions } from '../hiccough/hiccoughElement'
 
 export function workflowRow(
   clock: Clock,
@@ -15,20 +17,20 @@ export function workflowRow(
     showWorkflowCell: boolean
   } = { showRepoCell: true, showWorkflowCell: true }
 ) {
-  return `<tr ${workflowRunClass(event)}>
-${showRepoCell ? `        ${repoCell(event)}` : ''}
-${showWorkflowCell ? `        ${workflowCell(event)}` : ''}
-        ${workflowResultCell(event)}
-        ${workflowRunCell(clock, event)}
-        ${userCell(event.actor)}
-        ${commitCellForWorkflowRunEvent(event)}
-      </tr>`
+  return tr(
+    { class: workflowRunClass(event) },
+    showRepoCell ? repoCell(event) : undefined,
+    showWorkflowCell ? workflowCell(event) : undefined,
+    workflowResultCell(event),
+    workflowRunCell(clock, event),
+    userCell(event.actor),
+    commitCellForWorkflowRunEvent(event)
+  )
 }
 
 export function workflowRunClass(event: GithubWorkflowRunEvent) {
   // TOEventually - handle in progress
-  const isSuccessfulWorkflowRun = event.conclusion === 'success'
-  return `class='${isSuccessfulWorkflowRun ? 'success' : 'danger'}'`
+  return event.conclusion === 'success' ? 'success' : 'danger'
 }
 
 export function repoCellForPush(push: GithubPush) {
@@ -43,25 +45,37 @@ export function repoCell({
 }: GithubRepositoryElement & {
   repoHtmlUrl: string
 }) {
-  const cicadaRepoAnchor = anchor(`/app/account/${ownerId}/repo/${repoId}`, repoName)
-  return cell(`${cicadaRepoAnchor}&nbsp;&nbsp;${githubAnchor(repoHtmlUrl)}`)
+  return withOptions(
+    inlineChildren,
+    td(a(`/app/account/${ownerId}/repo/${repoId}`, repoName), '&nbsp;&nbsp;', githubAnchor(repoHtmlUrl))
+  )
 }
 
 export function workflowCell(
   event: GithubRepositoryElement &
     Pick<GithubWorkflowRunEvent, 'workflowHtmlUrl' | 'workflowId' | 'workflowName' | 'path'>
 ) {
-  const cicadaPath = `/app/account/${event.ownerId}/repo/${event.repoId}/workflow/${event.workflowId}`
-
-  const workflowPath = `${event.path.substring(event.path.indexOf('/') + 1)}`,
-    workflowName = event.workflowName ?? workflowPath
-  const githubWorkflowUrl = event.workflowHtmlUrl ?? `${githubRepoUrl(event)}/actions/${workflowPath}`
-
-  return cell(`${anchor(cicadaPath, workflowName)}&nbsp;&nbsp;${githubAnchor(githubWorkflowUrl)}`)
+  const workflowPath = `${event.path.substring(event.path.indexOf('/') + 1)}`
+  return withOptions(
+    inlineChildren,
+    td(
+      a(
+        `/app/account/${event.ownerId}/repo/${event.repoId}/workflow/${event.workflowId}`,
+        event.workflowName ?? workflowPath
+      ),
+      '&nbsp;&nbsp;',
+      githubAnchor(event.workflowHtmlUrl ?? `${githubRepoUrl(event)}/actions/${workflowPath}`)
+    )
+  )
 }
 
 export function userCell(actor?: { login: string }) {
-  return cell(actor ? `${actor.login}&nbsp;&nbsp;${githubAnchor(`https://github.com/${actor.login}`)}` : '')
+  return actor === undefined
+    ? td()
+    : withOptions(
+        inlineChildren,
+        td(actor.login, `&nbsp;&nbsp;`, githubAnchor(`https://github.com/${actor.login}`))
+      )
 }
 
 export function commitCellForPush(push: GithubPush) {
@@ -90,40 +104,45 @@ export function commitCell(
   }
 ) {
   const { repoHtmlUrl, message, sha } = event
-  const commitUrl = `${repoHtmlUrl ?? githubRepoUrl(event)}/commit/${sha}`
-  const commitMessage = message.length < 40 ? message : `${message.substring(0, 40)}...`
-  return cell(`${commitMessage}&nbsp;&nbsp;${githubAnchor(commitUrl)}`)
+  return withOptions(
+    inlineChildren,
+    td(
+      message.length < 40 ? message : `${message.substring(0, 40)}...`,
+      '&nbsp;&nbsp;',
+      githubAnchor(`${repoHtmlUrl ?? githubRepoUrl(event)}/commit/${sha}`)
+    )
+  )
 }
 
 export function branchCell(push: GithubRepositoryElement & Pick<GithubPush, 'ref'>) {
-  const branchName = push.ref.split('/')[2]
-  const githubUrlBranchForPush = `${githubRepoUrl(push)}/tree/${branchName}`
-  return cell(`${branchName}&nbsp;&nbsp;${githubAnchor(githubUrlBranchForPush)}`)
+  return withOptions(
+    inlineChildren,
+    td(
+      push.ref.split('/')[2],
+      `&nbsp;&nbsp;`,
+      githubAnchor(`${githubRepoUrl(push)}/tree/${push.ref.split('/')[2]}`)
+    )
+  )
 }
 
 export function plainDateTimeCell(clock: Clock, { dateTime }: { dateTime: string }) {
-  return cell(displayDateTime(clock, dateTime))
+  return td(displayDateTime(clock, dateTime))
 }
 
 export function workflowRunCell(clock: Clock, event: GithubWorkflowRunEvent) {
-  return cell(`${displayDateTime(clock, event.updatedAt)}&nbsp;&nbsp;${githubAnchor(event.htmlUrl)}`)
+  return withOptions(
+    inlineChildren,
+    td(displayDateTime(clock, event.updatedAt), '&nbsp;&nbsp;', githubAnchor(event.htmlUrl))
+  )
 }
 
 export function workflowResultCell(event: GithubWorkflowRunEvent) {
   // TOEventually - handle in progress
-  return cell(event.conclusion === 'success' ? 'Success' : 'Failed')
+  return td(event.conclusion === 'success' ? 'Success' : 'Failed')
 }
 
 export function githubAnchor(target: string) {
-  return anchor(target, githubIcon)
-}
-
-export function cell(content: string) {
-  return `<td>${content}</td>`
-}
-
-export function anchor(href: string, content: string) {
-  return `<a href='${href}'>${content}</a>`
+  return a(target, githubIcon)
 }
 
 export const githubIcon = `<i class='bi bi-github' style='color: #6e5494'></i>`

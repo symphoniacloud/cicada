@@ -1,5 +1,5 @@
 import { GithubSetupAppState } from './githubSetupAppState'
-import { generatePageViewResultWithoutHtmx } from '../../../web/views/viewResultWrappers'
+import { pageViewResultWithoutHtmx } from '../../../web/views/viewResultWrappers'
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import { Route } from '../../../internalHttpRouter/internalHttpRoute'
 
@@ -49,8 +49,8 @@ GitHub Account. If you're not sure then the official GitHub docs
 </form>
 <script type="module">
 import { modifyControls } from '/js/github-app-setup.js' 
-modifyControls(document, "${appName}", "${webHostname}", "${webhookCode}")
+modifyControls(document, "${appName}", "${webHostname}", "${webhookCode}", "${callbackState}")
 </script>`
 
-  return generatePageViewResultWithoutHtmx(bodyContents, false)
+  return pageViewResultWithoutHtmx([bodyContents], false)
 }

@@ -6,7 +6,7 @@ import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { handleGitHubWebAuthRequest } from '../../domain/github/githubUserAuth/githubWebAuthHandler'
 import { logger } from '../../util/logging'
 import { isFailure } from '../../util/structuredResult'
-import { generatePageViewResultWithoutHtmx } from '../../web/views/viewResultWrappers'
+import { pageViewResultWithoutHtmx } from '../../web/views/viewResultWrappers'
 import { startSetupRoute } from '../../domain/github/setup/startGithubSetup'
 
 let appState: AppState
@@ -24,10 +24,13 @@ export const baseHandler: APIGatewayProxyHandler = async (event) => {
   return await handleGitHubWebAuthRequest(appState, event)
 }
 
-export const setupRequiredResponse = generatePageViewResultWithoutHtmx(
-  `<p>
+export const setupRequiredResponse = pageViewResultWithoutHtmx(
+  // TODO - use hiccough elements
+  [
+    `<p>
 Cicada GitHub app not ready yet. <a href="${startSetupRoute.path}">Go here to start the setup process</a>.
-</p>`,
+</p>`
+  ],
   false
 )
 

@@ -80,50 +80,64 @@ test('view-repo', async () => {
     'Content-Type': 'text/html'
   })
   expect(viewRepoResponse.body).toEqual(`<!doctype html>
-<html lang='en'>
-<head>
-  <meta charset='utf-8'>
-  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-  <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <title>Cicada</title>
-  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css' integrity='sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu' crossorigin='anonymous'>
-  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'>
-</head>
-<body>
-<div class='container' id='toplevel'>
-  <h2>Cicada</h2>
-
-    <h3>Repository: cicada-test-org/org-test-repo-one&nbsp;&nbsp;<a href='https://github.com/cicada-test-org/org-test-repo-one'><i class='bi bi-github' style='color: #6e5494'></i></a></h3>
-    <h4>GitHub Actions Status</h4>
-    <table class='table'>
-      <thead>
-        <tr><th>Workflow</th><th>Status</th><th>When</th><th>By</th><th>Commit</th></tr>
-      </thead>
-      <tbody>
-      
-      </tbody>
-    </table>    
-    <h4>Recent Activity</h4>
-    <table class='table'>
-      <thead>
-        <tr><th>Type</th><th>Activity</th><th>When</th><th>By</th><th>Commit</th></tr>
-      </thead>
-      <tbody>
-      <tr class='success'>
-        <td>Successful Run</td>
-        <td><a href='/app/account/162483619/repo/768206479/workflow/88647110'>Test Repo One Workflow</a>&nbsp;&nbsp;<a href='https://github.com/cicada-test-org/org-test-repo-one/actions/workflows/test.yml'><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-        <td>2024-03-06T19:25:42Z</td>
-        <td>mikebroberts&nbsp;&nbsp;<a href='https://github.com/mikebroberts'><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-        <td>Test Repo One Workflow&nbsp;&nbsp;<a href='https://github.com/cicada-test-org/org-test-repo-one/commit/8c3aa1cb0316ea23abeb2612457edb80868f53c8'><i class='bi bi-github' style='color: #6e5494'></i></a></td>
-      </tr>
-      </tbody>
-    </table>
-
-  <hr />
-  <p><a href='web-push.html'>Manage Web Push Notifications</a></p>
-  <p><a href='/'>Back to home</a></p>
-  <p><a href='/github/auth/logout'>Logout</a></p>
-</div>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cicada</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  </head>
+  <body>
+    <div class="container" id="toplevel">
+      <h2>Cicada</h2>
+      <h3>Repository: cicada-test-org/org-test-repo-one&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a></h3>
+      <h4>GitHub Actions Status</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Workflow</th>
+            <th>Status</th>
+            <th>When</th>
+            <th>By</th>
+            <th>Commit</th>
+          </tr>
+        </thead>
+        <tbody />
+      </table>
+      <h4>Recent Activity</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Activity</th>
+            <th>When</th>
+            <th>By</th>
+            <th>Commit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="success">
+            <td>Successful Run</td>
+            <td><a href="/app/account/162483619/repo/768206479/workflow/88647110">Test Repo One Workflow</a>&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/actions/workflows/test.yml"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+            <td>2024-03-06T19:25:42Z</td>
+            <td>mikebroberts&nbsp;&nbsp;<a href="https://github.com/mikebroberts"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+            <td>Test Repo One Workflow&nbsp;&nbsp;<a href="https://github.com/cicada-test-org/org-test-repo-one/commit/8c3aa1cb0316ea23abeb2612457edb80868f53c8"><i class='bi bi-github' style='color: #6e5494'></i></a></td>
+          </tr>
+        </tbody>
+      </table>
+      <hr />
+      <p>
+        <a href="web-push.html">Manage Web Push Notifications</a>
+      </p>
+      <p>
+        <a href="/">Back to home</a>
+      </p>
+      <p>
+        <a href="/github/auth/logout">Logout</a>
+      </p>
+    </div>
+  </body>
 </html>`)
 })

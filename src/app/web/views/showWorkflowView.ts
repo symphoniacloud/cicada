@@ -1,27 +1,24 @@
 import { Clock } from '../../util/dateAndTime'
-import { generatePageViewResultWithoutHtmx } from './viewResultWrappers'
+import { pageViewResultWithoutHtmx } from './viewResultWrappers'
 import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
 import { workflowRow } from './pageElements'
+import { h3, p, table, tbody, th, thead, tr } from '../hiccough/hiccoughElements'
 
 export function createShowWorkflowResponse(clock: Clock, runs: GithubWorkflowRunEvent[]) {
-  if (runs.length === 0) {
-    return generatePageViewResultWithoutHtmx(`
-      <p>No activity found. If this is a new workflow make sure it runs first before trying to view here
-`)
-  }
+  const structure =
+    runs.length === 0
+      ? [p('No activity found. If this is a new workflow make sure it runs first before trying to view here')]
+      : [
+          h3(`Runs for workflow ${runs[0].workflowName} in ${runs[0].ownerName}/${runs[0].repoName}`),
+          // TOEventually - when we have in-progress runs only show them if no corresponding completed event
+          table(
+            { class: 'table' },
+            thead(tr(...['Result', 'When', 'By', 'Commit'].map((x) => th(x)))),
+            tbody(
+              ...runs.map((run) => workflowRow(clock, run, { showRepoCell: false, showWorkflowCell: false }))
+            )
+          )
+        ]
 
-  // TOEventually - when we have in-progress runs only show them if no corresponding completed event
-  return generatePageViewResultWithoutHtmx(`
-    <h3>Runs for workflow ${runs[0].workflowName} in ${runs[0].ownerName}/${runs[0].repoName}</h3>
-    <table class='table'>
-      <thead>
-        <tr><th>Result</th><th>When</th><th>By</th><th>Commit</th></tr>
-      </thead>
-      <tbody>
-      ${runs
-        .map((event) => workflowRow(clock, event, { showRepoCell: false, showWorkflowCell: false }))
-        .join('')}
-      </tbody>
-    </table>
-`)
+  return pageViewResultWithoutHtmx(structure)
 }

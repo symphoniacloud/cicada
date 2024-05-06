@@ -1,4 +1,4 @@
-export function modifyControls(document, appName, webHostname, webhookCode) {
+export function modifyControls(document, appName, webHostname, webhookCode, callbackState) {
   const manifestConfig = JSON.stringify({
     name: appName,
     url: 'https://github.com/symphoniacloud/cicada',
@@ -30,7 +30,7 @@ export function modifyControls(document, appName, webHostname, webhookCode) {
       orgButton.className = 'btn btn-primary'
       orgButton.textContent = 'Start GitHub App Creation Process for ' + orgName
       orgForm.action =
-        'https://github.com/organizations/' + orgName + '/settings/apps/new?state=${callbackState}'
+        'https://github.com/organizations/' + orgName + '/settings/apps/new?state=' + callbackState
     } else {
       orgButton.disabled = 'disabled'
       orgButton.className = 'btn btn-default'
