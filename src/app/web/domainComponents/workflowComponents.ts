@@ -4,7 +4,7 @@ import { a, td, tr } from '../hiccough/hiccoughElements'
 import { Clock, displayDateTime } from '../../util/dateAndTime'
 import { githubAnchor } from './genericComponents'
 import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents'
-import { runWasSuccessful } from '../../domain/github/githubWorkflowRunEvent'
+import { runBasicStatus, WorkflowRunStatus } from '../../domain/github/githubWorkflowRunEvent'
 import { userCell } from './userComponents'
 
 export type WorkflowRowOptions = {
@@ -13,11 +13,15 @@ export type WorkflowRowOptions = {
   showWorkflow?: boolean
 }
 
-export function workflowRow(
-  clock: Clock,
-  workflowRunEvent: GithubWorkflowRunEvent,
-  options?: WorkflowRowOptions
-) {
+const runStatusFormatting: Record<
+  WorkflowRunStatus,
+  { rowClass: string; description: string; friendlyEventStatus: string }
+> = {
+  '✅': { rowClass: 'success', description: 'Successful Run', friendlyEventStatus: 'Success' },
+  '❌': { rowClass: 'danger', description: 'Failed Run', friendlyEventStatus: 'Failure' },
+  '⏳': { rowClass: 'warning', description: 'In Progress Run', friendlyEventStatus: 'In Progress' }
+}
+export function workflowRow(clock: Clock, event: GithubWorkflowRunEvent, options?: WorkflowRowOptions) {
   const { showDescription, showRepo, showWorkflow } = {
     showDescription: false,
     showRepo: false,
@@ -25,27 +29,23 @@ export function workflowRow(
     ...options
   }
 
-  const runSuccessful = runWasSuccessful(workflowRunEvent)
+  const { rowClass, description, friendlyEventStatus } = runStatusFormatting[runBasicStatus(event)]
+
   return tr(
-    { class: runSuccessful ? 'success' : 'danger' },
-    showDescription ? (runSuccessful ? successfulRunDescriptionCell : failedRunDescriptionCell) : undefined,
-    showRepo ? repoCell(workflowRunEvent) : undefined,
-    showWorkflow ? workflowCell(workflowRunEvent) : undefined,
-    showDescription ? undefined : runSuccessful ? successfulRunResultCell : failedRunResultCell,
-    td(displayDateTime(clock, workflowRunEvent.updatedAt), '&nbsp;', githubAnchor(workflowRunEvent.htmlUrl)),
-    userCell(workflowRunEvent.actor),
+    { class: rowClass },
+    showDescription ? td(description) : undefined,
+    showRepo ? repoCell(event) : undefined,
+    showWorkflow ? workflowCell(event) : undefined,
+    showDescription ? undefined : td(`${friendlyEventStatus}`),
+    td(displayDateTime(clock, event.updatedAt), '&nbsp;', githubAnchor(event.htmlUrl)),
+    userCell(event.actor),
     commitCell({
-      ...workflowRunEvent,
-      sha: workflowRunEvent.headSha,
-      message: workflowRunEvent.displayTitle
+      ...event,
+      sha: event.headSha,
+      message: event.displayTitle
     })
   )
 }
-
-const successfulRunDescriptionCell = td('Successful Run')
-const failedRunDescriptionCell = td('Failed Run')
-const successfulRunResultCell = td('Success')
-const failedRunResultCell = td('Failed')
 
 function workflowCell(
   event: GithubRepositoryElement &

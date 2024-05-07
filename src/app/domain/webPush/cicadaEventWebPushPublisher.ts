@@ -3,7 +3,11 @@ import { logger } from '../../util/logging'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
 import { publishToSubscriptionsForUsers } from './webPushPublisher'
 import { GithubWorkflowRunEvent, isGithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
-import { getRelatedMemberIdsForRunEvent, runWasSuccessful } from '../github/githubWorkflowRunEvent'
+import {
+  friendlyStatus,
+  getRelatedMemberIdsForRunEvent,
+  runBasicStatus
+} from '../github/githubWorkflowRunEvent'
 import { isCicadaEventBridgeDetail } from '../../outboundInterfaces/eventBridgeBus'
 import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper'
 
@@ -28,14 +32,15 @@ export async function handleNewWorkflowRunEvent(appState: AppState, eventDetail:
   )
 }
 
-function generateRunEventNotification(workflowRunEvent: GithubWorkflowRunEvent): CicadaWebNotification {
-  const success = runWasSuccessful(workflowRunEvent)
+export function generateRunEventNotification(
+  workflowRunEvent: GithubWorkflowRunEvent
+): CicadaWebNotification {
+  const titleIcon = runBasicStatus(workflowRunEvent)
+  const bodyStatus = friendlyStatus(workflowRunEvent)
 
   return {
-    title: `${success ? '✅' : '❌'} ${workflowRunEvent.workflowName}`,
-    body: `Workflow ${workflowRunEvent.workflowName} in Repo ${workflowRunEvent.repoName} ${
-      success ? 'succeeded' : 'failed'
-    }`,
+    title: `${titleIcon} ${workflowRunEvent.workflowName}`,
+    body: `Workflow ${workflowRunEvent.workflowName} in Repo ${workflowRunEvent.repoName} ${bodyStatus}`,
     data: { url: workflowRunEvent.htmlUrl }
   }
 }

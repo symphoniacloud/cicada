@@ -13,3 +13,5 @@ export class FakeClock implements Clock {
     return new Date(Date.parse(this.fakeNowIso))
   }
 }
+
+export const defaultFakeClock = new FakeClock()

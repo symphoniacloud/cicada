@@ -88,7 +88,26 @@ export async function getRunsForWorkflow(
     )
 }
 
-export function runWasSuccessful(event: GithubWorkflowRunEvent) {
-  // TOEventually - handle incomplete
-  return event.conclusion === 'success'
+export function runCompleted(event: GithubWorkflowRunEvent) {
+  return event.conclusion !== undefined
+}
+
+// Used as part of notification UI, so don't change these unless also changing the
+// notification code
+export type WorkflowRunStatus = '✅' | '❌' | '⏳'
+
+export function runBasicStatus(event: GithubWorkflowRunEvent): WorkflowRunStatus {
+  return runCompleted(event) ? (event.conclusion === 'success' ? '✅' : '❌') : '⏳'
+}
+
+export function friendlyStatus(event: GithubWorkflowRunEvent) {
+  if (runCompleted(event)) {
+    const { conclusion } = event
+    if (conclusion === 'success') return 'succeeded'
+    if (conclusion === 'failure') return 'failed'
+    return conclusion ?? 'complete'
+  }
+  const { status } = event
+  if (status === 'in_progress') return 'in progress'
+  return status ?? 'in progress'
 }
