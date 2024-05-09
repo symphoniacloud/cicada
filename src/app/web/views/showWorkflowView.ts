@@ -14,7 +14,7 @@ export function createShowWorkflowResponse(clock: Clock, runs: GithubWorkflowRun
           table(
             { class: 'table' },
             thead(tr(...['Result', 'When', 'By', 'Commit'].map((x) => th(x)))),
-            tbody(...runs.map((run) => workflowRow(clock, run)))
+            tbody(...runs.map((run) => workflowRow(clock, run, 'workflowActivity')))
           )
         ]
 

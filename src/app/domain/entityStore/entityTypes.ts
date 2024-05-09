@@ -1,5 +1,6 @@
-export const GITHUB_LATEST_WORKFLOW_RUN_EVENT = 'githubLatestWorkflowRunEvent'
 export const GITHUB_WORKFLOW_RUN_EVENT = 'githubWorkflowRunEvent'
+export const GITHUB_WORKFLOW_RUN = 'githubWorkflowRun'
+export const GITHUB_LATEST_WORKFLOW_RUN_EVENT = 'githubLatestWorkflowRunEvent'
 export const GITHUB_INSTALLATION = 'githubInstallation'
 export const GITHUB_LATEST_PUSH_PER_REF = 'githubLatestPushPerRef'
 export const GITHUB_PUSH = 'githubPush'

@@ -24,11 +24,6 @@ function parse(body: string) {
     return
   }
 
-  if (action !== 'completed') {
-    logger.warn(`Not processing action [${action}] at this time`)
-    return
-  }
-
   const workflowRun = eventDetails['workflow_run']
   if (!workflowRun) {
     logger.warn('No workflow_run on body for workflow_run action - nothing to process')

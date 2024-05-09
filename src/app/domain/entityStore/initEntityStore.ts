@@ -15,6 +15,7 @@ import {
   GITHUB_PUSH,
   GITHUB_REPOSITORY,
   GITHUB_USER,
+  GITHUB_WORKFLOW_RUN,
   GITHUB_WORKFLOW_RUN_EVENT,
   WEB_PUSH_SUBSCRIPTION
 } from './entityTypes'
@@ -66,7 +67,7 @@ export function setupEntityStore(
           ...entityStoreConfigFor(tableNames, 'github-repositories')
         },
         {
-          entityTypes: [GITHUB_WORKFLOW_RUN_EVENT, GITHUB_PUSH],
+          entityTypes: [GITHUB_WORKFLOW_RUN_EVENT, GITHUB_WORKFLOW_RUN, GITHUB_PUSH],
           ...entityStoreConfigFor(tableNames, 'github-repo-activity')
         },
         {

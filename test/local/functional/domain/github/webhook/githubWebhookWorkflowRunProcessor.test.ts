@@ -10,7 +10,7 @@ test('workflow-run-completed-webhook', async () => {
 
   await githubWebhookWorkflowRunProcessor(appState, JSON.stringify(example_workflow_run_complete))
 
-  expect(appState.dynamoDB.puts.length).toEqual(2)
+  expect(appState.dynamoDB.puts.length).toEqual(3)
   expect(appState.dynamoDB.puts[0]).toEqual({
     ConditionExpression: 'attribute_not_exists(PK)',
     Item: {
@@ -25,6 +25,25 @@ test('workflow-run-completed-webhook', async () => {
     TableName: 'fakeGithubRepoActivityTable'
   })
   expect(appState.dynamoDB.puts[1]).toEqual({
+    ConditionExpression: 'attribute_not_exists(PK) OR #updatedAt < :newUpdatedAt',
+    ExpressionAttributeNames: {
+      '#updatedAt': 'updatedAt'
+    },
+    ExpressionAttributeValues: {
+      ':newUpdatedAt': '2024-03-06T19:25:42Z'
+    },
+    Item: {
+      PK: 'ACCOUNT#162483619',
+      SK: 'REPO#768206479#WORKFLOW#88647110#WORKFLOW_RUN#RUN#8177622236',
+      GSI1PK: 'ACCOUNT#162483619',
+      GSI1SK: 'REPO#768206479#DATETIME#2024-03-06T19:25:42Z',
+      _et: 'githubWorkflowRun',
+      _lastUpdated: '2024-02-02T19:00:00.000Z',
+      ...testOrgTestRepoOneWorkflowRunThree
+    },
+    TableName: 'fakeGithubRepoActivityTable'
+  })
+  expect(appState.dynamoDB.puts[2]).toEqual({
     ConditionExpression: 'attribute_not_exists(PK) OR #updatedAt < :newUpdatedAt',
     ExpressionAttributeNames: {
       '#updatedAt': 'updatedAt'

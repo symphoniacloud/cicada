@@ -6,22 +6,38 @@ import { githubAnchor } from './genericComponents'
 import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents'
 import { runBasicStatus, WorkflowRunStatus } from '../../domain/github/githubWorkflowRunEvent'
 import { userCell } from './userComponents'
+import { removeNullAndUndefined } from '../../util/collections'
 
-export type WorkflowRowOptions = {
+export type WorkflowRowMode = 'allRepos' | 'repoStatus' | 'repoActivity' | 'workflowActivity'
+
+type WorkflowRowOptions = {
   showDescription?: boolean
   showRepo?: boolean
   showWorkflow?: boolean
 }
 
-const runStatusFormatting: Record<
-  WorkflowRunStatus,
-  { rowClass: string; description: string; friendlyEventStatus: string }
-> = {
-  '✅': { rowClass: 'success', description: 'Successful Run', friendlyEventStatus: 'Success' },
-  '❌': { rowClass: 'danger', description: 'Failed Run', friendlyEventStatus: 'Failure' },
-  '⏳': { rowClass: 'warning', description: 'In Progress Run', friendlyEventStatus: 'In Progress' }
+const rowConfig: Record<WorkflowRowMode, WorkflowRowOptions> = {
+  allRepos: { showRepo: true, showWorkflow: true },
+  repoStatus: { showWorkflow: true },
+  repoActivity: { showDescription: true, showWorkflow: true },
+  workflowActivity: {}
 }
-export function workflowRow(clock: Clock, event: GithubWorkflowRunEvent, options?: WorkflowRowOptions) {
+
+export function workflowRow(clock: Clock, event: GithubWorkflowRunEvent, mode: WorkflowRowMode) {
+  return workflowRowWithOptions(clock, event, rowConfig[mode])
+}
+
+const runStatusRowClass: Record<WorkflowRunStatus, string> = {
+  '✅': 'success',
+  '❌': 'danger',
+  '⏳': 'warning'
+}
+
+export function workflowRowWithOptions(
+  clock: Clock,
+  event: GithubWorkflowRunEvent,
+  options: WorkflowRowOptions
+) {
   const { showDescription, showRepo, showWorkflow } = {
     showDescription: false,
     showRepo: false,
@@ -29,14 +45,14 @@ export function workflowRow(clock: Clock, event: GithubWorkflowRunEvent, options
     ...options
   }
 
-  const { rowClass, description, friendlyEventStatus } = runStatusFormatting[runBasicStatus(event)]
+  const runStatus = runBasicStatus(event)
+  const rowClass = runStatusRowClass[runStatus]
 
-  return tr(
-    { class: rowClass },
-    showDescription ? td(description) : undefined,
+  const cells = removeNullAndUndefined([
+    showDescription ? td(description(runStatus, event)) : undefined,
     showRepo ? repoCell(event) : undefined,
     showWorkflow ? workflowCell(event) : undefined,
-    showDescription ? undefined : td(`${friendlyEventStatus}`),
+    showDescription ? undefined : td(statusMessage(runStatus, event)),
     td(displayDateTime(clock, event.updatedAt), '&nbsp;', githubAnchor(event.htmlUrl)),
     userCell(event.actor),
     commitCell({
@@ -44,7 +60,27 @@ export function workflowRow(clock: Clock, event: GithubWorkflowRunEvent, options
       sha: event.headSha,
       message: event.displayTitle
     })
-  )
+  ])
+
+  return tr({ class: rowClass }, ...cells)
+}
+
+function description(status: WorkflowRunStatus, event: GithubWorkflowRunEvent) {
+  if (status === '✅') return 'Successful Run'
+  if (status === '❌') return `Failed Run${descriptionOrMessageSuffix(status, event)}`
+  return `In Progress Run${descriptionOrMessageSuffix(status, event)}`
+}
+
+function statusMessage(status: WorkflowRunStatus, event: GithubWorkflowRunEvent) {
+  if (status === '✅') return 'Success'
+  if (status === '❌') return `Failure${descriptionOrMessageSuffix(status, event)}`
+  return `In Progress${descriptionOrMessageSuffix(status, event)}`
+}
+
+function descriptionOrMessageSuffix(status: WorkflowRunStatus, event: GithubWorkflowRunEvent) {
+  if (status === '✅') return ''
+  if (status === '❌') return event.conclusion === 'failure' ? '' : ` (${event.conclusion})`
+  return event.status === 'in_progress' ? '' : ` (${event.status})`
 }
 
 function workflowCell(

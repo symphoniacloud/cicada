@@ -16,7 +16,7 @@ export function createShowLatestActivityResponse(
     table(
       { class: 'table' },
       thead(tr(...['Repo', 'Workflow', 'Status', 'When', 'By', 'Commit'].map((x) => th(x)))),
-      tbody(...workflowStatus.map((e) => workflowRow(clock, e, { showRepo: true, showWorkflow: true })))
+      tbody(...workflowStatus.map((e) => workflowRow(clock, e, 'allRepos')))
     ),
     h3('Recent Branch Activity'),
     table(

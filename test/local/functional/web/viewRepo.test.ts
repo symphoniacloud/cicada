@@ -10,7 +10,7 @@ import {
 } from '../../../examples/cicada/githubDomainObjects'
 import {
   GITHUB_ACCOUNT_MEMBERSHIP,
-  GITHUB_WORKFLOW_RUN_EVENT
+  GITHUB_WORKFLOW_RUN
 } from '../../../../src/app/domain/entityStore/entityTypes'
 
 test('view-repo', async () => {
@@ -64,7 +64,7 @@ test('view-repo', async () => {
     },
     {
       $metadata: {},
-      Items: [{ ...testOrgTestRepoOneWorkflowRunThree, _et: GITHUB_WORKFLOW_RUN_EVENT }]
+      Items: [{ ...testOrgTestRepoOneWorkflowRunThree, _et: GITHUB_WORKFLOW_RUN }]
     }
   )
 

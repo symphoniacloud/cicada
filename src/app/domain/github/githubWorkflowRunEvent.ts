@@ -5,34 +5,22 @@ import {
   GithubWorkflowRunEventEntity,
   githubWorkflowRunEventSkPrefix
 } from '../entityStore/entities/GithubWorkflowRunEventEntity'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
 import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport'
-import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
 import { RawGithubWorkflowRunEvent } from '../types/rawGithub/RawGithubWorkflowRunEvent'
 import { getMemberIds } from './githubMembership'
-import {
-  MultipleEntityCollectionResponse,
-  rangeWhereSkBeginsWith
-} from '@symphoniacloud/dynamodb-entity-store'
-import { saveLatestEvents } from './githubLatestWorkflowRunEvents'
+import { saveRuns } from './githubWorkflowRun'
+import { rangeWhereSkBeginsWith } from '@symphoniacloud/dynamodb-entity-store'
 
 export async function processRawRunEvents(
   appState: AppState,
   rawRunEvents: RawGithubWorkflowRunEvent[],
   publishNotifications: boolean
 ) {
-  // TOEventually - this might not be sufficient - docs are ambiguous
-  const eventsToKeep = rawRunEvents
-    .map(fromRawGithubWorkflowRunEvent)
-    .filter(({ status }) => status === 'completed')
-  logger.debug(`Found ${eventsToKeep.length} interesting events`)
+  const events = rawRunEvents.map(fromRawGithubWorkflowRunEvent)
+  logger.debug(`Processing ${events.length} run events`)
 
-  const newEvents = await saveEvents(appState, eventsToKeep)
-  await saveLatestEvents(appState, newEvents)
-
-  for (const newEvent of publishNotifications ? newEvents : []) {
-    await sendToEventBridge(appState, EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_WORKFLOW_RUN_EVENT, newEvent)
-  }
+  await saveEvents(appState, events)
+  await saveRuns(appState, events, publishNotifications)
 }
 
 async function saveEvents(appState: AppState, eventsToKeep: GithubWorkflowRunEvent[]) {
@@ -59,21 +47,9 @@ export async function getRelatedMemberIdsForRunEvent(
   return getMemberIds(appState, runEvent.ownerId)
 }
 
-export function workflowRunEventsFromMultipleEventEntityResponse(
-  allActivity: MultipleEntityCollectionResponse
-): GithubWorkflowRunEvent[] {
-  return workflowRunEventsFromMultiple(allActivity, GithubWorkflowRunEventEntity.type)
-}
-
-export function workflowRunEventsFromMultiple(
-  allActivity: MultipleEntityCollectionResponse,
-  entityType: string
-) {
-  return (allActivity.itemsByEntityType[entityType] as GithubWorkflowRunEvent[]) ?? []
-}
-
-// TOEventually - only completed runs, once we have in-progress
-export async function getRunsForWorkflow(
+// Returns *all* the run events for each run (including in_progress) even if the run is complete
+// If you just want the most recent run event per run then use githubWorkflowRun.ts instead
+export async function getRunEventsForWorkflow(
   appState: AppState,
   ownerId: number,
   repoId: number,

@@ -1,13 +1,13 @@
 import { AppState } from '../environment/AppState'
 import { Route } from '../internalHttpRouter/internalHttpRoute'
 import { CicadaAuthorizedAPIEvent } from '../inboundInterfaces/lambdaTypes'
-import { getRunsForWorkflow } from '../domain/github/githubWorkflowRunEvent'
 import { createShowWorkflowResponse } from './views/showWorkflowView'
 import { JTDSchemaType } from 'ajv/dist/jtd'
 import { validatingPathParser } from '../schema/urlPathParser'
 import { isFailure } from '../util/structuredResult'
 import { logger } from '../util/logging'
 import { notFoundHTMLResponse } from '../inboundInterfaces/standardHttpResponses'
+import { getRunEventsForWorkflow } from '../domain/github/githubWorkflowRunEvent'
 
 export const showWorkflowRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/account(/:accountId)/repo(/:repoId)/workflow(/:workflowId)',
@@ -46,8 +46,7 @@ export async function showWorkflow(appState: AppState, event: CicadaAuthorizedAP
   const repoIdNumber = parseInt(repoId)
   const workflowIdNumber = parseInt(workflowId)
 
-  // TOEventually - figure out if can parse ints directly from path
-  const runs = await getRunsForWorkflow(appState, accountIdNumber, repoIdNumber, workflowIdNumber)
+  const runEvents = await getRunEventsForWorkflow(appState, accountIdNumber, repoIdNumber, workflowIdNumber)
 
-  return createShowWorkflowResponse(appState.clock, runs)
+  return createShowWorkflowResponse(appState.clock, runEvents)
 }

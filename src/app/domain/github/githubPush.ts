@@ -3,7 +3,10 @@ import { logger } from '../../util/logging'
 import { GithubPushEntity } from '../entityStore/entities/GithubPushEntity'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
 import { GithubPush } from '../types/GithubPush'
-import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport'
+import {
+  domainObjectsFromMultipleEventEntityResponse,
+  executeAndCatchConditionalCheckFailed
+} from '../entityStore/entityStoreOperationSupport'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
 import { MultipleEntityCollectionResponse } from '@symphoniacloud/dynamodb-entity-store'
 import { saveLatestPushes } from './githubLatestPushesPerRef'
@@ -37,11 +40,7 @@ async function savePushes(appState: AppState, pushes: GithubPush[]) {
 export function pushesFromMultipleEntityResponse(
   allActivity: MultipleEntityCollectionResponse
 ): GithubPush[] {
-  return pushesFromMultiple(allActivity, GithubPushEntity.type)
-}
-
-export function pushesFromMultiple(allActivity: MultipleEntityCollectionResponse, entityType: string) {
-  return (allActivity.itemsByEntityType[entityType] as GithubPush[]) ?? []
+  return domainObjectsFromMultipleEventEntityResponse(allActivity, GithubPushEntity.type)
 }
 
 export function latestCommitInPush(push: Pick<GithubPush, 'commits'>) {

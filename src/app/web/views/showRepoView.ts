@@ -30,13 +30,7 @@ export function createShowRepoResponse(
     table(
       { class: 'table' },
       thead(tr(...['Workflow', 'Status', 'When', 'By', 'Commit'].map((x) => th(x)))),
-      tbody(
-        ...workflowStatus.map((event) =>
-          workflowRow(clock, event, {
-            showWorkflow: true
-          })
-        )
-      )
+      tbody(...workflowStatus.map((event) => workflowRow(clock, event, 'repoStatus')))
     ),
     h4('Recent Activity'),
     table(
@@ -45,10 +39,7 @@ export function createShowRepoResponse(
       tbody(
         ...activity.map((event) =>
           activityIsWorkflowRunActivity(event)
-            ? workflowRow(clock, event.event, {
-                showDescription: true,
-                showWorkflow: true
-              })
+            ? workflowRow(clock, event.event, 'repoActivity')
             : pushRow(clock, event.event, { showDescription: true })
         )
       )

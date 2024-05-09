@@ -11,6 +11,7 @@ import { getEventUpdatedTimestamp } from './githubCommon'
 
 export async function saveLatestEvents(appState: AppState, newEvents: GithubWorkflowRunEvent[]) {
   // Update latest events if they are newer
+  // TODO - need to think about concurrent runs. E.g. if two runs are in progress, one completes, the status is still "in progress"
   for (const newEvent of newEvents) {
     await executeAndCatchConditionalCheckFailed(async () => {
       await appState.entityStore.for(GithubLatestWorkflowRunEventEntity).put(newEvent, {

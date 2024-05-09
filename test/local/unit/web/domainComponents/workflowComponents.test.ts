@@ -5,13 +5,10 @@ import { defaultFakeClock } from '../../../../testSupport/fakes/fakeClock'
 import { a, td, tr } from '../../../../../src/app/web/hiccough/hiccoughElements'
 import { githubAnchor } from '../../../../../src/app/web/domainComponents/genericComponents'
 
-test('successful row, no description', () => {
-  expect(
-    workflowRow(defaultFakeClock, testPersonalTestRepoWorkflowRun, { showRepo: true, showWorkflow: true })
-  ).toEqual(
+test('successful row, all Repos', () => {
+  expect(workflowRow(defaultFakeClock, testPersonalTestRepoWorkflowRun, 'allRepos')).toEqual(
     tr(
       { class: 'success' },
-      undefined,
       td(
         a(`/app/account/162360409/repo/767679529`, 'personal-test-repo'),
         '&nbsp;',
@@ -40,14 +37,16 @@ test('successful row, no description', () => {
   )
 })
 
-test('successful run with description', () => {
-  expect(workflowRow(defaultFakeClock, testPersonalTestRepoWorkflowRun, { showDescription: true })).toEqual(
+test('successful run, repo activity', () => {
+  expect(workflowRow(defaultFakeClock, testPersonalTestRepoWorkflowRun, 'repoActivity')).toEqual(
     tr(
       { class: 'success' },
       td('Successful Run'),
-      undefined,
-      undefined,
-      undefined,
+      td(
+        a(`/app/account/162360409/repo/767679529/workflow/88508779`, 'Test Workflow'),
+        '&nbsp;',
+        githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
+      ),
       td(
         '2024-03-05T18:01:40Z',
         '&nbsp;',
@@ -65,17 +64,12 @@ test('successful run with description', () => {
   )
 })
 
-test('unsuccessful run, no description', () => {
+test('unsuccessful run, all Repos', () => {
   expect(
-    workflowRow(
-      defaultFakeClock,
-      { ...testPersonalTestRepoWorkflowRun, conclusion: 'failure' },
-      { showRepo: true, showWorkflow: true }
-    )
+    workflowRow(defaultFakeClock, { ...testPersonalTestRepoWorkflowRun, conclusion: 'failure' }, 'allRepos')
   ).toEqual(
     tr(
       { class: 'danger' },
-      undefined,
       td(
         a(`/app/account/162360409/repo/767679529`, 'personal-test-repo'),
         '&nbsp;',
@@ -104,20 +98,22 @@ test('unsuccessful run, no description', () => {
   )
 })
 
-test('failed run with description', () => {
+test('failed run, repo Activity', () => {
   expect(
     workflowRow(
       defaultFakeClock,
       { ...testPersonalTestRepoWorkflowRun, conclusion: 'failure' },
-      { showDescription: true }
+      'repoActivity'
     )
   ).toEqual(
     tr(
       { class: 'danger' },
       td('Failed Run'),
-      undefined,
-      undefined,
-      undefined,
+      td(
+        a(`/app/account/162360409/repo/767679529/workflow/88508779`, 'Test Workflow'),
+        '&nbsp;',
+        githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
+      ),
       td(
         '2024-03-05T18:01:40Z',
         '&nbsp;',
@@ -135,7 +131,7 @@ test('failed run with description', () => {
   )
 })
 
-test('in progress run, no description', () => {
+test('in progress run, all repos', () => {
   expect(
     workflowRow(
       defaultFakeClock,
@@ -144,12 +140,11 @@ test('in progress run, no description', () => {
         conclusion: undefined,
         status: 'in_progress'
       },
-      { showRepo: true, showWorkflow: true }
+      'allRepos'
     )
   ).toEqual(
     tr(
       { class: 'warning' },
-      undefined,
       td(
         a(`/app/account/162360409/repo/767679529`, 'personal-test-repo'),
         '&nbsp;',
@@ -160,6 +155,70 @@ test('in progress run, no description', () => {
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
+      td('In Progress'),
+      td(
+        '2024-03-05T18:01:40Z',
+        '&nbsp;',
+        githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
+      ),
+      td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
+      td(
+        'Test Workflow',
+        '&nbsp;',
+        githubAnchor(
+          'https://github.com/cicada-test-user/personal-test-repo/commit/dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c'
+        )
+      )
+    )
+  )
+})
+
+test('queued run, workflow activity', () => {
+  expect(
+    workflowRow(
+      defaultFakeClock,
+      {
+        ...testPersonalTestRepoWorkflowRun,
+        conclusion: undefined,
+        status: 'queued'
+      },
+      'workflowActivity'
+    )
+  ).toEqual(
+    tr(
+      { class: 'warning' },
+      td('In Progress (queued)'),
+      td(
+        '2024-03-05T18:01:40Z',
+        '&nbsp;',
+        githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
+      ),
+      td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
+      td(
+        'Test Workflow',
+        '&nbsp;',
+        githubAnchor(
+          'https://github.com/cicada-test-user/personal-test-repo/commit/dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c'
+        )
+      )
+    )
+  )
+})
+
+test('in progress run, workflow activity', () => {
+  expect(
+    workflowRow(
+      defaultFakeClock,
+      {
+        ...testPersonalTestRepoWorkflowRun,
+        conclusion: undefined,
+        status: 'in_progress'
+      },
+      'workflowActivity'
+    )
+  ).toEqual(
+    tr(
+      { class: 'warning' },
       td('In Progress'),
       td(
         '2024-03-05T18:01:40Z',
