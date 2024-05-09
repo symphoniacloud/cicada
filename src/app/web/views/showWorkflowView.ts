@@ -1,8 +1,8 @@
 import { Clock } from '../../util/dateAndTime'
 import { pageViewResultWithoutHtmx } from './viewResultWrappers'
 import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
-import { h3, p, table, tbody, th, thead, tr } from '../hiccough/hiccoughElements'
-import { workflowRow } from '../domainComponents/workflowComponents'
+import { h3, p, table, tbody } from '../hiccough/hiccoughElements'
+import { workflowHeader, workflowRow } from '../domainComponents/workflowComponents'
 
 export function createShowWorkflowResponse(clock: Clock, runs: GithubWorkflowRunEvent[]) {
   const structure =
@@ -13,7 +13,7 @@ export function createShowWorkflowResponse(clock: Clock, runs: GithubWorkflowRun
           // TOEventually - when we have in-progress runs only show them if no corresponding completed event
           table(
             { class: 'table' },
-            thead(tr(...['Result', 'When', 'By', 'Commit'].map((x) => th(x)))),
+            workflowHeader('workflowActivity'),
             tbody(...runs.map((run) => workflowRow(clock, run, 'workflowActivity')))
           )
         ]

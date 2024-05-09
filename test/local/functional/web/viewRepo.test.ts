@@ -104,6 +104,7 @@ Repository: cicada-test-org/org-test-repo-one
             <th>Workflow</th>
             <th>Status</th>
             <th>When</th>
+            <th>Duration</th>
             <th>By</th>
             <th>Commit</th>
           </tr>

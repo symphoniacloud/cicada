@@ -3,9 +3,9 @@ import { activityIsWorkflowRunActivity, GithubActivity } from '../../domain/gith
 import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
 import { githubAnchor } from '../domainComponents/genericComponents'
 import { GithubRepository } from '../../domain/types/GithubRepository'
-import { h3, h4, table, tbody, th, thead, tr } from '../hiccough/hiccoughElements'
+import { h3, h4, table, tbody } from '../hiccough/hiccoughElements'
 import { pageViewResultWithoutHtmx } from './viewResultWrappers'
-import { workflowRow } from '../domainComponents/workflowComponents'
+import { workflowHeader, workflowRow } from '../domainComponents/workflowComponents'
 import { pushRow } from '../domainComponents/pushComponents'
 import { githubRepoUrl } from '../domainComponents/repoElementComponents'
 
@@ -29,13 +29,13 @@ export function createShowRepoResponse(
     h4('GitHub Actions Status'),
     table(
       { class: 'table' },
-      thead(tr(...['Workflow', 'Status', 'When', 'By', 'Commit'].map((x) => th(x)))),
+      workflowHeader('repoStatus'),
       tbody(...workflowStatus.map((event) => workflowRow(clock, event, 'repoStatus')))
     ),
     h4('Recent Activity'),
     table(
       { class: 'table' },
-      thead(tr(...['Type', 'Activity', 'When', 'By', 'Commit'].map((x) => th(x)))),
+      workflowHeader('repoActivity'),
       tbody(
         ...activity.map((event) =>
           activityIsWorkflowRunActivity(event)

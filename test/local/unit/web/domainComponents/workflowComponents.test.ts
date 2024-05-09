@@ -25,6 +25,7 @@ test('successful row, all Repos', () => {
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
       ),
+      td('16 seconds'),
       td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
       td(
         'Test Workflow',
@@ -86,6 +87,7 @@ test('unsuccessful run, all Repos', () => {
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
       ),
+      td('16 seconds'),
       td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
       td(
         'Test Workflow',
@@ -161,6 +163,7 @@ test('in progress run, all repos', () => {
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
       ),
+      td('16 seconds'),
       td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
       td(
         'Test Workflow',
@@ -193,6 +196,7 @@ test('queued run, workflow activity', () => {
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
       ),
+      td('16 seconds'),
       td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
       td(
         'Test Workflow',
@@ -225,6 +229,7 @@ test('in progress run, workflow activity', () => {
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
       ),
+      td('16 seconds'),
       td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
       td(
         'Test Workflow',

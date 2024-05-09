@@ -10,6 +10,7 @@ import { RawGithubWorkflowRunEvent } from '../types/rawGithub/RawGithubWorkflowR
 import { getMemberIds } from './githubMembership'
 import { saveRuns } from './githubWorkflowRun'
 import { rangeWhereSkBeginsWith } from '@symphoniacloud/dynamodb-entity-store'
+import { isoDifferenceMs } from '../../util/dateAndTime'
 
 export async function processRawRunEvents(
   appState: AppState,
@@ -86,4 +87,8 @@ export function friendlyStatus(event: GithubWorkflowRunEvent) {
   const { status } = event
   if (status === 'in_progress') return 'in progress'
   return status ?? 'in progress'
+}
+
+export function elapsedTimeMs(event: GithubWorkflowRunEvent) {
+  return isoDifferenceMs(event.createdAt, event.updatedAt)
 }

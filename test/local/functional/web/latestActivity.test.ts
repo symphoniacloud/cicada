@@ -108,6 +108,7 @@ test('latest-activity', async () => {
           <th>Workflow</th>
           <th>Status</th>
           <th>When</th>
+          <th>Duration</th>
           <th>By</th>
           <th>Commit</th>
         </tr>
@@ -130,6 +131,7 @@ test('latest-activity', async () => {
 &nbsp;
             <a href="https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236"><i class='bi bi-github' style='color: #6e5494'></i></a>
           </td>
+          <td>10 seconds</td>
           <td>
 mikebroberts
 &nbsp;
