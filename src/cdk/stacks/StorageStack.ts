@@ -1,11 +1,13 @@
-import { Duration, RemovalPolicy, Stack } from 'aws-cdk-lib'
+import { Aws, Duration, RemovalPolicy, Stack } from 'aws-cdk-lib'
 import { Construct } from 'constructs'
 import { AttributeType, TableV2 } from 'aws-cdk-lib/aws-dynamodb'
 import { saveInSSMViaCloudFormation } from '../support/ssm'
 import { AllStacksProps } from '../config/allStacksProps'
-import { BlockPublicAccess, Bucket, ObjectOwnership } from 'aws-cdk-lib/aws-s3'
-import { SSM_PARAM_NAMES, ssmTableNamePath } from '../../multipleContexts/ssmParams'
+import { BlockPublicAccess, Bucket, IBucket, ObjectOwnership } from 'aws-cdk-lib/aws-s3'
+import { SSM_PARAM_NAMES, SsmParamName, ssmTableNamePath } from '../../multipleContexts/ssmParams'
 import { CICADA_TABLE_IDS, CicadaTableId, tableConfigurations } from '../../multipleContexts/dynamoDBTables'
+import { CfnDatabase } from 'aws-cdk-lib/aws-glue'
+import { CfnWorkGroup } from 'aws-cdk-lib/aws-athena'
 
 export class StorageStack extends Stack {
   constructor(scope: Construct, id: string, props: AllStacksProps) {
@@ -15,20 +17,23 @@ export class StorageStack extends Stack {
       defineTable(this, props, tableId)
     }
 
-    const eventsBucket = new Bucket(this, 'EventsBucket', {
-      objectOwnership: ObjectOwnership.BUCKET_OWNER_ENFORCED,
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      autoDeleteObjects: props.storageResourceRemovalPolicy === RemovalPolicy.DESTROY,
-      removalPolicy: props.storageResourceRemovalPolicy,
-      eventBridgeEnabled: true,
-      lifecycleRules: [
-        {
-          expiration: Duration.days(14)
-        }
-      ]
+    defineBucket(this, props, 'EventsBucket', SSM_PARAM_NAMES.EVENTS_BUCKET_NAME, { expirationDays: 14 })
+    defineBucket(this, props, 'ReportingIngestionBucket', SSM_PARAM_NAMES.REPORTING_INGESTION_BUCKET_NAME, {
+      expirationDays: 14
     })
+    defineBucket(this, props, 'ReportingBucket', SSM_PARAM_NAMES.REPORTING_BUCKET_NAME)
+    const athenaOutputBucket = defineBucket(
+      this,
+      props,
+      'AthenaOutputBucket',
+      SSM_PARAM_NAMES.ATHENA_OUTPUT_BUCKET_NAME,
+      {
+        expirationDays: 7
+      }
+    )
 
-    saveInSSMViaCloudFormation(this, props, SSM_PARAM_NAMES.EVENTS_BUCKET_NAME, eventsBucket.bucketName)
+    defineGlueDatabase(this, props)
+    defineAthenaWorkgroup(this, props, athenaOutputBucket)
   }
 }
 
@@ -71,4 +76,61 @@ function defineTable(scope: Construct, props: AllStacksProps, tableId: CicadaTab
   })
 
   saveInSSMViaCloudFormation(scope, props, ssmTableNamePath(tableId), table.tableName)
+}
+
+function defineBucket(
+  scope: Construct,
+  props: AllStacksProps,
+  id: string,
+  ssmParamName: SsmParamName,
+  options: { expirationDays?: number } = {}
+) {
+  const bucket = new Bucket(scope, id, {
+    objectOwnership: ObjectOwnership.BUCKET_OWNER_ENFORCED,
+    blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+    autoDeleteObjects: props.storageResourceRemovalPolicy === RemovalPolicy.DESTROY,
+    removalPolicy: props.storageResourceRemovalPolicy,
+    eventBridgeEnabled: true,
+    ...(options.expirationDays === undefined
+      ? {}
+      : {
+          lifecycleRules: [
+            {
+              expiration: Duration.days(options.expirationDays)
+            }
+          ]
+        })
+  })
+
+  saveInSSMViaCloudFormation(scope, props, ssmParamName, bucket.bucketName)
+  return bucket
+}
+
+function defineGlueDatabase(scope: Construct, props: AllStacksProps) {
+  const glueDatabaseName = props.appName.toLowerCase().replaceAll('-', '_')
+  const glueDatabase = new CfnDatabase(scope, 'GlueDatabase', {
+    catalogId: Aws.ACCOUNT_ID,
+    databaseInput: {
+      name: glueDatabaseName
+    }
+  })
+  glueDatabase.applyRemovalPolicy(RemovalPolicy.DESTROY)
+  saveInSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.GLUE_DATABASE_NAME, glueDatabaseName)
+
+  return glueDatabaseName
+}
+
+function defineAthenaWorkgroup(scope: Construct, props: AllStacksProps, athenaOutputBucket: IBucket) {
+  const workgroupName = props.appName
+  new CfnWorkGroup(scope, 'AthenaWorkgroup', {
+    name: `${workgroupName}`,
+    recursiveDeleteOption: props.storageResourceRemovalPolicy === RemovalPolicy.DESTROY,
+    workGroupConfiguration: {
+      resultConfiguration: {
+        outputLocation: `s3://${athenaOutputBucket.bucketName}/`
+      }
+    }
+  })
+  saveInSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.ATHENA_WORKGROUP_NAME, workgroupName)
+  return workgroupName
 }
