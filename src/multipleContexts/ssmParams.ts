@@ -51,7 +51,8 @@ export function ssmTableNamePath(id: CicadaTableId): SsmParamName {
 }
 
 // For now, only table with a stream
-export function ssmTableStreamPath(id: 'github-repo-activity'): SsmParamName {
+export function ssmTableStreamPath(id: CicadaTableId): SsmParamName {
+  if (id !== 'github-repo-activity') throw new Error('Only currently implemented for github-repo-activity')
   return `resources/tableStreamArn/${id}`
 }
 

@@ -2,7 +2,7 @@ import { Construct } from 'constructs'
 import { AllStacksProps } from '../../config/allStacksProps'
 import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3'
 import { readFromSSMViaCloudFormation } from '../../support/ssm'
-import { SSM_PARAM_NAMES, ssmTableNamePath } from '../../../multipleContexts/ssmParams'
+import { SSM_PARAM_NAMES, ssmTableNamePath, ssmTableStreamPath } from '../../../multipleContexts/ssmParams'
 import { Certificate, ICertificate } from 'aws-cdk-lib/aws-certificatemanager'
 import { Fn } from 'aws-cdk-lib'
 import { HostedZone, IHostedZone } from 'aws-cdk-lib/aws-route53'
@@ -37,11 +37,7 @@ export function createMainStackProps(scope: Construct, props: AllStacksProps): M
   return {
     ...props,
     allTables: lookupTables(scope, props),
-    eventsBucket: Bucket.fromBucketName(
-      scope,
-      'EventsBucket',
-      readFromSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.EVENTS_BUCKET_NAME)
-    ),
+    eventsBucket: lookupBucket(scope, props, 'EventsBucket', SSM_PARAM_NAMES.EVENTS_BUCKET_NAME),
     ...(certificate
       ? {
           certificate
@@ -54,16 +50,32 @@ export function createMainStackProps(scope: Construct, props: AllStacksProps): M
 }
 
 function lookupTables(scope: Construct, props: AllStacksProps): Record<CicadaTableId, ITableV2> {
-  function lookupTable(tableId: CicadaTableId) {
-    return TableV2.fromTableAttributes(scope, `${tableId}-table`, {
-      tableName: readFromSSMViaCloudFormation(scope, props, ssmTableNamePath(tableId)),
-      grantIndexPermissions: tableConfigurations[tableId].hasGSI1
-    })
-  }
-
   // Typescript question - any way to do this without the typecasting with 'as' ?
-  return Object.fromEntries(CICADA_TABLE_IDS.map((id) => [id, lookupTable(id)])) as Record<
+  return Object.fromEntries(CICADA_TABLE_IDS.map((id) => [id, lookupTable(scope, props, id)])) as Record<
     CicadaTableId,
     ITableV2
   >
+}
+
+// also used by reporting stack props
+export function lookupBucket(scope: Construct, props: AllStacksProps, id: string, key: string) {
+  return Bucket.fromBucketName(scope, id, readFromSSMViaCloudFormation(scope, props, key))
+}
+
+export function lookupBucketFromName(scope: Construct, id: string, name: string) {
+  return Bucket.fromBucketName(scope, id, name)
+}
+
+// also used by reporting stack props
+export function lookupTable(scope: Construct, props: AllStacksProps, tableId: CicadaTableId) {
+  const config = tableConfigurations[tableId]
+  return TableV2.fromTableAttributes(scope, `${tableId}-table`, {
+    tableName: readFromSSMViaCloudFormation(scope, props, ssmTableNamePath(tableId)),
+    grantIndexPermissions: config.hasGSI1,
+    ...(config.stream
+      ? {
+          tableStreamArn: readFromSSMViaCloudFormation(scope, props, ssmTableStreamPath(tableId))
+        }
+      : {})
+  })
 }

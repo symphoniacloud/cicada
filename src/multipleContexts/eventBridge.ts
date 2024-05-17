@@ -3,7 +3,8 @@ export const EVENTBRIDGE_DETAIL_TYPES = {
   GITHUB_NEW_PUSH: 'GithubNewPush',
   GITHUB_NEW_WORKFLOW_RUN_EVENT: 'GithubNewWorkflowRunEvent',
   WEB_PUSH_TEST: 'WebPushTest',
-  INSTALLATION_UPDATED: 'InstallationUpdated'
+  INSTALLATION_UPDATED: 'InstallationUpdated',
+  GITHUB_REPO_ACTIVITY_TABLE_UPDATED: 'GithubRepoActivityTableUpdated'
 } as const
 
 export type EventBridgeDetailType = (typeof EVENTBRIDGE_DETAIL_TYPES)[keyof typeof EVENTBRIDGE_DETAIL_TYPES]
