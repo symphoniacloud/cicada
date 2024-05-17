@@ -2,6 +2,7 @@
 // Used by CDK for deployment and application code for configuration
 
 // If adding here, also add to SsmTableNameParamName type
+
 export const CICADA_TABLE_IDS = [
   'github-installations',
   'github-users',
@@ -15,40 +16,47 @@ export const CICADA_TABLE_IDS = [
 export type CicadaTableId = (typeof CICADA_TABLE_IDS)[number]
 
 interface CicadaTableConfig {
-  hasSortKey: boolean
-  hasGSI1: boolean
+  readonly hasSortKey: boolean
+  readonly hasGSI1: boolean
+  readonly stream: boolean
+}
+
+const allFalseConfig: CicadaTableConfig = {
+  hasGSI1: false,
+  hasSortKey: false,
+  stream: false
 }
 
 export const tableConfigurations: Record<CicadaTableId, CicadaTableConfig> = {
-  'github-installations': {
-    hasSortKey: false,
-    hasGSI1: false
-  },
-  'github-users': {
-    hasSortKey: false,
-    hasGSI1: false
-  },
+  'github-installations': allFalseConfig,
+  'github-users': allFalseConfig,
   'github-account-memberships': {
+    ...allFalseConfig,
     hasSortKey: true,
     hasGSI1: true
   },
   'github-repositories': {
+    ...allFalseConfig,
     hasSortKey: true,
     hasGSI1: false
   },
   'github-repo-activity': {
     hasSortKey: true,
-    hasGSI1: true
+    hasGSI1: true,
+    stream: true
   },
   'github-latest-workflow-runs': {
+    ...allFalseConfig,
     hasSortKey: true,
     hasGSI1: true
   },
   'github-latest-pushes-per-ref': {
+    ...allFalseConfig,
     hasSortKey: true,
     hasGSI1: true
   },
   'web-push-subscriptions': {
+    ...allFalseConfig,
     hasSortKey: true,
     hasGSI1: false
   }

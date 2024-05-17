@@ -50,6 +50,11 @@ export function ssmTableNamePath(id: CicadaTableId): SsmParamName {
   return `resources/table/${id}`
 }
 
+// For now, only table with a stream
+export function ssmTableStreamPath(id: 'github-repo-activity'): SsmParamName {
+  return `resources/tableStreamArn/${id}`
+}
+
 export function createFullParameterName({ appName }: { appName: string }, key: string) {
   return `/${appName}/${key}`
 }

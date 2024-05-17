@@ -1,10 +1,15 @@
 import { Aws, Duration, RemovalPolicy, Stack } from 'aws-cdk-lib'
 import { Construct } from 'constructs'
-import { AttributeType, TableV2 } from 'aws-cdk-lib/aws-dynamodb'
+import { AttributeType, StreamViewType, TableV2 } from 'aws-cdk-lib/aws-dynamodb'
 import { saveInSSMViaCloudFormation } from '../support/ssm'
 import { AllStacksProps } from '../config/allStacksProps'
 import { BlockPublicAccess, Bucket, IBucket, ObjectOwnership } from 'aws-cdk-lib/aws-s3'
-import { SSM_PARAM_NAMES, SsmParamName, ssmTableNamePath } from '../../multipleContexts/ssmParams'
+import {
+  SSM_PARAM_NAMES,
+  SsmParamName,
+  ssmTableNamePath,
+  ssmTableStreamPath
+} from '../../multipleContexts/ssmParams'
 import { CICADA_TABLE_IDS, CicadaTableId, tableConfigurations } from '../../multipleContexts/dynamoDBTables'
 import { CfnDatabase } from 'aws-cdk-lib/aws-glue'
 import { CfnWorkGroup } from 'aws-cdk-lib/aws-athena'
@@ -48,6 +53,11 @@ function defineTable(scope: Construct, props: AllStacksProps, tableId: CicadaTab
       name: 'PK',
       type: AttributeType.STRING
     },
+    ...(config.stream
+      ? {
+          dynamoStream: StreamViewType.NEW_IMAGE
+        }
+      : {}),
     ...(config.hasSortKey
       ? {
           sortKey: {
@@ -76,6 +86,13 @@ function defineTable(scope: Construct, props: AllStacksProps, tableId: CicadaTab
   })
 
   saveInSSMViaCloudFormation(scope, props, ssmTableNamePath(tableId), table.tableName)
+
+  if (config.stream) {
+    if (tableId !== 'github-repo-activity')
+      throw new Error(`Streaming config not currently setup for table ${tableId}`)
+    if (!table.tableStreamArn) throw new Error(`Stream has not been configured for table ${tableId}`)
+    saveInSSMViaCloudFormation(scope, props, ssmTableStreamPath(tableId), table.tableStreamArn)
+  }
 }
 
 function defineBucket(
