@@ -13,6 +13,7 @@ import {
 import { CICADA_TABLE_IDS, CicadaTableId, tableConfigurations } from '../../multipleContexts/dynamoDBTables'
 import { CfnDatabase } from 'aws-cdk-lib/aws-glue'
 import { CfnWorkGroup } from 'aws-cdk-lib/aws-athena'
+import { AthenaMigrations } from './main/constructs/AthenaMigrations'
 
 export class StorageStack extends Stack {
   constructor(scope: Construct, id: string, props: AllStacksProps) {
@@ -26,7 +27,12 @@ export class StorageStack extends Stack {
     defineBucket(this, props, 'ReportingIngestionBucket', SSM_PARAM_NAMES.REPORTING_INGESTION_BUCKET_NAME, {
       expirationDays: 14
     })
-    defineBucket(this, props, 'ReportingBucket', SSM_PARAM_NAMES.REPORTING_BUCKET_NAME)
+    const reportingBucket = defineBucket(
+      this,
+      props,
+      'ReportingBucket',
+      SSM_PARAM_NAMES.REPORTING_BUCKET_NAME
+    )
     const athenaOutputBucket = defineBucket(
       this,
       props,
@@ -37,8 +43,16 @@ export class StorageStack extends Stack {
       }
     )
 
-    defineGlueDatabase(this, props)
-    defineAthenaWorkgroup(this, props, athenaOutputBucket)
+    const glueDatabaseName = defineGlueDatabase(this, props)
+    const athenaWorkgroupName = defineAthenaWorkgroup(this, props, athenaOutputBucket)
+
+    new AthenaMigrations(this, 'athenaMigrations', {
+      ...props,
+      glueDatabaseName,
+      tableBucket: reportingBucket,
+      athenaBucket: athenaOutputBucket,
+      workGroupName: athenaWorkgroupName
+    })
   }
 }
 

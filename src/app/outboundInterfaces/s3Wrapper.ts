@@ -1,9 +1,14 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { tracer } from '../util/tracing'
 import { throwFunction } from '../../multipleContexts/errors'
+import { NodeJsRuntimeStreamingBlobPayloadOutputTypes } from '@smithy/types/dist-types/streaming-payload/streaming-blob-payload-output-types'
 
 export interface S3Wrapper {
   getObjectAsString(bucket: string, key: string): Promise<string>
+
+  getObject(bucket: string, key: string): Promise<NodeJsRuntimeStreamingBlobPayloadOutputTypes>
+
+  s3client(): S3Client
 }
 
 export function realS3(): S3Wrapper {
@@ -11,17 +16,30 @@ export function realS3(): S3Wrapper {
 
   return {
     async getObjectAsString(bucket: string, key: string): Promise<string> {
-      const body =
-        (
-          await s3.send(
-            new GetObjectCommand({
-              Bucket: bucket,
-              Key: key
-            })
-          )
-        ).Body ?? throwFunction(`No body for s3://${bucket}/${key}`)()
+      return await (await getS3Object(s3, bucket, key)).transformToString()
+    },
+    async getObject(bucket: string, key: string): Promise<NodeJsRuntimeStreamingBlobPayloadOutputTypes> {
+      return await getS3Object(s3, bucket, key)
+    },
 
-      return await body.transformToString()
+    s3client(): S3Client {
+      return s3
     }
   }
+}
+
+export async function getS3Object(
+  s3Client: S3Client,
+  bucket: string,
+  key: string
+): Promise<NodeJsRuntimeStreamingBlobPayloadOutputTypes> {
+  return ((
+    await s3Client.send(
+      new GetObjectCommand({
+        Bucket: bucket,
+        Key: key
+      })
+    )
+  ).Body ??
+    throwFunction(`No body for s3://${bucket}/${key}`)()) as NodeJsRuntimeStreamingBlobPayloadOutputTypes
 }

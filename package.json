@@ -42,6 +42,7 @@
     "@aws-lambda-powertools/logger": "2.x",
     "@aws-lambda-powertools/parameters": "2.x",
     "@aws-lambda-powertools/tracer": "2.x",
+    "@aws-sdk/client-athena": "3.x",
     "@aws-sdk/client-dynamodb": "3.x",
     "@aws-sdk/client-eventbridge": "3.x",
     "@aws-sdk/client-lambda": "3.x",
@@ -52,8 +53,10 @@
     "@octokit/auth-app": "6.x",
     "@octokit/rest": "20.x",
     "@symphoniacloud/dynamodb-entity-store": "1.x",
+    "@types/unzipper": "0.x",
     "ajv": "8.x",
     "dotenv": "16.x",
+    "unzipper": "0.x",
     "url-pattern": "1.x",
     "web-push": "3.x"
   }
