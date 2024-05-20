@@ -3,7 +3,7 @@ import { ReportingStackProps } from './reportingStackProps'
 import { RemovalPolicy } from 'aws-cdk-lib'
 import { StartingPosition } from 'aws-cdk-lib/aws-lambda'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../../multipleContexts/eventBridge'
-import { DynamoDBStreamFanOut } from '../constructs/DynamoDBStreamFanOut'
+import { DynamoDBStreamFanOut } from '../../../constructs/DynamoDBStreamFanOut'
 
 export function defineRepoActivityDynamoDBStreamFanOut(scope: Construct, props: ReportingStackProps) {
   new DynamoDBStreamFanOut(scope, 'GithubRepoActivityFanOut', {

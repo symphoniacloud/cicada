@@ -2,8 +2,8 @@ import { NodejsFunction, SourceMapMode } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { Construct } from 'constructs'
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda'
 import { Duration } from 'aws-cdk-lib'
-import { WithAppName } from '../../../config/allStacksProps'
-import { EnvironmentSettings } from '../../../config/environmentSettings'
+import { WithAppName } from '../config/allStacksProps'
+import { EnvironmentSettings } from '../config/environmentSettings'
 
 export interface CicadaCDKCustomResourceFunctionProps extends WithAppName, EnvironmentSettings {
   readonly functionName: string

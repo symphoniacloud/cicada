@@ -3,7 +3,7 @@ import { Construct } from 'constructs'
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam'
 import { CfnDeliveryStream } from 'aws-cdk-lib/aws-kinesisfirehose'
 import { IBucket } from 'aws-cdk-lib/aws-s3'
-import { WithEnvironment } from '../../../config/allStacksProps'
+import { WithEnvironment } from '../config/allStacksProps'
 
 export interface PartitioningJSONFirehoseProps extends WithEnvironment, NamingProps {
   readonly bucket: IBucket

@@ -1,5 +1,5 @@
-import { WithAppName } from '../../../config/allStacksProps'
-import { EnvironmentSettings } from '../../../config/environmentSettings'
+import { WithAppName } from '../config/allStacksProps'
+import { EnvironmentSettings } from '../config/environmentSettings'
 import { IBucket } from 'aws-cdk-lib/aws-s3'
 import { Construct } from 'constructs'
 import { CustomResource, Stack } from 'aws-cdk-lib'

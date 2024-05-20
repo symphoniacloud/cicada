@@ -13,7 +13,7 @@ import {
 import { CICADA_TABLE_IDS, CicadaTableId, tableConfigurations } from '../../multipleContexts/dynamoDBTables'
 import { CfnDatabase } from 'aws-cdk-lib/aws-glue'
 import { CfnWorkGroup } from 'aws-cdk-lib/aws-athena'
-import { AthenaMigrations } from './main/constructs/AthenaMigrations'
+import { AthenaMigrations } from '../constructs/AthenaMigrations'
 
 export class StorageStack extends Stack {
   constructor(scope: Construct, id: string, props: AllStacksProps) {
@@ -44,15 +44,18 @@ export class StorageStack extends Stack {
     )
 
     const glueDatabaseName = defineGlueDatabase(this, props)
-    const athenaWorkgroupName = defineAthenaWorkgroup(this, props, athenaOutputBucket)
+    const { athenaWorkgroup, athenaWorkgroupName } = defineAthenaWorkgroup(this, props, athenaOutputBucket)
 
-    new AthenaMigrations(this, 'athenaMigrations', {
+    const athenaMigrations = new AthenaMigrations(this, 'athenaMigrations', {
       ...props,
       glueDatabaseName,
       tableBucket: reportingBucket,
       athenaBucket: athenaOutputBucket,
       workGroupName: athenaWorkgroupName
     })
+    athenaMigrations.node.addDependency(athenaWorkgroup)
+    athenaMigrations.node.addDependency(athenaOutputBucket)
+    athenaMigrations.node.addDependency(reportingBucket)
   }
 }
 
@@ -152,9 +155,9 @@ function defineGlueDatabase(scope: Construct, props: AllStacksProps) {
 }
 
 function defineAthenaWorkgroup(scope: Construct, props: AllStacksProps, athenaOutputBucket: IBucket) {
-  const workgroupName = props.appName
-  new CfnWorkGroup(scope, 'AthenaWorkgroup', {
-    name: `${workgroupName}`,
+  const athenaWorkgroupName = props.appName
+  const athenaWorkgroup = new CfnWorkGroup(scope, 'AthenaWorkgroup', {
+    name: `${athenaWorkgroupName}`,
     recursiveDeleteOption: props.storageResourceRemovalPolicy === RemovalPolicy.DESTROY,
     workGroupConfiguration: {
       resultConfiguration: {
@@ -162,6 +165,6 @@ function defineAthenaWorkgroup(scope: Construct, props: AllStacksProps, athenaOu
       }
     }
   })
-  saveInSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.ATHENA_WORKGROUP_NAME, workgroupName)
-  return workgroupName
+  saveInSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.ATHENA_WORKGROUP_NAME, athenaWorkgroupName)
+  return { athenaWorkgroup, athenaWorkgroupName }
 }

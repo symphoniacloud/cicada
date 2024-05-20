@@ -5,9 +5,9 @@ import { CfnPipeProps } from 'aws-cdk-lib/aws-pipes/lib/pipes.generated'
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam'
 import { LogGroup } from 'aws-cdk-lib/aws-logs'
 import { LogGroupProps } from 'aws-cdk-lib/aws-logs/lib/log-group'
-import { Optional } from '../../../../app/util/types'
+import { Optional } from '../../app/util/types'
 
-import { WithEnvironment } from '../../../config/allStacksProps'
+import { WithEnvironment } from '../config/allStacksProps'
 
 export interface EventBridgePipeProps
   extends WithEnvironment,

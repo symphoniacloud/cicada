@@ -9,6 +9,7 @@ import { sleep } from '../../../../test/remote/integrationTestSupport/utils'
 import { Extract } from 'unzipper'
 import { realS3 } from '../../../app/outboundInterfaces/s3Wrapper'
 
+// TOEventually - look at "important cases to handle" at https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.custom_resources-readme.html#important-cases-to-handle
 export async function onEvent(event: OnEventRequest): Promise<OnEventResponse> {
   const props = readProperties(event)
   switch (event.RequestType) {

@@ -9,7 +9,7 @@ import {
   StateMachineType
 } from 'aws-cdk-lib/aws-stepfunctions'
 import { stringArrayToCommaNewLineSeparated, topLevelGlueFields } from './schema'
-import { ExecuteAthenaQueryStateMachineFragment } from '../constructs/ExecuteAthenaQueryStateMachineFragment'
+import { ExecuteAthenaQueryStateMachineFragment } from '../../../constructs/ExecuteAthenaQueryStateMachineFragment'
 import { Duration, RemovalPolicy } from 'aws-cdk-lib'
 import { ManagedPolicy } from 'aws-cdk-lib/aws-iam'
 import { Rule } from 'aws-cdk-lib/aws-events'

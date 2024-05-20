@@ -8,7 +8,7 @@ import { Rule } from 'aws-cdk-lib/aws-events'
 import { SqsQueue } from 'aws-cdk-lib/aws-events-targets'
 import { resourceName } from './constructSupport'
 import { EventPattern } from 'aws-cdk-lib/aws-events/lib/event-pattern'
-import { Optional } from '../../../../app/util/types'
+import { Optional } from '../../app/util/types'
 
 export interface EventBridgeToFirehoseProps
   extends Optional<EventBridgePipeProps, 'source' | 'sourceParameters' | 'target' | 'targetParameters'> {

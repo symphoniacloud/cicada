@@ -1,13 +1,13 @@
 import { Construct } from 'constructs'
 import { ITable } from 'aws-cdk-lib/aws-dynamodb'
-import { eventbridgeDefaultBusArn, grantRolePermissionToPutEvents } from '../../../support/eventbridge'
+import { eventbridgeDefaultBusArn, grantRolePermissionToPutEvents } from '../support/eventbridge'
 import { CfnPipe } from 'aws-cdk-lib/aws-pipes'
-import { throwFunction } from '../../../../multipleContexts/errors'
+import { throwFunction } from '../../multipleContexts/errors'
 import { EventBridgePipe, EventBridgePipeProps } from './EventBridgePipe'
 import PipeTargetEventBridgeEventBusParametersProperty = CfnPipe.PipeTargetEventBridgeEventBusParametersProperty
 import PipeSourceDynamoDBStreamParametersProperty = CfnPipe.PipeSourceDynamoDBStreamParametersProperty
 
-import { WithEnvironment } from '../../../config/allStacksProps'
+import { WithEnvironment } from '../config/allStacksProps'
 
 interface DynamoDBStreamFanOutProps
   extends WithEnvironment,

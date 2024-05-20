@@ -1,5 +1,5 @@
 import { Construct } from 'constructs'
-import { CicadaFunction, cicadaFunctionProps } from './constructs/CicadaFunction'
+import { CicadaFunction, cicadaFunctionProps } from '../../constructs/CicadaFunction'
 import { HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2'
 import {
   AwsIntegration,

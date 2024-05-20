@@ -1,6 +1,6 @@
 import { Construct } from 'constructs'
 import { MainStackProps } from './mainStackProps'
-import { CicadaFunction, cicadaFunctionProps } from './constructs/CicadaFunction'
+import { CicadaFunction, cicadaFunctionProps } from '../../constructs/CicadaFunction'
 import {
   DefinitionBody,
   IntegrationPattern,

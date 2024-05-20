@@ -4,8 +4,8 @@ import { Aws, RemovalPolicy } from 'aws-cdk-lib'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../../multipleContexts/eventBridge'
 import { CfnDeliveryStream } from 'aws-cdk-lib/aws-kinesisfirehose'
 import { CfnTable } from 'aws-cdk-lib/aws-glue'
-import { EventBridgeToFirehose } from '../constructs/EventBridgeToFirehose'
-import { PartitioningJSONFirehose } from '../constructs/PartitioningJSONFirehose'
+import { EventBridgeToFirehose } from '../../../constructs/EventBridgeToFirehose'
+import { PartitioningJSONFirehose } from '../../../constructs/PartitioningJSONFirehose'
 import { githubWorkflowGlueSchema } from './schema'
 
 export function defineGithubWorkflowRunEventCapture(scope: Construct, props: ReportingStackProps) {

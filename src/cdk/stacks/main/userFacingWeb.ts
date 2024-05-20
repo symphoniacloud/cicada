@@ -1,5 +1,5 @@
 import { Construct } from 'constructs'
-import { CicadaFunction, cicadaFunctionProps } from './constructs/CicadaFunction'
+import { CicadaFunction, cicadaFunctionProps } from '../../constructs/CicadaFunction'
 import { Duration } from 'aws-cdk-lib'
 import { grantLambdaFunctionPermissionToPutEvents } from '../../support/eventbridge'
 import { Rule } from 'aws-cdk-lib/aws-events'
