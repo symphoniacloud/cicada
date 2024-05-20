@@ -4,6 +4,7 @@ import { NestedStack } from 'aws-cdk-lib'
 import { createReportingStackProps } from './reportingStackProps'
 import { defineRepoActivityDynamoDBStreamFanOut } from './streamFanOut'
 import { defineGithubWorkflowRunEventCapture } from './workflowRunEventCapture'
+import { defineGithubWorkflowRunEventProcessing } from './workflowRunEventProcessing'
 
 export class ReportingStack extends NestedStack {
   constructor(scope: Construct, id: string, allStacksProps: AllStacksProps) {
@@ -17,5 +18,8 @@ export class ReportingStack extends NestedStack {
 
     // Capture Github Workflow Run Events as JSON to the ingestion store
     defineGithubWorkflowRunEventCapture(this, props)
+
+    // Process captured events for reporting
+    defineGithubWorkflowRunEventProcessing(this, props)
   }
 }

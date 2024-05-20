@@ -10,6 +10,8 @@ export interface ReportingStackProps extends AllStacksProps {
   githubRepoActivityTable: ITableV2
   reportingIngestionBucket: IBucket
   glueDatabaseName: string
+  athenaOutputBucket: IBucket
+  athenaWorkgroupName: string
 }
 
 export function createReportingStackProps(scope: Construct, props: AllStacksProps): ReportingStackProps {
@@ -22,6 +24,13 @@ export function createReportingStackProps(scope: Construct, props: AllStacksProp
       'ReportingIngestionBucket',
       SSM_PARAM_NAMES.REPORTING_INGESTION_BUCKET_NAME
     ),
-    glueDatabaseName: readFromSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.GLUE_DATABASE_NAME)
+    glueDatabaseName: readFromSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.GLUE_DATABASE_NAME),
+    athenaOutputBucket: lookupBucket(
+      scope,
+      props,
+      'AthenaOutputBucket',
+      SSM_PARAM_NAMES.ATHENA_OUTPUT_BUCKET_NAME
+    ),
+    athenaWorkgroupName: readFromSSMViaCloudFormation(scope, props, SSM_PARAM_NAMES.ATHENA_WORKGROUP_NAME)
   }
 }
