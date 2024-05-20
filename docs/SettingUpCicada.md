@@ -2,6 +2,19 @@
 
 Before I get started on how to use Cicada some important...
 
+## The short version 
+
+If you just want to deploy Cicada to take a look at how I've done things, and you're already
+familiar with deploying serverless applications to AWS, then this is the tl;dr :
+
+1. Clone this repo
+2. Run `npm install`
+3. With your AWS environment pointing to the correct account and region, run [deploy.sh](../deploy.sh)
+4. Go and make a cup of tea - first deployment takes (currently) 5 - 10 minutes in `us-east-1`.
+5. Look at the final output for URL details
+
+## The long version
+
 **WARNINGS!**
 
 * I'm still actively developing Cicada and will probably make breaking changes.
