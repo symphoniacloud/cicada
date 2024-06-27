@@ -10,7 +10,7 @@ test('successful row, all Repos', () => {
     tr(
       { class: 'success' },
       td(
-        a(`/repo/index.html?ownerId=162360409&repoId=767679529`, 'personal-test-repo'),
+        a(`/repo?ownerId=162360409&repoId=767679529`, 'personal-test-repo'),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo')
       ),
@@ -72,7 +72,7 @@ test('unsuccessful run, all Repos', () => {
     tr(
       { class: 'danger' },
       td(
-        a(`/repo/index.html?ownerId=162360409&repoId=767679529`, 'personal-test-repo'),
+        a(`/repo?ownerId=162360409&repoId=767679529`, 'personal-test-repo'),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo')
       ),
@@ -148,7 +148,7 @@ test('in progress run, all repos', () => {
     tr(
       { class: 'warning' },
       td(
-        a(`/repo/index.html?ownerId=162360409&repoId=767679529`, 'personal-test-repo'),
+        a(`/repo?ownerId=162360409&repoId=767679529`, 'personal-test-repo'),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo')
       ),

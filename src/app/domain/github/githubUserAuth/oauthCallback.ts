@@ -58,7 +58,7 @@ async function tryOauthCallback(
   // for now using Github's token is sufficient
   const webHostname = `${await appState.config.webHostname()}`
   return redirectResponseWithCookies(
-    `https://${webHostname}/app.html`,
+    `https://${webHostname}/app`,
     cookies(appState.clock, webHostname, token, 'true', 3)
   )
 }

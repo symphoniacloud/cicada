@@ -10,11 +10,7 @@ export function repoCell({
 }: GithubRepositoryElement & {
   repoHtmlUrl: string
 }) {
-  return td(
-    a(`/repo/index.html?ownerId=${ownerId}&repoId=${repoId}`, repoName),
-    '&nbsp;',
-    githubAnchor(repoHtmlUrl)
-  )
+  return td(a(`/repo?ownerId=${ownerId}&repoId=${repoId}`, repoName), '&nbsp;', githubAnchor(repoHtmlUrl))
 }
 
 export function githubRepoUrl({

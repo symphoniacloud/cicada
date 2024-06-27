@@ -76,7 +76,7 @@ test('oauthCallback', async () => {
 
   // Assert
   expect(response.statusCode).toEqual(302)
-  expect(response.multiValueHeaders?.['Location']).toEqual(['https://fake-cicada.example.com/app.html'])
+  expect(response.multiValueHeaders?.['Location']).toEqual(['https://fake-cicada.example.com/app'])
   // Expires 1 day before "now" where now is defined in appState's clock (which defaults to defaultFakeNowIso)
   expect(response.multiValueHeaders?.['Set-Cookie']).toEqual([
     'token=validUserToken; Secure; HttpOnly; SameSite=Lax; Domain=fake-cicada.example.com; Expires=Mon, 05 Feb 2024 19:00:00 GMT; Path=/',
