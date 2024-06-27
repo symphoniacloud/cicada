@@ -11,36 +11,31 @@
 </head>
 
 <body>
-<!-- TODO - move this to shared script -->
+<script src="/js/checkLoggedIn.js"></script>
 <script>
-  if (!(document.cookie
-    .split('; ')
-    .find((part) => part.startsWith('loggedIn='))
-    ?.split('=')[1] === 'true'))
-    location.assign('/')
-
   const urlParams = new URLSearchParams(window.location.search)
-  const ownerId = urlParams.get('ownerId')
-  const repoId = urlParams.get('repoId')
+  // noinspection JSUnusedGlobalSymbols
+  const repoKey = { ownerId: urlParams.get('ownerId'), repoId: urlParams.get('repoId') }
 </script>
 <div class="container" id="toplevel">
   <h2>Cicada</h2>
+  <script src="/js/checkForHtmxUnauthorizedResponse.js"></script>
   <div hx-get='/app/elements/repo/heading'
        hx-trigger='load'
-       hx-vals='js:{ownerId: ownerId, repoId: repoId}'
+       hx-vals='js:{ ...repoKey }'
        hx-swap='outerHTML'>Finding repository details...
   </div>
   <h4>GitHub Actions Status</h4>
   <div hx-get='/app/elements/repo/actionsStatus'
        hx-trigger='load'
-       hx-vals='js:{ownerId: ownerId, repoId: repoId}'
-       hx-swap='outerHTML'>Loading GitHub Actions Status
+       hx-vals='js:{ ...repoKey }'
+       hx-swap='outerHTML'>Loading GitHub Actions Status...
   </div>
   <h4>Recent Activity</h4>
   <div hx-get='/app/elements/repo/recentActivity'
        hx-trigger='load'
-       hx-vals='js:{ownerId: ownerId, repoId: repoId}'
-       hx-swap='outerHTML'>Loading Recent Activity
+       hx-vals='js:{ ...repoKey }'
+       hx-swap='outerHTML'>Loading Recent Activity...
   </div>
   <hr />
   <p>
