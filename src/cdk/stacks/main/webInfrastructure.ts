@@ -13,6 +13,9 @@ import {
   BehaviorOptions,
   CachePolicy,
   Distribution,
+  Function,
+  FunctionCode,
+  FunctionEventType,
   HttpVersion,
   OriginRequestPolicy,
   ViewerProtocolPolicy
@@ -117,7 +120,15 @@ function defineCloudfront(
       origin: new S3Origin(websiteBucket),
       viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       // TOEventually - eventually will want caching enabled but with a default cache time
-      cachePolicy: CachePolicy.CACHING_DISABLED
+      cachePolicy: CachePolicy.CACHING_DISABLED,
+      functionAssociations: [
+        {
+          eventType: FunctionEventType.VIEWER_REQUEST,
+          function: new Function(scope, 'StackContentPreProcessFunction', {
+            code: FunctionCode.fromFile({ filePath: '../cloudfront/staticContentPreProcessFunction.js' })
+          })
+        }
+      ]
     },
     additionalBehaviors: {
       // TOEventually - would be nice to put these paths on the sub-modules
