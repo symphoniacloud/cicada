@@ -10,25 +10,9 @@
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'>
 </head>
 <body>
-<script>
-  if (!(document.cookie
-    .split('; ')
-    .find((part) => part.startsWith('loggedIn='))
-    ?.split('=')[1] === 'true')) {
-    console.log('Not logged in, changing to index page')
-    location.assign('/')
-  }
-</script>
+<script src="/js/checkLoggedIn.js"></script>
 <div class='container' id='toplevel'>
-  <script>
-    document.getElementById('toplevel').addEventListener('htmx:responseError', (evt) => {
-      if (evt?.detail?.xhr?.status === 403) {
-        console.log('Unauthorized')
-        location.assign('/github/auth/logout')
-      }
-      console.log(evt)
-    })
-  </script>
+  <script src="/js/checkForHtmxUnauthorizedResponse.js"></script>
   <h2>Cicada</h2>
   <div id='initialLoadingData' hx-get='/app/fragment/latestActivity' hx-trigger='load'
        hx-swap='outerHTML'>

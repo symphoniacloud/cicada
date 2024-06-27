@@ -5,12 +5,19 @@ module.exports = {
     es2022: true
   },
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
-  overrides: [],
   ignorePatterns: ['htmx.min.js'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
-  plugins: ['@typescript-eslint']
+  plugins: ['@typescript-eslint'],
+  overrides: [
+    {
+      files: ['src/web/**'],
+      env: {
+        browser: true
+      }
+    }
+  ]
 }
