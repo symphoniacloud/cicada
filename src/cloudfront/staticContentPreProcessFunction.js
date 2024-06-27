@@ -11,6 +11,7 @@
 var defaultObject = 'index.html'
 
 // See https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/writing-function-code.html
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function handler(event) {
   var request = event.request
   var uri = request.uri
