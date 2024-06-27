@@ -17,8 +17,19 @@ import { fragmentViewResult } from '../../web/views/viewResultWrappers'
 import { startSetupRoute } from '../../domain/github/setup/startGithubSetup'
 import { isFailure } from '../../util/structuredResult'
 import { a, p } from '../../web/hiccough/hiccoughElements'
+import { repoHeadingRoute } from '../../web/repoHeading'
+import { repoActionsStatusRoute } from '../../web/repoActionsStatus'
+import { repoRecentActivityRoute } from '../../web/repoRecentActivity'
 
-const router = createRouter([showHelloRoute, showLatestActivityRoute, showRepoRoute, showWorkflowRoute])
+const router = createRouter([
+  showHelloRoute,
+  showLatestActivityRoute,
+  showRepoRoute,
+  repoHeadingRoute,
+  repoActionsStatusRoute,
+  repoRecentActivityRoute,
+  showWorkflowRoute
+])
 
 let appState: AppState
 

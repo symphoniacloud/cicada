@@ -9,6 +9,7 @@ import { Result } from '../util/structuredResult'
 // more efficient
 
 export type WithPath = { path: string }
+export type QueryStringParameters = { [name: string]: string | undefined } | null
 
 export function validatingPathParser<T>(
   pathPattern: string,
@@ -20,5 +21,14 @@ export function validatingPathParser<T>(
     const pathParams = urlPattern.match(path)
     logger.debug('Parsed path params', { pathParams })
     return structuredValidate(validate, pathParams)
+  }
+}
+
+export function validatingQueryStringParser<T>(
+  schema: JTDSchemaType<T>
+): (params: QueryStringParameters) => Result<T> {
+  const validate: ValidateFunction<T> = ajvInstance.compile(schema)
+  return (params: QueryStringParameters) => {
+    return structuredValidate(validate, params)
   }
 }

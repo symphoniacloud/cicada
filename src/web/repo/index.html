@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>Cicada</title>
+  <!-- TODO - use self hosted paths -->
+  <script src='https://unpkg.com/htmx.org@1.9.11'
+          integrity='sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0'
+          crossorigin='anonymous'></script>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css'
+        integrity='sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu' crossorigin='anonymous'>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'>
+</head>
+
+<body>
+<!-- TODO - move this to shared script -->
+<script>
+  if (!(document.cookie
+    .split('; ')
+    .find((part) => part.startsWith('loggedIn='))
+    ?.split('=')[1] === 'true'))
+    location.assign('/')
+
+  const urlParams = new URLSearchParams(window.location.search)
+  const ownerId = urlParams.get('ownerId')
+  const repoId = urlParams.get('repoId')
+</script>
+<div class="container" id="toplevel">
+  <h2>Cicada</h2>
+  <div hx-get='/app/elements/repo/heading'
+       hx-trigger='load'
+       hx-vals='js:{ownerId: ownerId, repoId: repoId}'
+       hx-swap='outerHTML'>Finding repository details...
+  </div>
+  <h4>GitHub Actions Status</h4>
+  <div hx-get='/app/elements/repo/actionsStatus'
+       hx-trigger='load'
+       hx-vals='js:{ownerId: ownerId, repoId: repoId}'
+       hx-swap='outerHTML'>Loading GitHub Actions Status
+  </div>
+  <h4>Recent Activity</h4>
+  <div hx-get='/app/elements/repo/recentActivity'
+       hx-trigger='load'
+       hx-vals='js:{ownerId: ownerId, repoId: repoId}'
+       hx-swap='outerHTML'>Loading Recent Activity
+  </div>
+  <hr />
+  <p>
+    <a href="/web-push.html">Manage Web Push Notifications</a>
+  </p>
+  <p>
+    <a href="/">Back to home</a>
+  </p>
+  <p>
+    <a href="/github/auth/logout">Logout</a>
+  </p>
+</div>
+</body>
+</html>
