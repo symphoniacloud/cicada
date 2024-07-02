@@ -10,7 +10,7 @@ import { getRepository } from '../../domain/github/githubRepository'
 import { createRepoHeadingResponse } from './views/repoHeadingView'
 
 export const repoHeadingRoute: Route<CicadaAuthorizedAPIEvent> = {
-  path: '/app/elements/repo/heading',
+  path: '/app/fragment/repo/heading',
   target: repoHeading
 }
 

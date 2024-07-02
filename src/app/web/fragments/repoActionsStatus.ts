@@ -11,7 +11,7 @@ import { latestWorkflowRunEventsPerWorkflowForRepo } from '../../domain/github/g
 import { createRepoActionsStatusResponse } from './views/repoActionsStatusView'
 
 export const repoActionsStatusRoute: Route<CicadaAuthorizedAPIEvent> = {
-  path: '/app/elements/repo/actionsStatus',
+  path: '/app/fragment/actionsStatus',
   target: repoActionsStatus
 }
 

@@ -77,7 +77,7 @@ test('view-repo-heading', async () => {
   const viewRepoResponse = await handleWebRequest(
     appState,
     createStubApiGatewayProxyEventWithToken('validUserToken', {
-      path: '/app/elements/repo/heading',
+      path: '/app/fragment/repo/heading',
       queryStringParameters: { ownerId: '162483619', repoId: '768206479' }
     })
   )
@@ -112,7 +112,7 @@ test('view-repo-actions-status', async () => {
   const viewRepoResponse = await handleWebRequest(
     appState,
     createStubApiGatewayProxyEventWithToken('validUserToken', {
-      path: '/app/elements/repo/actionsStatus',
+      path: '/app/fragment/actionsStatus',
       queryStringParameters: { ownerId: '162483619', repoId: '768206479' }
     })
   )
@@ -155,7 +155,7 @@ test('view-repo-recent-activity', async () => {
   const viewRepoResponse = await handleWebRequest(
     appState,
     createStubApiGatewayProxyEventWithToken('validUserToken', {
-      path: '/app/elements/repo/recentActivity',
+      path: '/app/fragment/recentActivity',
       queryStringParameters: { ownerId: '162483619', repoId: '768206479' }
     })
   )
