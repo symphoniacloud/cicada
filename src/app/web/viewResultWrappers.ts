@@ -1,8 +1,8 @@
-import { htmlOkResult } from '../../inboundInterfaces/httpResponses'
-import { a, body, div, h2, head, htmlPage, link, meta, p, title } from '../hiccough/hiccoughElements'
-import { html } from '../hiccough/hiccoughCore'
-import { element, HiccoughContent } from '../hiccough/hiccoughElement'
-import { DOCTYPE_HTML5 } from '../hiccough/hiccoughPage'
+import { htmlOkResult } from '../inboundInterfaces/httpResponses'
+import { a, body, div, h2, head, htmlPage, link, meta, p, title } from './hiccough/hiccoughElements'
+import { html } from './hiccough/hiccoughCore'
+import { element, HiccoughContent } from './hiccough/hiccoughElement'
+import { DOCTYPE_HTML5 } from './hiccough/hiccoughPage'
 
 export function fragmentViewResult(...bodyContent: HiccoughContent[]) {
   return htmlOkResponseFor(...bodyContent)

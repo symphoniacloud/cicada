@@ -6,7 +6,7 @@ import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { handleGitHubWebAuthRequest } from '../../domain/github/githubUserAuth/githubWebAuthHandler'
 import { logger } from '../../util/logging'
 import { isFailure } from '../../util/structuredResult'
-import { pageViewResultWithoutHtmx } from '../../web/views/viewResultWrappers'
+import { pageViewResultWithoutHtmx } from '../../web/viewResultWrappers'
 import { startSetupRoute } from '../../domain/github/setup/startGithubSetup'
 
 let appState: AppState

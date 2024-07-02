@@ -1,5 +1,5 @@
 import { GithubSetupAppState } from './githubSetupAppState'
-import { pageViewResultWithoutHtmx } from '../../../web/views/viewResultWrappers'
+import { pageViewResultWithoutHtmx } from '../../../web/viewResultWrappers'
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import { Route } from '../../../internalHttpRouter/internalHttpRoute'
 

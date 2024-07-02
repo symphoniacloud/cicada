@@ -1,7 +1,7 @@
 import { Route } from '../../../internalHttpRouter/internalHttpRoute'
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import { GithubSetupAppState } from './githubSetupAppState'
-import { pageViewResultWithoutHtmx } from '../../../web/views/viewResultWrappers'
+import { pageViewResultWithoutHtmx } from '../../../web/viewResultWrappers'
 import { Octokit } from '@octokit/rest'
 import { ParameterType, PutParameterCommand, SSMClient } from '@aws-sdk/client-ssm'
 import {

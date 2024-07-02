@@ -1,8 +1,8 @@
-import { fragmentViewResult } from './viewResultWrappers'
-import { h3 } from '../hiccough/hiccoughElements'
-import { githubAnchor } from '../domainComponents/genericComponents'
-import { githubRepoUrl } from '../domainComponents/repoElementComponents'
-import { GithubRepository } from '../../domain/types/GithubRepository'
+import { fragmentViewResult } from '../../viewResultWrappers'
+import { h3 } from '../../hiccough/hiccoughElements'
+import { githubAnchor } from '../../domainComponents/genericComponents'
+import { githubRepoUrl } from '../../domainComponents/repoElementComponents'
+import { GithubRepository } from '../../../domain/types/GithubRepository'
 
 export function createRepoHeadingResponse(repo: GithubRepository) {
   return fragmentViewResult(repoHeadingElement(repo))

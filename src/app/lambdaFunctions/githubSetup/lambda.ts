@@ -4,7 +4,7 @@ import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { handleGithubSetupRequest } from '../../domain/github/setup/appSetupHandler'
 import { GithubSetupAppState, githubSetupStartup } from '../../domain/github/setup/githubSetupAppState'
 import { githubAppIsReady } from '../../domain/github/setup/githubAppReadyCheck'
-import { pageViewResultWithoutHtmx } from '../../web/views/viewResultWrappers'
+import { pageViewResultWithoutHtmx } from '../../web/viewResultWrappers'
 import { p } from '../../web/hiccough/hiccoughElements'
 
 let appState: GithubSetupAppState
