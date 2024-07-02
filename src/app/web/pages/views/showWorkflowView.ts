@@ -1,8 +1,8 @@
-import { Clock } from '../../util/dateAndTime'
-import { pageViewResultWithoutHtmx } from './viewResultWrappers'
-import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
-import { h3, p, table, tbody } from '../hiccough/hiccoughElements'
-import { workflowHeader, workflowRow } from '../domainComponents/workflowComponents'
+import { Clock } from '../../../util/dateAndTime'
+import { pageViewResultWithoutHtmx } from '../../viewResultWrappers'
+import { GithubWorkflowRunEvent } from '../../../domain/types/GithubWorkflowRunEvent'
+import { h3, p, table, tbody } from '../../hiccough/hiccoughElements'
+import { workflowHeader, workflowRow } from '../../domainComponents/workflowComponents'
 
 export function createShowWorkflowResponse(clock: Clock, runs: GithubWorkflowRunEvent[]) {
   const structure =

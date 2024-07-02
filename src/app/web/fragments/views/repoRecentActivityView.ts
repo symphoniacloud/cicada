@@ -1,9 +1,9 @@
-import { fragmentViewResult } from './viewResultWrappers'
-import { table, tbody } from '../hiccough/hiccoughElements'
-import { workflowHeader, workflowRow } from '../domainComponents/workflowComponents'
-import { Clock } from '../../util/dateAndTime'
-import { activityIsWorkflowRunActivity, GithubActivity } from '../../domain/github/githubActivity'
-import { pushRow } from '../domainComponents/pushComponents'
+import { fragmentViewResult } from '../../viewResultWrappers'
+import { table, tbody } from '../../hiccough/hiccoughElements'
+import { workflowHeader, workflowRow } from '../../domainComponents/workflowComponents'
+import { Clock } from '../../../util/dateAndTime'
+import { activityIsWorkflowRunActivity, GithubActivity } from '../../../domain/github/githubActivity'
+import { pushRow } from '../../domainComponents/pushComponents'
 
 export function createRepoRecentActivityResponse(clock: Clock, activity: GithubActivity[]) {
   return fragmentViewResult(repoRecentActivityElement(clock, activity))

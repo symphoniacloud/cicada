@@ -1,10 +1,10 @@
-import { fragmentViewResult } from './viewResultWrappers'
-import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
-import { GithubPush } from '../../domain/types/GithubPush'
-import { Clock } from '../../util/dateAndTime'
-import { h3, table, tbody, th, thead, tr } from '../hiccough/hiccoughElements'
-import { workflowHeader, workflowRow } from '../domainComponents/workflowComponents'
-import { pushRow } from '../domainComponents/pushComponents'
+import { fragmentViewResult } from '../../viewResultWrappers'
+import { GithubWorkflowRunEvent } from '../../../domain/types/GithubWorkflowRunEvent'
+import { GithubPush } from '../../../domain/types/GithubPush'
+import { Clock } from '../../../util/dateAndTime'
+import { h3, table, tbody, th, thead, tr } from '../../hiccough/hiccoughElements'
+import { workflowHeader, workflowRow } from '../../domainComponents/workflowComponents'
+import { pushRow } from '../../domainComponents/pushComponents'
 
 export function createShowLatestActivityResponse(
   clock: Clock,
