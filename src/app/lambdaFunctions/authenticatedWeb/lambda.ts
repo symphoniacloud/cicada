@@ -5,7 +5,6 @@ import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { showLatestActivityRoute } from '../../web/showLatestActivity'
 import { createRouter } from '../../internalHttpRouter/internalHttpRouter'
 import { showHelloRoute } from '../../web/showHello'
-import { showRepoRoute } from '../../web/showRepo'
 import { CicadaAPIAuthorizedAPIHandler } from '../../inboundInterfaces/lambdaTypes'
 import { showWorkflowRoute } from '../../web/showWorkflow'
 import { APIGatewayProxyEvent } from 'aws-lambda'
@@ -24,7 +23,6 @@ import { repoRecentActivityRoute } from '../../web/repoRecentActivity'
 const router = createRouter([
   showHelloRoute,
   showLatestActivityRoute,
-  showRepoRoute,
   repoHeadingRoute,
   repoActionsStatusRoute,
   repoRecentActivityRoute,
