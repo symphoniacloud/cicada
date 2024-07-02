@@ -20,19 +20,19 @@
 <div class="container" id="toplevel">
   <h2>Cicada</h2>
   <script src="/js/checkForHtmxUnauthorizedResponse.js"></script>
-  <div hx-get='/app/elements/repo/heading'
+  <div hx-get='/app/fragment/repo/heading'
        hx-trigger='load'
        hx-vals='js:{ ...repoKey }'
        hx-swap='outerHTML'>Finding repository details...
   </div>
   <h4>GitHub Actions Status</h4>
-  <div hx-get='/app/elements/repo/actionsStatus'
+  <div hx-get='/app/fragment/actionsStatus'
        hx-trigger='load'
        hx-vals='js:{ ...repoKey }'
        hx-swap='outerHTML'>Loading GitHub Actions Status...
   </div>
   <h4>Recent Activity</h4>
-  <div hx-get='/app/elements/repo/recentActivity'
+  <div hx-get='/app/fragment/recentActivity'
        hx-trigger='load'
        hx-vals='js:{ ...repoKey }'
        hx-swap='outerHTML'>Loading Recent Activity...
