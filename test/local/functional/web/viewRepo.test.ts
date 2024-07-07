@@ -130,7 +130,7 @@ test('view-repo-recent-activity', async () => {
     <tr class="success">
       <td>Successful Run</td>
       <td>
-        <a href="/app/account/162483619/repo/768206479/workflow/88647110">Test Repo One Workflow</a>
+        <a href="/workflow?ownerId=162483619&repoId=768206479&workflowId=88647110">Test Repo One Workflow</a>
 &nbsp;
         <a href="https://github.com/cicada-test-org/org-test-repo-one/actions/workflows/test.yml"><i class='bi bi-github' style='color: #6e5494'></i></a>
       </td>

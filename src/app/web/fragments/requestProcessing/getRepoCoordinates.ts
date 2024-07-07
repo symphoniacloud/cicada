@@ -20,16 +20,16 @@ export function getRepoCoordinates(
   return successWith({ ownerId: parseInt(ownerId), repoId: parseInt(repoId) })
 }
 
-interface QueryStringParamaters {
+export interface RepoCoordinatesQueryStringParameters {
   ownerId: string
   repoId: string
 }
 
-const schema: JTDSchemaType<QueryStringParamaters> = {
+export const repoCoordinatesSchema: JTDSchemaType<RepoCoordinatesQueryStringParameters> = {
   properties: {
     ownerId: { type: 'string' },
     repoId: { type: 'string' }
   }
 }
 
-const qsParser = validatingQueryStringParser(schema)
+const qsParser = validatingQueryStringParser(repoCoordinatesSchema)

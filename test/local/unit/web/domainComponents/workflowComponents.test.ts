@@ -15,7 +15,7 @@ test('successful row, all Repos', () => {
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo')
       ),
       td(
-        a(`/app/account/162360409/repo/767679529/workflow/88508779`, 'Test Workflow'),
+        a(`/workflow?ownerId=162360409&repoId=767679529&workflowId=88508779`, 'Test Workflow'),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
@@ -44,7 +44,7 @@ test('successful run, repo activity', () => {
       { class: 'success' },
       td('Successful Run'),
       td(
-        a(`/app/account/162360409/repo/767679529/workflow/88508779`, 'Test Workflow'),
+        a(`/workflow?ownerId=162360409&repoId=767679529&workflowId=88508779`, 'Test Workflow'),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
@@ -77,7 +77,7 @@ test('unsuccessful run, all Repos', () => {
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo')
       ),
       td(
-        a(`/app/account/162360409/repo/767679529/workflow/88508779`, 'Test Workflow'),
+        a(`/workflow?ownerId=162360409&repoId=767679529&workflowId=88508779`, 'Test Workflow'),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
@@ -112,7 +112,7 @@ test('failed run, repo Activity', () => {
       { class: 'danger' },
       td('Failed Run'),
       td(
-        a(`/app/account/162360409/repo/767679529/workflow/88508779`, 'Test Workflow'),
+        a(`/workflow?ownerId=162360409&repoId=767679529&workflowId=88508779`, 'Test Workflow'),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
@@ -153,7 +153,7 @@ test('in progress run, all repos', () => {
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo')
       ),
       td(
-        a(`/app/account/162360409/repo/767679529/workflow/88508779`, 'Test Workflow'),
+        a(`/workflow?ownerId=162360409&repoId=767679529&workflowId=88508779`, 'Test Workflow'),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
