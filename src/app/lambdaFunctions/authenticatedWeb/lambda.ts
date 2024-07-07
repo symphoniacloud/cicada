@@ -2,7 +2,6 @@ import { AppState } from '../../environment/AppState'
 import { lambdaStartup } from '../../environment/lambdaStartup'
 import middy from '@middy/core'
 import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
-import { showLatestActivityRoute } from '../../web/fragments/latestActivity'
 import { createRouter } from '../../internalHttpRouter/internalHttpRouter'
 import { showHelloRoute } from '../../web/pages/showHello'
 import { CicadaAPIAuthorizedAPIHandler } from '../../inboundInterfaces/lambdaTypes'
@@ -19,10 +18,13 @@ import { a, p } from '../../web/hiccough/hiccoughElements'
 import { repoHeadingRoute } from '../../web/fragments/repoHeading'
 import { repoActionsStatusRoute } from '../../web/fragments/repoActionsStatus'
 import { repoRecentActivityRoute } from '../../web/fragments/repoRecentActivity'
+import { homeActionsStatusRoute } from '../../web/fragments/homeActionsStatus'
+import { homeRecentActivityRoute } from '../../web/fragments/homeRecentActivity'
 
 const router = createRouter([
   showHelloRoute,
-  showLatestActivityRoute,
+  homeActionsStatusRoute,
+  homeRecentActivityRoute,
   repoHeadingRoute,
   repoActionsStatusRoute,
   repoRecentActivityRoute,
