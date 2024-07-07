@@ -1,7 +1,4 @@
-import { applicationJSONErrorAndLog, responseWithStatusCode, withHtmlContentType } from './httpResponses'
-
-export const notFoundHTMLResponse = withHtmlContentType(responseWithStatusCode(404, `"Not Found"`))
-export const notAuthorizedHTMLResponse = withHtmlContentType(responseWithStatusCode(403, 'Unauthorized'))
+import { applicationJSONErrorAndLog } from './httpResponses'
 
 // Function not constant because this logs
 export function usernameFieldMissingFromContextResponse() {

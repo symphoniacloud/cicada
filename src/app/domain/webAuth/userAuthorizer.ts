@@ -19,6 +19,7 @@ export type SuccessfulAuthorizationResult = {
 }
 
 // Common code used by both API Gateway Lambda Authorizer AND /appa/... Lambda function
+// TODO - eventually do a cached lookup to Github to avoid calling GitHub every time
 export async function authorizeUserRequest(
   appState: AppState,
   event: WithHeadersEvent
