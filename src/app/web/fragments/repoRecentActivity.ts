@@ -6,7 +6,7 @@ import { getRepository } from '../../domain/github/githubRepository'
 import { getRecentActivityForRepo } from '../../domain/github/githubActivity'
 import { createRepoRecentActivityResponse } from './views/repoRecentActivityView'
 import { getRepoCoordinates } from './requestProcessing/getRepoCoordinates'
-import { notFoundHTMLResponse } from '../../inboundInterfaces/htmlResponses'
+import { notFoundHTMLResponse } from '../htmlResponses'
 
 export const repoRecentActivityRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/fragment/recentActivity',

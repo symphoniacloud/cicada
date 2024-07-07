@@ -1,8 +1,8 @@
-import { htmlOkResult } from '../inboundInterfaces/httpResponses'
 import { a, body, div, h2, head, htmlPage, link, meta, p, title } from './hiccough/hiccoughElements'
 import { html } from './hiccough/hiccoughCore'
 import { element, HiccoughContent } from './hiccough/hiccoughElement'
 import { DOCTYPE_HTML5 } from './hiccough/hiccoughPage'
+import { htmlOkResponse } from './htmlResponses'
 
 const hiccoughOptions = {
   newLines: true,
@@ -10,7 +10,7 @@ const hiccoughOptions = {
 }
 
 export function fragmentViewResult(...bodyContent: HiccoughContent[]) {
-  return htmlOkResult(html(bodyContent, hiccoughOptions))
+  return htmlOkResponse(html(bodyContent, hiccoughOptions))
 }
 
 export function pageViewResultWithoutHtmx(bodyContents: HiccoughContent[], loggedIn = true) {
@@ -32,7 +32,7 @@ export function pageViewResultWithoutHtmx(bodyContents: HiccoughContent[], logge
 }
 
 function htmlOkResponseFor(...bodyContent: HiccoughContent[]) {
-  return htmlOkResult(
+  return htmlOkResponse(
     html([DOCTYPE_HTML5, htmlPage({ lang: 'en' }, standardHead, body(...bodyContent))], hiccoughOptions)
   )
 }

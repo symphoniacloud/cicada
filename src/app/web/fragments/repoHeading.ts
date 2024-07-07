@@ -4,7 +4,7 @@ import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { isFailure } from '../../util/structuredResult'
 import { getRepository } from '../../domain/github/githubRepository'
 import { createRepoHeadingResponse } from './views/repoHeadingView'
-import { notFoundHTMLResponse } from '../../inboundInterfaces/htmlResponses'
+import { notFoundHTMLResponse } from '../htmlResponses'
 import { getRepoCoordinates } from './requestProcessing/getRepoCoordinates'
 
 export const repoHeadingRoute: Route<CicadaAuthorizedAPIEvent> = {
