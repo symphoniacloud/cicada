@@ -12,7 +12,7 @@ import { logoutResponse } from '../../domain/github/githubUserAuth/githubWebAuth
 import { authorizeUserRequest } from '../../domain/webAuth/userAuthorizer'
 import { notAuthorizedHTMLResponse } from '../../inboundInterfaces/htmlResponses'
 import { logger } from '../../util/logging'
-import { fragmentViewResult } from '../../web/viewResultWrappers'
+import { pageViewResultWithoutHtmx } from '../../web/viewResultWrappers'
 import { startSetupRoute } from '../../domain/github/setup/startGithubSetup'
 import { isFailure } from '../../util/structuredResult'
 import { a, p } from '../../web/hiccough/hiccoughElements'
@@ -45,9 +45,9 @@ export const baseHandler: CicadaAPIAuthorizedAPIHandler = async (event: APIGatew
   return await handleWebRequest(appState, event)
 }
 
-export const setupRequiredResponse = fragmentViewResult(
+export const setupRequiredResponse = pageViewResultWithoutHtmx([
   p('Cicada GitHub app not ready yet.', a(startSetupRoute.path, 'Go here to start the setup process'))
-)
+])
 
 // TOEventually - top level error handler
 export async function handleWebRequest(appState: AppState, event: APIGatewayProxyEvent) {
