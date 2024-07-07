@@ -4,8 +4,13 @@ import { html } from './hiccough/hiccoughCore'
 import { element, HiccoughContent } from './hiccough/hiccoughElement'
 import { DOCTYPE_HTML5 } from './hiccough/hiccoughPage'
 
+const hiccoughOptions = {
+  newLines: true,
+  eachIndent: '  '
+}
+
 export function fragmentViewResult(...bodyContent: HiccoughContent[]) {
-  return htmlOkResponseFor(...bodyContent)
+  return htmlOkResult(html(bodyContent, hiccoughOptions))
 }
 
 export function pageViewResultWithoutHtmx(bodyContents: HiccoughContent[], loggedIn = true) {
@@ -28,10 +33,7 @@ export function pageViewResultWithoutHtmx(bodyContents: HiccoughContent[], logge
 
 function htmlOkResponseFor(...bodyContent: HiccoughContent[]) {
   return htmlOkResult(
-    html([DOCTYPE_HTML5, htmlPage({ lang: 'en' }, standardHead, body(...bodyContent))], {
-      newLines: true,
-      eachIndent: '  '
-    })
+    html([DOCTYPE_HTML5, htmlPage({ lang: 'en' }, standardHead, body(...bodyContent))], hiccoughOptions)
   )
 }
 
