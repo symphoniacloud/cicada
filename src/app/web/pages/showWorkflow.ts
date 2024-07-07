@@ -6,8 +6,8 @@ import { JTDSchemaType } from 'ajv/dist/jtd'
 import { validatingPathParser } from '../../schema/urlPathParser'
 import { isFailure } from '../../util/structuredResult'
 import { logger } from '../../util/logging'
-import { notFoundHTMLResponse } from '../../inboundInterfaces/standardHttpResponses'
 import { getRunEventsForWorkflow } from '../../domain/github/githubWorkflowRunEvent'
+import { notFoundHTMLResponse } from '../../inboundInterfaces/htmlResponses'
 
 export const showWorkflowRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/account(/:accountId)/repo(/:repoId)/workflow(/:workflowId)',

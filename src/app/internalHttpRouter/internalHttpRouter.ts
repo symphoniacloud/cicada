@@ -1,7 +1,7 @@
 import { logger } from '../util/logging'
 import { CicadaHandler, MinimalAPIGatewayProxyEvent, Route } from './internalHttpRoute'
 import { matcherForRoute } from './internalHttpMatcher'
-import { notFoundHTMLResponse } from '../inboundInterfaces/standardHttpResponses'
+import { notFoundHTMLResponse } from '../inboundInterfaces/htmlResponses'
 
 // Cicada doesn't have a separate Lambda function for all API routes, instead we use a mixture of API Gateway
 // routing and in-process routing. There's no standard way to perform in process routing - short of importing Express, and
