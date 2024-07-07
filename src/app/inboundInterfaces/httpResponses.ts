@@ -8,16 +8,8 @@ export function responseWithStatusCode(statusCode: number, body?: string | unkno
   }
 }
 
-export function okResult(body?: string | unknown): APIGatewayProxyResult {
-  return responseWithStatusCode(200, body)
-}
-
-export function htmlOkResult(body: string): APIGatewayProxyResult {
-  return withHtmlContentType(okResult(body))
-}
-
 export function jsonOkResult(body: unknown): APIGatewayProxyResult {
-  return withJSONContentType(okResult(body))
+  return withJSONContentType(responseWithStatusCode(200, body))
 }
 
 export function foundRedirectResponse(location: string): APIGatewayProxyResult {
@@ -32,10 +24,6 @@ export function redirectResponse(statusCode: number, location: string): APIGatew
 export function applicationJSONErrorAndLog(internalMessage: string): APIGatewayProxyResult {
   logger.error(internalMessage)
   return withJSONContentType(responseWithStatusCode(500, `"Application internal error"`))
-}
-
-export function withHtmlContentType(result: APIGatewayProxyResult): APIGatewayProxyResult {
-  return withContentType(result, 'text/html')
 }
 
 export function withJSONContentType(result: APIGatewayProxyResult): APIGatewayProxyResult {

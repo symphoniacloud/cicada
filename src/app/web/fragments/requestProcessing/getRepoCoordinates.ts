@@ -4,7 +4,7 @@ import { validatingQueryStringParser } from '../../../schema/urlPathParser'
 import { failedWithResult, isFailure, Result, successWith } from '../../../util/structuredResult'
 import { logger } from '../../../util/logging'
 import { APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
-import { invalidRequestResponse } from '../../../inboundInterfaces/htmlResponses'
+import { invalidRequestResponse } from '../../htmlResponses'
 
 export function getRepoCoordinates(
   event: CicadaAuthorizedAPIEvent
