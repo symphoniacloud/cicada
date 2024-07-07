@@ -5,7 +5,6 @@ import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { createRouter } from '../../internalHttpRouter/internalHttpRouter'
 import { showHelloRoute } from '../../web/pages/showHello'
 import { CicadaAPIAuthorizedAPIHandler } from '../../inboundInterfaces/lambdaTypes'
-import { showWorkflowRoute } from '../../web/pages/showWorkflow'
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import { logoutResponse } from '../../domain/github/githubUserAuth/githubWebAuthHandler'
 import { authorizeUserRequest } from '../../domain/webAuth/userAuthorizer'
@@ -20,6 +19,8 @@ import { repoActionsStatusRoute } from '../../web/fragments/repoActionsStatus'
 import { repoRecentActivityRoute } from '../../web/fragments/repoRecentActivity'
 import { homeActionsStatusRoute } from '../../web/fragments/homeActionsStatus'
 import { homeRecentActivityRoute } from '../../web/fragments/homeRecentActivity'
+import { workflowHeadingRoute } from '../../web/fragments/workflowHeading'
+import { workflowActivityRoute } from '../../web/fragments/workflowActivity'
 
 const router = createRouter([
   showHelloRoute,
@@ -28,7 +29,8 @@ const router = createRouter([
   repoHeadingRoute,
   repoActionsStatusRoute,
   repoRecentActivityRoute,
-  showWorkflowRoute
+  workflowHeadingRoute,
+  workflowActivityRoute
 ])
 
 let appState: AppState

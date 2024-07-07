@@ -65,6 +65,22 @@ export async function getRunEventsForWorkflow(
     )
 }
 
+export async function getRunEventsForWorkflowPage(
+  appState: AppState,
+  ownerId: number,
+  repoId: number,
+  workflowId: number,
+  limit?: number
+) {
+  return await appState.entityStore
+    .for(GithubWorkflowRunEventEntity)
+    .queryOnePageByPkAndSk(
+      { ownerId },
+      rangeWhereSkBeginsWith(githubWorkflowRunEventSkPrefix({ repoId, workflowId })),
+      { scanIndexForward: false, ...(limit ? { limit } : {}) }
+    )
+}
+
 export function runCompleted(event: GithubWorkflowRunEvent) {
   return event.conclusion !== undefined
 }
