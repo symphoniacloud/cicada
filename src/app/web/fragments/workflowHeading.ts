@@ -2,7 +2,7 @@ import { AppState } from '../../environment/AppState'
 import { Route } from '../../internalHttpRouter/internalHttpRoute'
 import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { isFailure } from '../../util/structuredResult'
-import { getWorkflowCoordinates } from './requestProcessing/getWorkflowCoordinates'
+import { getWorkflowCoordinates } from './requestParsing/getWorkflowCoordinates'
 import { createWorkflowHeadingResponse } from './views/workflowHeadingView'
 import { getRunEventsForWorkflowPage } from '../../domain/github/githubWorkflowRunEvent'
 

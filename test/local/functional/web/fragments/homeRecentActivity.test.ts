@@ -63,7 +63,7 @@ test('home-recent-activity', async () => {
   const recentActivity = await handleWebRequest(
     appState,
     createStubApiGatewayProxyEventWithToken('validUserToken', {
-      path: '/app/fragment/homeRecentActivity'
+      path: '/app/fragment/gitHubActivity'
     })
   )
 

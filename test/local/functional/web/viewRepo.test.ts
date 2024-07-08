@@ -147,7 +147,7 @@ test('view-repo-recent-activity', async () => {
   const viewRepoResponse = await handleWebRequest(
     appState,
     createStubApiGatewayProxyEventWithToken('validUserToken', {
-      path: '/app/fragment/recentActivity',
+      path: '/app/fragment/gitHubActivity',
       queryStringParameters: { ownerId: '162483619', repoId: '768206479' }
     })
   )

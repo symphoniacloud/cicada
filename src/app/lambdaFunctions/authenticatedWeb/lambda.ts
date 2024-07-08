@@ -15,22 +15,16 @@ import { startSetupRoute } from '../../domain/github/setup/startGithubSetup'
 import { isFailure } from '../../util/structuredResult'
 import { a, p } from '../../web/hiccough/hiccoughElements'
 import { repoHeadingRoute } from '../../web/fragments/repoHeading'
-import { repoActionsStatusRoute } from '../../web/fragments/repoActionsStatus'
-import { repoRecentActivityRoute } from '../../web/fragments/repoRecentActivity'
-import { homeActionsStatusRoute } from '../../web/fragments/homeActionsStatus'
-import { homeRecentActivityRoute } from '../../web/fragments/homeRecentActivity'
+import { actionsStatusRoute } from '../../web/fragments/actionsStatus'
+import { gitHubActivityRoute } from '../../web/fragments/gitHubActivity'
 import { workflowHeadingRoute } from '../../web/fragments/workflowHeading'
-import { workflowActivityRoute } from '../../web/fragments/workflowActivity'
 
 const router = createRouter([
   showHelloRoute,
-  homeActionsStatusRoute,
-  homeRecentActivityRoute,
   repoHeadingRoute,
-  repoActionsStatusRoute,
-  repoRecentActivityRoute,
-  workflowHeadingRoute,
-  workflowActivityRoute
+  actionsStatusRoute,
+  gitHubActivityRoute,
+  workflowHeadingRoute
 ])
 
 let appState: AppState

@@ -5,7 +5,7 @@ import { isFailure } from '../../util/structuredResult'
 import { getRepository } from '../../domain/github/githubRepository'
 import { createRepoHeadingResponse } from './views/repoHeadingView'
 import { notFoundHTMLResponse } from '../htmlResponses'
-import { getRepoCoordinates } from './requestProcessing/getRepoCoordinates'
+import { getRepoCoordinates } from './requestParsing/getRepoCoordinates'
 
 export const repoHeadingRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/fragment/repo/heading',
