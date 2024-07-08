@@ -15,12 +15,12 @@
   <h2>Cicada</h2>
   <script src="/js/checkForHtmxUnauthorizedResponse.js"></script>
   <h3>GitHub Actions Status</h3>
-  <div hx-get='/app/fragment/homeActionsStatus'
+  <div hx-get='/app/fragment/actionsStatus'
        hx-trigger='load'
        hx-swap='outerHTML'>Loading GitHub Actions Status...
   </div>
   <h3>Recent Branch Activity</h3>
-  <div hx-get='/app/fragment/homeRecentActivity'
+  <div hx-get='/app/fragment/gitHubActivity'
        hx-trigger='load'
        hx-swap='outerHTML'>Loading Recent Activity...
   </div>

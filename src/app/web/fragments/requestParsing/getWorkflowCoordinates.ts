@@ -25,15 +25,15 @@ export function getWorkflowCoordinates(
   })
 }
 
-interface WorkflowCoordinatesQueryStringParameters extends RepoCoordinatesQueryStringParameters {
+export interface WorkflowCoordinatesQueryStringParameters extends RepoCoordinatesQueryStringParameters {
   workflowId: string
 }
 
-const schema: JTDSchemaType<WorkflowCoordinatesQueryStringParameters> = {
+export const workflowCoordinatesSchema: JTDSchemaType<WorkflowCoordinatesQueryStringParameters> = {
   properties: {
     ...repoCoordinatesSchema.properties,
     workflowId: { type: 'string' }
   }
 }
 
-const qsParser = validatingQueryStringParser(schema)
+const qsParser = validatingQueryStringParser(workflowCoordinatesSchema)

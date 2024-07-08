@@ -9,7 +9,7 @@ import { invalidRequestResponse } from '../../htmlResponses'
 export function getRepoCoordinates(
   event: CicadaAuthorizedAPIEvent
 ): Result<{ ownerId: number; repoId: number }, APIGatewayProxyResult> {
-  const parseResult = qsParser(event.queryStringParameters)
+  const parseResult = parser(event.queryStringParameters)
   if (isFailure(parseResult)) {
     logger.warn('Invalid request in getRepoCoordinates', { reason: parseResult.reason })
     return failedWithResult('Failed to parse', invalidRequestResponse)
@@ -32,4 +32,4 @@ export const repoCoordinatesSchema: JTDSchemaType<RepoCoordinatesQueryStringPara
   }
 }
 
-const qsParser = validatingQueryStringParser(repoCoordinatesSchema)
+const parser = validatingQueryStringParser(repoCoordinatesSchema)
