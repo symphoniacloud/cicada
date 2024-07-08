@@ -4,7 +4,8 @@ import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { isFailure } from '../../util/structuredResult'
 import { getWorkflowCoordinates } from './requestProcessing/getWorkflowCoordinates'
 import { getRunEventsForWorkflow } from '../../domain/github/githubWorkflowRunEvent'
-import { createWorkflowActivityResponse } from './views/workflowActivityView'
+
+import { createWorkflowRunEventTableResponse } from './views/activityAndStatusView'
 
 export const workflowActivityRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/fragment/workflow/activity',
@@ -20,5 +21,5 @@ export async function workflowActivity(appState: AppState, event: CicadaAuthoriz
   const runEvents = await getRunEventsForWorkflow(appState, ownerId, repoId, workflowId)
 
   // TODO eventually - make sure user has permission for this
-  return createWorkflowActivityResponse(appState.clock, runEvents)
+  return createWorkflowRunEventTableResponse('workflowActivity', appState.clock, runEvents)
 }

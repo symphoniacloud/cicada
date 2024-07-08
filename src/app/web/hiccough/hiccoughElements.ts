@@ -68,6 +68,10 @@ export function p(...def: HiccoughElementDefinition) {
   return element('p', ...def)
 }
 
+export function i(...def: HiccoughElementDefinition) {
+  return element('i', ...def)
+}
+
 export function a(href: string, ...def: HiccoughElementDefinition) {
   return withAttributes({ href }, element('a', ...def))
 }

@@ -8,24 +8,17 @@ import { GithubRepositoryElement } from '../../domain/types/GithubRepositoryElem
 import { githubAnchor } from './genericComponents'
 
 export type PushRowOptions = {
-  showDescription?: boolean
-  showRepo?: boolean
+  showDescription: boolean
+  showRepo: boolean
 }
 
-export function pushRow(clock: Clock, push: GithubPush, options?: PushRowOptions) {
-  const { showDescription, showRepo } = {
-    showDescription: false,
-    showRepo: false,
-    ...options
-  }
-
-  const { dateTime }: { dateTime: string } = push
+export function pushRow(clock: Clock, push: GithubPush, options: PushRowOptions) {
   return tr(
     { class: 'info' },
-    showDescription ? pushDescriptionCell : undefined,
-    showRepo ? repoCellForPush(push) : undefined,
+    options.showDescription ? pushDescriptionCell : undefined,
+    options.showRepo ? repoCellForPush(push) : undefined,
     branchCell(push),
-    td(displayDateTime(clock, dateTime)),
+    td(displayDateTime(clock, push.dateTime)),
     userCell(push.actor),
     commitCellForPush(push)
   )
