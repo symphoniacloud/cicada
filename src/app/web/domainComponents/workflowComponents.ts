@@ -1,6 +1,6 @@
 import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
 import { GithubRepositoryElement } from '../../domain/types/GithubRepositoryElement'
-import { a, td, th, thead, tr } from '../hiccough/hiccoughElements'
+import { a, td, tr } from '../hiccough/hiccoughElements'
 import { Clock, displayDateTime, durationAsStringFromMs } from '../../util/dateAndTime'
 import { githubAnchor } from './genericComponents'
 import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents'
@@ -8,35 +8,11 @@ import { elapsedTimeMs, runBasicStatus, WorkflowRunStatus } from '../../domain/g
 import { userCell } from './userComponents'
 import { removeNullAndUndefined } from '../../util/collections'
 
-export type WorkflowRowMode = 'allRepos' | 'repoStatus' | 'repoActivity' | 'workflowActivity'
-
-type WorkflowRowOptions = {
+export type WorkflowRowOptions = {
   showDescription?: boolean
   showRepo?: boolean
   showWorkflow?: boolean
   showElapsed?: boolean
-}
-
-const rowConfig: Record<WorkflowRowMode, WorkflowRowOptions> = {
-  allRepos: { showRepo: true, showWorkflow: true, showElapsed: true },
-  repoStatus: { showWorkflow: true, showElapsed: true },
-  repoActivity: { showDescription: true, showWorkflow: true },
-  workflowActivity: { showElapsed: true }
-}
-
-const columnTitles: Record<WorkflowRowMode, string[]> = {
-  allRepos: ['Repo', 'Workflow', 'Status', 'When', 'Duration', 'By', 'Commit'],
-  repoStatus: ['Workflow', 'Status', 'When', 'Duration', 'By', 'Commit'],
-  repoActivity: ['Type', 'Activity', 'When', 'By', 'Commit'],
-  workflowActivity: ['Result', 'When', 'Elapsed time', 'By', 'Commit']
-}
-
-export function workflowHeader(mode: WorkflowRowMode) {
-  return thead(tr(...columnTitles[mode].map((x) => th(x))))
-}
-
-export function workflowRow(clock: Clock, event: GithubWorkflowRunEvent, mode: WorkflowRowMode) {
-  return workflowRowWithOptions(clock, event, rowConfig[mode])
 }
 
 const runStatusRowClass: Record<WorkflowRunStatus, string> = {
@@ -45,11 +21,7 @@ const runStatusRowClass: Record<WorkflowRunStatus, string> = {
   '⏳': 'warning'
 }
 
-export function workflowRowWithOptions(
-  clock: Clock,
-  event: GithubWorkflowRunEvent,
-  options: WorkflowRowOptions
-) {
+export function workflowRow(clock: Clock, event: GithubWorkflowRunEvent, options: WorkflowRowOptions) {
   const { showDescription, showRepo, showWorkflow, showElapsed } = {
     showDescription: false,
     showRepo: false,

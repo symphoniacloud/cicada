@@ -4,9 +4,9 @@ import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { isFailure } from '../../util/structuredResult'
 import { getRepository } from '../../domain/github/githubRepository'
 import { getRecentActivityForRepo } from '../../domain/github/githubActivity'
-import { createRepoRecentActivityResponse } from './views/repoRecentActivityView'
 import { getRepoCoordinates } from './requestProcessing/getRepoCoordinates'
 import { notFoundHTMLResponse } from '../htmlResponses'
+import { createGithubActivityResponse } from './views/activityAndStatusView'
 
 export const repoRecentActivityRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/fragment/recentActivity',
@@ -23,7 +23,8 @@ export async function repoRecentActivity(appState: AppState, event: CicadaAuthor
 
   // TODO eventually - make sure user has permission for this
   // TODO eventually - move repo check into domain logic
-  return createRepoRecentActivityResponse(
+  return createGithubActivityResponse(
+    'repoActivity',
     appState.clock,
     await getRecentActivityForRepo(appState, ownerId, repoId)
   )
