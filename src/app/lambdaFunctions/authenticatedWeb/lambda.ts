@@ -20,11 +20,11 @@ import { gitHubActivityRoute } from '../../web/fragments/gitHubActivity'
 import { workflowHeadingRoute } from '../../web/fragments/workflowHeading'
 
 const router = createRouter([
-  showHelloRoute,
   repoHeadingRoute,
+  workflowHeadingRoute,
   actionsStatusRoute,
   gitHubActivityRoute,
-  workflowHeadingRoute
+  showHelloRoute
 ])
 
 let appState: AppState
