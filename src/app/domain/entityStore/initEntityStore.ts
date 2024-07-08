@@ -15,6 +15,7 @@ import {
   GITHUB_PUSH,
   GITHUB_REPOSITORY,
   GITHUB_USER,
+  GITHUB_USER_TOKEN,
   GITHUB_WORKFLOW_RUN,
   GITHUB_WORKFLOW_RUN_EVENT,
   WEB_PUSH_SUBSCRIPTION
@@ -53,6 +54,10 @@ export function setupEntityStore(
         {
           entityTypes: [GITHUB_INSTALLATION],
           ...entityStoreConfigFor(tableNames, 'github-installations')
+        },
+        {
+          entityTypes: [GITHUB_USER_TOKEN],
+          ...entityStoreConfigFor(tableNames, 'github-user-tokens')
         },
         {
           entityTypes: [GITHUB_USER],
@@ -100,6 +105,7 @@ function entityStoreConfigFor(tableNames: TableNames, tableId: CicadaTableId): T
       pk: 'PK',
       entityType: '_et',
       lastUpdated: '_lastUpdated',
+      ...(config.useTtl ? { ttl: 'ttl' } : {}),
       ...(config.hasSortKey ? { sk: 'SK' } : {}),
       ...(config.hasGSI1
         ? {

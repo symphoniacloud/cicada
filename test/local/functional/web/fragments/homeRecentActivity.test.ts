@@ -3,7 +3,8 @@ import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState'
 import {
   testOrgTestRepoOnePush,
   testTestUser,
-  testTestUserMembershipOfOrg
+  testTestUserMembershipOfOrg,
+  testTestUserTokenRecord
 } from '../../../../examples/cicada/githubDomainObjects'
 import {
   GITHUB_ACCOUNT_MEMBERSHIP,
@@ -14,14 +15,16 @@ import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport
 
 test('home-recent-activity', async () => {
   const appState = new FakeAppState()
-  appState.githubClient.stubGithubUsers.addResponse('validUserToken', {
-    login: 'cicada-test-user',
-    id: 162360409,
-    avatar_url: '',
-    html_url: '',
-    type: '',
-    url: ''
-  })
+  appState.dynamoDB.stubGets.addResponse(
+    {
+      TableName: 'fakeGithubUserTokensTable',
+      Key: { PK: 'USER_TOKEN#validUserToken' }
+    },
+    {
+      $metadata: {},
+      Item: testTestUserTokenRecord
+    }
+  )
   appState.dynamoDB.stubGets.addResponse(
     { TableName: 'fakeGithubUsersTable', Key: { PK: 'USER#162360409' } },
     {

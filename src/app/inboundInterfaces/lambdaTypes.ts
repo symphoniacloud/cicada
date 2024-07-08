@@ -1,4 +1,8 @@
-import { APIGatewayProxyWithLambdaAuthorizerEvent } from 'aws-lambda/trigger/api-gateway-proxy'
+import {
+  APIGatewayProxyEventHeaders,
+  APIGatewayProxyEventMultiValueHeaders,
+  APIGatewayProxyWithLambdaAuthorizerEvent
+} from 'aws-lambda/trigger/api-gateway-proxy'
 import { APIGatewayProxyEvent, APIGatewayProxyWithLambdaAuthorizerHandler } from 'aws-lambda'
 
 // We store userId in database as a number (because it's a number on the GitHub API),
@@ -10,3 +14,8 @@ export type CicadaAPIAuthorizedAPIEvent = APIGatewayProxyWithLambdaAuthorizerEve
 export type CicadaAPIAuthorizedAPIHandler = APIGatewayProxyWithLambdaAuthorizerHandler<WebAuthorizerContext>
 
 export type CicadaAuthorizedAPIEvent = APIGatewayProxyEvent & { username: string; userId: number }
+
+export type WithHeadersEvent = {
+  headers: APIGatewayProxyEventHeaders | null
+  multiValueHeaders: APIGatewayProxyEventMultiValueHeaders | null
+}

@@ -31,6 +31,7 @@ export const SSM_PARAM_NAMES = {
 // Typescript Question - 1-1 with CICADA_TABLE_IDS - is it possible to remove duplication?
 type SsmTableNameParamName =
   | 'resources/table/github-installations'
+  | 'resources/table/github-user-tokens'
   | 'resources/table/github-users'
   | 'resources/table/github-repositories'
   | 'resources/table/github-account-memberships'

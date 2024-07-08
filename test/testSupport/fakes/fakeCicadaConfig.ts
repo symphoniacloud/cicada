@@ -13,6 +13,7 @@ export class FakeCicadaConfig implements CicadaConfig {
 
   public fakeTableNames: TableNames = {
     'github-installations': 'fakeGithubInstallationsTable',
+    'github-user-tokens': 'fakeGithubUserTokensTable',
     'github-users': 'fakeGithubUsersTable',
     'github-account-memberships': 'fakeGithubAccountMemberships',
     'github-repositories': 'fakeGithubRepositoriesTable',

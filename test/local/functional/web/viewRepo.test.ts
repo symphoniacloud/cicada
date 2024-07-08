@@ -6,7 +6,8 @@ import {
   testOrgTestRepoOne,
   testOrgTestRepoOneWorkflowRunThree,
   testTestUser,
-  testTestUserMembershipOfOrg
+  testTestUserMembershipOfOrg,
+  testTestUserTokenRecord
 } from '../../../examples/cicada/githubDomainObjects'
 import {
   GITHUB_ACCOUNT_MEMBERSHIP,
@@ -17,15 +18,16 @@ import {
 function setupState() {
   const appState = new FakeAppState()
 
-  appState.githubClient.stubGithubUsers.addResponse('validUserToken', {
-    login: 'cicada-test-user',
-    id: 162360409,
-    avatar_url: '',
-    html_url: '',
-    type: '',
-    url: ''
-  })
-
+  appState.dynamoDB.stubGets.addResponse(
+    {
+      TableName: 'fakeGithubUserTokensTable',
+      Key: { PK: 'USER_TOKEN#validUserToken' }
+    },
+    {
+      $metadata: {},
+      Item: testTestUserTokenRecord
+    }
+  )
   appState.dynamoDB.stubGets.addResponse(
     { TableName: 'fakeGithubUsersTable', Key: { PK: 'USER#162360409' } },
     {

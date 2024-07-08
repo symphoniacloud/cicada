@@ -24,7 +24,8 @@ function defineAuthorizer(scope: Construct, props: UserFacingWebEndpointsProps) 
     scope,
     cicadaFunctionProps(props, 'apiGatewayAuthorizer', {
       timeoutSeconds: 10,
-      tablesReadAccess: ['github-users', 'github-account-memberships']
+      tablesReadAccess: ['github-users', 'github-account-memberships'],
+      tablesReadWriteAccess: ['github-user-tokens']
     })
   )
   return new RequestAuthorizer(scope, 'RestRequestAuthorizer', {
@@ -46,7 +47,8 @@ function defineAuthenticatedWeb(scope: Construct, props: UserFacingWebEndpointsP
         'github-latest-workflow-runs',
         'github-latest-pushes-per-ref',
         'github-repo-activity'
-      ]
+      ],
+      tablesReadWriteAccess: ['github-user-tokens']
     })
   )
   props.restApi.root

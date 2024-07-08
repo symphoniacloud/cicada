@@ -32,8 +32,8 @@ export function dateTimeAddDays(date: Date, days: number) {
   return dateTimeAddHours(date, days * 24)
 }
 
-export function secondsTimestampInFutureDays(clock: Clock, days: number): number {
-  return dateToTimestampSeconds(dateTimeAddDays(clock.now(), days))
+export function secondsTimestampInFutureHours(clock: Clock, hours: number): number {
+  return dateToTimestampSeconds(dateTimeAddHours(clock.now(), hours))
 }
 
 export function dateToTimestampSeconds(date: Date) {
@@ -51,6 +51,10 @@ export function isoDifferenceAsString(isoOne: string, isoTwo: string): string {
 
 export function isoDifferenceMs(isoOne: string, isoTwo: string) {
   return timestampDifferenceMs(Date.parse(isoOne), Date.parse(isoTwo))
+}
+
+export function timestampSecondsIsInPast(clock: Clock, timestampSeconds: number) {
+  return dateToTimestampSeconds(clock.now()) > timestampSeconds
 }
 
 export function timestampDifferenceMs(tsOne: number, tsTwo: number) {

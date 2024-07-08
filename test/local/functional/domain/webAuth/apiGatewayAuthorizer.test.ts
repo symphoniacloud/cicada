@@ -3,7 +3,10 @@ import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState'
 import { createStubAPIGatewayRequestAuthorizerEvent } from '../../../../testSupport/fakes/awsStubs'
 import { GITHUB_ACCOUNT_MEMBERSHIP, GITHUB_USER } from '../../../../../src/app/domain/entityStore/entityTypes'
 import { attemptToAuthorize } from '../../../../../src/app/domain/webAuth/apiGatewayAuthorizer'
-import { testTestUserMembershipOfOrg } from '../../../../examples/cicada/githubDomainObjects'
+import {
+  testTestUserMembershipOfOrg,
+  testTestUserTokenRecord
+} from '../../../../examples/cicada/githubDomainObjects'
 
 test('failed-auth-no-token', async () => {
   const appState = new FakeAppState()
@@ -33,14 +36,16 @@ test('failed-auth-no-token', async () => {
 
 test('successful-auth', async () => {
   const appState = new FakeAppState()
-  appState.githubClient.stubGithubUsers.addResponse('token-1234', {
-    login: 'testLogin',
-    id: 162360409,
-    avatar_url: '',
-    html_url: '',
-    type: '',
-    url: ''
-  })
+  appState.dynamoDB.stubGets.addResponse(
+    {
+      TableName: 'fakeGithubUserTokensTable',
+      Key: { PK: 'USER_TOKEN#validUserToken' }
+    },
+    {
+      $metadata: {},
+      Item: testTestUserTokenRecord
+    }
+  )
   appState.dynamoDB.stubGets.addResponse(
     {
       TableName: 'fakeGithubUsersTable',
@@ -81,7 +86,7 @@ test('successful-auth', async () => {
     createStubAPIGatewayRequestAuthorizerEvent({
       methodArn: 'arn:aws:execute-api:us-east-1:123456789012:1234567890/prod/GET/apia/hello',
       multiValueHeaders: {
-        Cookie: ['token=token-1234']
+        Cookie: ['token=validUserToken']
       }
     })
   )

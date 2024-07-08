@@ -4,8 +4,10 @@ import {
   dateTimeAddHours,
   dateTimeAddMinutes,
   dateTimeAddSeconds,
+  dateToTimestampSeconds,
   displayDateTime,
   isoDifferenceAsString,
+  timestampSecondsIsInPast,
   timestampToIso
 } from '../../../../src/app/util/dateAndTime'
 import { Clock } from '@symphoniacloud/dynamodb-entity-store'
@@ -18,6 +20,8 @@ function makeFakeClock(atTime = '2023-11-01T12:00:00'): Clock {
   }
 }
 
+const fakeClock = makeFakeClock()
+
 test('dateTimeAdd', () => {
   expect(dateTimeAddDays(new Date('2023-03-01T01:23:45'), 3)).toEqual(new Date('2023-03-04T01:23:45'))
   expect(dateTimeAddHours(new Date('2023-03-01T01:23:45'), 3)).toEqual(new Date('2023-03-01T04:23:45'))
@@ -26,8 +30,6 @@ test('dateTimeAdd', () => {
 })
 
 test('toFriendlyText', () => {
-  const fakeClock = makeFakeClock()
-
   expect(displayDateTime(fakeClock, '2023-11-01T11:00:00Z')).toEqual('11:00:00')
   expect(displayDateTime(fakeClock, '2023-10-31T16:00:00Z')).toEqual('2023-10-31')
   expect(displayDateTime(fakeClock, '2023-10-29T16:00:00Z')).toEqual('2023-10-29')
@@ -59,4 +61,13 @@ test('isoDifferenceToString', () => {
   expect(isoDifferenceAsString('2023-11-01T11:00:00Z', '2023-11-01T11:00:01.123Z')).toEqual('1 second')
   expect(isoDifferenceAsString('2023-11-01T11:00:00Z', '2023-11-01T11:00:00.823Z')).toEqual('1 second')
   expect(isoDifferenceAsString('2023-11-01T11:00:00Z', '2023-11-01T11:00:00.323Z')).toEqual('--')
+})
+
+test('timestampSecondsIsInPast', () => {
+  expect(
+    timestampSecondsIsInPast(fakeClock, dateToTimestampSeconds(new Date('2023-11-01T11:00:00')))
+  ).toBeTruthy()
+  expect(
+    timestampSecondsIsInPast(fakeClock, dateToTimestampSeconds(new Date('2023-11-01T13:00:00')))
+  ).toBeFalsy()
 })

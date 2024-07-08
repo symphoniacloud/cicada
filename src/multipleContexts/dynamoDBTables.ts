@@ -5,6 +5,7 @@
 
 export const CICADA_TABLE_IDS = [
   'github-installations',
+  'github-user-tokens',
   'github-users',
   'github-account-memberships',
   'github-repositories',
@@ -19,16 +20,19 @@ interface CicadaTableConfig {
   readonly hasSortKey: boolean
   readonly hasGSI1: boolean
   readonly stream: boolean
+  readonly useTtl: boolean
 }
 
 const allFalseConfig: CicadaTableConfig = {
   hasGSI1: false,
   hasSortKey: false,
-  stream: false
+  stream: false,
+  useTtl: false
 }
 
 export const tableConfigurations: Record<CicadaTableId, CicadaTableConfig> = {
   'github-installations': allFalseConfig,
+  'github-user-tokens': { ...allFalseConfig, useTtl: true },
   'github-users': allFalseConfig,
   'github-account-memberships': {
     ...allFalseConfig,
@@ -41,6 +45,7 @@ export const tableConfigurations: Record<CicadaTableId, CicadaTableConfig> = {
     hasGSI1: false
   },
   'github-repo-activity': {
+    ...allFalseConfig,
     hasSortKey: true,
     hasGSI1: true,
     stream: true

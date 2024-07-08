@@ -3,6 +3,10 @@ import { AppState } from '../../environment/AppState'
 import { SSM_PARAM_NAMES } from '../../../multipleContexts/ssmParams'
 import { paramsForAppName } from '../../environment/config'
 
+export function isTestUserToken(token: string) {
+  return token.indexOf('testuser') >= 0
+}
+
 export async function processTestToken(appState: AppState, token: string) {
   try {
     const { username, userId, secret } = JSON.parse(token)

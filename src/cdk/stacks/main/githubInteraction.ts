@@ -47,7 +47,8 @@ function defineAuth(scope: Construct, props: GithubInteractionProps, githubApiRe
   const lambdaFunction = new CicadaFunction(
     scope,
     cicadaFunctionProps(props, 'githubAuth', {
-      tablesReadAccess: ['github-users']
+      tablesReadAccess: ['github-users'],
+      tablesReadWriteAccess: ['github-user-tokens']
     })
   )
   githubApiResource

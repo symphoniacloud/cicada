@@ -1,10 +1,11 @@
 import { AppState } from '../../environment/AppState'
-import { logger } from '../../util/logging'
 import { GithubUserEntity } from '../entityStore/entities/GithubUserEntity'
 import { fromRawGithubUser, GithubUser } from '../types/GithubUser'
 import { GithubInstallation } from '../types/GithubInstallation'
 import { RawGithubUser } from '../types/rawGithub/RawGithubUser'
 import { setMemberships } from './githubMembership'
+import { GithubUserToken } from '../types/GithubUserToken'
+import { isGithubCheckRequired, saveOrRefreshGithubUserToken } from './githubUserToken'
 
 export async function processRawUsers(
   appState: AppState,
@@ -24,16 +25,24 @@ export async function saveUsers(appState: AppState, users: GithubUser[]) {
 }
 
 export async function getUserByAuthToken(appState: AppState, token: string) {
-  // TOEventually - don't require calling GitHub API for all user requests - cache for some period
   const rawGithubUser = await appState.githubClient.getGithubUser(token)
   if (!rawGithubUser) return undefined
+
   const cicadaUser = await getUserById(appState, rawGithubUser.id)
-  if (!cicadaUser) {
-    logger.info(
-      `User ${rawGithubUser.login} is a valid GitHub user but does not have access to any Cicada resources`
-    )
-  }
+  if (cicadaUser)
+    await saveOrRefreshGithubUserToken(appState, {
+      token,
+      userId: cicadaUser.id,
+      userLogin: cicadaUser.login
+    })
+
   return cicadaUser
+}
+
+export async function getUserByTokenRecord(appState: AppState, tokenRecord: GithubUserToken) {
+  return isGithubCheckRequired(appState.clock, tokenRecord)
+    ? getUserByAuthToken(appState, tokenRecord.token)
+    : getUserById(appState, tokenRecord.userId)
 }
 
 export async function getUserById(appState: AppState, id: number) {

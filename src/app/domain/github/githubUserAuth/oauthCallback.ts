@@ -55,7 +55,7 @@ async function tryOauthCallback(
 
   // For now the cookie token Cicada uses is precisely the GitHub user token. In theory Cicada
   // could generate its own tokens and then keep a database table mapping those tokens to users, but
-  // for now using Github's token is sufficient
+  // for now using Github's token is sufficient. Besides, we need the user's token anyway for later checks
   const webHostname = `${await appState.config.webHostname()}`
   return redirectResponseWithCookies(
     `https://${webHostname}/app`,

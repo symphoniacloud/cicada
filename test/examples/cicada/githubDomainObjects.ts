@@ -4,6 +4,7 @@ import { GithubAccountMembership } from '../../../src/app/domain/types/GithubAcc
 import { GithubRepository } from '../../../src/app/domain/types/GithubRepository'
 import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWorkflowRunEvent'
 import { GithubPush } from '../../../src/app/domain/types/GithubPush'
+import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken'
 
 export const testPersonalInstallation: GithubInstallation = {
   accountId: 162360409,
@@ -21,6 +22,13 @@ export const testOrgInstallation: GithubInstallation = {
   appId: 850768,
   appSlug: 'cicada-test-org',
   installationId: 48133709
+}
+
+export const testTestUserTokenRecord: GithubUserToken = {
+  token: 'validUserToken',
+  userId: 162360409,
+  userLogin: 'cicada-test-user',
+  nextCheckTime: 1800000000
 }
 
 export const testTestUser: GithubUser = {
