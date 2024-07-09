@@ -14,7 +14,7 @@ export type PushRowOptions = {
 
 export function pushRow(clock: Clock, push: GithubPush, options: PushRowOptions) {
   return tr(
-    { class: 'table-info' },
+    { class: 'table-light' },
     options.showDescription ? pushDescriptionCell : undefined,
     options.showRepo ? repoCellForPush(push) : undefined,
     branchCell(push),
