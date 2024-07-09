@@ -115,7 +115,7 @@ test('view-repo-actions-status', async () => {
     </tr>
   </thead>
   <tbody>
-    <tr class="success">
+    <tr class="table-success">
       <td>
         <a href="/workflow?ownerId=162483619&repoId=768206479&workflowId=88647110">Test Repo One Workflow</a>
 &nbsp;
@@ -169,7 +169,7 @@ test('view-repo-recent-activity', async () => {
     </tr>
   </thead>
   <tbody>
-    <tr class="success">
+    <tr class="table-success">
       <td>Successful Run</td>
       <td>
         <a href="/workflow?ownerId=162483619&repoId=768206479&workflowId=88647110">Test Repo One Workflow</a>

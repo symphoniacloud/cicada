@@ -86,7 +86,7 @@ test('home-recent-activity', async () => {
     </tr>
   </thead>
   <tbody>
-    <tr class="info">
+    <tr class="table-info">
       <td>
         <a href="/repo?ownerId=162483619&repoId=768206479">org-test-repo-one</a>
 &nbsp;

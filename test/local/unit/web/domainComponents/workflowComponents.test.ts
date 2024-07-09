@@ -8,7 +8,7 @@ import { workflowRowForMode } from '../../../../../src/app/web/fragments/views/a
 test('successful row, all Repos', () => {
   expect(workflowRowForMode('homeStatus', defaultFakeClock, testPersonalTestRepoWorkflowRun)).toEqual(
     tr(
-      { class: 'success' },
+      { class: 'table-success' },
       td(
         a(`/repo?ownerId=162360409&repoId=767679529`, 'personal-test-repo'),
         '&nbsp;',
@@ -41,7 +41,7 @@ test('successful row, all Repos', () => {
 test('successful run, repo activity', () => {
   expect(workflowRowForMode('repoActivity', defaultFakeClock, testPersonalTestRepoWorkflowRun)).toEqual(
     tr(
-      { class: 'success' },
+      { class: 'table-success' },
       td('Successful Run'),
       td(
         a(`/workflow?ownerId=162360409&repoId=767679529&workflowId=88508779`, 'Test Workflow'),
@@ -73,7 +73,7 @@ test('unsuccessful run, all Repos', () => {
     })
   ).toEqual(
     tr(
-      { class: 'danger' },
+      { class: 'table-danger' },
       td(
         a(`/repo?ownerId=162360409&repoId=767679529`, 'personal-test-repo'),
         '&nbsp;',
@@ -111,7 +111,7 @@ test('failed run, repo Activity', () => {
     })
   ).toEqual(
     tr(
-      { class: 'danger' },
+      { class: 'table-danger' },
       td('Failed Run'),
       td(
         a(`/workflow?ownerId=162360409&repoId=767679529&workflowId=88508779`, 'Test Workflow'),
@@ -144,7 +144,7 @@ test('in progress run, all repos', () => {
     })
   ).toEqual(
     tr(
-      { class: 'warning' },
+      { class: 'table-warning' },
       td(
         a(`/repo?ownerId=162360409&repoId=767679529`, 'personal-test-repo'),
         '&nbsp;',
@@ -183,7 +183,7 @@ test('queued run, workflow activity', () => {
     })
   ).toEqual(
     tr(
-      { class: 'warning' },
+      { class: 'table-warning' },
       td('In Progress (queued)'),
       td(
         '2024-03-05T18:01:40Z',
@@ -212,7 +212,7 @@ test('in progress run, workflow activity', () => {
     })
   ).toEqual(
     tr(
-      { class: 'warning' },
+      { class: 'table-warning' },
       td('In Progress'),
       td(
         '2024-03-05T18:01:40Z',

@@ -16,9 +16,9 @@ export type WorkflowRowOptions = {
 }
 
 const runStatusRowClass: Record<WorkflowRunStatus, string> = {
-  '✅': 'success',
-  '❌': 'danger',
-  '⏳': 'warning'
+  '✅': 'table-success',
+  '❌': 'table-danger',
+  '⏳': 'table-warning'
 }
 
 export function workflowRow(clock: Clock, event: GithubWorkflowRunEvent, options: WorkflowRowOptions) {
