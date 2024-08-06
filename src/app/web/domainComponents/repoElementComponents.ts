@@ -1,4 +1,4 @@
-import { GithubRepositoryElement } from '../../domain/types/GithubRepositoryElement'
+import { GithubRepositoryElement } from '../../domain/types/GithubElements'
 import { a, td } from '../hiccough/hiccoughElements'
 import { githubAnchor } from './genericComponents'
 

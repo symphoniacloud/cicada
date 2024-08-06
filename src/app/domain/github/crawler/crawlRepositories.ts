@@ -2,7 +2,7 @@ import { AppState } from '../../../environment/AppState'
 import { GithubInstallation } from '../../types/GithubInstallation'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient'
 import { processRawRepositories, toRepositorySummary } from '../githubRepository'
-import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../../types/githubCommonTypes'
+import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../../types/GithubAccountType'
 
 export async function crawlRepositories(appState: AppState, installation: GithubInstallation) {
   const githubClient = appState.githubClient.clientForInstallation(installation.installationId)

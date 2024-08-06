@@ -1,15 +1,11 @@
 import { RawGithubWorkflowRunEvent } from './rawGithub/RawGithubWorkflowRunEvent'
-import { fromRawAccountType } from './githubCommonTypes'
-import { GithubRepositoryElement } from './GithubRepositoryElement'
+import { fromRawAccountType } from './GithubAccountType'
+import { GithubWorkflow, isGithubWorkflow } from './GithubWorkflow'
 
-export interface GithubWorkflowRunEvent extends GithubRepositoryElement {
+export interface GithubWorkflowRunEvent extends GithubWorkflow {
   repoHtmlUrl: string
-  workflowId: number
-  workflowName?: string
   path: string
   // Not available on all source data from GitHub
-  workflowHtmlUrl?: string
-  workflowBadgeUrl?: string
   id: number
   runNumber: number
   runAttempt?: number
@@ -31,13 +27,8 @@ export function isGithubWorkflowRunEvent(x: unknown): x is GithubWorkflowRunEven
   const candidate = x as GithubWorkflowRunEvent
   // TOEventually - actually check type of fields, e.g. with AJV
   return (
-    candidate.ownerId !== undefined &&
-    candidate.ownerName !== undefined &&
-    candidate.ownerType !== undefined &&
-    candidate.repoId !== undefined &&
-    candidate.repoName !== undefined &&
+    isGithubWorkflow(x) &&
     candidate.repoHtmlUrl !== undefined &&
-    candidate.workflowId !== undefined &&
     candidate.path !== undefined &&
     candidate.id !== undefined &&
     candidate.runNumber !== undefined &&

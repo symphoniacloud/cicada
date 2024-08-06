@@ -1,5 +1,5 @@
 import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
-import { GithubRepositoryElement } from '../../domain/types/GithubRepositoryElement'
+import { GithubRepositoryElement } from '../../domain/types/GithubElements'
 import { a, td, tr } from '../hiccough/hiccoughElements'
 import { Clock, displayDateTime, durationAsStringFromMs } from '../../util/dateAndTime'
 import { githubAnchor } from './genericComponents'

@@ -1,21 +1,28 @@
 import { RawGithubUser } from './rawGithub/RawGithubUser'
+import { GithubUserId, isGithubUserId } from './GithubKeys'
+import { isNotNullObject, isString } from '../../util/types'
 
 export interface GithubUser {
   login: string
-  id: number
+  id: GithubUserId
   avatarUrl: string
   htmlUrl: string
   url: string
 }
 
 export function isGithubUser(x: unknown): x is GithubUser {
-  const candidate = x as GithubUser
   return (
-    candidate.login !== undefined &&
-    candidate.id !== undefined &&
-    candidate.avatarUrl !== undefined &&
-    candidate.htmlUrl !== undefined &&
-    candidate.url !== undefined
+    isNotNullObject(x) &&
+    'login' in x &&
+    isString(x.login) &&
+    'id' in x &&
+    isGithubUserId(x.id) &&
+    'avatarUrl' in x &&
+    isString(x.avatarUrl) &&
+    'htmlUrl' in x &&
+    isString(x.htmlUrl) &&
+    'url' in x &&
+    isString(x.url)
   )
 }
 

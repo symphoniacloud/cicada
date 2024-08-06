@@ -3,14 +3,11 @@ import { Route } from '../../internalHttpRouter/internalHttpRoute'
 import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { isFailure } from '../../util/structuredResult'
 import { getRepository } from '../../domain/github/githubRepository'
-import {
-  latestWorkflowRunEventsPerWorkflowForOwners,
-  latestWorkflowRunEventsPerWorkflowForRepo
-} from '../../domain/github/githubLatestWorkflowRunEvents'
+import { latestWorkflowRunEventsPerWorkflowForRepo } from '../../domain/github/githubLatestWorkflowRunEvents'
 import { invalidRequestResponse, notFoundHTMLResponse } from '../htmlResponses'
 import { createWorkflowRunEventTableResponse } from './views/activityAndStatusView'
-import { getAllAccountIdsForUser } from '../../domain/github/githubMembership'
 import { getOptionalRepoCoordinates } from './requestParsing/getOptionalRepoCoordinates'
+import { getLatestWorkflowRunEventsForUser } from '../../domain/user/userVisible'
 
 export const actionsStatusRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/fragment/actionsStatus',
@@ -41,10 +38,9 @@ async function actionsStatusForRepo(appState: AppState, ownerId: number, repoId:
 }
 
 async function actionsStatusForHome(appState: AppState, userId: number) {
-  const accountIds = await getAllAccountIdsForUser(appState, userId)
   return createWorkflowRunEventTableResponse(
     'homeStatus',
     appState.clock,
-    await latestWorkflowRunEventsPerWorkflowForOwners(appState, accountIds)
+    await getLatestWorkflowRunEventsForUser(appState, userId)
   )
 }
