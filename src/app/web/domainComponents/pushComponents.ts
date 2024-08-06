@@ -4,7 +4,7 @@ import { td, tr } from '../hiccough/hiccoughElements'
 import { latestCommitInPush } from '../../domain/github/githubPush'
 import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents'
 import { userCell } from './userComponents'
-import { GithubRepositoryElement } from '../../domain/types/GithubRepositoryElement'
+import { GithubRepositoryElement } from '../../domain/types/GithubElements'
 import { githubAnchor } from './genericComponents'
 
 export type PushRowOptions = {

@@ -10,7 +10,7 @@ import {
   SsmParamName
 } from '../../../../multipleContexts/ssmParams'
 import { logger } from '../../../util/logging'
-import { fromRawAccountType, ORGANIZATION_ACCOUNT_TYPE } from '../../types/githubCommonTypes'
+import { fromRawAccountType, ORGANIZATION_ACCOUNT_TYPE } from '../../types/GithubAccountType'
 import { a, p } from '../../../web/hiccough/hiccoughElements'
 
 export const setupRedirectRoute: Route<APIGatewayProxyEvent, GithubSetupAppState> = {

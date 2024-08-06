@@ -1,24 +1,39 @@
 import { RawGithubInstallation } from './rawGithub/RawGithubInstallation'
-import { fromRawAccountType, GithubAccountType, isAccountType } from './githubCommonTypes'
+import { fromRawAccountType, GithubAccountType, isGithubAccountType } from './GithubAccountType'
+import {
+  GithubAccountId,
+  GithubAppId,
+  GithubInstallationId,
+  isGithubAccountId,
+  isGithubAppId,
+  isGithubInstallationId
+} from './GithubKeys'
+import { isNotNullObject, isString } from '../../util/types'
 
 export interface GithubInstallation {
-  installationId: number
-  appId: number
+  installationId: GithubInstallationId
+  appId: GithubAppId
   appSlug: string
   accountLogin: string
-  accountId: number
+  accountId: GithubAccountId
   accountType: GithubAccountType
 }
 
 export function isGithubInstallation(x: unknown): x is GithubInstallation {
-  const candidate = x as GithubInstallation
   return (
-    candidate.installationId !== undefined &&
-    candidate.appId !== undefined &&
-    candidate.appSlug !== undefined &&
-    candidate.accountLogin !== undefined &&
-    candidate.accountId !== undefined &&
-    isAccountType(candidate.accountType)
+    isNotNullObject(x) &&
+    'installationId' in x &&
+    isGithubInstallationId(x.installationId) &&
+    'appId' in x &&
+    isGithubAppId(x.appId) &&
+    'appSlug' in x &&
+    isString(x.appSlug) &&
+    'accountLogin' in x &&
+    isString(x.accountLogin) &&
+    'accountId' in x &&
+    isGithubAccountId(x.accountId) &&
+    'accountType' in x &&
+    isGithubAccountType(x.accountType)
   )
 }
 

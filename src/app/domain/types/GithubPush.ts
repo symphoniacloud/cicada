@@ -4,11 +4,12 @@ import {
   RawGithubAPIPushEventEvent,
   RawGithubAPIPushEventEventCommit
 } from './rawGithub/RawGithubAPIPushEventEvent'
-import { fromRawAccountType } from './githubCommonTypes'
+import { fromRawAccountType } from './GithubAccountType'
 import { GithubRepositorySummary } from './GithubRepository'
 import { NonEmptyArray } from '../../util/collections'
-import { GithubRepositoryElement } from './GithubRepositoryElement'
+import { GithubRepositoryElement, isGithubRepositoryElement } from './GithubElements'
 import { timestampToIso } from '../../util/dateAndTime'
+import { GithubUserId } from './GithubKeys'
 
 // There's no consistent ID between pushes sourced from Webhooks vs Events, so use combination
 // of owner, repo, ref, and first commit SHA to create a key
@@ -16,7 +17,7 @@ export interface GithubPush extends GithubRepositoryElement {
   // Repo URL only available from Webhook Push, not API Push
   repoUrl?: string
   actor: {
-    id: number
+    id: GithubUserId
     login: string
     avatarUrl: string
   }
@@ -38,12 +39,10 @@ export interface GithubPushCommit {
 }
 
 export function isGithubPush(x: unknown): x is GithubPush {
+  if (!isGithubRepositoryElement(x)) return false
+
   const candidate = x as GithubPush
   return (
-    candidate.ownerId !== undefined &&
-    candidate.ownerName !== undefined &&
-    candidate.repoId !== undefined &&
-    candidate.repoName !== undefined &&
     candidate.actor !== undefined &&
     candidate.actor.id !== undefined &&
     candidate.actor.login !== undefined &&

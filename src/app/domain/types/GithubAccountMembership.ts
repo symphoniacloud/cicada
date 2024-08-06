@@ -1,9 +1,17 @@
+import { GithubAccountId, GithubUserId, isGithubUserId } from './GithubKeys'
+import { isNotNullObject } from '../../util/types'
+
 export interface GithubAccountMembership {
-  userId: number
-  accountId: number
+  userId: GithubUserId
+  accountId: GithubAccountId
 }
 
 export function isGithubOrganizationMembership(x: unknown): x is GithubAccountMembership {
-  const candidate = x as GithubAccountMembership
-  return candidate.userId !== undefined && candidate.accountId !== undefined
+  return (
+    isNotNullObject(x) &&
+    'userId' in x &&
+    isGithubUserId(x.userId) &&
+    'accountId' in x &&
+    isGithubUserId(x.accountId)
+  )
 }

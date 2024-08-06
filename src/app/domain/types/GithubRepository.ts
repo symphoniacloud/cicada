@@ -1,12 +1,12 @@
 import { RawGithubRepository } from './rawGithub/RawGithubRepository'
-import { fromRawAccountType, GithubAccountType } from './githubCommonTypes'
+import { fromRawAccountType } from './GithubAccountType'
+import { GithubAccountElement, isGithubAccountElement } from './GithubElements'
+import { GithubRepoId, isGithubRepoId } from './GithubKeys'
+import { isString } from '../../util/types'
 
-export interface GithubRepositorySummary {
-  id: number
+export interface GithubRepositorySummary extends GithubAccountElement {
+  id: GithubRepoId
   name: string
-  ownerId: number
-  ownerName: string
-  ownerType: GithubAccountType
 }
 
 export interface GithubRepository extends GithubRepositorySummary {
@@ -27,14 +27,7 @@ export interface GithubRepository extends GithubRepositorySummary {
 }
 
 export function isGithubRepositorySummary(x: unknown): x is GithubRepositorySummary {
-  const candidate = x as GithubRepositorySummary
-  return (
-    candidate.id !== undefined &&
-    candidate.name !== undefined &&
-    candidate.ownerName !== undefined &&
-    candidate.ownerId !== undefined &&
-    (candidate.ownerType === 'organization' || candidate.ownerType === 'user')
-  )
+  return isGithubAccountElement(x) && 'id' in x && isGithubRepoId(x.id) && 'name' in x && isString(x.name)
 }
 
 export function isGithubRepository(x: unknown): x is GithubRepository {

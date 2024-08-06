@@ -2,7 +2,7 @@ import { AppState } from '../../../environment/AppState'
 import { GithubInstallation } from '../../types/GithubInstallation'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient'
 import { processRawUsers } from '../githubUser'
-import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../../types/githubCommonTypes'
+import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../../types/GithubAccountType'
 
 export async function crawlUsers(appState: AppState, installation: GithubInstallation) {
   const latestRawUsers = await readRawUsers(
