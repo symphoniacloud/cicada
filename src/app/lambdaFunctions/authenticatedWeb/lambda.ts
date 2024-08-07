@@ -18,12 +18,14 @@ import { repoHeadingRoute } from '../../web/fragments/repoHeading'
 import { actionsStatusRoute } from '../../web/fragments/actionsStatus'
 import { gitHubActivityRoute } from '../../web/fragments/gitHubActivity'
 import { workflowHeadingRoute } from '../../web/fragments/workflowHeading'
+import { userSettingsRoute } from '../../web/fragments/userSettings'
 
 const router = createRouter([
   repoHeadingRoute,
   workflowHeadingRoute,
   actionsStatusRoute,
   gitHubActivityRoute,
+  userSettingsRoute,
   showHelloRoute
 ])
 

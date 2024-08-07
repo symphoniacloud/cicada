@@ -2,6 +2,7 @@ import { GithubRepositoryElement, isGithubRepositoryElement } from './GithubElem
 import { GithubWorkflowKey, isGithubWorkflowKey } from './GithubKeys'
 
 export interface GithubWorkflow extends GithubWorkflowKey, GithubRepositoryElement {
+  path: string
   workflowName?: string
   // Not available on all source data from GitHub
   workflowHtmlUrl?: string
@@ -9,5 +10,5 @@ export interface GithubWorkflow extends GithubWorkflowKey, GithubRepositoryEleme
 }
 
 export function isGithubWorkflow(x: unknown): x is GithubWorkflow {
-  return isGithubWorkflowKey(x) && isGithubRepositoryElement(x)
+  return isGithubWorkflowKey(x) && isGithubRepositoryElement(x) && 'path' in x && typeof x.path === 'string'
 }

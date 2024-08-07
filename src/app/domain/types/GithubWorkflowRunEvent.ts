@@ -4,7 +4,6 @@ import { GithubWorkflow, isGithubWorkflow } from './GithubWorkflow'
 
 export interface GithubWorkflowRunEvent extends GithubWorkflow {
   repoHtmlUrl: string
-  path: string
   // Not available on all source data from GitHub
   id: number
   runNumber: number
@@ -29,7 +28,6 @@ export function isGithubWorkflowRunEvent(x: unknown): x is GithubWorkflowRunEven
   return (
     isGithubWorkflow(x) &&
     candidate.repoHtmlUrl !== undefined &&
-    candidate.path !== undefined &&
     candidate.id !== undefined &&
     candidate.runNumber !== undefined &&
     candidate.displayTitle !== undefined &&

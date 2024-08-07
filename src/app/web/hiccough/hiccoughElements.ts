@@ -72,10 +72,22 @@ export function i(...def: HiccoughElementDefinition) {
   return element('i', ...def)
 }
 
+export function b(...def: HiccoughElementDefinition) {
+  return element('b', ...def)
+}
+
 export function a(href: string, ...def: HiccoughElementDefinition) {
   return withAttributes({ href }, element('a', ...def))
 }
 
 export function div(...def: HiccoughElementDefinition) {
   return element('div', ...def)
+}
+
+export function input(...def: HiccoughElementDefinition) {
+  return element('input', ...def)
+}
+
+export function label(...def: HiccoughElementDefinition) {
+  return element('label', ...def)
 }
