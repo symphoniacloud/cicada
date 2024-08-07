@@ -60,7 +60,7 @@ function renderElement(input: HiccoughElement, parentOptions: InternalHiccoughOp
       : ''
 
   if (rendered.length === 0) {
-    return `${preOpenIndentString}<${name}${renderedAttributes} />`
+    return `${preOpenIndentString}<${name}${renderedAttributes}></${name}>`
   }
 
   const newLineString = options.newLines && containsStructure ? '\n' : '',

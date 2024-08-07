@@ -53,11 +53,11 @@ test('hiccough smoke test', () => {
 })
 
 test('hiccough', () => {
-  expect(html(element('span'))).toEqual(`<span />`)
+  expect(html(element('span'))).toEqual(`<span></span>`)
   expect(html(element('span', 'bar'))).toEqual(`<span>bar</span>`)
   expect(html(element('span', 'bar', '&nbsp;baz'))).toEqual(`<span>bar&nbsp;baz</span>`)
 
-  expect(html(element('span', { class: 'foo' }))).toEqual(`<span class="foo" />`)
+  expect(html(element('span', { class: 'foo' }))).toEqual(`<span class="foo"></span>`)
   expect(html(element('span', { class: 'foo' }, 'bar'))).toEqual(`<span class="foo">bar</span>`)
   expect(html(element('span', { class: 'foo' }, '\nbar', '\nbaz'))).toEqual(`<span class="foo">
 bar

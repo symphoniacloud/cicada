@@ -1,32 +1,33 @@
 import { GithubWorkflow } from '../types/GithubWorkflow'
-import { GithubAccountElement, GithubRepositoryElement } from '../types/GithubElements'
+import { GithubAccountId, GithubRepoId, GithubWorkflowId } from '../types/GithubKeys'
 
-export function getAccountsAndRepoElements(workflows: GithubWorkflow[]): {
-  accounts: GithubAccountElement[]
-  repos: GithubRepositoryElement[]
-} {
-  const accounts: GithubAccountElement[] = []
-  const repos: GithubRepositoryElement[] = []
+export function findAccountName(workflows: GithubWorkflow[], accountId: GithubAccountId) {
+  const workflowInAccount = workflows.find((w) => w.ownerId === accountId)
+  // TODO - this will actually occur if we remove the account from Cicada, so need to handle
+  if (!workflowInAccount) throw new Error(`Unable to find a workflow for accountId ${accountId}`)
+  return workflowInAccount.ownerName
+}
 
-  // Oh, for a language with decent Sets, and overridable object equality :/
-  workflows.forEach((workflow) => {
-    if (!accounts.find((account) => account.ownerId === workflow.ownerId)) {
-      accounts.push({
-        ownerId: workflow.ownerId,
-        ownerName: workflow.ownerName,
-        ownerType: workflow.ownerType
-      })
-    }
-    if (!repos.find((repo) => repo.ownerId === workflow.ownerId && repo.repoId === workflow.repoId)) {
-      repos.push({
-        ownerId: workflow.ownerId,
-        ownerName: workflow.ownerName,
-        ownerType: workflow.ownerType,
-        repoId: workflow.repoId,
-        repoName: workflow.repoName
-      })
-    }
-  })
+export function findRepoName(workflows: GithubWorkflow[], accountId: GithubAccountId, repoId: GithubRepoId) {
+  const workflowInRepo = workflows.find((w) => w.ownerId === accountId && w.repoId === repoId)
+  // TODO - this will actually occur if the repo is removed from Cicada, so need to handle
+  if (!workflowInRepo) throw new Error(`Unable to find a repo for accountId ${accountId}, repoId ${repoId}`)
+  return workflowInRepo.repoName
+}
 
-  return { accounts, repos }
+export function findWorkflowName(
+  workflows: GithubWorkflow[],
+  accountId: GithubAccountId,
+  repoId: GithubRepoId,
+  workflowId: GithubWorkflowId
+) {
+  const workflow = workflows.find(
+    (w) => w.ownerId === accountId && w.repoId === repoId && w.workflowId === workflowId
+  )
+  // TODO - this will actually occur if the workflow is removed from Cicada, so need to handle
+  if (!workflow)
+    throw new Error(
+      `Unable to find a workflow for accountId ${accountId}, repoId ${repoId}, workflowId ${workflowId}`
+    )
+  return workflow.workflowName || workflow.path
 }
