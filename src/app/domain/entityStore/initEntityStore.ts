@@ -18,6 +18,7 @@ import {
   GITHUB_USER_TOKEN,
   GITHUB_WORKFLOW_RUN,
   GITHUB_WORKFLOW_RUN_EVENT,
+  USER_SETTINGS,
   WEB_PUSH_SUBSCRIPTION
 } from './entityTypes'
 import { Clock } from '../../util/dateAndTime'
@@ -82,6 +83,10 @@ export function setupEntityStore(
         {
           entityTypes: [GITHUB_LATEST_PUSH_PER_REF],
           ...entityStoreConfigFor(tableNames, 'github-latest-pushes-per-ref')
+        },
+        {
+          entityTypes: [USER_SETTINGS],
+          ...entityStoreConfigFor(tableNames, 'user-settings')
         },
         {
           entityTypes: [WEB_PUSH_SUBSCRIPTION],

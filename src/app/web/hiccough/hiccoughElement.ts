@@ -1,3 +1,5 @@
+import { isNotNullObject } from '../../util/types'
+
 export type HiccoughAttributes = Record<string, string>
 
 export type HiccoughContent = string | HiccoughElement | undefined
@@ -18,7 +20,7 @@ export type HiccoughElement = {
 }
 
 function isHiccoughElement(x: unknown): x is HiccoughElement {
-  return typeof x === 'object' && (x as HiccoughElement).isElement
+  return isNotNullObject(x) && 'isElement' in x && typeof x.isElement === 'boolean' && x.isElement
 }
 
 function isHiccoughContent(x: unknown): x is HiccoughContent {

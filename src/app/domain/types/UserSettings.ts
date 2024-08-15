@@ -1,31 +1,68 @@
-import { GithubAccountId, GithubRepoId, GithubWorkflowId } from './GithubKeys'
+import { GithubAccountId, GithubRepoId, GithubUserId, GithubWorkflowId, isGithubUserId } from './GithubKeys'
 import { isNotNullObject } from '../../util/types'
 
-export function isUserSettings(x: unknown): x is UserSettings {
-  // TODO - this needs a lot more. Perhaps with AJV?
-  return isNotNullObject(x) && 'github' in x && isNotNullObject(x.github) && 'accounts' in x.github
+export type UserSetting = 'visible' | 'notify'
+
+export function isUserSetting(x: unknown): x is UserSetting {
+  return x === 'visible' || x === 'notify'
 }
 
-export interface UserSettings {
+export function isUserSettings(x: unknown): x is PersistedUserSettings {
+  // TODO - this needs a lot more. Perhaps with AJV?
+  return (
+    isNotNullObject(x) &&
+    'userId' in x &&
+    isGithubUserId(x.userId) &&
+    'github' in x &&
+    isNotNullObject(x.github) &&
+    'accounts' in x.github
+  )
+}
+
+export interface PersistedUserSettings {
+  userId: GithubUserId
   github: {
-    accounts: Map<GithubAccountId, GithubAccountSettings>
+    accounts: Map<GithubAccountId, PersistedGithubAccountSettings>
   }
 }
 
-export interface VisibleAndNotifyConfigurable {
+export interface PersistedVisibleAndNotifyConfigurable {
   visible?: boolean
   notify?: boolean
 }
 
-export interface GithubAccountSettings extends VisibleAndNotifyConfigurable {
-  repos: Map<GithubRepoId, GithubRepoSettings>
+export interface PersistedGithubAccountSettings extends PersistedVisibleAndNotifyConfigurable {
+  repos: Map<GithubRepoId, PersistedGithubRepoSettings>
 }
 
-export interface GithubRepoSettings extends VisibleAndNotifyConfigurable {
-  workflows: Map<GithubWorkflowId, GithubWorkflowSettings>
+export interface PersistedGithubRepoSettings extends PersistedVisibleAndNotifyConfigurable {
+  workflows: Map<GithubWorkflowId, PersistedGithubWorkflowSettings>
 }
 
-export type GithubWorkflowSettings = VisibleAndNotifyConfigurable
+export type PersistedGithubWorkflowSettings = PersistedVisibleAndNotifyConfigurable
+
+// ***
+
+export interface CalculatedUserSettings {
+  userId: GithubUserId
+  github: {
+    accounts: Map<GithubAccountId, CalculatedGithubAccountSettings>
+  }
+}
+
+export type CalculatedVisibleAndNotifyConfigurable = Required<PersistedVisibleAndNotifyConfigurable>
+
+export interface CalculatedGithubAccountSettings extends CalculatedVisibleAndNotifyConfigurable {
+  repos: Map<GithubRepoId, CalculatedGithubRepoSettings>
+}
+
+export interface CalculatedGithubRepoSettings extends CalculatedVisibleAndNotifyConfigurable {
+  workflows: Map<GithubWorkflowId, CalculatedGithubWorkflowSettings>
+}
+
+export type CalculatedGithubWorkflowSettings = CalculatedVisibleAndNotifyConfigurable
+
+// ***
 
 export interface DisplayableUserSettings {
   github: {
@@ -38,13 +75,13 @@ export interface Displayable {
 }
 
 export interface DisplayableGithubAccountSettings
-  extends Required<VisibleAndNotifyConfigurable>,
+  extends CalculatedVisibleAndNotifyConfigurable,
     Displayable {
   repos: Map<GithubRepoId, DisplayableGithubRepoSettings>
 }
 
-export interface DisplayableGithubRepoSettings extends Required<VisibleAndNotifyConfigurable>, Displayable {
+export interface DisplayableGithubRepoSettings extends CalculatedVisibleAndNotifyConfigurable, Displayable {
   workflows: Map<GithubWorkflowId, DisplayableGithubWorkflowSettings>
 }
 
-export type DisplayableGithubWorkflowSettings = Required<VisibleAndNotifyConfigurable> & Displayable
+export type DisplayableGithubWorkflowSettings = CalculatedGithubWorkflowSettings & Displayable
