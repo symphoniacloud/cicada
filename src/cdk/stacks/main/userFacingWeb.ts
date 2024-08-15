@@ -48,13 +48,13 @@ function defineAuthenticatedWeb(scope: Construct, props: UserFacingWebEndpointsP
         'github-latest-pushes-per-ref',
         'github-repo-activity'
       ],
-      tablesReadWriteAccess: ['github-user-tokens']
+      tablesReadWriteAccess: ['github-user-tokens', 'user-settings']
     })
   )
   props.restApi.root
     .addResource('app')
     .addResource('{proxy+}')
-    .addMethod(HttpMethod.GET, new LambdaIntegration(lambdaFunction))
+    .addMethod(HttpMethod.ANY, new LambdaIntegration(lambdaFunction))
 }
 
 function defineAuthenticatedApi(scope: Construct, props: UserFacingWebEndpointsProps) {

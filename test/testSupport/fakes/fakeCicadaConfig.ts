@@ -20,6 +20,7 @@ export class FakeCicadaConfig implements CicadaConfig {
     'github-repo-activity': 'fakeGithubRepoActivityTable',
     'github-latest-workflow-runs': 'fakeGithubLatestWorkflowRunsTable',
     'github-latest-pushes-per-ref': 'fakeGithubLatestPushesPerRefTable',
+    'user-settings': 'fakeUserSettingsTable',
     'web-push-subscriptions': 'fakeWebPushSubscriptions'
   }
   public fakeWebpushVapidConfig: WebPushVapidConfig = {

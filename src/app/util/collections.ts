@@ -47,3 +47,15 @@ export type NonEmptyArray<T> = [T, ...T[]]
 export function removeNullAndUndefined<T>(xs: (T | undefined | null)[]) {
   return xs.filter((x) => x !== null && x !== undefined) as T[]
 }
+
+export function getFromMapOrSetNewAndReturn<TKey, TValue>(
+  map: Map<TKey, TValue>,
+  key: TKey,
+  getNewValue: () => TValue
+): TValue {
+  const existingValue = map.get(key)
+  if (existingValue !== undefined) return existingValue
+  const newValue = getNewValue()
+  map.set(key, newValue)
+  return newValue
+}
