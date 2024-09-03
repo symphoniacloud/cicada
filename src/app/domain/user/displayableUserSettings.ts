@@ -6,7 +6,8 @@ import {
   DisplayableGithubAccountSettings,
   DisplayableGithubRepoSettings,
   DisplayableGithubWorkflowSettings,
-  DisplayableUserSettings
+  DisplayableUserSettings,
+  PersistedUserSettings
 } from '../types/UserSettings'
 import { GithubWorkflow } from '../types/GithubWorkflow'
 import {
@@ -17,8 +18,16 @@ import {
   GithubWorkflowKey
 } from '../types/GithubKeys'
 import { findAccountName, findRepoName, findWorkflowName } from '../github/githubWorkflow'
+import { calculateUserSettings } from './calculatedUserSettings'
 
-export function toDisplayableUserSettings(
+export function toCalculatedAndDisplayableUserSettings(
+  userSettings: PersistedUserSettings,
+  workflows: GithubWorkflow[]
+): DisplayableUserSettings {
+  return toDisplayableUserSettings(calculateUserSettings(userSettings, workflows), workflows)
+}
+
+function toDisplayableUserSettings(
   userSettings: CalculatedUserSettings,
   workflows: GithubWorkflow[]
 ): DisplayableUserSettings {
