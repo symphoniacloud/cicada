@@ -23,16 +23,13 @@ import {
 } from '../../domain/user/displayableUserSettings'
 import { throwFunction } from '../../../multipleContexts/errors'
 import {
+  getUserSettings,
   updateAndSaveAccountSetting,
   updateAndSaveRepoSetting,
   updateAndSaveWorkflowSetting
 } from '../../domain/user/persistedUserSettings'
 import { getWorkflowsForUser } from '../../domain/user/userVisible'
-import {
-  calculateAccountSettings,
-  calculateRepoSettings,
-  calculateWorkflowSettings
-} from '../../domain/user/calculatedUserSettings'
+import { calculateAccountSettings, calculateUserSettings } from '../../domain/user/calculatedUserSettings'
 import { UserSetting } from '../../domain/types/UserSettings'
 
 export const postUserSettingRoute: Route<CicadaAuthorizedAPIEvent> = {
@@ -100,19 +97,18 @@ async function processUpdateRepoSetting(
   enabled: boolean
 ) {
   logger.debug('processUpdateRepoSetting')
+  await updateAndSaveRepoSetting(appState, userId, repoKey, setting, enabled)
+
+  const newPersistedUserSettings = await getUserSettings(appState, userId)
   const allWorkflows = await getWorkflowsForUser(appState, userId)
-  const updatedSettings = await updateAndSaveRepoSetting(appState, userId, repoKey, setting, enabled)
-  const updatedRepoSettings =
-    updatedSettings.github.accounts.get(repoKey.ownerId)?.repos.get(repoKey.repoId) ??
+  const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, allWorkflows)
+  const newCalculatedRepoSettings =
+    newCalculatedUserSettings.github.accounts.get(repoKey.ownerId)?.repos.get(repoKey.repoId) ??
     throwFunction('Internal error in processUpdateRepoSetting - no repo settings')()
 
   return createUpdateUserRepoSettingResponse(
     repoKey,
-    toDisplayableRepoSettings(
-      repoKey,
-      calculateRepoSettings(updatedRepoSettings, repoKey, allWorkflows),
-      allWorkflows
-    )
+    toDisplayableRepoSettings(repoKey, newCalculatedRepoSettings, allWorkflows)
   )
 }
 
@@ -124,10 +120,13 @@ async function processUpdateWorkflowSetting(
   enabled: boolean
 ) {
   logger.debug('processUpdateWorkflowSetting')
+  await updateAndSaveWorkflowSetting(appState, userId, workflowKey, setting, enabled)
+
+  const newPersistedUserSettings = await getUserSettings(appState, userId)
   const allWorkflows = await getWorkflowsForUser(appState, userId)
-  const updatedSettings = await updateAndSaveWorkflowSetting(appState, userId, workflowKey, setting, enabled)
-  const updatedWorkflowSettings =
-    updatedSettings.github.accounts
+  const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, allWorkflows)
+  const newCalculatedWorkflowSettings =
+    newCalculatedUserSettings.github.accounts
       .get(workflowKey.ownerId)
       ?.repos.get(workflowKey.repoId)
       ?.workflows.get(workflowKey.workflowId) ??
@@ -137,10 +136,6 @@ async function processUpdateWorkflowSetting(
 
   return createUpdateUserWorkflowSettingResponse(
     workflowKey,
-    toDisplayableWorkflowSettings(
-      workflowKey,
-      calculateWorkflowSettings(updatedWorkflowSettings),
-      allWorkflows
-    )
+    toDisplayableWorkflowSettings(workflowKey, newCalculatedWorkflowSettings, allWorkflows)
   )
 }
