@@ -17,25 +17,38 @@ import {
 import { UserSettingsEntity } from '../entityStore/entities/UserSettingsEntity'
 import { getFromMapOrSetNewAndReturn } from '../../util/collections'
 
+function userSettingsEntity(appState: AppState) {
+  return appState.entityStore.for(UserSettingsEntity)
+}
+
 export async function saveUserSettings(
   appState: AppState,
   userSettings: PersistedUserSettings
 ): Promise<PersistedUserSettings> {
-  return await appState.entityStore.for(UserSettingsEntity).put(userSettings)
+  return await userSettingsEntity(appState).put(userSettings)
 }
 
 export async function getUserSettings(
   appState: AppState,
   userId: GithubUserId
 ): Promise<PersistedUserSettings> {
-  return (
-    (await appState.entityStore.for(UserSettingsEntity).getOrUndefined({ userId })) ?? {
-      userId,
-      github: {
-        accounts: new Map<GithubAccountId, PersistedGithubAccountSettings>()
-      }
+  return (await userSettingsEntity(appState).getOrUndefined({ userId })) ?? initialUserSettings(userId)
+}
+
+export async function resetPersistedUserSettings(
+  appState: AppState,
+  userId: GithubUserId
+): Promise<PersistedUserSettings> {
+  return await saveUserSettings(appState, initialUserSettings(userId))
+}
+
+function initialUserSettings(userId: GithubUserId): PersistedUserSettings {
+  return {
+    userId,
+    github: {
+      accounts: new Map<GithubAccountId, PersistedGithubAccountSettings>()
     }
-  )
+  }
 }
 
 export async function updateAndSaveAccountSetting(

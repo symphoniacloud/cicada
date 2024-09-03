@@ -6,7 +6,6 @@ import {
   CalculatedVisibleAndNotifyConfigurable,
   PersistedGithubAccountSettings,
   PersistedGithubRepoSettings,
-  PersistedGithubWorkflowSettings,
   PersistedUserSettings,
   PersistedVisibleAndNotifyConfigurable
 } from '../types/UserSettings'
@@ -18,17 +17,16 @@ import {
   findWorkflowsForRepo
 } from '../github/githubWorkflow'
 
+const DEFAULT_ACCOUNT_NOTIFY = true
+
 export function calculateUserSettings(
   settings: PersistedUserSettings,
   allWorkflows: GithubWorkflow[]
 ): CalculatedUserSettings {
   const accountEntries: [GithubAccountId, CalculatedGithubAccountSettings][] = findUniqueAccountIds(
     allWorkflows
-  ).map((accountId) => {
-    return [
-      accountId,
-      calculateAccountSettings(settings.github.accounts.get(accountId), accountId, allWorkflows)
-    ]
+  ).map((id) => {
+    return [id, calculateAccountSettings(settings.github.accounts.get(id), id, allWorkflows)]
   })
 
   return {
@@ -39,70 +37,69 @@ export function calculateUserSettings(
   }
 }
 
-// TODO - if notify is NOT specified, parent notify is active
-//    If notify IS specified, use it
-
 export function calculateAccountSettings(
   settings: PersistedGithubAccountSettings | undefined,
   accountId: GithubAccountId,
   allWorkflows: GithubWorkflow[]
 ): CalculatedGithubAccountSettings {
-  const visibleAndNotify = calculateVisibleAndNotifyConfigurable(settings)
-  const repoEntries: [GithubRepoId, CalculatedGithubRepoSettings][] = visibleAndNotify.visible
-    ? findUniqueRepoIdsForAccount(allWorkflows, accountId).map((repoId) => {
+  const visibleAndNotify = calculateVisibleAndNotifyConfigurable(settings, DEFAULT_ACCOUNT_NOTIFY)
+
+  if (!visibleAndNotify.visible) {
+    return { ...visibleAndNotify, repos: new Map<GithubRepoId, CalculatedGithubRepoSettings>() }
+  }
+
+  return {
+    ...visibleAndNotify,
+    repos: new Map<GithubRepoId, CalculatedGithubRepoSettings>(
+      findUniqueRepoIdsForAccount(allWorkflows, accountId).map((repoId) => {
         return [
           repoId,
           calculateRepoSettings(
-            {
-              ...settings?.repos.get(repoId),
-              ...(!visibleAndNotify.notify ? { notify: false } : {}),
-              workflows:
-                settings?.repos.get(repoId)?.workflows ??
-                new Map<GithubWorkflowId, PersistedGithubWorkflowSettings>()
-            },
+            settings?.repos.get(repoId),
             { ownerId: accountId, repoId },
-            allWorkflows
+            allWorkflows,
+            visibleAndNotify.notify
           )
         ]
       })
-    : []
-  return {
-    ...visibleAndNotify,
-    repos: new Map<GithubRepoId, CalculatedGithubRepoSettings>(repoEntries)
+    )
   }
 }
 
 export function calculateRepoSettings(
-  settings: PersistedGithubRepoSettings | undefined,
+  repoSettings: PersistedGithubRepoSettings | undefined,
   repoKey: GithubRepoKey,
-  allWorkflows: GithubWorkflow[]
+  allWorkflows: GithubWorkflow[],
+  defaultNotify: boolean
 ): CalculatedGithubRepoSettings {
-  const visibleAndNotify = calculateVisibleAndNotifyConfigurable(settings)
-  const workflowEntries: [GithubWorkflowId, CalculatedGithubWorkflowSettings][] = visibleAndNotify.visible
-    ? findWorkflowsForRepo(allWorkflows, repoKey).map((wf) => {
-        return [
-          wf.workflowId,
-          calculateWorkflowSettings({
-            ...settings?.workflows.get(wf.workflowId),
-            ...(!visibleAndNotify.notify ? { notify: false } : {})
-          })
-        ]
-      })
-    : []
+  const visibleAndNotify = calculateVisibleAndNotifyConfigurable(repoSettings, defaultNotify)
+
+  if (!visibleAndNotify.visible) {
+    return { ...visibleAndNotify, workflows: new Map<GithubWorkflowId, CalculatedGithubWorkflowSettings>() }
+  }
+
   return {
     ...visibleAndNotify,
-    workflows: new Map<GithubWorkflowId, CalculatedGithubWorkflowSettings>(workflowEntries)
+    workflows: new Map<GithubWorkflowId, CalculatedGithubWorkflowSettings>(
+      findWorkflowsForRepo(allWorkflows, repoKey).map((wf) => {
+        return [
+          wf.workflowId,
+          calculateWorkflowSettings(repoSettings?.workflows.get(wf.workflowId), visibleAndNotify.notify)
+        ]
+      })
+    )
   }
 }
 
 export const calculateWorkflowSettings = calculateVisibleAndNotifyConfigurable
 
 export function calculateVisibleAndNotifyConfigurable(
-  settings: PersistedVisibleAndNotifyConfigurable | undefined
+  settings: PersistedVisibleAndNotifyConfigurable | undefined,
+  defaultNotify: boolean
 ): CalculatedVisibleAndNotifyConfigurable {
   const visible = settings?.visible ?? true
   return {
     visible,
-    notify: visible && (settings?.notify ?? true)
+    notify: visible && (settings?.notify ?? defaultNotify)
   }
 }

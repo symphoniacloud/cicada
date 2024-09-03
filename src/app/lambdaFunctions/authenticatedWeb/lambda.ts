@@ -20,6 +20,7 @@ import { gitHubActivityRoute } from '../../web/fragments/gitHubActivity'
 import { workflowHeadingRoute } from '../../web/fragments/workflowHeading'
 import { getUserSettingsRoute } from '../../web/fragments/getUserSettings'
 import { postUserSettingRoute } from '../../web/fragments/postUserSetting'
+import { postResetUserSettingsRoute } from '../../web/fragments/postResetUserSettings'
 
 const router = createRouter([
   repoHeadingRoute,
@@ -28,6 +29,7 @@ const router = createRouter([
   gitHubActivityRoute,
   getUserSettingsRoute,
   postUserSettingRoute,
+  postResetUserSettingsRoute,
   showHelloRoute
 ])
 

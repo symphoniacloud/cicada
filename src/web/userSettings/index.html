@@ -15,9 +15,21 @@
 <div class='container' id='toplevel'>
   <h1 class="display-3 mt-4">User Settings</h1>
   <script src="/js/checkForHtmxUnauthorizedResponse.js"></script>
-  <div hx-get='/app/fragment/userSettings'
+  <div id="topUserSettings"
+       hx-get='/app/fragment/userSettings'
        hx-trigger='load'
-       hx-swap='outerHTML'>Finding user settings...
+       hx-swap='innerHTML'>Finding user settings...
+  </div>
+  <div>
+    <button type="button"
+            class="btn btn-danger"
+            hx-post="/app/fragment/resetUserSettings"
+            hx-trigger="click"
+            hx-target="#topUserSettings"
+            hx-swap="innerHTML"
+    >
+      Reset User Settings
+    </button>
   </div>
   <hr />
   <p>
