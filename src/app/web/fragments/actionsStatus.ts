@@ -3,11 +3,13 @@ import { Route } from '../../internalHttpRouter/internalHttpRoute'
 import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { isFailure } from '../../util/structuredResult'
 import { getRepository } from '../../domain/github/githubRepository'
-import { latestWorkflowRunEventsPerWorkflowForRepo } from '../../domain/github/githubLatestWorkflowRunEvents'
 import { invalidRequestResponse, notFoundHTMLResponse } from '../htmlResponses'
 import { createWorkflowRunEventTableResponse } from './views/activityAndStatusView'
 import { getOptionalRepoCoordinates } from './requestParsing/getOptionalRepoCoordinates'
-import { getLatestVisibleWorkflowRunEventsForUser } from '../../domain/user/userVisible'
+import {
+  getLatestVisibleWorkflowRunEventsForUser,
+  getLatestVisibleWorkflowRunEventsPerWorkflowForRepoForUser
+} from '../../domain/user/userVisible'
 
 export const actionsStatusRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/fragment/actionsStatus',
@@ -20,20 +22,27 @@ export async function actionsStatus(appState: AppState, event: CicadaAuthorizedA
   if (isFailure(coordinatesResult)) return coordinatesResult.failureResult
   const { ownerId, repoId } = coordinatesResult.result
 
-  if (ownerId && repoId) return await actionsStatusForRepo(appState, ownerId, repoId)
+  if (ownerId && repoId) return await actionsStatusForRepo(appState, event.userId, ownerId, repoId)
   if (!ownerId && !repoId) return actionsStatusForHome(appState, event.userId)
   return invalidRequestResponse
 }
 
-async function actionsStatusForRepo(appState: AppState, ownerId: number, repoId: number) {
+async function actionsStatusForRepo(appState: AppState, userId: number, ownerId: number, repoId: number) {
   // TODO eventually - make sure user has permission for this
   // TODO eventually - move repo check into domain logic
   if (!(await getRepository(appState, ownerId, repoId))) return notFoundHTMLResponse
 
+  const latestEvents = await getLatestVisibleWorkflowRunEventsPerWorkflowForRepoForUser(
+    appState,
+    userId,
+    ownerId,
+    repoId
+  )
   return createWorkflowRunEventTableResponse(
     'repoStatus',
     appState.clock,
-    await latestWorkflowRunEventsPerWorkflowForRepo(appState, ownerId, repoId)
+    latestEvents.visibleEvents,
+    latestEvents.someEventsHidden
   )
 }
 
