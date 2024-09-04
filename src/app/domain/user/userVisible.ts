@@ -13,7 +13,7 @@ export async function getLatestVisibleWorkflowRunEventsForUser(
 ): Promise<{
   allEvents: GithubWorkflowRunEvent[]
   visibleEvents: GithubWorkflowRunEvent[]
-  someWorkflowsInvisible: boolean
+  someEventsHidden: boolean
 }> {
   const allEvents = await getAllLatestRunEventsForUser(appState, userId)
   const userSettings = calculateUserSettings(await getUserSettings(appState, userId), allEvents)
@@ -21,7 +21,7 @@ export async function getLatestVisibleWorkflowRunEventsForUser(
   return {
     allEvents,
     visibleEvents: filteredEvents,
-    someWorkflowsInvisible: allEvents.length !== filteredEvents.length
+    someEventsHidden: allEvents.length !== filteredEvents.length
   }
 }
 

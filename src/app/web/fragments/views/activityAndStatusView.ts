@@ -6,7 +6,7 @@ import { GithubPush } from '../../../domain/types/GithubPush'
 import { pushRow, PushRowOptions } from '../../domainComponents/pushComponents'
 import { activityIsWorkflowRunActivity, GithubActivity } from '../../../domain/github/githubActivity'
 import { HiccoughElement } from '../../hiccough/hiccoughElement'
-import { i, p } from '../../hiccough/hiccoughElements'
+import { a, i, p } from '../../hiccough/hiccoughElements'
 import { workflowRow, WorkflowRowOptions } from '../../domainComponents/workflowComponents'
 
 export type WorkflowRunEventTableType = 'homeStatus' | 'repoStatus' | 'workflowActivity'
@@ -16,11 +16,13 @@ export type GithubActivityTableType = 'repoActivity'
 export function createWorkflowRunEventTableResponse(
   mode: WorkflowRunEventTableType,
   clock: Clock,
-  events: GithubWorkflowRunEvent[]
+  events: GithubWorkflowRunEvent[],
+  someEventsHidden = false
 ) {
   return createResponse(
     mode,
-    events.map((event) => workflowRowForMode(mode, clock, event))
+    events.map((event) => workflowRowForMode(mode, clock, event)),
+    someEventsHidden
   )
 }
 
@@ -55,10 +57,22 @@ const columnTitles: Record<TableType, string[]> = {
   workflowActivity: ['Result', 'When', 'Elapsed time', 'By', 'Commit']
 }
 
-function createResponse(mode: TableType, rows: HiccoughElement[]) {
-  return fragmentViewResult(
-    rows.length === 0 ? p(i('No data available')) : standardTable(columnTitles[mode], rows)
-  )
+function createResponse(mode: TableType, rows: HiccoughElement[], someEventsHidden = false) {
+  return fragmentViewResult(...createResponseContent(mode, rows, someEventsHidden))
+}
+
+const USER_SETTINGS_LINK = a('/userSettings', 'user settings')
+const NO_DATA_AVAILABLE_MESSAGE = p(i('No data available'))
+const ALL_DATA_HIDDEN_MESSAGE = p(i('No data visible because of your ', USER_SETTINGS_LINK))
+const SOME_DATA_HIDDEN_MESSAGE = p(i('Some data hidden because of your ', USER_SETTINGS_LINK))
+
+function createResponseContent(mode: TableType, rows: HiccoughElement[], someEventsHidden: boolean) {
+  if (rows.length === 0) {
+    return [someEventsHidden ? ALL_DATA_HIDDEN_MESSAGE : NO_DATA_AVAILABLE_MESSAGE]
+  }
+
+  const resultsTable = standardTable(columnTitles[mode], rows)
+  return someEventsHidden ? [resultsTable, SOME_DATA_HIDDEN_MESSAGE] : [resultsTable]
 }
 
 type WorkflowRowMode = WorkflowRunEventTableType | GithubActivityTableType

@@ -39,6 +39,10 @@ async function actionsStatusForRepo(appState: AppState, ownerId: number, repoId:
 
 async function actionsStatusForHome(appState: AppState, userId: number) {
   const latestEvents = await getLatestVisibleWorkflowRunEventsForUser(appState, userId)
-  // TODO - message for if some are hidden
-  return createWorkflowRunEventTableResponse('homeStatus', appState.clock, latestEvents.visibleEvents)
+  return createWorkflowRunEventTableResponse(
+    'homeStatus',
+    appState.clock,
+    latestEvents.visibleEvents,
+    latestEvents.someEventsHidden
+  )
 }
