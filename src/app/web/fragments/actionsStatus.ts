@@ -8,7 +8,7 @@ import { createWorkflowRunEventTableResponse } from './views/activityAndStatusVi
 import { getOptionalRepoCoordinates } from './requestParsing/getOptionalRepoCoordinates'
 import {
   getLatestVisibleWorkflowRunEventsForUser,
-  getLatestVisibleWorkflowRunEventsPerWorkflowForRepoForUser
+  getLatestVisibleWorkflowRunEventsPerRepoForUser
 } from '../../domain/user/userVisible'
 import { GithubRepoKey } from '../../domain/types/GithubKeys'
 
@@ -29,15 +29,9 @@ export async function actionsStatus(appState: AppState, event: CicadaAuthorizedA
 }
 
 async function actionsStatusForRepo(appState: AppState, userId: number, repoKey: GithubRepoKey) {
-  // TODO eventually - make sure user has permission for this
-  // TODO eventually - move repo check into domain logic
   if (!(await getRepository(appState, repoKey))) return notFoundHTMLResponse
 
-  const latestEvents = await getLatestVisibleWorkflowRunEventsPerWorkflowForRepoForUser(
-    appState,
-    userId,
-    repoKey
-  )
+  const latestEvents = await getLatestVisibleWorkflowRunEventsPerRepoForUser(appState, userId, repoKey)
   return createWorkflowRunEventTableResponse(
     'repoStatus',
     appState.clock,
