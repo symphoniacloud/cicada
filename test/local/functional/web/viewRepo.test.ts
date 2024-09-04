@@ -16,6 +16,7 @@ import {
 } from '../../../../src/app/domain/entityStore/entityTypes'
 
 function setupState() {
+  // const appState = new FakeAppState({ entityStoreLogger: consoleLogger })
   const appState = new FakeAppState()
 
   appState.dynamoDB.stubGets.addResponse(
@@ -76,6 +77,22 @@ function setupState() {
       KeyConditionExpression: 'PK = :pk and begins_with(#sk, :skPrefix)',
       ExpressionAttributeValues: { ':pk': 'ACCOUNT#162483619', ':skPrefix': 'REPO#768206479' },
       ExpressionAttributeNames: { '#sk': 'SK' }
+    },
+    [
+      {
+        $metadata: {},
+        Items: [{ ...testOrgTestRepoOneWorkflowRunThree, _et: GITHUB_LATEST_WORKFLOW_RUN_EVENT }]
+      }
+    ]
+  )
+  // Used when loading "all workflows" for user settings lookup. Eventually consider adding a workflows entity
+  appState.dynamoDB.stubAllPagesQueries.addResponse(
+    {
+      TableName: 'fakeGithubLatestWorkflowRunsTable',
+      KeyConditionExpression: 'GSI1PK = :pk',
+      IndexName: 'GSI1',
+      ExpressionAttributeValues: { ':pk': 'ACCOUNT#162483619' },
+      ScanIndexForward: false
     },
     [
       {

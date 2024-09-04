@@ -1,6 +1,9 @@
 import { AppState } from '../../environment/AppState'
 import { getAllAccountIdsForUser } from '../github/githubMembership'
-import { latestWorkflowRunEventsPerWorkflowForOwners } from '../github/githubLatestWorkflowRunEvents'
+import {
+  latestWorkflowRunEventsPerWorkflowForOwners,
+  latestWorkflowRunEventsPerWorkflowForRepo
+} from '../github/githubLatestWorkflowRunEvents'
 import { GithubWorkflow } from '../types/GithubWorkflow'
 import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
 import { getUserSettings } from './persistedUserSettings'
@@ -25,8 +28,32 @@ export async function getLatestVisibleWorkflowRunEventsForUser(
   }
 }
 
+export async function getLatestVisibleWorkflowRunEventsPerWorkflowForRepoForUser(
+  appState: AppState,
+  userId: number,
+  ownerId: number,
+  repoId: number
+): Promise<{
+  allEvents: GithubWorkflowRunEvent[]
+  visibleEvents: GithubWorkflowRunEvent[]
+  someEventsHidden: boolean
+}> {
+  const allEventsForRepo = await latestWorkflowRunEventsPerWorkflowForRepo(appState, ownerId, repoId)
+  const userSettings = calculateUserSettings(
+    await getUserSettings(appState, userId),
+    await getWorkflowsForUser(appState, userId)
+  )
+  const filteredEvents = filterOutConfiguredInvisibleWorkflowEvents(allEventsForRepo, userSettings)
+  return {
+    allEvents: allEventsForRepo,
+    visibleEvents: filteredEvents,
+    someEventsHidden: allEventsForRepo.length !== filteredEvents.length
+  }
+}
+
 export async function getWorkflowsForUser(appState: AppState, userId: number): Promise<GithubWorkflow[]> {
-  // Workflow run events extend workflow, so we can just return the latest run events
+  // Workflow run events extend workflow, so we can just return the latest run events for now
+  // TODOEventually have a more efficient way of doing this
   return getAllLatestRunEventsForUser(appState, userId)
 }
 
