@@ -7,8 +7,8 @@ import { invalidRequestResponse, notFoundHTMLResponse } from '../htmlResponses'
 import { createWorkflowRunEventTableResponse } from './views/activityAndStatusView'
 import { getOptionalRepoCoordinates } from './requestParsing/getOptionalRepoCoordinates'
 import {
-  getLatestVisibleWorkflowRunEventsForUser,
-  getLatestVisibleWorkflowRunEventsPerRepoForUser
+  getLatestWorkflowRunEventsForUser,
+  getLatestWorkflowRunEventsForRepoForUser
 } from '../../domain/user/userVisible'
 import { GithubRepoKey } from '../../domain/types/GithubKeys'
 
@@ -31,21 +31,11 @@ export async function actionsStatus(appState: AppState, event: CicadaAuthorizedA
 async function actionsStatusForRepo(appState: AppState, userId: number, repoKey: GithubRepoKey) {
   if (!(await getRepository(appState, repoKey))) return notFoundHTMLResponse
 
-  const latestEvents = await getLatestVisibleWorkflowRunEventsPerRepoForUser(appState, userId, repoKey)
-  return createWorkflowRunEventTableResponse(
-    'repoStatus',
-    appState.clock,
-    latestEvents.visibleEvents,
-    latestEvents.someEventsHidden
-  )
+  const latestEvents = await getLatestWorkflowRunEventsForRepoForUser(appState, userId, repoKey)
+  return createWorkflowRunEventTableResponse('repoStatus', appState.clock, latestEvents)
 }
 
 async function actionsStatusForHome(appState: AppState, userId: number) {
-  const latestEvents = await getLatestVisibleWorkflowRunEventsForUser(appState, userId)
-  return createWorkflowRunEventTableResponse(
-    'homeStatus',
-    appState.clock,
-    latestEvents.visibleEvents,
-    latestEvents.someEventsHidden
-  )
+  const latestEvents = await getLatestWorkflowRunEventsForUser(appState, userId)
+  return createWorkflowRunEventTableResponse('homeStatus', appState.clock, latestEvents)
 }

@@ -11,10 +11,9 @@ import {
   createWorkflowRunEventTableResponse
 } from './views/activityAndStatusView'
 import { getOptionalWorkflowCoordinates } from './requestParsing/getOptionalWorkflowCoordinates'
-import { getRunEventsForWorkflow } from '../../domain/github/githubWorkflowRunEvent'
 import { logger } from '../../util/logging'
-import { GithubRepoKey } from '../../domain/types/GithubKeys'
-import { getRecentActiveBranchesForUser } from '../../domain/user/userVisible'
+import { GithubRepoKey, GithubUserId, GithubWorkflowKey } from '../../domain/types/GithubKeys'
+import { getRecentActiveBranchesForUser, getRunEventsForWorkflowForUser } from '../../domain/user/userVisible'
 
 export const gitHubActivityRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/fragment/gitHubActivity',
@@ -26,28 +25,29 @@ export async function gitHubActivity(appState: AppState, event: CicadaAuthorized
 
   if (isFailure(coordinatesResult)) return coordinatesResult.failureResult
   const { ownerId, repoId, workflowId } = coordinatesResult.result
+  const { userId } = event
 
   if (ownerId && repoId) {
     return workflowId
-      ? await githubActivityForWorkflow(appState, ownerId, repoId, workflowId)
+      ? await githubActivityForWorkflow(appState, userId, { ownerId, repoId, workflowId })
       : await githubActivityForRepo(appState, { ownerId, repoId })
   }
-  if (!ownerId && !repoId) return await githubActivityForHome(appState, event.userId)
+  if (!ownerId && !repoId) return await githubActivityForHome(appState, userId)
   return invalidRequestResponse
 }
 
 async function githubActivityForWorkflow(
   appState: AppState,
-  ownerId: number,
-  repoId: number,
-  workflowId: number
+  userId: GithubUserId,
+  workflow: GithubWorkflowKey
 ) {
-  logger.debug('githubActivityForWorkflow', { ownerId, repoId, workflowId })
-  // TODO eventually - make sure user has permission for this
+  logger.debug('githubActivityForWorkflow', { workflow })
+  // TODO - check workflow exists
+
   return createWorkflowRunEventTableResponse(
     'workflowActivity',
     appState.clock,
-    await getRunEventsForWorkflow(appState, ownerId, repoId, workflowId)
+    await getRunEventsForWorkflowForUser(appState, userId, workflow)
   )
 }
 
@@ -55,8 +55,6 @@ async function githubActivityForRepo(appState: AppState, repoKey: GithubRepoKey)
   logger.debug('githubActivityForRepo')
   if (!(await getRepository(appState, repoKey))) return notFoundHTMLResponse
 
-  // TODO eventually - make sure user has permission for this
-  // TODO eventually - move repo check into domain logic
   return createGithubActivityResponse(
     'repoActivity',
     appState.clock,

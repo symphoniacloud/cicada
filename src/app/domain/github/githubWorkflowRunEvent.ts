@@ -11,6 +11,7 @@ import { getMemberIds } from './githubMembership'
 import { saveRuns } from './githubWorkflowRun'
 import { rangeWhereSkBeginsWith } from '@symphoniacloud/dynamodb-entity-store'
 import { isoDifferenceMs } from '../../util/dateAndTime'
+import { GithubWorkflowKey } from '../types/GithubKeys'
 
 export async function processRawRunEvents(
   appState: AppState,
@@ -50,19 +51,12 @@ export async function getRelatedMemberIdsForRunEvent(
 
 // Returns *all* the run events for each run (including in_progress) even if the run is complete
 // If you just want the most recent run event per run then use githubWorkflowRun.ts instead
-export async function getRunEventsForWorkflow(
-  appState: AppState,
-  ownerId: number,
-  repoId: number,
-  workflowId: number
-) {
+export async function getRunEventsForWorkflow(appState: AppState, key: GithubWorkflowKey) {
   return appState.entityStore
     .for(GithubWorkflowRunEventEntity)
-    .queryAllByPkAndSk(
-      { ownerId },
-      rangeWhereSkBeginsWith(githubWorkflowRunEventSkPrefix({ repoId, workflowId })),
-      { scanIndexForward: false }
-    )
+    .queryAllByPkAndSk(key, rangeWhereSkBeginsWith(githubWorkflowRunEventSkPrefix(key)), {
+      scanIndexForward: false
+    })
 }
 
 export async function getRunEventsForWorkflowPage(
