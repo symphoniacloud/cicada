@@ -12,10 +12,9 @@ import {
 } from './views/activityAndStatusView'
 import { getOptionalWorkflowCoordinates } from './requestParsing/getOptionalWorkflowCoordinates'
 import { getRunEventsForWorkflow } from '../../domain/github/githubWorkflowRunEvent'
-import { recentActiveBranchesForOwners } from '../../domain/github/githubLatestPushesPerRef'
-import { getAllAccountIdsForUser } from '../../domain/github/githubMembership'
 import { logger } from '../../util/logging'
 import { GithubRepoKey } from '../../domain/types/GithubKeys'
+import { getRecentActiveBranchesForUser } from '../../domain/user/userVisible'
 
 export const gitHubActivityRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/fragment/gitHubActivity',
@@ -70,6 +69,6 @@ async function githubActivityForHome(appState: AppState, userId: number) {
   return createGithubPushTableResponse(
     'homeActivity',
     appState.clock,
-    await recentActiveBranchesForOwners(appState, await getAllAccountIdsForUser(appState, userId))
+    await getRecentActiveBranchesForUser(appState, userId)
   )
 }

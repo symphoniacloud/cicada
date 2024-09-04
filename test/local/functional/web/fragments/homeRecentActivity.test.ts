@@ -2,13 +2,15 @@ import { expect, test } from 'vitest'
 import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState'
 import {
   testOrgTestRepoOnePush,
+  testOrgTestRepoOneWorkflowRunThree,
   testTestUser,
   testTestUserMembershipOfOrg,
   testTestUserTokenRecord
 } from '../../../../examples/cicada/githubDomainObjects'
 import {
   GITHUB_ACCOUNT_MEMBERSHIP,
-  GITHUB_LATEST_PUSH_PER_REF
+  GITHUB_LATEST_PUSH_PER_REF,
+  GITHUB_LATEST_WORKFLOW_RUN_EVENT
 } from '../../../../../src/app/domain/entityStore/entityTypes'
 import { handleWebRequest } from '../../../../../src/app/lambdaFunctions/authenticatedWeb/lambda'
 import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport/fakes/awsStubs'
@@ -59,6 +61,22 @@ test('home-recent-activity', async () => {
       {
         $metadata: {},
         Items: [{ ...testOrgTestRepoOnePush, _et: GITHUB_LATEST_PUSH_PER_REF }]
+      }
+    ]
+  )
+  // Used when loading "all workflows" for user settings lookup. Eventually consider adding a workflows entity
+  appState.dynamoDB.stubAllPagesQueries.addResponse(
+    {
+      TableName: 'fakeGithubLatestWorkflowRunsTable',
+      KeyConditionExpression: 'GSI1PK = :pk',
+      IndexName: 'GSI1',
+      ExpressionAttributeValues: { ':pk': 'ACCOUNT#162483619' },
+      ScanIndexForward: false
+    },
+    [
+      {
+        $metadata: {},
+        Items: [{ ...testOrgTestRepoOneWorkflowRunThree, _et: GITHUB_LATEST_WORKFLOW_RUN_EVENT }]
       }
     ]
   )
