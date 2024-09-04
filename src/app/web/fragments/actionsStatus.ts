@@ -7,7 +7,7 @@ import { latestWorkflowRunEventsPerWorkflowForRepo } from '../../domain/github/g
 import { invalidRequestResponse, notFoundHTMLResponse } from '../htmlResponses'
 import { createWorkflowRunEventTableResponse } from './views/activityAndStatusView'
 import { getOptionalRepoCoordinates } from './requestParsing/getOptionalRepoCoordinates'
-import { getLatestWorkflowRunEventsForUser } from '../../domain/user/userVisible'
+import { getLatestVisibleWorkflowRunEventsForUser } from '../../domain/user/userVisible'
 
 export const actionsStatusRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/fragment/actionsStatus',
@@ -38,9 +38,7 @@ async function actionsStatusForRepo(appState: AppState, ownerId: number, repoId:
 }
 
 async function actionsStatusForHome(appState: AppState, userId: number) {
-  return createWorkflowRunEventTableResponse(
-    'homeStatus',
-    appState.clock,
-    await getLatestWorkflowRunEventsForUser(appState, userId)
-  )
+  const latestEvents = await getLatestVisibleWorkflowRunEventsForUser(appState, userId)
+  // TODO - message for if some are hidden
+  return createWorkflowRunEventTableResponse('homeStatus', appState.clock, latestEvents.visibleEvents)
 }
