@@ -9,9 +9,10 @@ import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
 import { getUserSettings } from './persistedUserSettings'
 import { calculateUserSettings } from './calculatedUserSettings'
 import { CalculatedUserSettings } from '../types/UserSettings'
-import { GithubRepoKey, GithubUserId } from '../types/GithubKeys'
+import { GithubRepoKey, GithubUserId, GithubWorkflowKey } from '../types/GithubKeys'
 import { recentActiveBranchesForOwners } from '../github/githubLatestPushesPerRef'
 import { GithubPush } from '../types/GithubPush'
+import { getRunEventsForWorkflow } from '../github/githubWorkflowRunEvent'
 
 export interface VisibleWorkflowRunEvents {
   allEvents: GithubWorkflowRunEvent[]
@@ -25,9 +26,9 @@ export interface VisiblePushes {
   someEventsHidden: boolean
 }
 
-// TODO - perform authorization for user visibility here
+// TODO - perform authorization for user visibility in this file
 
-export async function getLatestVisibleWorkflowRunEventsForUser(
+export async function getLatestWorkflowRunEventsForUser(
   appState: AppState,
   userId: GithubUserId
 ): Promise<VisibleWorkflowRunEvents> {
@@ -36,7 +37,7 @@ export async function getLatestVisibleWorkflowRunEventsForUser(
   return toVisibleEvents(allEvents, userSettings)
 }
 
-export async function getLatestVisibleWorkflowRunEventsPerRepoForUser(
+export async function getLatestWorkflowRunEventsForRepoForUser(
   appState: AppState,
   userId: GithubUserId,
   repo: GithubRepoKey
@@ -47,6 +48,21 @@ export async function getLatestVisibleWorkflowRunEventsPerRepoForUser(
     await getWorkflowsForUser(appState, userId)
   )
   return toVisibleEvents(allEvents, userSettings)
+}
+
+export async function getRunEventsForWorkflowForUser(
+  appState: AppState,
+  // For now userId is unused, but eventually should be used for authorization. Could be used for filtering too
+  // but not necessary now
+  _userId: GithubUserId,
+  workflow: GithubWorkflowKey
+): Promise<VisibleWorkflowRunEvents> {
+  const allEvents = await getRunEventsForWorkflow(appState, workflow)
+  return {
+    allEvents: allEvents,
+    visibleEvents: allEvents,
+    someEventsHidden: false
+  }
 }
 
 export async function getRecentActiveBranchesForUser(appState: AppState, userId: GithubUserId) {

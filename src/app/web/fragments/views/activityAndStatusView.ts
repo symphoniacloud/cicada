@@ -8,7 +8,7 @@ import { activityIsWorkflowRunActivity, GithubActivity } from '../../../domain/g
 import { HiccoughElement } from '../../hiccough/hiccoughElement'
 import { a, i, p } from '../../hiccough/hiccoughElements'
 import { workflowRow, WorkflowRowOptions } from '../../domainComponents/workflowComponents'
-import { VisiblePushes } from '../../../domain/user/userVisible'
+import { VisiblePushes, VisibleWorkflowRunEvents } from '../../../domain/user/userVisible'
 
 export type WorkflowRunEventTableType = 'homeStatus' | 'repoStatus' | 'workflowActivity'
 export type GithubPushTableType = 'homeActivity'
@@ -17,13 +17,12 @@ export type GithubActivityTableType = 'repoActivity'
 export function createWorkflowRunEventTableResponse(
   mode: WorkflowRunEventTableType,
   clock: Clock,
-  events: GithubWorkflowRunEvent[],
-  someEventsHidden = false
+  events: VisibleWorkflowRunEvents
 ) {
   return createResponse(
     mode,
-    events.map((event) => workflowRowForMode(mode, clock, event)),
-    someEventsHidden
+    events.visibleEvents.map((event) => workflowRowForMode(mode, clock, event)),
+    events.someEventsHidden
   )
 }
 
