@@ -15,6 +15,7 @@ import { getRunEventsForWorkflow } from '../../domain/github/githubWorkflowRunEv
 import { recentActiveBranchesForOwners } from '../../domain/github/githubLatestPushesPerRef'
 import { getAllAccountIdsForUser } from '../../domain/github/githubMembership'
 import { logger } from '../../util/logging'
+import { GithubRepoKey } from '../../domain/types/GithubKeys'
 
 export const gitHubActivityRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/fragment/gitHubActivity',
@@ -30,7 +31,7 @@ export async function gitHubActivity(appState: AppState, event: CicadaAuthorized
   if (ownerId && repoId) {
     return workflowId
       ? await githubActivityForWorkflow(appState, ownerId, repoId, workflowId)
-      : await githubActivityForRepo(appState, ownerId, repoId)
+      : await githubActivityForRepo(appState, { ownerId, repoId })
   }
   if (!ownerId && !repoId) return await githubActivityForHome(appState, event.userId)
   return invalidRequestResponse
@@ -51,16 +52,16 @@ async function githubActivityForWorkflow(
   )
 }
 
-async function githubActivityForRepo(appState: AppState, ownerId: number, repoId: number) {
+async function githubActivityForRepo(appState: AppState, repoKey: GithubRepoKey) {
   logger.debug('githubActivityForRepo')
-  if (!(await getRepository(appState, ownerId, repoId))) return notFoundHTMLResponse
+  if (!(await getRepository(appState, repoKey))) return notFoundHTMLResponse
 
   // TODO eventually - make sure user has permission for this
   // TODO eventually - move repo check into domain logic
   return createGithubActivityResponse(
     'repoActivity',
     appState.clock,
-    await getRecentActivityForRepo(appState, ownerId, repoId)
+    await getRecentActivityForRepo(appState, repoKey)
   )
 }
 

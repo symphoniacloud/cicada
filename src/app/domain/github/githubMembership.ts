@@ -3,8 +3,13 @@ import { GithubUser } from '../types/GithubUser'
 import { GithubAccountMembershipEntity } from '../entityStore/entities/GithubAccountMembershipEntity'
 import { GithubAccountMembership } from '../types/GithubAccountMembership'
 import { arrayDifferenceDeep } from '../../util/collections'
+import { GithubAccountId, GithubUserId } from '../types/GithubKeys'
 
-export async function setMemberships(appState: AppState, latestMembers: GithubUser[], accountId: number) {
+export async function setMemberships(
+  appState: AppState,
+  latestMembers: GithubUser[],
+  accountId: GithubAccountId
+) {
   const store = membershipStore(appState)
   const { newMemberships, expiredMemberships } = calculateMembershipUpdates(
     latestMembers.map(({ id }) => ({
@@ -28,7 +33,7 @@ export function calculateMembershipUpdates(
   }
 }
 
-export async function getAllAccountIdsForUser(appState: AppState, userId: number): Promise<number[]> {
+export async function getAllAccountIdsForUser(appState: AppState, userId: GithubUserId): Promise<number[]> {
   return (await membershipStore(appState).queryAllWithGsiByPk({ userId }, { gsiId: 'gsi1' })).map(
     ({ accountId }) => accountId
   )
@@ -38,6 +43,6 @@ function membershipStore(appState: AppState) {
   return appState.entityStore.for(GithubAccountMembershipEntity)
 }
 
-export async function getMemberIds(appState: AppState, accountId: number) {
+export async function getMemberIds(appState: AppState, accountId: GithubAccountId) {
   return (await membershipStore(appState).queryAllByPk({ accountId })).map(({ userId }) => userId)
 }

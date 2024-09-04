@@ -8,6 +8,7 @@ import {
 import { rangeWhereSkBeginsWith } from '@symphoniacloud/dynamodb-entity-store'
 import { sortBy } from '../../util/collections'
 import { getEventUpdatedTimestamp } from './githubCommon'
+import { GithubRepoKey } from '../types/GithubKeys'
 
 export async function saveLatestEvents(appState: AppState, newEvents: GithubWorkflowRunEvent[]) {
   // Update latest events if they are newer
@@ -40,14 +41,10 @@ export async function latestWorkflowRunEventsPerWorkflowForOwner(appState: AppSt
   )
 }
 
-export async function latestWorkflowRunEventsPerWorkflowForRepo(
-  appState: AppState,
-  ownerId: number,
-  repoId: number
-) {
+export async function latestWorkflowRunEventsPerWorkflowForRepo(appState: AppState, repoKey: GithubRepoKey) {
   const latestEvents = await appState.entityStore
     .for(GithubLatestWorkflowRunEventEntity)
-    .queryAllByPkAndSk({ ownerId }, rangeWhereSkBeginsWith(githubLatestWorkflowRunEventSkPrefix({ repoId })))
+    .queryAllByPkAndSk(repoKey, rangeWhereSkBeginsWith(githubLatestWorkflowRunEventSkPrefix(repoKey)))
 
   return sortBy(latestEvents, getEventUpdatedTimestamp, false)
 }
