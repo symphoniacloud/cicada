@@ -16,9 +16,8 @@ export async function repoHeading(appState: AppState, event: CicadaAuthorizedAPI
   const repoCoordinatesResult = getRepoCoordinates(event)
 
   if (isFailure(repoCoordinatesResult)) return repoCoordinatesResult.failureResult
-  const { ownerId, repoId } = repoCoordinatesResult.result
 
-  const repo = await getRepository(appState, ownerId, repoId)
+  const repo = await getRepository(appState, repoCoordinatesResult.result)
   if (!repo) return notFoundHTMLResponse
 
   // TODO eventually - make sure user has permission for this

@@ -10,6 +10,7 @@ import {
   getLatestVisibleWorkflowRunEventsForUser,
   getLatestVisibleWorkflowRunEventsPerWorkflowForRepoForUser
 } from '../../domain/user/userVisible'
+import { GithubRepoKey } from '../../domain/types/GithubKeys'
 
 export const actionsStatusRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/fragment/actionsStatus',
@@ -22,21 +23,20 @@ export async function actionsStatus(appState: AppState, event: CicadaAuthorizedA
   if (isFailure(coordinatesResult)) return coordinatesResult.failureResult
   const { ownerId, repoId } = coordinatesResult.result
 
-  if (ownerId && repoId) return await actionsStatusForRepo(appState, event.userId, ownerId, repoId)
+  if (ownerId && repoId) return await actionsStatusForRepo(appState, event.userId, { ownerId, repoId })
   if (!ownerId && !repoId) return actionsStatusForHome(appState, event.userId)
   return invalidRequestResponse
 }
 
-async function actionsStatusForRepo(appState: AppState, userId: number, ownerId: number, repoId: number) {
+async function actionsStatusForRepo(appState: AppState, userId: number, repoKey: GithubRepoKey) {
   // TODO eventually - make sure user has permission for this
   // TODO eventually - move repo check into domain logic
-  if (!(await getRepository(appState, ownerId, repoId))) return notFoundHTMLResponse
+  if (!(await getRepository(appState, repoKey))) return notFoundHTMLResponse
 
   const latestEvents = await getLatestVisibleWorkflowRunEventsPerWorkflowForRepoForUser(
     appState,
     userId,
-    ownerId,
-    repoId
+    repoKey
   )
   return createWorkflowRunEventTableResponse(
     'repoStatus',
