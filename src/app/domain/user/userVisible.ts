@@ -13,18 +13,17 @@ import { GithubRepoKey, GithubUserId, GithubWorkflowKey } from '../types/GithubK
 import { recentActiveBranchesForOwners } from '../github/githubLatestPushesPerRef'
 import { GithubPush } from '../types/GithubPush'
 import { getRunEventsForWorkflow } from '../github/githubWorkflowRunEvent'
+import { getRecentActivityForRepo, GithubActivity } from '../github/githubActivity'
 
-export interface VisibleWorkflowRunEvents {
-  allEvents: GithubWorkflowRunEvent[]
-  visibleEvents: GithubWorkflowRunEvent[]
+interface UserVisibleObjects<T> {
+  allEvents: T[]
+  visibleEvents: T[]
   someEventsHidden: boolean
 }
 
-export interface VisiblePushes {
-  allEvents: GithubPush[]
-  visibleEvents: GithubPush[]
-  someEventsHidden: boolean
-}
+export type VisibleWorkflowRunEvents = UserVisibleObjects<GithubWorkflowRunEvent>
+export type VisiblePushes = UserVisibleObjects<GithubPush>
+export type VisibleActivity = UserVisibleObjects<GithubActivity>
 
 // TODO - perform authorization for user visibility in this file
 
@@ -59,7 +58,22 @@ export async function getRunEventsForWorkflowForUser(
 ): Promise<VisibleWorkflowRunEvents> {
   const allEvents = await getRunEventsForWorkflow(appState, workflow)
   return {
-    allEvents: allEvents,
+    allEvents,
+    visibleEvents: allEvents,
+    someEventsHidden: false
+  }
+}
+
+export async function getRecentActivityForRepoForUser(
+  appState: AppState,
+  // For now userId is unused, but eventually should be used for authorization.
+  // Could be used for filtering too, e.g. for workflow events not in visible scope
+  _userId: GithubUserId,
+  repo: GithubRepoKey
+): Promise<VisibleActivity> {
+  const allEvents = await getRecentActivityForRepo(appState, repo)
+  return {
+    allEvents,
     visibleEvents: allEvents,
     someEventsHidden: false
   }

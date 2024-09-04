@@ -3,7 +3,6 @@ import { Route } from '../../internalHttpRouter/internalHttpRoute'
 import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { isFailure } from '../../util/structuredResult'
 import { getRepository } from '../../domain/github/githubRepository'
-import { getRecentActivityForRepo } from '../../domain/github/githubActivity'
 import { invalidRequestResponse, notFoundHTMLResponse } from '../htmlResponses'
 import {
   createGithubActivityResponse,
@@ -13,7 +12,11 @@ import {
 import { getOptionalWorkflowCoordinates } from './requestParsing/getOptionalWorkflowCoordinates'
 import { logger } from '../../util/logging'
 import { GithubRepoKey, GithubUserId, GithubWorkflowKey } from '../../domain/types/GithubKeys'
-import { getRecentActiveBranchesForUser, getRunEventsForWorkflowForUser } from '../../domain/user/userVisible'
+import {
+  getRecentActiveBranchesForUser,
+  getRecentActivityForRepoForUser,
+  getRunEventsForWorkflowForUser
+} from '../../domain/user/userVisible'
 
 export const gitHubActivityRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: '/app/fragment/gitHubActivity',
@@ -30,7 +33,7 @@ export async function gitHubActivity(appState: AppState, event: CicadaAuthorized
   if (ownerId && repoId) {
     return workflowId
       ? await githubActivityForWorkflow(appState, userId, { ownerId, repoId, workflowId })
-      : await githubActivityForRepo(appState, { ownerId, repoId })
+      : await githubActivityForRepo(appState, userId, { ownerId, repoId })
   }
   if (!ownerId && !repoId) return await githubActivityForHome(appState, userId)
   return invalidRequestResponse
@@ -51,18 +54,18 @@ async function githubActivityForWorkflow(
   )
 }
 
-async function githubActivityForRepo(appState: AppState, repoKey: GithubRepoKey) {
+async function githubActivityForRepo(appState: AppState, userId: GithubUserId, repoKey: GithubRepoKey) {
   logger.debug('githubActivityForRepo')
   if (!(await getRepository(appState, repoKey))) return notFoundHTMLResponse
 
   return createGithubActivityResponse(
     'repoActivity',
     appState.clock,
-    await getRecentActivityForRepo(appState, repoKey)
+    await getRecentActivityForRepoForUser(appState, userId, repoKey)
   )
 }
 
-async function githubActivityForHome(appState: AppState, userId: number) {
+async function githubActivityForHome(appState: AppState, userId: GithubUserId) {
   logger.debug('githubActivityForHome')
   return createGithubPushTableResponse(
     'homeActivity',

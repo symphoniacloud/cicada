@@ -4,11 +4,11 @@ import { fragmentViewResult } from '../../viewResultWrappers'
 import { standardTable } from '../../domainComponents/genericComponents'
 import { GithubPush } from '../../../domain/types/GithubPush'
 import { pushRow, PushRowOptions } from '../../domainComponents/pushComponents'
-import { activityIsWorkflowRunActivity, GithubActivity } from '../../../domain/github/githubActivity'
+import { activityIsWorkflowRunActivity } from '../../../domain/github/githubActivity'
 import { HiccoughElement } from '../../hiccough/hiccoughElement'
 import { a, i, p } from '../../hiccough/hiccoughElements'
 import { workflowRow, WorkflowRowOptions } from '../../domainComponents/workflowComponents'
-import { VisiblePushes, VisibleWorkflowRunEvents } from '../../../domain/user/userVisible'
+import { VisibleActivity, VisiblePushes, VisibleWorkflowRunEvents } from '../../../domain/user/userVisible'
 
 export type WorkflowRunEventTableType = 'homeStatus' | 'repoStatus' | 'workflowActivity'
 export type GithubPushTableType = 'homeActivity'
@@ -41,15 +41,16 @@ export function createGithubPushTableResponse(
 export function createGithubActivityResponse(
   mode: GithubActivityTableType,
   clock: Clock,
-  activity: GithubActivity[]
+  activity: VisibleActivity
 ) {
   return createResponse(
     mode,
-    activity.map((event) =>
+    activity.visibleEvents.map((event) =>
       activityIsWorkflowRunActivity(event)
         ? workflowRowForMode(mode, clock, event.event)
         : pushRowForMode(mode, clock, event.event)
-    )
+    ),
+    activity.someEventsHidden
   )
 }
 
@@ -62,7 +63,7 @@ const columnTitles: Record<TableType, string[]> = {
   workflowActivity: ['Result', 'When', 'Elapsed time', 'By', 'Commit']
 }
 
-function createResponse(mode: TableType, rows: HiccoughElement[], someEventsHidden = false) {
+function createResponse(mode: TableType, rows: HiccoughElement[], someEventsHidden: boolean) {
   return fragmentViewResult(...createResponseContent(mode, rows, someEventsHidden))
 }
 
