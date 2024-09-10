@@ -76,7 +76,7 @@
     "head_commit": {
       "id": "8c3aa1cb0316ea23abeb2612457edb80868f53c8",
       "tree_id": "6e9a155d6edce0d3e95b859a17d8f574a461fb33",
-      "message": "test workflow",
+      "message": "It's a test workflow",
       "timestamp": "2024-03-06T17:00:36Z",
       "author": {
         "name": "Mike Roberts",
