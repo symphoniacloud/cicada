@@ -88,11 +88,15 @@ function defineWebhook(scope: Construct, props: GithubInteractionProps, githubAp
       // so define a request template to generate a JSON object with those headers, and the
       // original body, as fields
       requestTemplates: {
-        // The value here used to be a nice JSON.stringify, but I couldn't get it working with the replaceAll magic
-        // Talking of which, there's some API Gateway magic here in the value for `body`. See:
+        // There's some API Gateway magic here in the value for `body`. See:
         // https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#util-template-reference ($util.escapeJavaScript())
         // and https://github.com/aws/serverless-application-model/issues/1895
-        'application/json': `{"X-Hub-Signature-256":"$util.escapeJavaScript($input.params('X-Hub-Signature-256'))","X-GitHub-Event":"$util.escapeJavaScript($input.params('X-GitHub-Event'))","body":"$util.escapeJavaScript($input.body).replaceAll("\\\\'","'")"}`
+        // Also .replace(/\\"/g, '"') exists because of JSON.stringify's escaping behaviour of double quotes
+        'application/json': JSON.stringify({
+          'X-Hub-Signature-256': "$util.escapeJavaScript($input.params('X-Hub-Signature-256'))",
+          'X-GitHub-Event': "$util.escapeJavaScript($input.params('X-GitHub-Event'))",
+          body: '$util.escapeJavaScript($input.body).replaceAll("\\\'","\'")'
+        }).replace(/\\"/g, '"')
       },
       // Don't passthrough body if content type is unexpected (should always be application/json)
       passthroughBehavior: PassthroughBehavior.NEVER,
