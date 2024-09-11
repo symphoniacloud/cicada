@@ -80,7 +80,12 @@ function defineWebPushPublisher(scope: Construct, props: UserFacingWebEndpointsP
   const lambdaFunction = new CicadaFunction(
     scope,
     cicadaFunctionProps(props, 'webPushPublisher', {
-      tablesReadAccess: ['web-push-subscriptions', 'github-account-memberships']
+      tablesReadAccess: [
+        'web-push-subscriptions',
+        'github-account-memberships',
+        'github-latest-workflow-runs',
+        'user-settings'
+      ]
     })
   )
   new Rule(scope, 'WebPushPublisherRule', {
