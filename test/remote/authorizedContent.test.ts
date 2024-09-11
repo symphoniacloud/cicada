@@ -53,7 +53,7 @@ testuser
       </p>
       <hr></hr>
       <p>
-        <a href="web-push.html">Manage Web Push Notifications</a>
+        <a href="/userSettings">User Settings</a>
       </p>
       <p>
         <a href="/">Back to home</a>
