@@ -62,7 +62,7 @@ Now try logging in - click the "login with your GitHub user" link. You'll go thr
 
 ## Using Push Notifications
 
-On each Cicada screen you'll see a "Manage Web Push Notifications" link - choosing this will allow you to subscribe for notifications.
+On each Cicada screen you'll see a "User Settings" link - choosing this will allow you to subscribe for notifications.
 
 **IMPORTANT FOR IPHONE USERS** :
 On an iPhone you need to "install" Cicada as a Progressive Web App (PWA) first - you do this by adding it to your home screen via the "share" button in Safari.

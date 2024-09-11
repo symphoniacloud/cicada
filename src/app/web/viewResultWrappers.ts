@@ -22,7 +22,7 @@ export function pageViewResultWithoutHtmx(bodyContents: HiccoughContent[], logge
       element('hr'),
       ...(loggedIn
         ? [
-            p(a('web-push.html', 'Manage Web Push Notifications')),
+            p(a('/userSettings', 'User Settings')),
             p(a('/', 'Back to home')),
             p(a('/github/auth/logout', 'Logout'))
           ]

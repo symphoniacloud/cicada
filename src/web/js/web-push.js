@@ -13,6 +13,7 @@ async function subscribeToPush() {
     return
   }
 
+  updateStatus('Attempting to subscribe for notifications')
   const registration = await navigator.serviceWorker.getRegistration(serviceWorkerScript)
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
@@ -21,15 +22,18 @@ async function subscribeToPush() {
   console.log(JSON.stringify(subscription))
   await postToServer('webPushSubscribe', subscription)
   await updateUI()
+  updateStatus('Subscribed for push notifications ✅')
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function unsubscribeFromPush() {
+  updateStatus('Attempting to unsubscribe from push notifications')
   const registration = await navigator.serviceWorker.getRegistration(serviceWorkerScript)
   const subscription = await registration.pushManager.getSubscription()
   await postToServer('webPushUnsubscribe', { endpoint: subscription.endpoint })
   await subscription.unsubscribe()
   await updateUI()
+  updateStatus('Unsubscribed from push notifications')
 }
 
 async function testPing() {
@@ -38,15 +42,13 @@ async function testPing() {
 }
 
 async function updateUI() {
-  updateFurtherStatus('')
   if (!('serviceWorker' in navigator)) {
     updateStatus('Web Push not supported by this browser - no service worker')
     return
   }
   if (!('PushManager' in window)) {
-    updateStatus('Web Push not supported by this browser')
-    updateFurtherStatus(
-      'If using an iOS device then use Cicada as a PWA by adding a shortcut to your home screen, and open from there.'
+    updateStatus(
+      'Web Push not supported by this browser. If using an iOS device then use Cicada as a PWA by adding a shortcut to your home screen, and open from there.'
     )
     return
   }
@@ -66,14 +68,13 @@ async function updateUI() {
   const pushSubscription = await serviceWorkerRegistration.pushManager.getSubscription()
   if (pushSubscription) {
     console.log(`Push Subscription Endpoint = ${pushSubscription.endpoint}`)
-    updateStatus('Subscribed for push notifications ✅')
-    updateSubscriptionButton('Unsubscribe', unsubscribeFromPush)
+    updateSubscribeToggle(true, unsubscribeFromPush)
   } else {
-    updateStatus('You need to subscribe for push notifications')
-    updateSubscriptionButton('Subscribe', subscribeToPush)
+    updateSubscribeToggle(false, subscribeToPush)
   }
 
   document.getElementById('pingButton').onclick = testPing
+  updateStatus('')
 }
 
 function updateStatus(s) {
@@ -81,18 +82,16 @@ function updateStatus(s) {
   status.textContent = s
 }
 
-function updateFurtherStatus(s) {
-  const status = document.getElementById('furtherStatus')
-  status.textContent = s
-}
-
-function updateSubscriptionButton(s, onclick) {
-  const button = document.getElementById('updateSubscription')
-  const enabled = s && s.length > 0
-  button.disabled = !enabled
-  button.setAttribute('class', enabled ? 'btn btn-primary btn-lg' : 'invisible')
-  button.textContent = s
-  button.onclick = onclick
+function updateSubscribeToggle(checked, onclick) {
+  const toggle = document.getElementById('subscribeToggle')
+  toggle.removeAttribute('disabled')
+  toggle.disabled = false
+  toggle.onclick = onclick
+  if (checked) {
+    toggle.setAttribute('checked', checked)
+  } else {
+    toggle.removeAttribute('checked')
+  }
 }
 
 async function getOrRegisterServiceWorker() {
