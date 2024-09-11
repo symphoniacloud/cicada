@@ -7,6 +7,7 @@ import {
 } from '../../../../../examples/cicada/githubDomainObjects'
 import {
   GITHUB_ACCOUNT_MEMBERSHIP,
+  GITHUB_LATEST_WORKFLOW_RUN_EVENT,
   WEB_PUSH_SUBSCRIPTION
 } from '../../../../../../src/app/domain/entityStore/entityTypes'
 import { processEventBridgeWebPushEvent } from '../../../../../../src/app/domain/webPush/webPushEventBridgeEventProcessor'
@@ -32,6 +33,50 @@ test('newWorkflowRunEvent', async () => {
           { ...testTestUserMembershipOfOrg, _et: GITHUB_ACCOUNT_MEMBERSHIP },
           { ...testMikeRobertsUserMembershipOfOrg, _et: GITHUB_ACCOUNT_MEMBERSHIP }
         ]
+      }
+    ]
+  )
+  appState.dynamoDB.stubAllPagesQueries.addResponse(
+    {
+      TableName: 'fakeGithubAccountMemberships',
+      KeyConditionExpression: 'GSI1PK = :pk',
+      IndexName: 'GSI1',
+      ExpressionAttributeValues: { ':pk': 'USER#162360409' }
+    },
+    [
+      {
+        $metadata: {},
+        Items: [{ ...testTestUserMembershipOfOrg, _et: GITHUB_ACCOUNT_MEMBERSHIP }]
+      }
+    ]
+  )
+  appState.dynamoDB.stubAllPagesQueries.addResponse(
+    {
+      TableName: 'fakeGithubAccountMemberships',
+      KeyConditionExpression: 'GSI1PK = :pk',
+      IndexName: 'GSI1',
+      ExpressionAttributeValues: { ':pk': 'USER#49635' }
+    },
+    [
+      {
+        $metadata: {},
+        Items: [{ ...testMikeRobertsUserMembershipOfOrg, _et: GITHUB_ACCOUNT_MEMBERSHIP }]
+      }
+    ]
+  )
+
+  appState.dynamoDB.stubAllPagesQueries.addResponse(
+    {
+      TableName: 'fakeGithubLatestWorkflowRunsTable',
+      KeyConditionExpression: 'GSI1PK = :pk',
+      IndexName: 'GSI1',
+      ExpressionAttributeValues: { ':pk': 'ACCOUNT#162483619' },
+      ScanIndexForward: false
+    },
+    [
+      {
+        $metadata: {},
+        Items: [{ ...testOrgTestRepoOneWorkflowRunThree, _et: GITHUB_LATEST_WORKFLOW_RUN_EVENT }]
       }
     ]
   )
