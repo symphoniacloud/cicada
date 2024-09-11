@@ -10,6 +10,7 @@ import {
 } from '../github/githubWorkflowRunEvent'
 import { isCicadaEventBridgeDetail } from '../../outboundInterfaces/eventBridgeBus'
 import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper'
+import { filterWorkflowNotifyEnabled } from '../user/userNotifyable'
 
 // TOEventually - these are going to create a lot of queries for subscription lookup for large organizations
 // May be better to have one table / index for this.
@@ -24,10 +25,12 @@ export async function handleNewWorkflowRunEvent(appState: AppState, eventDetail:
   }
 
   const workflowRunEvent = eventDetail.data
+  const userIds = await getRelatedMemberIdsForRunEvent(appState, workflowRunEvent)
+  const notifyEnabledUserIds = await filterWorkflowNotifyEnabled(appState, userIds, workflowRunEvent)
 
   await publishToSubscriptionsForUsers(
     appState,
-    await getRelatedMemberIdsForRunEvent(appState, workflowRunEvent),
+    notifyEnabledUserIds,
     generateRunEventNotification(workflowRunEvent)
   )
 }
@@ -45,7 +48,7 @@ export function generateRunEventNotification(
   }
 }
 
-// TOEventually - add this back when notification preferences added
+// TOEventually - add this back now that notification preferences added, maybe
 // export async function handleNewPush(appState: AppState, eventDetail: unknown) {
 //   if (!isCicadaEventBridgeDetail(eventDetail) || !isGithubPush(eventDetail.data)) {
 //     logger.error(
