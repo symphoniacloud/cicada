@@ -62,6 +62,11 @@ export const testMikeRobertsUserMembershipOfOrg: GithubAccountMembership = {
   userId: 49635
 }
 
+export const accountMemberships: Record<number, GithubAccountMembership> = {
+  162360409: testTestUserMembershipOfOrg,
+  49635: testMikeRobertsUserMembershipOfOrg
+}
+
 export const testPersonalTestRepo: GithubRepository = {
   archived: false,
   createdAt: '2024-03-05T17:56:33Z',

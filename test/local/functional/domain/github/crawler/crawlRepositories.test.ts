@@ -6,8 +6,7 @@ import {
   testOrgTestRepoOne,
   testOrgTestRepoTwo,
   testPersonalInstallation,
-  testPersonalTestRepo,
-  testTestUserMembershipOfOrg
+  testPersonalTestRepo
 } from '../../../../../examples/cicada/githubDomainObjects'
 import example_personal_account_repo from '../../../../../examples/github/personal-account/api/repo.json'
 import example_org_repos from '../../../../../examples/github/org/api/repos.json'
@@ -50,30 +49,6 @@ test('repository-crawler-for-org-installation', async () => {
   const githubInstallationClient = new FakeGithubInstallationClient()
   appState.githubClient.fakeClientsForInstallation.addResponse(48133709, githubInstallationClient)
   githubInstallationClient.stubOrganizationRepositories.addResponse('cicada-test-org', example_org_repos)
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubAccountMemberships',
-      KeyConditionExpression: 'PK = :pk',
-      ExpressionAttributeValues: { ':pk': 'ACCOUNT#162483619' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [
-          {
-            _et: 'githubAccountMembership',
-            ...testTestUserMembershipOfOrg
-          },
-          // Old membership that will be deleted
-          {
-            _et: 'githubAccountMembership',
-            ...testTestUserMembershipOfOrg,
-            userId: 9786
-          }
-        ]
-      }
-    ]
-  )
 
   // A
   await crawlRepositories(appState, testOrgInstallation)

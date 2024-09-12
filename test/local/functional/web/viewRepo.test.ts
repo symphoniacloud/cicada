@@ -3,104 +3,22 @@ import { FakeAppState } from '../../../testSupport/fakes/fakeAppState'
 import { handleWebRequest } from '../../../../src/app/lambdaFunctions/authenticatedWeb/lambda'
 import { createStubApiGatewayProxyEventWithToken } from '../../../testSupport/fakes/awsStubs'
 import {
-  testOrgTestRepoOne,
-  testOrgTestRepoOneWorkflowRunThree,
-  testTestUser,
-  testTestUserMembershipOfOrg,
-  testTestUserTokenRecord
-} from '../../../examples/cicada/githubDomainObjects'
-import {
-  GITHUB_ACCOUNT_MEMBERSHIP,
-  GITHUB_LATEST_WORKFLOW_RUN_EVENT,
-  GITHUB_WORKFLOW_RUN
-} from '../../../../src/app/domain/entityStore/entityTypes'
+  stubGetRepo,
+  stubQueryActivityForRepo,
+  stubQueryLatestWorkflowRuns,
+  stubQueryLatestWorkflowRunsForRepo,
+  stubSetupUserRecords
+} from '../../../testSupport/fakes/fakeTableRecords'
 
 function setupState() {
-  // const appState = new FakeAppState({ entityStoreLogger: consoleLogger })
   const appState = new FakeAppState()
 
-  appState.dynamoDB.stubGets.addResponse(
-    {
-      TableName: 'fakeGithubUserTokensTable',
-      Key: { PK: 'USER_TOKEN#validUserToken' }
-    },
-    {
-      $metadata: {},
-      Item: testTestUserTokenRecord
-    }
-  )
-  appState.dynamoDB.stubGets.addResponse(
-    { TableName: 'fakeGithubUsersTable', Key: { PK: 'USER#162360409' } },
-    {
-      $metadata: {},
-      Item: testTestUser
-    }
-  )
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubAccountMemberships',
-      KeyConditionExpression: 'GSI1PK = :pk',
-      IndexName: 'GSI1',
-      ExpressionAttributeValues: { ':pk': 'USER#162360409' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [{ ...testTestUserMembershipOfOrg, _et: GITHUB_ACCOUNT_MEMBERSHIP }]
-      }
-    ]
-  )
-  appState.dynamoDB.stubGets.addResponse(
-    { TableName: 'fakeGithubRepositoriesTable', Key: { PK: 'OWNER#162483619', SK: 'REPO#768206479' } },
-    {
-      $metadata: {},
-      Item: testOrgTestRepoOne
-    }
-  )
-  appState.dynamoDB.stubOnePageQueries.addResponse(
-    {
-      TableName: 'fakeGithubRepoActivityTable',
-      KeyConditionExpression: 'GSI1PK = :pk and begins_with(#sk, :skPrefix)',
-      IndexName: 'GSI1',
-      ExpressionAttributeValues: { ':pk': 'ACCOUNT#162483619', ':skPrefix': 'REPO#768206479' },
-      ExpressionAttributeNames: { '#sk': 'GSI1SK' },
-      ScanIndexForward: false
-    },
-    {
-      $metadata: {},
-      Items: [{ ...testOrgTestRepoOneWorkflowRunThree, _et: GITHUB_WORKFLOW_RUN }]
-    }
-  )
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubLatestWorkflowRunsTable',
-      KeyConditionExpression: 'PK = :pk and begins_with(#sk, :skPrefix)',
-      ExpressionAttributeValues: { ':pk': 'ACCOUNT#162483619', ':skPrefix': 'REPO#768206479' },
-      ExpressionAttributeNames: { '#sk': 'SK' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [{ ...testOrgTestRepoOneWorkflowRunThree, _et: GITHUB_LATEST_WORKFLOW_RUN_EVENT }]
-      }
-    ]
-  )
+  stubSetupUserRecords(appState)
+  stubGetRepo(appState)
+  stubQueryActivityForRepo(appState)
+  stubQueryLatestWorkflowRunsForRepo(appState)
   // Used when loading "all workflows" for user settings lookup. Eventually consider adding a workflows entity
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubLatestWorkflowRunsTable',
-      KeyConditionExpression: 'GSI1PK = :pk',
-      IndexName: 'GSI1',
-      ExpressionAttributeValues: { ':pk': 'ACCOUNT#162483619' },
-      ScanIndexForward: false
-    },
-    [
-      {
-        $metadata: {},
-        Items: [{ ...testOrgTestRepoOneWorkflowRunThree, _et: GITHUB_LATEST_WORKFLOW_RUN_EVENT }]
-      }
-    ]
-  )
+  stubQueryLatestWorkflowRuns(appState)
 
   return appState
 }

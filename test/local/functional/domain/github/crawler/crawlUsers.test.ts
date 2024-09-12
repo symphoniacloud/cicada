@@ -14,6 +14,7 @@ import {
 import example_personal_account_user from '../../../../../examples/github/personal-account/api/user.json'
 import example_org_users from '../../../../../examples/github/org/api/users.json'
 import { crawlUsers } from '../../../../../../src/app/domain/github/crawler/crawlUsers'
+import { stubQueryAccountMembershipsByAccount } from '../../../../../testSupport/fakes/fakeTableRecords'
 
 test('user-crawler-for-personal-account-installation', async () => {
   // A
@@ -71,30 +72,11 @@ test('user-crawler-for-org-installation', async () => {
   appState.githubClient.fakeClientsForInstallation.addResponse(48133709, githubInstallationClient)
   githubInstallationClient.stubOrganizationMembers.addResponse('cicada-test-org', example_org_users)
 
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubAccountMemberships',
-      KeyConditionExpression: 'PK = :pk',
-      ExpressionAttributeValues: { ':pk': 'ACCOUNT#162483619' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [
-          {
-            _et: 'githubAccountMembership',
-            ...testTestUserMembershipOfOrg
-          },
-          // Old membership that will be deleted
-          {
-            _et: 'githubAccountMembership',
-            ...testTestUserMembershipOfOrg,
-            userId: 9786
-          }
-        ]
-      }
-    ]
-  )
+  stubQueryAccountMembershipsByAccount(appState, [
+    testTestUserMembershipOfOrg,
+    // Old membership that will be deleted
+    { ...testTestUserMembershipOfOrg, userId: 9786 }
+  ])
 
   // A
   await crawlUsers(appState, testOrgInstallation)

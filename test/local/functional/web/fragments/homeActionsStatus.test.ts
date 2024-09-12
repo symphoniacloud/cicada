@@ -1,66 +1,16 @@
 import { expect, test } from 'vitest'
 import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState'
-import {
-  testOrgTestRepoOneWorkflowRunThree,
-  testTestUser,
-  testTestUserMembershipOfOrg,
-  testTestUserTokenRecord
-} from '../../../../examples/cicada/githubDomainObjects'
-import {
-  GITHUB_ACCOUNT_MEMBERSHIP,
-  GITHUB_LATEST_WORKFLOW_RUN_EVENT
-} from '../../../../../src/app/domain/entityStore/entityTypes'
 import { handleWebRequest } from '../../../../../src/app/lambdaFunctions/authenticatedWeb/lambda'
 import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport/fakes/awsStubs'
+import {
+  stubQueryLatestWorkflowRuns,
+  stubSetupUserRecords
+} from '../../../../testSupport/fakes/fakeTableRecords'
 
 test('home-actions-status', async () => {
   const appState = new FakeAppState()
-  appState.dynamoDB.stubGets.addResponse(
-    {
-      TableName: 'fakeGithubUserTokensTable',
-      Key: { PK: 'USER_TOKEN#validUserToken' }
-    },
-    {
-      $metadata: {},
-      Item: testTestUserTokenRecord
-    }
-  )
-  appState.dynamoDB.stubGets.addResponse(
-    { TableName: 'fakeGithubUsersTable', Key: { PK: 'USER#162360409' } },
-    {
-      $metadata: {},
-      Item: testTestUser
-    }
-  )
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubAccountMemberships',
-      KeyConditionExpression: 'GSI1PK = :pk',
-      IndexName: 'GSI1',
-      ExpressionAttributeValues: { ':pk': 'USER#162360409' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [{ ...testTestUserMembershipOfOrg, _et: GITHUB_ACCOUNT_MEMBERSHIP }]
-      }
-    ]
-  )
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubLatestWorkflowRunsTable',
-      KeyConditionExpression: 'GSI1PK = :pk',
-      IndexName: 'GSI1',
-      ExpressionAttributeValues: { ':pk': 'ACCOUNT#162483619' },
-      ScanIndexForward: false
-    },
-    [
-      {
-        $metadata: {},
-        Items: [{ ...testOrgTestRepoOneWorkflowRunThree, _et: GITHUB_LATEST_WORKFLOW_RUN_EVENT }]
-      }
-    ]
-  )
+  stubSetupUserRecords(appState)
+  stubQueryLatestWorkflowRuns(appState)
 
   const latestActivity = await handleWebRequest(
     appState,

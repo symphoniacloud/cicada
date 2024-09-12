@@ -17,14 +17,10 @@ import {
   UpdateCommandInput,
   UpdateCommandOutput
 } from '@aws-sdk/lib-dynamodb'
-import { arrayStubResponse } from './fakeSupport'
+import { arrayStubResponse } from '../fakeSupport'
 import { DynamoDBInterface } from '@symphoniacloud/dynamodb-entity-store'
 
 export const METADATA = { $metadata: {} }
-
-export function fakeDynamoDBInterface() {
-  return new FakeDynamoDBInterface()
-}
 
 export class FakeDynamoDBInterface implements DynamoDBInterface {
   public puts: PutCommandInput[] = []

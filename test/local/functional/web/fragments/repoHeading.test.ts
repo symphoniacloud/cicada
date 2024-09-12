@@ -2,16 +2,13 @@ import { expect, test } from 'vitest'
 import { handleWebRequest } from '../../../../../src/app/lambdaFunctions/authenticatedWeb/lambda'
 import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport/fakes/awsStubs'
 import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState'
-import {
-  testOrgTestRepoOne,
-  testTestUser,
-  testTestUserMembershipOfOrg,
-  testTestUserTokenRecord
-} from '../../../../examples/cicada/githubDomainObjects'
-import { GITHUB_ACCOUNT_MEMBERSHIP } from '../../../../../src/app/domain/entityStore/entityTypes'
+import { stubGetRepo, stubSetupUserRecords } from '../../../../testSupport/fakes/fakeTableRecords'
 
 test('view-repo-heading', async () => {
-  const appState = setupState()
+  const appState = new FakeAppState()
+
+  stubSetupUserRecords(appState)
+  stubGetRepo(appState)
 
   const viewRepoResponse = await handleWebRequest(
     appState,
@@ -31,49 +28,3 @@ Repository: cicada-test-org/org-test-repo-one
   <a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a>
 </h3>`)
 })
-
-function setupState() {
-  const appState = new FakeAppState()
-
-  appState.dynamoDB.stubGets.addResponse(
-    {
-      TableName: 'fakeGithubUserTokensTable',
-      Key: { PK: 'USER_TOKEN#validUserToken' }
-    },
-    {
-      $metadata: {},
-      Item: testTestUserTokenRecord
-    }
-  )
-
-  appState.dynamoDB.stubGets.addResponse(
-    { TableName: 'fakeGithubUsersTable', Key: { PK: 'USER#162360409' } },
-    {
-      $metadata: {},
-      Item: testTestUser
-    }
-  )
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubAccountMemberships',
-      KeyConditionExpression: 'GSI1PK = :pk',
-      IndexName: 'GSI1',
-      ExpressionAttributeValues: { ':pk': 'USER#162360409' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [{ ...testTestUserMembershipOfOrg, _et: GITHUB_ACCOUNT_MEMBERSHIP }]
-      }
-    ]
-  )
-  appState.dynamoDB.stubGets.addResponse(
-    { TableName: 'fakeGithubRepositoriesTable', Key: { PK: 'OWNER#162483619', SK: 'REPO#768206479' } },
-    {
-      $metadata: {},
-      Item: testOrgTestRepoOne
-    }
-  )
-
-  return appState
-}

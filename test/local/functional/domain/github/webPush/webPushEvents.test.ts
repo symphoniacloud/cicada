@@ -1,126 +1,31 @@
 import { expect, test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
-import {
-  testMikeRobertsUserMembershipOfOrg,
-  testOrgTestRepoOneWorkflowRunThree,
-  testTestUserMembershipOfOrg
-} from '../../../../../examples/cicada/githubDomainObjects'
-import {
-  GITHUB_ACCOUNT_MEMBERSHIP,
-  GITHUB_LATEST_WORKFLOW_RUN_EVENT,
-  WEB_PUSH_SUBSCRIPTION
-} from '../../../../../../src/app/domain/entityStore/entityTypes'
+import { testOrgTestRepoOneWorkflowRunThree } from '../../../../../examples/cicada/githubDomainObjects'
 import { processEventBridgeWebPushEvent } from '../../../../../../src/app/domain/webPush/webPushEventBridgeEventProcessor'
 import {
   testMikeRobertsPushSubscriptionThree,
-  testMikeRobertsPushSubscriptionTwo,
-  testTestUserPushSubscription
+  testMikeRobertsPushSubscriptionTwo
 } from '../../../../../examples/cicada/webPushDomainObjects'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../../../../src/multipleContexts/eventBridge'
+import {
+  stubQueryAccountMembershipsByAccount,
+  stubQueryAccountMembershipsByUser,
+  stubQueryLatestWorkflowRuns,
+  stubQueryWebPushSubscription
+} from '../../../../../testSupport/fakes/fakeTableRecords'
 
 test('newWorkflowRunEvent', async () => {
   const appState = new FakeAppState()
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubAccountMemberships',
-      KeyConditionExpression: 'PK = :pk',
-      ExpressionAttributeValues: { ':pk': 'ACCOUNT#162483619' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [
-          { ...testTestUserMembershipOfOrg, _et: GITHUB_ACCOUNT_MEMBERSHIP },
-          { ...testMikeRobertsUserMembershipOfOrg, _et: GITHUB_ACCOUNT_MEMBERSHIP }
-        ]
-      }
-    ]
-  )
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubAccountMemberships',
-      KeyConditionExpression: 'GSI1PK = :pk',
-      IndexName: 'GSI1',
-      ExpressionAttributeValues: { ':pk': 'USER#162360409' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [{ ...testTestUserMembershipOfOrg, _et: GITHUB_ACCOUNT_MEMBERSHIP }]
-      }
-    ]
-  )
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubAccountMemberships',
-      KeyConditionExpression: 'GSI1PK = :pk',
-      IndexName: 'GSI1',
-      ExpressionAttributeValues: { ':pk': 'USER#49635' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [{ ...testMikeRobertsUserMembershipOfOrg, _et: GITHUB_ACCOUNT_MEMBERSHIP }]
-      }
-    ]
-  )
+  stubQueryAccountMembershipsByAccount(appState)
 
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubLatestWorkflowRunsTable',
-      KeyConditionExpression: 'GSI1PK = :pk',
-      IndexName: 'GSI1',
-      ExpressionAttributeValues: { ':pk': 'ACCOUNT#162483619' },
-      ScanIndexForward: false
-    },
-    [
-      {
-        $metadata: {},
-        Items: [{ ...testOrgTestRepoOneWorkflowRunThree, _et: GITHUB_LATEST_WORKFLOW_RUN_EVENT }]
-      }
-    ]
-  )
-
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeWebPushSubscriptions',
-      KeyConditionExpression: 'PK = :pk',
-      ExpressionAttributeValues: { ':pk': 'USER#162360409' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [
-          {
-            _et: WEB_PUSH_SUBSCRIPTION,
-            ...testTestUserPushSubscription
-          }
-        ]
-      }
-    ]
-  )
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeWebPushSubscriptions',
-      KeyConditionExpression: 'PK = :pk',
-      ExpressionAttributeValues: { ':pk': 'USER#49635' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [
-          {
-            _et: WEB_PUSH_SUBSCRIPTION,
-            ...testMikeRobertsPushSubscriptionTwo
-          },
-          {
-            _et: WEB_PUSH_SUBSCRIPTION,
-            ...testMikeRobertsPushSubscriptionThree
-          }
-        ]
-      }
-    ]
-  )
+  stubQueryAccountMembershipsByUser(appState)
+  stubQueryAccountMembershipsByUser(appState, 49635)
+  stubQueryLatestWorkflowRuns(appState)
+  stubQueryWebPushSubscription(appState)
+  stubQueryWebPushSubscription(appState, {
+    userId: 49635,
+    subscriptions: [testMikeRobertsPushSubscriptionTwo, testMikeRobertsPushSubscriptionThree]
+  })
 
   await processEventBridgeWebPushEvent(appState, {
     version: '0',
@@ -191,38 +96,9 @@ test('newWorkflowRunEvent', async () => {
 
 test('newPushTest', async () => {
   const appState = new FakeAppState()
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubAccountMemberships',
-      KeyConditionExpression: 'PK = :pk',
-      ExpressionAttributeValues: { ':pk': 'ACCOUNT#162483619' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [{ ...testTestUserMembershipOfOrg, _et: GITHUB_ACCOUNT_MEMBERSHIP }]
-      }
-    ]
-  )
 
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeWebPushSubscriptions',
-      KeyConditionExpression: 'PK = :pk',
-      ExpressionAttributeValues: { ':pk': 'USER#162360409' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [
-          {
-            _et: WEB_PUSH_SUBSCRIPTION,
-            ...testTestUserPushSubscription
-          }
-        ]
-      }
-    ]
-  )
+  stubQueryAccountMembershipsByUser(appState)
+  stubQueryWebPushSubscription(appState)
 
   await processEventBridgeWebPushEvent(appState, {
     version: '0',

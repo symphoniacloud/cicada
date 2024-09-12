@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
 import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes/awsStubs'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
-import { GITHUB_USER } from '../../../../../../src/app/domain/entityStore/entityTypes'
 import { handleGitHubWebAuthRequest } from '../../../../../../src/app/domain/github/githubUserAuth/githubWebAuthHandler'
+import { stubGetUser } from '../../../../../testSupport/fakes/fakeTableRecords'
 
 test('login', async () => {
   const response = await handleGitHubWebAuthRequest(
@@ -34,32 +34,13 @@ test('oauthCallback', async () => {
   })
   appState.githubClient.stubGithubUsers.addResponse('validUserToken', {
     login: 'testLogin',
-    id: 123456,
+    id: 162360409,
     avatar_url: '',
     html_url: '',
     type: '',
     url: ''
   })
-  appState.dynamoDB.stubGets.addResponse(
-    {
-      TableName: 'fakeGithubUsersTable',
-      Key: {
-        PK: 'USER#123456'
-      }
-    },
-    {
-      Item: {
-        PK: 'USER#123456',
-        _et: GITHUB_USER,
-        login: 'fakeUserLogin',
-        id: 123456,
-        avatarUrl: '',
-        htmlUrl: '',
-        url: ''
-      },
-      $metadata: {}
-    }
-  )
+  stubGetUser(appState)
 
   // Act
   const response = await handleGitHubWebAuthRequest(

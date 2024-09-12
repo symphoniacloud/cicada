@@ -1,12 +1,8 @@
 import { expect, test } from 'vitest'
 import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState'
 import { createStubAPIGatewayRequestAuthorizerEvent } from '../../../../testSupport/fakes/awsStubs'
-import { GITHUB_ACCOUNT_MEMBERSHIP, GITHUB_USER } from '../../../../../src/app/domain/entityStore/entityTypes'
 import { attemptToAuthorize } from '../../../../../src/app/domain/webAuth/apiGatewayAuthorizer'
-import {
-  testTestUserMembershipOfOrg,
-  testTestUserTokenRecord
-} from '../../../../examples/cicada/githubDomainObjects'
+import { stubSetupUserRecords } from '../../../../testSupport/fakes/fakeTableRecords'
 
 test('failed-auth-no-token', async () => {
   const appState = new FakeAppState()
@@ -36,50 +32,7 @@ test('failed-auth-no-token', async () => {
 
 test('successful-auth', async () => {
   const appState = new FakeAppState()
-  appState.dynamoDB.stubGets.addResponse(
-    {
-      TableName: 'fakeGithubUserTokensTable',
-      Key: { PK: 'USER_TOKEN#validUserToken' }
-    },
-    {
-      $metadata: {},
-      Item: testTestUserTokenRecord
-    }
-  )
-  appState.dynamoDB.stubGets.addResponse(
-    {
-      TableName: 'fakeGithubUsersTable',
-      Key: {
-        PK: 'USER#162360409'
-      }
-    },
-    {
-      Item: {
-        PK: 'USER#162360409',
-        _et: GITHUB_USER,
-        login: 'fakeUserLogin',
-        id: 162360409,
-        avatarUrl: '',
-        htmlUrl: '',
-        url: ''
-      },
-      $metadata: {}
-    }
-  )
-  appState.dynamoDB.stubAllPagesQueries.addResponse(
-    {
-      TableName: 'fakeGithubAccountMemberships',
-      KeyConditionExpression: 'GSI1PK = :pk',
-      IndexName: 'GSI1',
-      ExpressionAttributeValues: { ':pk': 'USER#162360409' }
-    },
-    [
-      {
-        $metadata: {},
-        Items: [{ ...testTestUserMembershipOfOrg, _et: GITHUB_ACCOUNT_MEMBERSHIP }]
-      }
-    ]
-  )
+  stubSetupUserRecords(appState)
 
   const response = await attemptToAuthorize(
     appState,
@@ -105,7 +58,7 @@ test('successful-auth', async () => {
     },
     // Means that the user details are available to target lambda function
     context: {
-      username: 'fakeUserLogin',
+      username: 'cicada-test-user',
       userId: '162360409'
     }
   })
