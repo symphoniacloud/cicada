@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState'
 import { createStubAPIGatewayRequestAuthorizerEvent } from '../../../../testSupport/fakes/awsStubs'
 import { attemptToAuthorize } from '../../../../../src/app/domain/webAuth/apiGatewayAuthorizer'
-import { stubSetupUserRecords } from '../../../../testSupport/fakes/fakeTableRecords'
+import { stubSetupUserRecords } from '../../../../testSupport/fakes/tableRecordReadStubs'
 
 test('failed-auth-no-token', async () => {
   const appState = new FakeAppState()

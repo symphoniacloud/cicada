@@ -5,7 +5,7 @@ import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport
 import {
   stubQueryLatestWorkflowRuns,
   stubSetupUserRecords
-} from '../../../../testSupport/fakes/fakeTableRecords'
+} from '../../../../testSupport/fakes/tableRecordReadStubs'
 
 test('home-actions-status', async () => {
   const appState = new FakeAppState()

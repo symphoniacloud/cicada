@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
 import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient'
 import {
@@ -11,6 +11,11 @@ import {
 import example_personal_account_repo from '../../../../../examples/github/personal-account/api/repo.json'
 import example_org_repos from '../../../../../examples/github/org/api/repos.json'
 import { crawlRepositories } from '../../../../../../src/app/domain/github/crawler/crawlRepositories'
+import {
+  expectBatchWrites,
+  expectBatchWritesLength
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
+import { expectedBatchWriteGithubRepositories } from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
 
 test('repository-crawler-for-personal-account-installation', async () => {
   // A
@@ -23,24 +28,8 @@ test('repository-crawler-for-personal-account-installation', async () => {
   await crawlRepositories(appState, testPersonalInstallation)
 
   // A
-  expect(appState.dynamoDB.batchWrites.length).toEqual(1)
-  expect(appState.dynamoDB.batchWrites[0]).toEqual({
-    RequestItems: {
-      fakeGithubRepositoriesTable: [
-        {
-          PutRequest: {
-            Item: {
-              PK: 'OWNER#162360409',
-              SK: 'REPO#767679529',
-              _et: 'githubRepository',
-              _lastUpdated: '2024-02-02T19:00:00.000Z',
-              ...testPersonalTestRepo
-            }
-          }
-        }
-      ]
-    }
-  })
+  expectBatchWritesLength(appState).toEqual(1)
+  expectBatchWrites(appState, 0).toEqual(expectedBatchWriteGithubRepositories([testPersonalTestRepo]))
 })
 
 test('repository-crawler-for-org-installation', async () => {
@@ -54,34 +43,8 @@ test('repository-crawler-for-org-installation', async () => {
   await crawlRepositories(appState, testOrgInstallation)
 
   // A
-  expect(appState.dynamoDB.batchWrites.length).toEqual(1)
-
-  expect(appState.dynamoDB.batchWrites[0]).toEqual({
-    RequestItems: {
-      fakeGithubRepositoriesTable: [
-        {
-          PutRequest: {
-            Item: {
-              PK: 'OWNER#162483619',
-              SK: 'REPO#768206479',
-              _et: 'githubRepository',
-              _lastUpdated: '2024-02-02T19:00:00.000Z',
-              ...testOrgTestRepoOne
-            }
-          }
-        },
-        {
-          PutRequest: {
-            Item: {
-              PK: 'OWNER#162483619',
-              SK: 'REPO#768207426',
-              _et: 'githubRepository',
-              _lastUpdated: '2024-02-02T19:00:00.000Z',
-              ...testOrgTestRepoTwo
-            }
-          }
-        }
-      ]
-    }
-  })
+  expectBatchWritesLength(appState).toEqual(1)
+  expectBatchWrites(appState, 0).toEqual(
+    expectedBatchWriteGithubRepositories([testOrgTestRepoOne, testOrgTestRepoTwo])
+  )
 })

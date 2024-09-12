@@ -12,7 +12,7 @@ import {
   stubQueryAccountMembershipsByUser,
   stubQueryLatestWorkflowRuns,
   stubQueryWebPushSubscription
-} from '../../../../../testSupport/fakes/fakeTableRecords'
+} from '../../../../../testSupport/fakes/tableRecordReadStubs'
 
 test('newWorkflowRunEvent', async () => {
   const appState = new FakeAppState()

@@ -8,7 +8,7 @@ import {
   stubQueryLatestWorkflowRuns,
   stubQueryLatestWorkflowRunsForRepo,
   stubSetupUserRecords
-} from '../../../testSupport/fakes/fakeTableRecords'
+} from '../../../testSupport/fakes/tableRecordReadStubs'
 
 function setupState() {
   const appState = new FakeAppState()

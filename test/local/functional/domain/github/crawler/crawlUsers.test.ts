@@ -14,7 +14,7 @@ import {
 import example_personal_account_user from '../../../../../examples/github/personal-account/api/user.json'
 import example_org_users from '../../../../../examples/github/org/api/users.json'
 import { crawlUsers } from '../../../../../../src/app/domain/github/crawler/crawlUsers'
-import { stubQueryAccountMembershipsByAccount } from '../../../../../testSupport/fakes/fakeTableRecords'
+import { stubQueryAccountMembershipsByAccount } from '../../../../../testSupport/fakes/tableRecordReadStubs'
 
 test('user-crawler-for-personal-account-installation', async () => {
   // A

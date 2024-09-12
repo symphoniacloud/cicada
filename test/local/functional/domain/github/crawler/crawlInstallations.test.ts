@@ -7,6 +7,11 @@ import {
 import example_personal_account_installation from '../../../../../examples/github/personal-account/api/installation.json'
 import example_org_installation from '../../../../../examples/github/org/api/installation.json'
 import { crawlInstallations } from '../../../../../../src/app/domain/github/crawler/crawlInstallations'
+import {
+  expectPut,
+  expectPutsLength
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
+import { expectedPutGithubInstallation } from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
 
 test('app-crawler-for-personal-account-installation', async () => {
   // A
@@ -21,16 +26,8 @@ test('app-crawler-for-personal-account-installation', async () => {
   const result = await crawlInstallations(appState)
 
   // A
-  expect(appState.dynamoDB.puts.length).toEqual(1)
-  expect(appState.dynamoDB.puts[0]).toEqual({
-    Item: {
-      PK: 'ACCOUNT#162360409',
-      _et: 'githubInstallation',
-      _lastUpdated: '2024-02-02T19:00:00.000Z',
-      ...testPersonalInstallation
-    },
-    TableName: 'fakeGithubInstallationsTable'
-  })
+  expectPutsLength(appState).toEqual(1)
+  expectPut(appState).toEqual(expectedPutGithubInstallation(testPersonalInstallation))
   expect(result).toEqual([testPersonalInstallation])
 })
 
@@ -47,15 +44,7 @@ test('app-crawler-for-org-installation', async () => {
   const result = await crawlInstallations(appState)
 
   // A
-  expect(appState.dynamoDB.puts.length).toEqual(1)
-  expect(appState.dynamoDB.puts[0]).toEqual({
-    Item: {
-      PK: 'ACCOUNT#162483619',
-      _et: 'githubInstallation',
-      _lastUpdated: '2024-02-02T19:00:00.000Z',
-      ...testOrgInstallation
-    },
-    TableName: 'fakeGithubInstallationsTable'
-  })
+  expectPutsLength(appState).toEqual(1)
+  expectPut(appState).toEqual(expectedPutGithubInstallation(testOrgInstallation))
   expect(result).toEqual([testOrgInstallation])
 })

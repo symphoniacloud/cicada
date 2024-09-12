@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import { handleWebRequest } from '../../../../../src/app/lambdaFunctions/authenticatedWeb/lambda'
 import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport/fakes/awsStubs'
 import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState'
-import { stubGetRepo, stubSetupUserRecords } from '../../../../testSupport/fakes/fakeTableRecords'
+import { stubGetRepo, stubSetupUserRecords } from '../../../../testSupport/fakes/tableRecordReadStubs'
 
 test('view-repo-heading', async () => {
   const appState = new FakeAppState()

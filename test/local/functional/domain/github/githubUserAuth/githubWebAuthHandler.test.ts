@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes/awsStubs'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
 import { handleGitHubWebAuthRequest } from '../../../../../../src/app/domain/github/githubUserAuth/githubWebAuthHandler'
-import { stubGetUser } from '../../../../../testSupport/fakes/fakeTableRecords'
+import { stubGetUser } from '../../../../../testSupport/fakes/tableRecordReadStubs'
 
 test('login', async () => {
   const response = await handleGitHubWebAuthRequest(

@@ -6,7 +6,7 @@ import {
   stubQueryLatestPushesPerRef,
   stubQueryLatestWorkflowRuns,
   stubSetupUserRecords
-} from '../../../../testSupport/fakes/fakeTableRecords'
+} from '../../../../testSupport/fakes/tableRecordReadStubs'
 
 test('home-recent-activity', async () => {
   const appState = new FakeAppState()
