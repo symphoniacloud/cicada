@@ -11,7 +11,15 @@ export function expectPut(appState: FakeAppState, index?: number) {
   return expect(appState.dynamoDB.puts[index ?? 0])
 }
 
-// TODO - use similar metadata object from stubber
+export function expectDeletesLength(appState: FakeAppState) {
+  return expect(appState.dynamoDB.deletes.length)
+}
+
+export function expectDelete(appState: FakeAppState, index?: number) {
+  return expect(appState.dynamoDB.deletes[index ?? 0])
+}
+
+// TODO - use similar metadata object from stubber?
 export function buildPut(
   tableName: string,
   entityType: string,
@@ -26,6 +34,13 @@ export function buildPut(
     },
     TableName: tableName,
     ...options
+  }
+}
+
+export function buildDelete(tableName: string, key: Record<string, NativeAttributeValue>) {
+  return {
+    Key: key,
+    TableName: tableName
   }
 }
 
@@ -50,6 +65,20 @@ export function buildBatchWriteForEntity(
             _et: entityType,
             _lastUpdated: '2024-02-02T19:00:00.000Z',
             ...item
+          }
+        }
+      }))
+    }
+  }
+}
+
+export function buildBatchDelete(tableName: string, keys: Record<string, NativeAttributeValue>[]) {
+  return {
+    RequestItems: {
+      [tableName]: keys.map((key) => ({
+        DeleteRequest: {
+          Key: {
+            ...key
           }
         }
       }))

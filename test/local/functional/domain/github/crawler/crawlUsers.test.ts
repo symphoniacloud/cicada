@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
 import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient'
 import {
@@ -15,6 +15,15 @@ import example_personal_account_user from '../../../../../examples/github/person
 import example_org_users from '../../../../../examples/github/org/api/users.json'
 import { crawlUsers } from '../../../../../../src/app/domain/github/crawler/crawlUsers'
 import { stubQueryAccountMembershipsByAccount } from '../../../../../testSupport/fakes/tableRecordReadStubs'
+import {
+  expectBatchWrites,
+  expectBatchWritesLength
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
+import {
+  expectedBatchDeleteGithubMemberships,
+  expectedBatchWriteGithubMemberships,
+  expectedBatchWriteGithubUsers
+} from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
 
 test('user-crawler-for-personal-account-installation', async () => {
   // A
@@ -27,42 +36,11 @@ test('user-crawler-for-personal-account-installation', async () => {
   await crawlUsers(appState, testPersonalInstallation)
 
   // A
-  expect(appState.dynamoDB.batchWrites.length).toEqual(2)
-  expect(appState.dynamoDB.batchWrites[0]).toEqual({
-    RequestItems: {
-      fakeGithubUsersTable: [
-        {
-          PutRequest: {
-            Item: {
-              PK: 'USER#162360409',
-              _et: 'githubUser',
-              _lastUpdated: '2024-02-02T19:00:00.000Z',
-              ...testTestUser
-            }
-          }
-        }
-      ]
-    }
-  })
-  expect(appState.dynamoDB.batchWrites[1]).toEqual({
-    RequestItems: {
-      fakeGithubAccountMemberships: [
-        {
-          PutRequest: {
-            Item: {
-              GSI1PK: 'USER#162360409',
-              GSI1SK: 'ACCOUNT#162360409',
-              PK: 'ACCOUNT#162360409',
-              SK: 'USER#162360409',
-              _et: 'githubAccountMembership',
-              _lastUpdated: '2024-02-02T19:00:00.000Z',
-              ...testTestUserMembershipOfPersonalInstallation
-            }
-          }
-        }
-      ]
-    }
-  })
+  expectBatchWritesLength(appState).toEqual(2)
+  expectBatchWrites(appState, 0).toEqual(expectedBatchWriteGithubUsers([testTestUser]))
+  expectBatchWrites(appState, 1).toEqual(
+    expectedBatchWriteGithubMemberships([testTestUserMembershipOfPersonalInstallation])
+  )
 })
 
 test('user-crawler-for-org-installation', async () => {
@@ -82,66 +60,18 @@ test('user-crawler-for-org-installation', async () => {
   await crawlUsers(appState, testOrgInstallation)
 
   // A
-  expect(appState.dynamoDB.batchWrites.length).toEqual(3)
-  expect(appState.dynamoDB.batchWrites[0]).toEqual({
-    RequestItems: {
-      fakeGithubUsersTable: [
-        {
-          PutRequest: {
-            Item: {
-              PK: 'USER#162360409',
-              _et: 'githubUser',
-              _lastUpdated: '2024-02-02T19:00:00.000Z',
-              ...testTestUser
-            }
-          }
-        },
-        {
-          PutRequest: {
-            Item: {
-              PK: 'USER#49635',
-              _et: 'githubUser',
-              _lastUpdated: '2024-02-02T19:00:00.000Z',
-              ...testMikeRobertsUser
-            }
-          }
-        }
-      ]
-    }
-  })
-  // Previous membership for testTestUserMembershipOfOrg can remain unchanged
-  expect(appState.dynamoDB.batchWrites[1]).toEqual({
-    RequestItems: {
-      fakeGithubAccountMemberships: [
-        {
-          PutRequest: {
-            Item: {
-              GSI1PK: 'USER#49635',
-              GSI1SK: 'ACCOUNT#162483619',
-              PK: 'ACCOUNT#162483619',
-              SK: 'USER#49635',
-              _et: 'githubAccountMembership',
-              _lastUpdated: '2024-02-02T19:00:00.000Z',
-              ...testMikeRobertsUserMembershipOfOrg
-            }
-          }
-        }
-      ]
-    }
-  })
+  expectBatchWritesLength(appState).toEqual(3)
+  expectBatchWrites(appState, 0).toEqual(expectedBatchWriteGithubUsers([testTestUser, testMikeRobertsUser]))
+  expectBatchWrites(appState, 1).toEqual(
+    expectedBatchWriteGithubMemberships([testMikeRobertsUserMembershipOfOrg])
+  )
   // No longer a member
-  expect(appState.dynamoDB.batchWrites[2]).toEqual({
-    RequestItems: {
-      fakeGithubAccountMemberships: [
-        {
-          DeleteRequest: {
-            Key: {
-              PK: 'ACCOUNT#162483619',
-              SK: 'USER#9786'
-            }
-          }
-        }
-      ]
-    }
-  })
+  expectBatchWrites(appState, 2).toEqual(
+    expectedBatchDeleteGithubMemberships([
+      {
+        accountId: 162483619,
+        userId: 9786
+      }
+    ])
+  )
 })
