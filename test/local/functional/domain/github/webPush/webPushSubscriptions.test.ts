@@ -4,6 +4,16 @@ import { testTestUserPushSubscription } from '../../../../../examples/cicada/web
 import { handleApiMessage } from '../../../../../../src/app/lambdaFunctions/authenticatedApi/lambda'
 import { createAPIGatewayProxyWithLambdaAuthorizerEvent } from '../../../../../testSupport/fakes/awsStubs'
 import { HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2'
+import {
+  expectDelete,
+  expectDeletesLength,
+  expectPut,
+  expectPutsLength
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
+import {
+  expectedDeleteWebPushSubscription,
+  expectedPutWebPushSubscription
+} from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
 
 test('web push test', async () => {
   const appState = new FakeAppState()
@@ -55,17 +65,8 @@ test('web push subscribe', async () => {
     },
     statusCode: 200
   })
-  expect(appState.dynamoDB.puts.length).toEqual(1)
-  expect(appState.dynamoDB.puts[0]).toEqual({
-    Item: {
-      PK: 'USER#162360409',
-      SK: 'ENDPOINT#https://web.push.apple.com/TestOne',
-      _et: 'webPushSubscription',
-      _lastUpdated: '2024-02-02T19:00:00.000Z',
-      ...testTestUserPushSubscription
-    },
-    TableName: 'fakeWebPushSubscriptions'
-  })
+  expectPutsLength(appState).toEqual(1)
+  expectPut(appState).toEqual(expectedPutWebPushSubscription(testTestUserPushSubscription))
 })
 
 test('web push unsubscribe', async () => {
@@ -93,12 +94,6 @@ test('web push unsubscribe', async () => {
     },
     statusCode: 200
   })
-  expect(appState.dynamoDB.deletes.length).toEqual(1)
-  expect(appState.dynamoDB.deletes[0]).toEqual({
-    Key: {
-      PK: 'USER#162360409',
-      SK: 'ENDPOINT#https://web.push.apple.com/TestOne'
-    },
-    TableName: 'fakeWebPushSubscriptions'
-  })
+  expectDeletesLength(appState).toEqual(1)
+  expectDelete(appState).toEqual(expectedDeleteWebPushSubscription(testTestUserPushSubscription))
 })

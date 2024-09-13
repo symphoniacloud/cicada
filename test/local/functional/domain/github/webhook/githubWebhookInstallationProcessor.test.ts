@@ -4,6 +4,11 @@ import { githubWebhookInstallationProcessor } from '../../../../../../src/app/do
 
 import example_installation_created from '../../../../../examples/github/org/webhook/installationCreated.json'
 import { testOrgInstallation } from '../../../../../examples/cicada/githubDomainObjects'
+import {
+  expectPut,
+  expectPutsLength
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
+import { expectedPutGithubInstallation } from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
 
 test('installation-webhook-for-org-account-installation', async () => {
   // A
@@ -17,16 +22,8 @@ test('installation-webhook-for-org-account-installation', async () => {
   await githubWebhookInstallationProcessor(appState, JSON.stringify(example_installation_created))
 
   // A
-  expect(appState.dynamoDB.puts.length).toEqual(1)
-  expect(appState.dynamoDB.puts[0]).toEqual({
-    Item: {
-      PK: 'ACCOUNT#162483619',
-      _et: 'githubInstallation',
-      _lastUpdated: '2024-02-02T19:00:00.000Z',
-      ...testOrgInstallation
-    },
-    TableName: 'fakeGithubInstallationsTable'
-  })
+  expectPutsLength(appState).toEqual(1)
+  expectPut(appState).toEqual(expectedPutGithubInstallation(testOrgInstallation))
   expect(appState.eventBridgeBus.sentEvents.length).toEqual(1)
   expect(appState.eventBridgeBus.sentEvents[0]).toEqual({
     detailType: 'InstallationUpdated',

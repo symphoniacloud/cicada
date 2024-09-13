@@ -1,8 +1,17 @@
-import { buildBatchWriteForEntity, buildPut } from './dynamoDB/fakeDynamoDBInterfaceExpectations'
+import {
+  buildBatchDelete,
+  buildBatchWriteForEntity,
+  buildDelete,
+  buildPut
+} from './dynamoDB/fakeDynamoDBInterfaceExpectations'
 import { GithubInstallation } from '../../../src/app/domain/types/GithubInstallation'
 import { GithubPush } from '../../../src/app/domain/types/GithubPush'
 import { GithubRepository } from '../../../src/app/domain/types/GithubRepository'
 import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWorkflowRunEvent'
+import { GithubUser } from '../../../src/app/domain/types/GithubUser'
+import { GithubAccountMembership } from '../../../src/app/domain/types/GithubAccountMembership'
+import { GithubAccountId, GithubUserId } from '../../../src/app/domain/types/GithubKeys'
+import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription'
 
 export function expectedPutGithubInstallation(installation: GithubInstallation) {
   return buildPut('fakeGithubInstallationsTable', 'githubInstallation', {
@@ -124,4 +133,56 @@ export function expectedBatchWriteGithubRepositories(repos: GithubRepository[]) 
       ...repo
     }))
   )
+}
+
+export function expectedBatchWriteGithubUsers(users: GithubUser[]) {
+  return buildBatchWriteForEntity(
+    'fakeGithubUsersTable',
+    'githubUser',
+    users.map((user) => ({
+      PK: `USER#${user.id}`,
+      ...user
+    }))
+  )
+}
+
+export function expectedBatchWriteGithubMemberships(memberships: GithubAccountMembership[]) {
+  return buildBatchWriteForEntity(
+    'fakeGithubAccountMemberships',
+    'githubAccountMembership',
+    memberships.map((membership) => ({
+      PK: `ACCOUNT#${membership.accountId}`,
+      SK: `USER#${membership.userId}`,
+      GSI1PK: `USER#${membership.userId}`,
+      GSI1SK: `ACCOUNT#${membership.accountId}`,
+      ...membership
+    }))
+  )
+}
+
+export function expectedBatchDeleteGithubMemberships(
+  memberships: { accountId: GithubAccountId; userId: GithubUserId }[]
+) {
+  return buildBatchDelete(
+    'fakeGithubAccountMemberships',
+    memberships.map(({ accountId, userId }) => ({
+      PK: `ACCOUNT#${accountId}`,
+      SK: `USER#${userId}`
+    }))
+  )
+}
+
+export function expectedPutWebPushSubscription(subscription: WebPushSubscription) {
+  return buildPut('fakeWebPushSubscriptions', 'webPushSubscription', {
+    PK: `USER#${subscription.userId}`,
+    SK: `ENDPOINT#${subscription.endpoint}`,
+    ...subscription
+  })
+}
+
+export function expectedDeleteWebPushSubscription(subscription: WebPushSubscription) {
+  return buildDelete('fakeWebPushSubscriptions', {
+    PK: `USER#${subscription.userId}`,
+    SK: `ENDPOINT#${subscription.endpoint}`
+  })
 }

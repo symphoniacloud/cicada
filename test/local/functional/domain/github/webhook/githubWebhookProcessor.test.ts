@@ -1,9 +1,11 @@
 import { expect, test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
-import { githubWebhookWorkflowRunProcessor } from '../../../../../../src/app/domain/github/webhookProcessor/processors/githubWebhookWorkflowRunProcessor'
-
-import example_workflow_run_complete from '../../../../../examples/github/org/webhook/workflowRunCompleted.json'
+import example_workflow_run from '../../../../../examples/github/org/webhook/workflowRunCompleted.json'
 import { testOrgTestRepoOneWorkflowRunThree } from '../../../../../examples/cicada/githubDomainObjects'
+import {
+  createSignatureHeader,
+  processWebhookFromS3Event
+} from '../../../../../../src/app/domain/github/webhookProcessor/githubWebhookProcessor'
 import {
   expectPut,
   expectPutsLength
@@ -14,11 +16,40 @@ import {
   expectedPutLatestGithubWorkflowRunEvent
 } from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
 
-test('workflow-run-completed-webhook', async () => {
+test('run-event', async () => {
+  // Arrange
   const appState = new FakeAppState()
+  const rawBody = JSON.stringify(example_workflow_run)
+  appState.s3.getObjectsAsString.addResponse(
+    { bucket: 'fake-bucket', key: 'fake-key' },
+    JSON.stringify({
+      'X-Hub-Signature-256': createSignatureHeader(rawBody, appState.config.fakeGithubConfig.webhookSecret),
+      'X-GitHub-Event': 'workflow_run',
+      body: rawBody
+    })
+  )
 
-  await githubWebhookWorkflowRunProcessor(appState, JSON.stringify(example_workflow_run_complete))
+  // Act
+  await processWebhookFromS3Event(appState, {
+    detail: {
+      bucket: {
+        name: 'fake-bucket'
+      },
+      object: {
+        key: 'fake-key'
+      }
+    },
+    'detail-type': '',
+    account: '',
+    id: '',
+    region: '',
+    resources: [],
+    source: '',
+    time: '',
+    version: ''
+  })
 
+  // Assert
   expectPutsLength(appState).toEqual(3)
   expectPut(appState, 0).toEqual(expectedPutGithubWorkflowRunEvent(testOrgTestRepoOneWorkflowRunThree))
   expectPut(appState, 1).toEqual(expectedPutGithubWorkflowRun(testOrgTestRepoOneWorkflowRunThree))
