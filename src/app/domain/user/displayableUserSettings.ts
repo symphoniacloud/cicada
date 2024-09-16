@@ -10,13 +10,7 @@ import {
   PersistedUserSettings
 } from '../types/UserSettings'
 import { GithubWorkflow } from '../types/GithubWorkflow'
-import {
-  GithubAccountId,
-  GithubRepoId,
-  GithubRepoKey,
-  GithubWorkflowId,
-  GithubWorkflowKey
-} from '../types/GithubKeys'
+import { GithubAccountId, GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys'
 import { findAccountName, findRepoName, findWorkflowName } from '../github/githubWorkflow'
 import { calculateUserSettings } from './calculatedUserSettings'
 
@@ -32,11 +26,12 @@ function toDisplayableUserSettings(
   workflows: GithubWorkflow[]
 ): DisplayableUserSettings {
   return {
+    userId: userSettings.userId,
     github: {
-      accounts: new Map<GithubAccountId, DisplayableGithubAccountSettings>(
-        Array.from(userSettings.github.accounts.entries()).map(([accountId, accountSettings]) => [
+      accounts: Object.fromEntries(
+        Object.entries(userSettings.github.accounts).map(([accountId, accountSettings]) => [
           accountId,
-          toDisplayableAccountSettings(accountId, accountSettings, workflows)
+          toDisplayableAccountSettings(Number(accountId), accountSettings, workflows)
         ])
       )
     }
@@ -51,13 +46,13 @@ export function toDisplayableAccountSettings(
   return {
     ...accountSettings,
     name: findAccountName(allWorkflows, accountId),
-    repos: new Map<GithubRepoId, DisplayableGithubRepoSettings>(
-      Array.from(accountSettings.repos.entries()).map(([repoId, repoSettings]) => [
+    repos: Object.fromEntries(
+      Object.entries(accountSettings.repos).map(([repoId, repoSettings]) => [
         repoId,
         toDisplayableRepoSettings(
           {
             ownerId: accountId,
-            repoId
+            repoId: Number(repoId)
           },
           repoSettings,
           allWorkflows
@@ -75,10 +70,14 @@ export function toDisplayableRepoSettings(
   return {
     ...repoSettings,
     name: findRepoName(allWorkflows, repoKey),
-    workflows: new Map<GithubWorkflowId, DisplayableGithubWorkflowSettings>(
-      Array.from(repoSettings.workflows.entries()).map(([workflowId, workflowSettings]) => [
+    workflows: Object.fromEntries(
+      Object.entries(repoSettings.workflows).map(([workflowId, workflowSettings]) => [
         workflowId,
-        toDisplayableWorkflowSettings({ ...repoKey, workflowId }, workflowSettings, allWorkflows)
+        toDisplayableWorkflowSettings(
+          { ...repoKey, workflowId: Number(workflowId) },
+          workflowSettings,
+          allWorkflows
+        )
       ])
     )
   }

@@ -1,4 +1,4 @@
-import { GithubAccountId, GithubRepoId, GithubUserId, GithubWorkflowId, isGithubUserId } from './GithubKeys'
+import { GithubUserId, isGithubUserId } from './GithubKeys'
 import { isNotNullObject } from '../../util/types'
 
 export type UserSetting = 'visible' | 'notify'
@@ -19,10 +19,16 @@ export function isUserSettings(x: unknown): x is PersistedUserSettings {
   )
 }
 
+// Various types here use a string for Record key, rather than GithubAccountID, etc.
+// That's because JavaScript always uses strings for object keys, even if the Record type says number
+// An earlier version of this code used Maps to keep the strong typing of the ID keys
+// but it made the code more verbose - especially for tests - so I decided just to suck it up
+// and go with string ID keys
+
 export interface PersistedUserSettings {
   userId: GithubUserId
   github: {
-    accounts: Map<GithubAccountId, PersistedGithubAccountSettings>
+    accounts: Record<string, PersistedGithubAccountSettings>
   }
 }
 
@@ -32,11 +38,11 @@ export interface PersistedVisibleAndNotifyConfigurable {
 }
 
 export interface PersistedGithubAccountSettings extends PersistedVisibleAndNotifyConfigurable {
-  repos: Map<GithubRepoId, PersistedGithubRepoSettings>
+  repos: Record<string, PersistedGithubRepoSettings>
 }
 
 export interface PersistedGithubRepoSettings extends PersistedVisibleAndNotifyConfigurable {
-  workflows: Map<GithubWorkflowId, PersistedGithubWorkflowSettings>
+  workflows: Record<string, PersistedGithubWorkflowSettings>
 }
 
 export type PersistedGithubWorkflowSettings = PersistedVisibleAndNotifyConfigurable
@@ -46,18 +52,18 @@ export type PersistedGithubWorkflowSettings = PersistedVisibleAndNotifyConfigura
 export interface CalculatedUserSettings {
   userId: GithubUserId
   github: {
-    accounts: Map<GithubAccountId, CalculatedGithubAccountSettings>
+    accounts: Record<string, CalculatedGithubAccountSettings>
   }
 }
 
 export type CalculatedVisibleAndNotifyConfigurable = Required<PersistedVisibleAndNotifyConfigurable>
 
 export interface CalculatedGithubAccountSettings extends CalculatedVisibleAndNotifyConfigurable {
-  repos: Map<GithubRepoId, CalculatedGithubRepoSettings>
+  repos: Record<string, CalculatedGithubRepoSettings>
 }
 
 export interface CalculatedGithubRepoSettings extends CalculatedVisibleAndNotifyConfigurable {
-  workflows: Map<GithubWorkflowId, CalculatedGithubWorkflowSettings>
+  workflows: Record<string, CalculatedGithubWorkflowSettings>
 }
 
 export type CalculatedGithubWorkflowSettings = CalculatedVisibleAndNotifyConfigurable
@@ -65,8 +71,9 @@ export type CalculatedGithubWorkflowSettings = CalculatedVisibleAndNotifyConfigu
 // ***
 
 export interface DisplayableUserSettings {
+  userId: GithubUserId
   github: {
-    accounts: Map<GithubAccountId, DisplayableGithubAccountSettings>
+    accounts: Record<string, DisplayableGithubAccountSettings>
   }
 }
 
@@ -77,11 +84,11 @@ export interface Displayable {
 export interface DisplayableGithubAccountSettings
   extends CalculatedVisibleAndNotifyConfigurable,
     Displayable {
-  repos: Map<GithubRepoId, DisplayableGithubRepoSettings>
+  repos: Record<string, DisplayableGithubRepoSettings>
 }
 
 export interface DisplayableGithubRepoSettings extends CalculatedVisibleAndNotifyConfigurable, Displayable {
-  workflows: Map<GithubWorkflowId, DisplayableGithubWorkflowSettings>
+  workflows: Record<string, DisplayableGithubWorkflowSettings>
 }
 
 export type DisplayableGithubWorkflowSettings = CalculatedGithubWorkflowSettings & Displayable

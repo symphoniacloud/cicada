@@ -94,8 +94,7 @@ export async function getRecentActiveBranchesForUser(appState: AppState, userId:
 function toVisibleEvents(allEvents: GithubWorkflowRunEvent[], userSettings: CalculatedUserSettings) {
   const visibleEvents = allEvents.filter(
     ({ ownerId, repoId, workflowId }) =>
-      userSettings.github.accounts.get(ownerId)?.repos.get(repoId)?.workflows.get(workflowId)?.visible ??
-      false
+      userSettings.github.accounts[ownerId]?.repos[repoId]?.workflows[workflowId]?.visible ?? false
   )
   return {
     allEvents,
@@ -106,7 +105,7 @@ function toVisibleEvents(allEvents: GithubWorkflowRunEvent[], userSettings: Calc
 
 function toVisiblePushes(allEvents: GithubPush[], userSettings: CalculatedUserSettings) {
   const visibleEvents = allEvents.filter(
-    ({ ownerId, repoId }) => userSettings.github.accounts.get(ownerId)?.repos.get(repoId)?.visible ?? false
+    ({ ownerId, repoId }) => userSettings.github.accounts[ownerId]?.repos[repoId]?.visible ?? false
   )
   return {
     allEvents,
