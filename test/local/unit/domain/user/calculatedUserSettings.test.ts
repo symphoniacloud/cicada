@@ -8,15 +8,8 @@ import {
 import {
   CalculatedVisibleAndNotifyConfigurable,
   PersistedGithubAccountSettings,
-  PersistedGithubRepoSettings,
-  PersistedGithubWorkflowSettings,
   PersistedVisibleAndNotifyConfigurable
 } from '../../../../../src/app/domain/types/UserSettings'
-import {
-  GithubAccountId,
-  GithubRepoId,
-  GithubWorkflowId
-} from '../../../../../src/app/domain/types/GithubKeys'
 import { USER_ACCOUNT_TYPE } from '../../../../../src/app/domain/types/GithubAccountType'
 
 test('calculateVisibleAndNotifyConfigurable / calculateWorkflowSettings', () => {
@@ -52,7 +45,7 @@ test('calculateVisibleAndNotifyConfigurable / calculateWorkflowSettings', () => 
 
 test('repo settings when no workflow settings', () => {
   const calculated = calculateRepoSettings(
-    { workflows: new Map<GithubWorkflowId, PersistedGithubWorkflowSettings>() },
+    { workflows: {} },
     { ownerId: 123, repoId: 456 },
     [
       {
@@ -68,17 +61,22 @@ test('repo settings when no workflow settings', () => {
     ],
     true
   )
-  expect(calculated.visible).toEqual(true)
-  expect(calculated.notify).toEqual(true)
-  expect(calculated.workflows.size).toEqual(1)
-  expect(calculated.workflows.get(789)).toEqual({ visible: true, notify: true })
+
+  expect(calculated).toEqual({
+    visible: true,
+    notify: true,
+    workflows: {
+      789: {
+        visible: true,
+        notify: true
+      }
+    }
+  })
 })
 
 test('repo settings when workflow settings', () => {
-  const workflows = new Map<GithubWorkflowId, PersistedGithubWorkflowSettings>()
-  workflows.set(789, { notify: false })
   const calculated = calculateRepoSettings(
-    { workflows },
+    { workflows: { 789: { notify: false } } },
     { ownerId: 123, repoId: 456 },
     [
       {
@@ -94,17 +92,22 @@ test('repo settings when workflow settings', () => {
     ],
     true
   )
-  expect(calculated.visible).toEqual(true)
-  expect(calculated.notify).toEqual(true)
-  expect(calculated.workflows.size).toEqual(1)
-  expect(calculated.workflows.get(789)).toEqual({ visible: true, notify: false })
+
+  expect(calculated).toEqual({
+    visible: true,
+    notify: true,
+    workflows: {
+      789: {
+        visible: true,
+        notify: false
+      }
+    }
+  })
 })
 
 test('repo settings when visible false', () => {
-  const workflows = new Map<GithubWorkflowId, PersistedGithubWorkflowSettings>()
-  workflows.set(789, { notify: false })
   const calculated = calculateRepoSettings(
-    { workflows, visible: false },
+    { workflows: { 789: { notify: false } }, visible: false },
     { ownerId: 123, repoId: 456 },
     [
       {
@@ -120,17 +123,24 @@ test('repo settings when visible false', () => {
     ],
     true
   )
-  expect(calculated.visible).toEqual(false)
-  expect(calculated.notify).toEqual(false)
-  expect(calculated.workflows.size).toEqual(0)
+
+  expect(calculated).toEqual({
+    visible: false,
+    notify: false,
+    workflows: {}
+  })
 })
 
 test('repo settings when visible true notify false', () => {
-  const workflows = new Map<GithubWorkflowId, PersistedGithubWorkflowSettings>()
-  workflows.set(789, { notify: true })
-  workflows.set(790, {})
   const calculated = calculateRepoSettings(
-    { workflows, visible: true, notify: false },
+    {
+      workflows: {
+        789: { notify: true },
+        790: {}
+      },
+      visible: true,
+      notify: false
+    },
     { ownerId: 123, repoId: 456 },
     [
       {
@@ -156,11 +166,15 @@ test('repo settings when visible true notify false', () => {
     ],
     true
   )
-  expect(calculated.visible).toEqual(true)
-  expect(calculated.notify).toEqual(false)
-  expect(calculated.workflows.size).toEqual(2)
-  expect(calculated.workflows.get(789)).toEqual({ visible: true, notify: true })
-  expect(calculated.workflows.get(790)).toEqual({ visible: true, notify: false })
+
+  expect(calculated).toEqual({
+    visible: true,
+    notify: false,
+    workflows: {
+      789: { visible: true, notify: true },
+      790: { visible: true, notify: false }
+    }
+  })
 })
 
 test('account settings when none persisted', () => {
@@ -187,28 +201,46 @@ test('account settings when none persisted', () => {
     }
   ])
 
-  expect(calculated.visible).toEqual(true)
-  expect(calculated.notify).toEqual(true)
-  expect(calculated.repos.size).toEqual(2)
-  expect(calculated.repos.get(123)?.visible).toEqual(true)
-  expect(calculated.repos.get(123)?.notify).toEqual(true)
-  expect(calculated.repos.get(456)?.visible).toEqual(true)
-  expect(calculated.repos.get(456)?.notify).toEqual(true)
+  expect(calculated).toEqual({
+    visible: true,
+    notify: true,
+    repos: {
+      123: {
+        visible: true,
+        notify: true,
+        workflows: {
+          789: {
+            notify: true,
+            visible: true
+          }
+        }
+      },
+      456: {
+        visible: true,
+        notify: true,
+        workflows: {
+          790: {
+            notify: true,
+            visible: true
+          }
+        }
+      }
+    }
+  })
 })
 
 test('account settings ', () => {
-  const persistedRepos = new Map<GithubRepoId, PersistedGithubRepoSettings>()
-  persistedRepos.set(123, {
-    workflows: new Map<GithubWorkflowId, PersistedGithubWorkflowSettings>()
-  })
-  persistedRepos.set(456, {
-    visible: false,
-    notify: false,
-    workflows: new Map<GithubWorkflowId, PersistedGithubWorkflowSettings>()
-  })
-
   const persistedAccountSettings: PersistedGithubAccountSettings = {
-    repos: persistedRepos
+    repos: {
+      123: {
+        workflows: {}
+      },
+      456: {
+        visible: false,
+        notify: false,
+        workflows: {}
+      }
+    }
   }
 
   const calculated = calculateAccountSettings(persistedAccountSettings, 111, [
@@ -234,13 +266,27 @@ test('account settings ', () => {
     }
   ])
 
-  expect(calculated.visible).toEqual(true)
-  expect(calculated.notify).toEqual(true)
-  expect(calculated.repos.size).toEqual(2)
-  expect(calculated.repos.get(123)?.visible).toEqual(true)
-  expect(calculated.repos.get(123)?.notify).toEqual(true)
-  expect(calculated.repos.get(456)?.visible).toEqual(false)
-  expect(calculated.repos.get(456)?.notify).toEqual(false)
+  expect(calculated).toEqual({
+    visible: true,
+    notify: true,
+    repos: {
+      123: {
+        visible: true,
+        notify: true,
+        workflows: {
+          789: {
+            notify: true,
+            visible: true
+          }
+        }
+      },
+      456: {
+        visible: false,
+        notify: false,
+        workflows: {}
+      }
+    }
+  })
 })
 
 test('user settings when empty persisted', () => {
@@ -248,7 +294,7 @@ test('user settings when empty persisted', () => {
     {
       userId: 222,
       github: {
-        accounts: new Map<GithubAccountId, PersistedGithubAccountSettings>()
+        accounts: {}
       }
     },
     [
@@ -275,33 +321,57 @@ test('user settings when empty persisted', () => {
     ]
   )
 
-  expect(calculated.github.accounts.get(111)?.visible).toEqual(true)
-  expect(calculated.github.accounts.get(111)?.notify).toEqual(true)
-  expect(calculated.github.accounts.get(111)?.repos.size).toEqual(2)
-  expect(calculated.github.accounts.get(111)?.repos.get(123)?.visible).toEqual(true)
-  expect(calculated.github.accounts.get(111)?.repos.get(123)?.notify).toEqual(true)
-  expect(calculated.github.accounts.get(111)?.repos.get(456)?.visible).toEqual(true)
-  expect(calculated.github.accounts.get(111)?.repos.get(456)?.notify).toEqual(true)
+  expect(calculated).toEqual({
+    userId: 222,
+    github: {
+      accounts: {
+        111: {
+          visible: true,
+          notify: true,
+          repos: {
+            123: {
+              visible: true,
+              notify: true,
+              workflows: {
+                789: {
+                  notify: true,
+                  visible: true
+                }
+              }
+            },
+            456: {
+              visible: true,
+              notify: true,
+              workflows: {
+                790: {
+                  notify: true,
+                  visible: true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
 })
 
 test('user settings when some persisted', () => {
-  const persistedRepos = new Map<GithubRepoId, PersistedGithubRepoSettings>()
-  persistedRepos.set(456, {
-    visible: false,
-    notify: false,
-    workflows: new Map<GithubWorkflowId, PersistedGithubWorkflowSettings>()
-  })
-
-  const persistedAccounts = new Map<GithubAccountId, PersistedGithubAccountSettings>()
-  persistedAccounts.set(111, {
-    repos: persistedRepos
-  })
-
   const calculated = calculateUserSettings(
     {
       userId: 222,
       github: {
-        accounts: persistedAccounts
+        accounts: {
+          111: {
+            repos: {
+              456: {
+                visible: false,
+                notify: false,
+                workflows: {}
+              }
+            }
+          }
+        }
       }
     },
     [
@@ -328,11 +398,32 @@ test('user settings when some persisted', () => {
     ]
   )
 
-  expect(calculated.github.accounts.get(111)?.visible).toEqual(true)
-  expect(calculated.github.accounts.get(111)?.notify).toEqual(true)
-  expect(calculated.github.accounts.get(111)?.repos.size).toEqual(2)
-  expect(calculated.github.accounts.get(111)?.repos.get(123)?.visible).toEqual(true)
-  expect(calculated.github.accounts.get(111)?.repos.get(123)?.notify).toEqual(true)
-  expect(calculated.github.accounts.get(111)?.repos.get(456)?.visible).toEqual(false)
-  expect(calculated.github.accounts.get(111)?.repos.get(456)?.notify).toEqual(false)
+  expect(calculated).toEqual({
+    userId: 222,
+    github: {
+      accounts: {
+        111: {
+          visible: true,
+          notify: true,
+          repos: {
+            123: {
+              visible: true,
+              notify: true,
+              workflows: {
+                789: {
+                  notify: true,
+                  visible: true
+                }
+              }
+            },
+            456: {
+              visible: false,
+              notify: false,
+              workflows: {}
+            }
+          }
+        }
+      }
+    }
+  })
 })

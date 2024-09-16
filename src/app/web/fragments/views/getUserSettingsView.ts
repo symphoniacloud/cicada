@@ -16,8 +16,8 @@ export function createGetUserSettingsResponse(settings: DisplayableUserSettings)
 
 export function userSettingsElement(settings: DisplayableUserSettings) {
   const elements = []
-  for (const [accountId, accountSettings] of settings.github.accounts) {
-    elements.push(accountControlsRow(accountId, accountSettings))
+  for (const [accountId, accountSettings] of Object.entries(settings.github.accounts)) {
+    elements.push(accountControlsRow(Number(accountId), accountSettings))
   }
   return elements
 }
@@ -31,8 +31,8 @@ export function accountControlsRow(
   const repoRows = []
   if (accountSettings.visible) {
     repoRows.push(divRow(colSm(1), colSm(11, b('Repository'))))
-    for (const [repoId, repoSettings] of accountSettings.repos) {
-      repoRows.push(repoControlsRow({ ownerId: accountId, repoId }, repoSettings))
+    for (const [repoId, repoSettings] of Object.entries(accountSettings.repos)) {
+      repoRows.push(repoControlsRow({ ownerId: accountId, repoId: Number(repoId) }, repoSettings))
     }
   }
 
@@ -48,8 +48,8 @@ export function repoControlsRow(repoKey: GithubRepoKey, repoSettings: Displayabl
   const workflowRows: HiccoughElement[] = []
   if (repoSettings.visible) {
     workflowRows.push(divRow(colSm(2), colSm(10, b('Workflow'))))
-    for (const [workflowId, workflowSettings] of repoSettings.workflows) {
-      workflowRows.push(workflowControlsRow({ ...repoKey, workflowId }, workflowSettings))
+    for (const [workflowId, workflowSettings] of Object.entries(repoSettings.workflows)) {
+      workflowRows.push(workflowControlsRow({ ...repoKey, workflowId: Number(workflowId) }, workflowSettings))
     }
   }
 

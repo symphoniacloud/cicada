@@ -76,7 +76,7 @@ async function processUpdateAccountSetting(
   const allWorkflows = await getWorkflowsForUser(appState, userId)
   const updatedSettings = await updateAndSaveAccountSetting(appState, userId, ownerId, setting, enabled)
   const updatedAccountSettings =
-    updatedSettings.github.accounts.get(ownerId) ??
+    updatedSettings.github.accounts[ownerId] ??
     throwFunction('Internal error in processUpdateAccountSetting - no account settings')()
 
   return createUpdateUserAccountSettingResponse(
@@ -103,7 +103,7 @@ async function processUpdateRepoSetting(
   const allWorkflows = await getWorkflowsForUser(appState, userId)
   const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, allWorkflows)
   const newCalculatedRepoSettings =
-    newCalculatedUserSettings.github.accounts.get(repoKey.ownerId)?.repos.get(repoKey.repoId) ??
+    newCalculatedUserSettings.github.accounts[repoKey.ownerId]?.repos[repoKey.repoId] ??
     throwFunction('Internal error in processUpdateRepoSetting - no repo settings')()
 
   return createUpdateUserRepoSettingResponse(
@@ -126,11 +126,9 @@ async function processUpdateWorkflowSetting(
   const allWorkflows = await getWorkflowsForUser(appState, userId)
   const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, allWorkflows)
   const newCalculatedWorkflowSettings =
-    newCalculatedUserSettings.github.accounts
-      .get(workflowKey.ownerId)
-      ?.repos.get(workflowKey.repoId)
-      ?.workflows.get(workflowKey.workflowId) ??
-    throwFunction('Internal error in processUpdateWorkflowSetting - no workflow settings')()
+    newCalculatedUserSettings.github.accounts[workflowKey.ownerId]?.repos[workflowKey.repoId]?.workflows[
+      workflowKey.workflowId
+    ] ?? throwFunction('Internal error in processUpdateWorkflowSetting - no workflow settings')()
 
   // TODO - think about validating values of IDs
 

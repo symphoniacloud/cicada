@@ -48,14 +48,14 @@ export function removeNullAndUndefined<T>(xs: (T | undefined | null)[]) {
   return xs.filter((x) => x !== null && x !== undefined) as T[]
 }
 
-export function getFromMapOrSetNewAndReturn<TKey, TValue>(
-  map: Map<TKey, TValue>,
-  key: TKey,
+export function getOrSetNewAndReturn<TValue>(
+  record: Record<string, TValue>,
+  key: string,
   getNewValue: () => TValue
 ): TValue {
-  const existingValue = map.get(key)
+  const existingValue = record[key]
   if (existingValue !== undefined) return existingValue
   const newValue = getNewValue()
-  map.set(key, newValue)
+  record[key] = newValue
   return newValue
 }

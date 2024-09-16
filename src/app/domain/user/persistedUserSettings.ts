@@ -6,16 +6,9 @@ import {
   PersistedUserSettings,
   UserSetting
 } from '../types/UserSettings'
-import {
-  GithubAccountId,
-  GithubRepoId,
-  GithubRepoKey,
-  GithubUserId,
-  GithubWorkflowId,
-  GithubWorkflowKey
-} from '../types/GithubKeys'
+import { GithubAccountId, GithubRepoKey, GithubUserId, GithubWorkflowKey } from '../types/GithubKeys'
 import { UserSettingsEntity } from '../entityStore/entities/UserSettingsEntity'
-import { getFromMapOrSetNewAndReturn } from '../../util/collections'
+import { getOrSetNewAndReturn } from '../../util/collections'
 
 function userSettingsEntity(appState: AppState) {
   return appState.entityStore.for(UserSettingsEntity)
@@ -46,7 +39,7 @@ function initialUserSettings(userId: GithubUserId): PersistedUserSettings {
   return {
     userId,
     github: {
-      accounts: new Map<GithubAccountId, PersistedGithubAccountSettings>()
+      accounts: {}
     }
   }
 }
@@ -117,8 +110,8 @@ function getOrCreateAndReturnAccountSettings(
   settings: PersistedUserSettings,
   accountId: GithubAccountId
 ): PersistedGithubAccountSettings {
-  return getFromMapOrSetNewAndReturn(settings.github.accounts, accountId, () => ({
-    repos: new Map<GithubRepoId, PersistedGithubRepoSettings>()
+  return getOrSetNewAndReturn(settings.github.accounts, `${accountId}`, () => ({
+    repos: {}
   }))
 }
 
@@ -127,8 +120,8 @@ function getOrCreateAndReturnRepoSettings(
   repoKey: GithubRepoKey
 ): PersistedGithubRepoSettings {
   const accountSettings = getOrCreateAndReturnAccountSettings(settings, repoKey.ownerId)
-  return getFromMapOrSetNewAndReturn(accountSettings.repos, repoKey.repoId, () => ({
-    workflows: new Map<GithubWorkflowId, PersistedGithubWorkflowSettings>()
+  return getOrSetNewAndReturn(accountSettings.repos, `${repoKey.repoId}`, () => ({
+    workflows: {}
   }))
 }
 
@@ -137,5 +130,5 @@ function getOrCreateAndReturnWorkflowSettings(
   workflowKey: GithubWorkflowKey
 ): PersistedGithubWorkflowSettings {
   const repoSettings = getOrCreateAndReturnRepoSettings(settings, workflowKey)
-  return getFromMapOrSetNewAndReturn(repoSettings.workflows, workflowKey.workflowId, () => ({}))
+  return getOrSetNewAndReturn(repoSettings.workflows, `${workflowKey.workflowId}`, () => ({}))
 }

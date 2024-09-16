@@ -28,10 +28,9 @@ export async function getWorkflowNotifyEnabledForUser(
     await getUserSettings(appState, userId),
     await getWorkflowsForUser(appState, userId)
   )
-  const yesNotify = userSettings.github.accounts
-    .get(workflow.ownerId)
-    ?.repos.get(workflow.repoId)
-    ?.workflows.get(workflow.workflowId)?.notify
+  const yesNotify =
+    userSettings.github.accounts[workflow.ownerId]?.repos[workflow.repoId]?.workflows[workflow.workflowId]
+      .notify
   if (yesNotify === undefined) {
     logger.warn(`No calculated user notify setting for workflow`, { workflow, userSettings })
     return false
