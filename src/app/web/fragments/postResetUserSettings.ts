@@ -5,9 +5,10 @@ import { resetPersistedUserSettings } from '../../domain/user/persistedUserSetti
 import { getWorkflowsForUser } from '../../domain/user/userVisible'
 import { createGetUserSettingsResponse } from './views/getUserSettingsView'
 import { toCalculatedAndDisplayableUserSettings } from '../../domain/user/displayableUserSettings'
+import { fragmentPath } from '../routingCommon'
 
-export const postResetUserSettingsRoute: Route<CicadaAuthorizedAPIEvent> = {
-  path: '/app/fragment/resetUserSettings',
+export const postResetUserSettingsFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
+  path: fragmentPath('resetUserSettings'),
   method: 'POST',
   target: resetUserSettings
 }

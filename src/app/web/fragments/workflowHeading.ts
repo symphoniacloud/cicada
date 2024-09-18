@@ -5,9 +5,10 @@ import { isFailure } from '../../util/structuredResult'
 import { getWorkflowCoordinates } from './requestParsing/getWorkflowCoordinates'
 import { createWorkflowHeadingResponse } from './views/workflowHeadingView'
 import { getRunEventsForWorkflowPage } from '../../domain/github/githubWorkflowRunEvent'
+import { fragmentPath } from '../routingCommon'
 
-export const workflowHeadingRoute: Route<CicadaAuthorizedAPIEvent> = {
-  path: '/app/fragment/workflow/heading',
+export const workflowHeadingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
+  path: fragmentPath('workflow/heading'),
   target: workflowHeading
 }
 

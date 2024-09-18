@@ -11,9 +11,10 @@ import {
   getLatestWorkflowRunEventsForRepoForUser
 } from '../../domain/user/userVisible'
 import { GithubRepoKey } from '../../domain/types/GithubKeys'
+import { fragmentPath } from '../routingCommon'
 
-export const actionsStatusRoute: Route<CicadaAuthorizedAPIEvent> = {
-  path: '/app/fragment/actionsStatus',
+export const actionsStatusFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
+  path: fragmentPath('actionsStatus'),
   target: actionsStatus
 }
 

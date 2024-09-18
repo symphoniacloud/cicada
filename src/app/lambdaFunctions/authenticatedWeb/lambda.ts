@@ -3,7 +3,7 @@ import { lambdaStartup } from '../../environment/lambdaStartup'
 import middy from '@middy/core'
 import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { createRouter } from '../../internalHttpRouter/internalHttpRouter'
-import { showHelloRoute } from '../../web/pages/showHello'
+import { showHelloPageRoute } from '../../web/pages/showHello'
 import { CicadaAPIAuthorizedAPIHandler } from '../../inboundInterfaces/lambdaTypes'
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import { logoutResponse } from '../../domain/github/githubUserAuth/githubWebAuthHandler'
@@ -14,23 +14,23 @@ import { pageViewResultWithoutHtmx } from '../../web/viewResultWrappers'
 import { startSetupRoute } from '../../domain/github/setup/startGithubSetup'
 import { isFailure } from '../../util/structuredResult'
 import { a, p } from '../../web/hiccough/hiccoughElements'
-import { repoHeadingRoute } from '../../web/fragments/repoHeading'
-import { actionsStatusRoute } from '../../web/fragments/actionsStatus'
-import { gitHubActivityRoute } from '../../web/fragments/gitHubActivity'
-import { workflowHeadingRoute } from '../../web/fragments/workflowHeading'
-import { getUserSettingsRoute } from '../../web/fragments/getUserSettings'
-import { postUserSettingRoute } from '../../web/fragments/postUserSetting'
-import { postResetUserSettingsRoute } from '../../web/fragments/postResetUserSettings'
+import { repoHeadingFragmentRoute } from '../../web/fragments/repoHeading'
+import { actionsStatusFragmentRoute } from '../../web/fragments/actionsStatus'
+import { gitHubActivityFragmentRoute } from '../../web/fragments/gitHubActivity'
+import { workflowHeadingFragmentRoute } from '../../web/fragments/workflowHeading'
+import { getUserSettingsFragmentRoute } from '../../web/fragments/getUserSettings'
+import { postUserSettingFragmentRoute } from '../../web/fragments/postUserSetting'
+import { postResetUserSettingsFragmentRoute } from '../../web/fragments/postResetUserSettings'
 
 const router = createRouter([
-  repoHeadingRoute,
-  workflowHeadingRoute,
-  actionsStatusRoute,
-  gitHubActivityRoute,
-  getUserSettingsRoute,
-  postUserSettingRoute,
-  postResetUserSettingsRoute,
-  showHelloRoute
+  repoHeadingFragmentRoute,
+  workflowHeadingFragmentRoute,
+  actionsStatusFragmentRoute,
+  gitHubActivityFragmentRoute,
+  getUserSettingsFragmentRoute,
+  postUserSettingFragmentRoute,
+  postResetUserSettingsFragmentRoute,
+  showHelloPageRoute
 ])
 
 let appState: AppState

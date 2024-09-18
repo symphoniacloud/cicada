@@ -6,9 +6,10 @@ import { getRepository } from '../../domain/github/githubRepository'
 import { createRepoHeadingResponse } from './views/repoHeadingView'
 import { notFoundHTMLResponse } from '../htmlResponses'
 import { getRepoCoordinates } from './requestParsing/getRepoCoordinates'
+import { fragmentPath } from '../routingCommon'
 
-export const repoHeadingRoute: Route<CicadaAuthorizedAPIEvent> = {
-  path: '/app/fragment/repo/heading',
+export const repoHeadingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
+  path: fragmentPath('repo/heading'),
   target: repoHeading
 }
 

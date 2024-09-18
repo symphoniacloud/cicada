@@ -5,9 +5,10 @@ import { toCalculatedAndDisplayableUserSettings } from '../../domain/user/displa
 import { createGetUserSettingsResponse } from './views/getUserSettingsView'
 import { getWorkflowsForUser } from '../../domain/user/userVisible'
 import { getUserSettings } from '../../domain/user/persistedUserSettings'
+import { fragmentPath } from '../routingCommon'
 
-export const getUserSettingsRoute: Route<CicadaAuthorizedAPIEvent> = {
-  path: '/app/fragment/userSettings',
+export const getUserSettingsFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
+  path: fragmentPath('userSettings'),
   method: 'GET',
   target: getUserSettingsFragment
 }
