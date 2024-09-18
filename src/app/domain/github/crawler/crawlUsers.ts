@@ -3,8 +3,10 @@ import { GithubInstallation } from '../../types/GithubInstallation'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient'
 import { processRawUsers } from '../githubUser'
 import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../../types/GithubAccountType'
+import { logger } from '../../../util/logging'
 
 export async function crawlUsers(appState: AppState, installation: GithubInstallation) {
+  logger.info(`Crawling Users for ${installation.accountLogin}`)
   const latestRawUsers = await readRawUsers(
     installation,
     appState.githubClient.clientForInstallation(installation.installationId)

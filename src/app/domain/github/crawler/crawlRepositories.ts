@@ -3,8 +3,10 @@ import { GithubInstallation } from '../../types/GithubInstallation'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient'
 import { processRawRepositories, toRepositorySummary } from '../githubRepository'
 import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../../types/GithubAccountType'
+import { logger } from '../../../util/logging'
 
 export async function crawlRepositories(appState: AppState, installation: GithubInstallation) {
+  logger.info(`Crawling Repositories for ${installation.accountLogin}`)
   const githubClient = appState.githubClient.clientForInstallation(installation.installationId)
   const latestRawRepositories = await readRawRepositories(installation, githubClient)
   const repos = await processRawRepositories(appState, latestRawRepositories)

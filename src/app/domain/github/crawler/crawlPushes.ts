@@ -4,6 +4,7 @@ import { isRawGithubPushEventEvent } from '../../types/rawGithub/RawGithubAPIPus
 import { fromRawGithubPushEventEvent, GithubPush } from '../../types/GithubPush'
 import { processPushes } from '../githubPush'
 import { GithubInstallation } from '../../types/GithubInstallation'
+import { logger } from '../../../util/logging'
 
 // TOEventually - only get all pushes back to lookback in crawl configuration, however GitHub doesn't keep
 // them around for very long
@@ -13,6 +14,7 @@ export async function crawlPushes(
   installation: GithubInstallation,
   repo: GithubRepositorySummary
 ) {
+  logger.info(`Crawling Pushes for ${installation.accountLogin}/${repo.name}`)
   const githubClient = appState.githubClient.clientForInstallation(installation.installationId)
   const allEventsForRepo = await githubClient.listMostRecentEventsForRepo(repo.ownerName, repo.name)
   const rawPushes = allEventsForRepo.filter(isRawGithubPushEventEvent)

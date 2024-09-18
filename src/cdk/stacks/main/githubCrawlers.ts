@@ -5,10 +5,8 @@ import {
   DefinitionBody,
   IntegrationPattern,
   JsonPath,
-  LogLevel,
   Map,
   StateMachine,
-  StateMachineType,
   TaskInput
 } from 'aws-cdk-lib/aws-stepfunctions'
 import { LambdaInvoke, StepFunctionsStartExecution } from 'aws-cdk-lib/aws-stepfunctions-tasks'
@@ -16,13 +14,11 @@ import { CRAWLABLE_RESOURCES } from '../../../multipleContexts/githubCrawler'
 import { Rule, Schedule } from 'aws-cdk-lib/aws-events'
 import { SfnStateMachine } from 'aws-cdk-lib/aws-events-targets'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
-import { Duration, RemovalPolicy } from 'aws-cdk-lib'
-import { LogGroup } from 'aws-cdk-lib/aws-logs'
+import { Duration } from 'aws-cdk-lib'
 
 export function defineGithubCrawlers(scope: Construct, props: MainStackProps) {
   const crawlerFunction = defineGithubCrawlerFunction(scope, props)
-  const reposChildrenCrawler = defineReposChildrenCrawler(scope, props, crawlerFunction)
-  const installationCrawler = defineInstallationCrawler(scope, props, crawlerFunction, reposChildrenCrawler)
+  const installationCrawler = defineInstallationCrawler(scope, props, crawlerFunction)
   const allInstallationsCrawler = defineAllInstallationsCrawler(
     scope,
     props,
@@ -52,114 +48,22 @@ function defineGithubCrawlerFunction(scope: Construct, props: MainStackProps) {
   )
 }
 
-function defineReposChildrenCrawler(
-  scope: Construct,
-  props: MainStackProps,
-  crawlerFunction: CicadaFunction
-) {
-  const crawlPushes = new LambdaInvoke(scope, 'crawlPushes', {
+function defineInstallationCrawler(scope: Construct, props: MainStackProps, crawlerFunction: CicadaFunction) {
+  const crawlInstallation = new LambdaInvoke(scope, 'crawlInstallation', {
     lambdaFunction: crawlerFunction,
     payload: TaskInput.fromObject({
-      resourceType: CRAWLABLE_RESOURCES.PUSHES,
+      resourceType: CRAWLABLE_RESOURCES.INSTALLATION,
       installation: JsonPath.objectAt('$.installation'),
-      repository: JsonPath.objectAt('$.repository')
+      lookbackDays: JsonPath.numberAt('$.lookbackDays')
     }),
     // Pass through original input to next state
     resultPath: JsonPath.DISCARD
   })
-
-  const crawlWorkflowRunEvents = new LambdaInvoke(scope, 'crawlWorkflowRunEvents', {
-    lambdaFunction: crawlerFunction,
-    payload: TaskInput.fromObject({
-      resourceType: CRAWLABLE_RESOURCES.WORKFLOW_RUN_EVENTS,
-      installation: JsonPath.objectAt('$.installation'),
-      repository: JsonPath.objectAt('$.repository'),
-      lookbackDays: JsonPath.numberAt('$$.Execution.Input.lookbackDays')
-    }),
-    resultPath: JsonPath.DISCARD
-  })
-
-  // TOEventually - need to consider github app rate limiting (max 5000 requests / hour, etc.)
-  // TOEventually - as part of rate limiting use conditional requests, look at returned quota data, etc.
-  const forEachRepository = new Map(scope, 'forEachRepository', {
-    maxConcurrency: 10,
-    itemsPath: '$.repositories',
-    itemSelector: {
-      installation: JsonPath.objectAt('$.installation'),
-      repository: JsonPath.objectAt('$$.Map.Item.Value')
-    }
-  })
-  forEachRepository.itemProcessor(crawlPushes.next(crawlWorkflowRunEvents))
-
-  return new StateMachine(scope, 'repoElementsCrawler', {
-    stateMachineName: `${props.appName}-repositories-elements-crawler`,
-    stateMachineType: StateMachineType.EXPRESS,
-    // Need to configure logs because Express Workflows don't have any diagnotics otherwise
-    logs: {
-      level: LogLevel.ALL,
-      destination: new LogGroup(scope, 'repoElementsCrawlerLogGroup', {
-        logGroupName: `${props.appName}-repositories-elements-crawler`,
-        removalPolicy: RemovalPolicy.DESTROY,
-        retention: props.logRetention
-      })
-    },
-    comment: 'Crawl child objects of a list of repositories (Express)',
-    definitionBody: DefinitionBody.fromChainable(forEachRepository),
-    tracingEnabled: true
-  })
-}
-
-function defineInstallationCrawler(
-  scope: Construct,
-  props: MainStackProps,
-  crawlerFunction: CicadaFunction,
-  reposChildrenCrawler: StateMachine
-) {
-  const crawlUsers = new LambdaInvoke(scope, 'crawlUsers', {
-    lambdaFunction: crawlerFunction,
-    payload: TaskInput.fromObject({
-      resourceType: CRAWLABLE_RESOURCES.USERS,
-      installation: JsonPath.objectAt('$.installation')
-    }),
-    // Pass through original input to next state
-    resultPath: JsonPath.DISCARD
-  })
-
-  const crawlRepositories = new LambdaInvoke(scope, 'crawlRepositories', {
-    lambdaFunction: crawlerFunction,
-    payload: TaskInput.fromObject({
-      resourceType: CRAWLABLE_RESOURCES.REPOSITORIES,
-      installation: JsonPath.objectAt('$.installation')
-    }),
-    resultSelector: {
-      repositories: JsonPath.objectAt('$.Payload')
-    },
-    resultPath: '$.repositoriesCrawler'
-  })
-
-  // TOEventually - will need to partition set of repositories due to either max timeout of
-  // underlying express workflow OR because of size of request.
-  const invokeReposChildrenCrawler = new StepFunctionsStartExecution(
-    scope,
-    'installationInvokeReposChildrenCrawler',
-    {
-      stateMachine: reposChildrenCrawler,
-      integrationPattern: IntegrationPattern.RUN_JOB,
-      associateWithParent: true,
-      input: TaskInput.fromObject({
-        installation: JsonPath.objectAt('$.installation'),
-        repositories: JsonPath.objectAt('$.repositoriesCrawler.repositories'),
-        lookbackDays: JsonPath.numberAt('$.lookbackDays')
-      })
-    }
-  )
-
-  const workflow = crawlUsers.next(crawlRepositories).next(invokeReposChildrenCrawler)
 
   return new StateMachine(scope, 'installationCrawler', {
     stateMachineName: `${props.appName}-installation`,
     comment: 'Crawl a GitHub App Installation and child resources',
-    definitionBody: DefinitionBody.fromChainable(workflow),
+    definitionBody: DefinitionBody.fromChainable(crawlInstallation),
     tracingEnabled: true
   })
 }

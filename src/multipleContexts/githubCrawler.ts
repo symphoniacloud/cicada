@@ -1,9 +1,6 @@
 export const CRAWLABLE_RESOURCES = {
   INSTALLATIONS: 'installations',
-  USERS: 'users',
-  REPOSITORIES: 'repositories',
-  PUSHES: 'pushes',
-  WORKFLOW_RUN_EVENTS: 'workflowRunEvents'
+  INSTALLATION: 'installation'
 } as const
 
 export type CrawlableResource = (typeof CRAWLABLE_RESOURCES)[keyof typeof CRAWLABLE_RESOURCES]
