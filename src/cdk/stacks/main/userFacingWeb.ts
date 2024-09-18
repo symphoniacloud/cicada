@@ -46,9 +46,10 @@ function defineAuthenticatedWeb(scope: Construct, props: UserFacingWebEndpointsP
         'github-repositories',
         'github-latest-workflow-runs',
         'github-latest-pushes-per-ref',
-        'github-repo-activity'
+        'github-repo-activity',
+        'github-installations'
       ],
-      tablesReadWriteAccess: ['github-user-tokens', 'user-settings']
+      tablesReadWriteAccess: ['github-user-tokens', 'user-settings', 'github-public-accounts']
     })
   )
   props.restApi.root

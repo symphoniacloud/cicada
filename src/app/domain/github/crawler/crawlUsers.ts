@@ -3,6 +3,7 @@ import { GithubInstallation } from '../../types/GithubInstallation'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient'
 import { processRawUsers } from '../githubUser'
 import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../../types/GithubAccountType'
+import { isSuccess } from '../../../util/structuredResult'
 
 export async function crawlUsers(
   appState: AppState,
@@ -17,7 +18,12 @@ async function readRawUsers(installation: GithubInstallation, githubClient: Gith
   if (installation.accountType === ORGANIZATION_ACCOUNT_TYPE) {
     return await githubClient.listOrganizationMembers(installation.accountLogin)
   } else if (installation.accountType === USER_ACCOUNT_TYPE) {
-    return [await githubClient.getUser(installation.accountLogin)]
+    const getUserResult = await githubClient.getUser(installation.accountLogin)
+    if (isSuccess(getUserResult)) {
+      return [getUserResult.result]
+    } else {
+      throw new Error(getUserResult.reason)
+    }
   } else {
     throw new Error(`Unknown installation account type: ${installation.accountType}`)
   }

@@ -16,6 +16,7 @@ export const fakeTableNames: TableNames = {
   'github-repo-activity': 'fakeGithubRepoActivityTable',
   'github-latest-workflow-runs': 'fakeGithubLatestWorkflowRunsTable',
   'github-latest-pushes-per-ref': 'fakeGithubLatestPushesPerRefTable',
+  'github-public-accounts': 'fakeGithubPublicAccounts',
   'user-settings': 'fakeUserSettingsTable',
   'web-push-subscriptions': 'fakeWebPushSubscriptions'
 }

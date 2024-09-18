@@ -38,6 +38,7 @@ type SsmTableNameParamName =
   | 'resources/table/github-repo-activity'
   | 'resources/table/github-latest-workflow-runs'
   | 'resources/table/github-latest-pushes-per-ref'
+  | 'resources/table/github-public-accounts'
   | 'resources/table/user-settings'
   | 'resources/table/web-push-subscriptions'
 

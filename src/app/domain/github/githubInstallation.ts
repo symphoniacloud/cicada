@@ -4,6 +4,7 @@ import { GithubInstallationEntity } from '../entityStore/entities/GithubInstalla
 import { logger } from '../../util/logging'
 import deepEqual from 'deep-equal'
 import { RawGithubInstallation } from '../types/rawGithub/RawGithubInstallation'
+import { GithubAccountId } from '../types/GithubKeys'
 
 export async function processRawInstallation(appState: AppState, rawInstallation: RawGithubInstallation) {
   return await processInstallation(appState, fromRawGithubInstallation(rawInstallation))
@@ -48,4 +49,8 @@ async function saveInstallation(appState: AppState, installation: GithubInstalla
 
 export function installationsEqual(x: GithubInstallation, y: GithubInstallation) {
   return deepEqual(x, y)
+}
+
+export async function getInstallationForAccount(appState: AppState, accountId: GithubAccountId) {
+  return appState.entityStore.for(GithubInstallationEntity).getOrThrow({ accountId })
 }

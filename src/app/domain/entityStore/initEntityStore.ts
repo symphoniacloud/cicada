@@ -12,6 +12,7 @@ import {
   GITHUB_INSTALLATION,
   GITHUB_LATEST_PUSH_PER_REF,
   GITHUB_LATEST_WORKFLOW_RUN_EVENT,
+  GITHUB_PUBLIC_ACCOUNT,
   GITHUB_PUSH,
   GITHUB_REPOSITORY,
   GITHUB_USER,
@@ -83,6 +84,10 @@ export function setupEntityStore(
         {
           entityTypes: [GITHUB_LATEST_PUSH_PER_REF],
           ...entityStoreConfigFor(tableNames, 'github-latest-pushes-per-ref')
+        },
+        {
+          entityTypes: [GITHUB_PUBLIC_ACCOUNT],
+          ...entityStoreConfigFor(tableNames, 'github-public-accounts')
         },
         {
           entityTypes: [USER_SETTINGS],

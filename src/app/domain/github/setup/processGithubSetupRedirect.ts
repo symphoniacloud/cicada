@@ -1,7 +1,7 @@
 import { Route } from '../../../internalHttpRouter/internalHttpRoute'
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import { GithubSetupAppState } from './githubSetupAppState'
-import { pageViewResultWithoutHtmx } from '../../../web/viewResultWrappers'
+import { pageViewResponse } from '../../../web/viewResultWrappers'
 import { Octokit } from '@octokit/rest'
 import { ParameterType, PutParameterCommand, SSMClient } from '@aws-sdk/client-ssm'
 import {
@@ -41,7 +41,7 @@ async function processRedirect(appState: GithubSetupAppState, event: APIGatewayP
       ? `https://github.com/organizations/${appDetails.ownerLogin}/settings/apps/${appDetails.appName}/installations`
       : `https://github.com/settings/apps/${appDetails.appName}/installations`
 
-  return pageViewResultWithoutHtmx(
+  return pageViewResponse(
     [
       p(
         `Github app ${appDetails.appName} has been successsfully created. You now need to install it in GitHub `,
@@ -49,7 +49,7 @@ async function processRedirect(appState: GithubSetupAppState, event: APIGatewayP
         `Once you've installed the GitHub app Cicada will start loading your GitHub data - <b>this can take a minute or more</b>`
       )
     ],
-    false
+    { loggedIn: false }
   )
 }
 
@@ -128,17 +128,14 @@ async function writeSSMParameter(
   )
 }
 
-const noCodeResponse = pageViewResultWithoutHtmx(
-  [p('Unexpected redirect from GitHub - no code on URL')],
-  false
-)
+const noCodeResponse = pageViewResponse([p('Unexpected redirect from GitHub - no code on URL')], {
+  loggedIn: false
+})
 
-const noStateResponse = pageViewResultWithoutHtmx(
-  [p('Unexpected redirect from GitHub - no state on URL')],
-  false
-)
+const noStateResponse = pageViewResponse([p('Unexpected redirect from GitHub - no state on URL')], {
+  loggedIn: false
+})
 
-const invalidStateResponse = pageViewResultWithoutHtmx(
-  [p('Unexpected redirect from GitHub - invalid state on URL')],
-  false
-)
+const invalidStateResponse = pageViewResponse([p('Unexpected redirect from GitHub - invalid state on URL')], {
+  loggedIn: false
+})

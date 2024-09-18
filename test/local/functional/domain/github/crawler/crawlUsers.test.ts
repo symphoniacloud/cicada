@@ -24,12 +24,16 @@ import {
   expectedBatchWriteGithubMemberships,
   expectedBatchWriteGithubUsers
 } from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
+import { successWith } from '../../../../../../src/app/util/structuredResult'
 
 test('user-crawler-for-personal-account-installation', async () => {
   // A
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
-  githubInstallationClient.stubUsers.addResponse('cicada-test-user', example_personal_account_user)
+  githubInstallationClient.stubUsers.addResponse(
+    'cicada-test-user',
+    successWith(example_personal_account_user)
+  )
 
   // A
   await crawlUsers(appState, testPersonalInstallation, githubInstallationClient)

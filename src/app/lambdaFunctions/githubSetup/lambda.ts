@@ -4,7 +4,7 @@ import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { handleGithubSetupRequest } from '../../domain/github/setup/appSetupHandler'
 import { GithubSetupAppState, githubSetupStartup } from '../../domain/github/setup/githubSetupAppState'
 import { githubAppIsReady } from '../../domain/github/setup/githubAppReadyCheck'
-import { pageViewResultWithoutHtmx } from '../../web/viewResultWrappers'
+import { pageViewResponse } from '../../web/viewResultWrappers'
 import { p } from '../../web/hiccough/hiccoughElements'
 
 let appState: GithubSetupAppState
@@ -19,7 +19,9 @@ export const baseHandler: APIGatewayProxyHandler = async (event) => {
   return await handleGithubSetupRequest(appState, event)
 }
 
-const setupAlreadyCompleteResponse = pageViewResultWithoutHtmx([p('Cicada is already configured.')], false)
+const setupAlreadyCompleteResponse = pageViewResponse([p('Cicada is already configured.')], {
+  loggedIn: false
+})
 
 // Entry point - usage is defined by CDK
 // noinspection JSUnusedGlobalSymbols
