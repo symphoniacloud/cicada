@@ -3,14 +3,14 @@ import { lambdaStartup } from '../../environment/lambdaStartup'
 import middy from '@middy/core'
 import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { createRouter } from '../../internalHttpRouter/internalHttpRouter'
-import { showHelloPageRoute } from '../../web/pages/showHello'
+import { helloPageRoute } from '../../web/pages/helloPage'
 import { CicadaAPIAuthorizedAPIHandler } from '../../inboundInterfaces/lambdaTypes'
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import { logoutResponse } from '../../domain/github/githubUserAuth/githubWebAuthHandler'
 import { authorizeUserRequest } from '../../domain/webAuth/userAuthorizer'
 import { notAuthorizedHTMLResponse } from '../../web/htmlResponses'
 import { logger } from '../../util/logging'
-import { pageViewResultWithoutHtmx } from '../../web/viewResultWrappers'
+import { pageViewResponse } from '../../web/viewResultWrappers'
 import { startSetupRoute } from '../../domain/github/setup/startGithubSetup'
 import { isFailure } from '../../util/structuredResult'
 import { a, p } from '../../web/hiccough/hiccoughElements'
@@ -21,6 +21,8 @@ import { workflowHeadingFragmentRoute } from '../../web/fragments/workflowHeadin
 import { getUserSettingsFragmentRoute } from '../../web/fragments/getUserSettings'
 import { postUserSettingFragmentRoute } from '../../web/fragments/postUserSetting'
 import { postResetUserSettingsFragmentRoute } from '../../web/fragments/postResetUserSettings'
+import { adminPageRoute } from '../../web/pages/adminPage'
+import { adminAddPublicAccountPageRoute } from '../../web/pages/adminAddPublicAccountPage'
 
 const router = createRouter([
   repoHeadingFragmentRoute,
@@ -30,7 +32,9 @@ const router = createRouter([
   getUserSettingsFragmentRoute,
   postUserSettingFragmentRoute,
   postResetUserSettingsFragmentRoute,
-  showHelloPageRoute
+  adminPageRoute,
+  helloPageRoute,
+  adminAddPublicAccountPageRoute
 ])
 
 let appState: AppState
@@ -49,7 +53,7 @@ export const baseHandler: CicadaAPIAuthorizedAPIHandler = async (event: APIGatew
   return await handleWebRequest(appState, event)
 }
 
-export const setupRequiredResponse = pageViewResultWithoutHtmx([
+export const setupRequiredResponse = pageViewResponse([
   p('Cicada GitHub app not ready yet.', a(startSetupRoute.path, 'Go here to start the setup process'))
 ])
 

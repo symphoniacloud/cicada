@@ -86,12 +86,13 @@ test('failedOauthCallback', async () => {
     <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
     <title>Cicada</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous"></link>
+    <script src="/js/htmx.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"></link>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"></link>
   </head>
   <body>
     <div class="container" id="toplevel">
-      <h2>Cicada</h2>
+      <h1 class="display-3 mt-4">Cicada</h1>
       <p>Unable to login because there was no code on request</p>
       <hr></hr>
       <p>

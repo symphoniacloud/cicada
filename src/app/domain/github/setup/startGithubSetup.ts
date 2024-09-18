@@ -1,5 +1,5 @@
 import { GithubSetupAppState } from './githubSetupAppState'
-import { pageViewResultWithoutHtmx } from '../../../web/viewResultWrappers'
+import { pageViewResponse } from '../../../web/viewResultWrappers'
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import { Route } from '../../../internalHttpRouter/internalHttpRoute'
 
@@ -52,5 +52,5 @@ import { modifyControls } from '/js/github-app-setup.js'
 modifyControls(document, "${appName}", "${webHostname}", "${webhookCode}", "${callbackState}")
 </script>`
 
-  return pageViewResultWithoutHtmx([bodyContents], false)
+  return pageViewResponse([bodyContents], { loggedIn: false })
 }

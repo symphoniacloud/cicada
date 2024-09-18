@@ -7,12 +7,13 @@ import {
   GithubInstallationClientMeta
 } from '../../../src/app/outboundInterfaces/githubInstallationClient'
 import { arrayStubResponse } from './fakeSupport'
+import { Result } from '../../../src/app/util/structuredResult'
 
 export class FakeGithubInstallationClient implements GithubInstallationClient {
   public stubOrganizationRepositories = arrayStubResponse<string, RawGithubRepository[]>()
   public stubInstallationRepositories: RawGithubRepository[] = []
   public stubOrganizationMembers = arrayStubResponse<string, RawGithubUser[]>()
-  public stubUsers = arrayStubResponse<string, RawGithubUser>()
+  public stubUsers = arrayStubResponse<string, Result<RawGithubUser>>()
 
   public stubWorkflowRunsForRepo = arrayStubResponse<
     {
@@ -54,7 +55,7 @@ export class FakeGithubInstallationClient implements GithubInstallationClient {
     return this.stubMostRecentEventsForRepo.getResponseOrThrow({ owner, repo })
   }
 
-  async getUser(username: string): Promise<RawGithubUser> {
+  async getUser(username: string): Promise<Result<RawGithubUser>> {
     return this.stubUsers.getResponseOrThrow(username)
   }
 

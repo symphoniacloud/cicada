@@ -6,6 +6,8 @@ import { RawGithubUser } from '../domain/types/rawGithub/RawGithubUser'
 import { RawGithubEvent } from '../domain/types/rawGithub/RawGithubEvent'
 import { metrics } from '../util/metrics'
 import { MetricUnit } from '@aws-lambda-powertools/metrics'
+import { logger } from '../util/logging'
+import { failedWith, Result, successWith } from '../util/structuredResult'
 
 export interface GithubInstallationClient {
   listWorkflowRunsForRepo(owner: string, repo: string, created?: string): Promise<RawGithubWorkflowRunEvent[]>
@@ -19,7 +21,7 @@ export interface GithubInstallationClient {
 
   listMostRecentEventsForRepo(owner: string, repo: string): Promise<RawGithubEvent[]>
 
-  getUser(username: string): Promise<RawGithubUser>
+  getUser(username: string): Promise<Result<RawGithubUser>>
 
   meta(): GithubInstallationClientMeta
 }
@@ -112,8 +114,19 @@ export function createRealGithubInstallationClient(
     async listMostRecentEventsForRepo(owner: string, repo: string): Promise<RawGithubEvent[]> {
       return processOctokitResponse(await octokit.activity.listRepoEvents({ owner, repo, per_page: 10 }))
     },
-    async getUser(username: string): Promise<RawGithubUser> {
-      return processOctokitResponse(await octokit.users.getByUsername({ username }))
+    async getUser(username: string): Promise<Result<RawGithubUser>> {
+      try {
+        const octokitResponse = processOctokitResponse(await octokit.users.getByUsername({ username }))
+        return successWith(octokitResponse.data)
+      } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        if (e?.status === 404) {
+          return failedWith('Invalid username')
+        } else {
+          throw e
+        }
+      }
     },
     meta(): GithubInstallationClientMeta {
       return rateLimitData

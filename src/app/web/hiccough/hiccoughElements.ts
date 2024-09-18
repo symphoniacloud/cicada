@@ -7,6 +7,7 @@ export function elementf(name: string) {
 export const htmlPage = elementf('html')
 export const head = elementf('head')
 export const meta = elementf('meta')
+export const script = elementf('script')
 export const body = elementf('body')
 export const h1 = elementf('h1')
 export const h2 = elementf('h2')
@@ -22,8 +23,10 @@ export const p = elementf('p')
 export const i = elementf('i')
 export const b = elementf('b')
 export const div = elementf('div')
+export const form = elementf('form')
 export const input = elementf('input')
 export const label = elementf('label')
+export const button = elementf('button')
 
 export function title(content: string) {
   return element('title', content)

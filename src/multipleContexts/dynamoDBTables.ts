@@ -12,6 +12,7 @@ export const CICADA_TABLE_IDS = [
   'github-repo-activity',
   'github-latest-workflow-runs',
   'github-latest-pushes-per-ref',
+  'github-public-accounts',
   'user-settings',
   'web-push-subscriptions'
 ] as const
@@ -42,8 +43,7 @@ export const tableConfigurations: Record<CicadaTableId, CicadaTableConfig> = {
   },
   'github-repositories': {
     ...allFalseConfig,
-    hasSortKey: true,
-    hasGSI1: false
+    hasSortKey: true
   },
   'github-repo-activity': {
     ...allFalseConfig,
@@ -61,10 +61,13 @@ export const tableConfigurations: Record<CicadaTableId, CicadaTableConfig> = {
     hasSortKey: true,
     hasGSI1: true
   },
+  'github-public-accounts': {
+    ...allFalseConfig,
+    hasSortKey: true
+  },
   'user-settings': allFalseConfig,
   'web-push-subscriptions': {
     ...allFalseConfig,
-    hasSortKey: true,
-    hasGSI1: false
+    hasSortKey: true
   }
 }

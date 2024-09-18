@@ -7,8 +7,9 @@ import {
   DisplayableUserSettings,
   PersistedVisibleAndNotifyConfigurable
 } from '../../../domain/types/UserSettings'
-import { HiccoughContent, HiccoughElement } from '../../hiccough/hiccoughElement'
+import { HiccoughElement } from '../../hiccough/hiccoughElement'
 import { GithubAccountId, GithubRepoKey, GithubWorkflowKey } from '../../../domain/types/GithubKeys'
+import { colSm, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements'
 
 export function createGetUserSettingsResponse(settings: DisplayableUserSettings) {
   return fragmentViewResult(...userSettingsElement(settings))
@@ -82,14 +83,6 @@ export function workflowControlsRow(
     colSm(4, settings.name),
     ...switchCells(settings, partialQs, targetId)
   )
-}
-
-function divRow(...content: HiccoughContent[]) {
-  return div({ class: 'row' }, ...content)
-}
-
-function colSm(col: number, ...content: HiccoughContent[]) {
-  return div({ class: `col-sm-${col}` }, ...content)
 }
 
 function switchCells(

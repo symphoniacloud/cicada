@@ -5,8 +5,7 @@ import { redirectResponseWithCookies } from '../../../inboundInterfaces/httpResp
 import { APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
 import { getUserByAuthToken } from '../githubUser'
 import { cookies } from './cicadaAuthCookies'
-import { pageViewResultWithoutHtmx } from '../../../web/viewResultWrappers'
-import { p } from '../../../web/hiccough/hiccoughElements'
+import { createBadRequestResponse } from '../../../web/pages/views/badRequestView'
 
 export async function oauthCallback(
   appState: AppState,
@@ -64,8 +63,5 @@ async function tryOauthCallback(
 }
 
 function failedToLoginResult(message: string): APIGatewayProxyResult {
-  return {
-    ...pageViewResultWithoutHtmx([p(message)]),
-    statusCode: 400
-  }
+  return createBadRequestResponse(message)
 }
