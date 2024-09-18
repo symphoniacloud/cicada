@@ -31,9 +31,10 @@ import {
 import { getWorkflowsForUser } from '../../domain/user/userVisible'
 import { calculateAccountSettings, calculateUserSettings } from '../../domain/user/calculatedUserSettings'
 import { UserSetting } from '../../domain/types/UserSettings'
+import { fragmentPath } from '../routingCommon'
 
-export const postUserSettingRoute: Route<CicadaAuthorizedAPIEvent> = {
-  path: '/app/fragment/userSetting',
+export const postUserSettingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
+  path: fragmentPath('userSetting'),
   method: 'POST',
   target: updateUserSetting
 }

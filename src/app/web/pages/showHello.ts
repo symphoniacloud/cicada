@@ -3,10 +3,11 @@ import { Route } from '../../internalHttpRouter/internalHttpRoute'
 import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { pageViewResultWithoutHtmx } from '../viewResultWrappers'
 import { p } from '../hiccough/hiccoughElements'
+import { pagePath } from '../routingCommon'
 
 // Used for testing / diagnostics
-export const showHelloRoute: Route<CicadaAuthorizedAPIEvent> = {
-  path: '/app/hello',
+export const showHelloPageRoute: Route<CicadaAuthorizedAPIEvent> = {
+  path: pagePath('hello'),
   target: showHello
 }
 

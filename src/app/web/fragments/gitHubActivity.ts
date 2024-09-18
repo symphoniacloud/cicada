@@ -17,9 +17,10 @@ import {
   getRecentActivityForRepoForUser,
   getRunEventsForWorkflowForUser
 } from '../../domain/user/userVisible'
+import { fragmentPath } from '../routingCommon'
 
-export const gitHubActivityRoute: Route<CicadaAuthorizedAPIEvent> = {
-  path: '/app/fragment/gitHubActivity',
+export const gitHubActivityFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
+  path: fragmentPath('gitHubActivity'),
   target: gitHubActivity
 }
 
