@@ -4,7 +4,7 @@ import { isRawGithubPushEventEvent } from '../../types/rawGithub/RawGithubAPIPus
 import { fromRawGithubPushEventEvent, GithubPush } from '../../types/GithubPush'
 import { processPushes } from '../githubPush'
 import { GithubInstallation } from '../../types/GithubInstallation'
-import { logger } from '../../../util/logging'
+import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient'
 
 // TOEventually - only get all pushes back to lookback in crawl configuration, however GitHub doesn't keep
 // them around for very long
@@ -12,10 +12,9 @@ export async function crawlPushes(
   appState: AppState,
   // the owner ID on repo isn't sufficient when we are crawling public repos from other accounts
   installation: GithubInstallation,
-  repo: GithubRepositorySummary
+  repo: GithubRepositorySummary,
+  githubClient: GithubInstallationClient
 ) {
-  logger.info(`Crawling Pushes for ${installation.accountLogin}/${repo.name}`)
-  const githubClient = appState.githubClient.clientForInstallation(installation.installationId)
   const allEventsForRepo = await githubClient.listMostRecentEventsForRepo(repo.ownerName, repo.name)
   const rawPushes = allEventsForRepo.filter(isRawGithubPushEventEvent)
   // TODO - this comment was from pre-step-functions version. Is there something that can be improved now

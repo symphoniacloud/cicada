@@ -21,11 +21,10 @@ test('repository-crawler-for-personal-account-installation', async () => {
   // A
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
-  appState.githubClient.fakeClientsForInstallation.addResponse(48093071, githubInstallationClient)
   githubInstallationClient.stubInstallationRepositories = [example_personal_account_repo]
 
   // A
-  await crawlRepositories(appState, testPersonalInstallation)
+  await crawlRepositories(appState, testPersonalInstallation, githubInstallationClient)
 
   // A
   expectBatchWritesLength(appState).toEqual(1)
@@ -36,11 +35,10 @@ test('repository-crawler-for-org-installation', async () => {
   // A
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
-  appState.githubClient.fakeClientsForInstallation.addResponse(48133709, githubInstallationClient)
   githubInstallationClient.stubOrganizationRepositories.addResponse('cicada-test-org', example_org_repos)
 
   // A
-  await crawlRepositories(appState, testOrgInstallation)
+  await crawlRepositories(appState, testOrgInstallation, githubInstallationClient)
 
   // A
   expectBatchWritesLength(appState).toEqual(1)

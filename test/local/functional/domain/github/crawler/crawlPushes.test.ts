@@ -25,7 +25,6 @@ test('repo-crawler-for-personal-account-installation', async () => {
   // A
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
-  appState.githubClient.fakeClientsForInstallation.addResponse(48093071, githubInstallationClient)
   githubInstallationClient.stubMostRecentEventsForRepo.addResponse(
     {
       owner: 'cicada-test-user',
@@ -35,7 +34,7 @@ test('repo-crawler-for-personal-account-installation', async () => {
   )
 
   // A
-  await crawlPushes(appState, testPersonalInstallation, testPersonalTestRepo)
+  await crawlPushes(appState, testPersonalInstallation, testPersonalTestRepo, githubInstallationClient)
 
   // A
   expectPutsLength(appState).toEqual(2)
@@ -57,7 +56,7 @@ test('repo-crawler-for-org-installation', async () => {
   )
 
   // A
-  await crawlPushes(appState, testOrgInstallation, testOrgTestRepoOne)
+  await crawlPushes(appState, testOrgInstallation, testOrgTestRepoOne, githubInstallationClient)
 
   // A
   expectPutsLength(appState).toEqual(2)

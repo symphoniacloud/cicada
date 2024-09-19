@@ -29,11 +29,10 @@ test('user-crawler-for-personal-account-installation', async () => {
   // A
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
-  appState.githubClient.fakeClientsForInstallation.addResponse(48093071, githubInstallationClient)
   githubInstallationClient.stubUsers.addResponse('cicada-test-user', example_personal_account_user)
 
   // A
-  await crawlUsers(appState, testPersonalInstallation)
+  await crawlUsers(appState, testPersonalInstallation, githubInstallationClient)
 
   // A
   expectBatchWritesLength(appState).toEqual(2)
@@ -47,7 +46,6 @@ test('user-crawler-for-org-installation', async () => {
   // A
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
-  appState.githubClient.fakeClientsForInstallation.addResponse(48133709, githubInstallationClient)
   githubInstallationClient.stubOrganizationMembers.addResponse('cicada-test-org', example_org_users)
 
   stubQueryAccountMembershipsByAccount(appState, [
@@ -57,7 +55,7 @@ test('user-crawler-for-org-installation', async () => {
   ])
 
   // A
-  await crawlUsers(appState, testOrgInstallation)
+  await crawlUsers(appState, testOrgInstallation, githubInstallationClient)
 
   // A
   expectBatchWritesLength(appState).toEqual(3)

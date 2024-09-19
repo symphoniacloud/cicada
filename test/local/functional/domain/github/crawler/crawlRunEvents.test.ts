@@ -27,7 +27,6 @@ test('repo-crawler-for-personal-account-installation', async () => {
   // A
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
-  appState.githubClient.fakeClientsForInstallation.addResponse(48093071, githubInstallationClient)
   githubInstallationClient.stubWorkflowRunsForRepo.addResponse(
     {
       owner: 'cicada-test-user',
@@ -38,7 +37,13 @@ test('repo-crawler-for-personal-account-installation', async () => {
   )
 
   // A
-  await crawlWorkflowRunEvents(appState, testPersonalInstallation, testPersonalTestRepo, 10)
+  await crawlWorkflowRunEvents(
+    appState,
+    testPersonalInstallation,
+    testPersonalTestRepo,
+    10,
+    githubInstallationClient
+  )
 
   // A
   expectPutsLength(appState).toEqual(3)
@@ -51,7 +56,6 @@ test('repo-crawler-for-org-installation', async () => {
   // A
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
-  appState.githubClient.fakeClientsForInstallation.addResponse(48133709, githubInstallationClient)
   githubInstallationClient.stubWorkflowRunsForRepo.addResponse(
     {
       owner: 'cicada-test-org',
@@ -62,7 +66,13 @@ test('repo-crawler-for-org-installation', async () => {
   )
 
   // A
-  await crawlWorkflowRunEvents(appState, testOrgInstallation, testOrgTestRepoOne, 10)
+  await crawlWorkflowRunEvents(
+    appState,
+    testOrgInstallation,
+    testOrgTestRepoOne,
+    10,
+    githubInstallationClient
+  )
 
   // A
   expectPutsLength(appState).toEqual(3)

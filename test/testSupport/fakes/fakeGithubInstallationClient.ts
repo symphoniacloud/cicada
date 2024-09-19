@@ -2,7 +2,10 @@ import { RawGithubEvent } from '../../../src/app/domain/types/rawGithub/RawGithu
 import { RawGithubRepository } from '../../../src/app/domain/types/rawGithub/RawGithubRepository'
 import { RawGithubUser } from '../../../src/app/domain/types/rawGithub/RawGithubUser'
 import { RawGithubWorkflowRunEvent } from '../../../src/app/domain/types/rawGithub/RawGithubWorkflowRunEvent'
-import { GithubInstallationClient } from '../../../src/app/outboundInterfaces/githubInstallationClient'
+import {
+  GithubInstallationClient,
+  GithubInstallationClientMeta
+} from '../../../src/app/outboundInterfaces/githubInstallationClient'
 import { arrayStubResponse } from './fakeSupport'
 
 export class FakeGithubInstallationClient implements GithubInstallationClient {
@@ -53,5 +56,15 @@ export class FakeGithubInstallationClient implements GithubInstallationClient {
 
   async getUser(username: string): Promise<RawGithubUser> {
     return this.stubUsers.getResponseOrThrow(username)
+  }
+
+  // TOEventually - stub this if necessary
+  meta(): GithubInstallationClientMeta {
+    return {
+      ratelimit: 0,
+      ratelimitUsed: 0,
+      ratelimitResetTimestamp: 0,
+      ratelimitRemaining: 0
+    }
   }
 }
