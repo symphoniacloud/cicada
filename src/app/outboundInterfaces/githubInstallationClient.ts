@@ -4,6 +4,9 @@ import { RawGithubWorkflowRunEvent } from '../domain/types/rawGithub/RawGithubWo
 import { RawGithubRepository } from '../domain/types/rawGithub/RawGithubRepository'
 import { RawGithubUser } from '../domain/types/rawGithub/RawGithubUser'
 import { RawGithubEvent } from '../domain/types/rawGithub/RawGithubEvent'
+import { GithubInstallation } from '../domain/types/GithubInstallation'
+import { metrics } from '../util/metrics'
+import { MetricUnit } from '@aws-lambda-powertools/metrics'
 
 export interface GithubInstallationClient {
   listWorkflowRunsForRepo(owner: string, repo: string, created?: string): Promise<RawGithubWorkflowRunEvent[]>
@@ -126,4 +129,18 @@ export type OctokitResponseHeaders = {
   'x-ratelimit-remaining'?: string
   'x-ratelimit-reset'?: string
   'x-ratelimit-used'?: string
+}
+
+// ToEventually - move this into the actual GithubInstallationClient object
+export function publishGithubInstallationClientMetrics(
+  installation: GithubInstallation,
+  githubInstallationClient: GithubInstallationClient
+) {
+  const rateLimitMetric = metrics.singleMetric()
+  rateLimitMetric.addDimension('installationAccount', installation.accountLogin)
+  rateLimitMetric.addMetric(
+    'githubRateLimitRemaining',
+    MetricUnit.Count,
+    githubInstallationClient.meta().ratelimitRemaining
+  )
 }
