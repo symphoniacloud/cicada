@@ -23,17 +23,19 @@ interface CicadaTableConfig {
   readonly hasGSI1: boolean
   readonly stream: boolean
   readonly useTtl: boolean
+  readonly allowScans: boolean
 }
 
 const allFalseConfig: CicadaTableConfig = {
   hasGSI1: false,
   hasSortKey: false,
   stream: false,
-  useTtl: false
+  useTtl: false,
+  allowScans: false
 }
 
 export const tableConfigurations: Record<CicadaTableId, CicadaTableConfig> = {
-  'github-installations': allFalseConfig,
+  'github-installations': { ...allFalseConfig, allowScans: true },
   'github-user-tokens': { ...allFalseConfig, useTtl: true },
   'github-users': allFalseConfig,
   'github-account-memberships': {

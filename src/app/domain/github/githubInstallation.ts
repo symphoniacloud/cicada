@@ -54,3 +54,7 @@ export function installationsEqual(x: GithubInstallation, y: GithubInstallation)
 export async function getInstallationForAccount(appState: AppState, accountId: GithubAccountId) {
   return appState.entityStore.for(GithubInstallationEntity).getOrThrow({ accountId })
 }
+
+export async function getAllInstallations(appState: AppState) {
+  return appState.entityStore.for(GithubInstallationEntity).scanAll()
+}
