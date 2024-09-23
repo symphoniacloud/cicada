@@ -22,8 +22,13 @@ export type CrawlInstallationEvent = {
   lookbackDays: number
 }
 
+export type CrawlPublicAccountsEvent = {
+  resourceType: 'publicAccounts'
+  lookbackHours: number
+}
+
 export type CrawlPublicAccountEvent = {
-  resourceType: 'public_account'
+  resourceType: 'publicAccount'
   installation: GithubInstallation
   publicAccountId: GithubAccountId
   lookbackHours: number
@@ -41,6 +46,14 @@ export function isCrawlInstallationEvent(x: CrawlEvent): x is CrawlInstallationE
       'lookbackDays' in x &&
       typeof x.lookbackDays === 'number') ||
     throwError(`Invalid object for ${CRAWLABLE_RESOURCES.INSTALLATION} : ${JSON.stringify(x)}`)()
+  )
+}
+
+export function isCrawlPublicAccountsEvent(x: CrawlEvent): x is CrawlPublicAccountsEvent {
+  if (x.resourceType !== CRAWLABLE_RESOURCES.PUBLIC_ACCOUNTS) return false
+  return (
+    ('lookbackHours' in x && typeof x.lookbackHours === 'number') ||
+    throwError(`Invalid object for ${CRAWLABLE_RESOURCES.PUBLIC_ACCOUNTS} : ${JSON.stringify(x)}`)()
   )
 }
 

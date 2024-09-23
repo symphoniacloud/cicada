@@ -10,10 +10,12 @@ import {
   isCrawlEvent,
   isCrawlInstallationEvent,
   isCrawlInstallationsEvent,
-  isCrawlPublicAccountEvent
-} from './githubCrawlTaskEvents'
+  isCrawlPublicAccountEvent,
+  isCrawlPublicAccountsEvent
+} from './githubCrawlerEvents'
 import { crawlInstallation } from '../../domain/github/crawler/crawlInstallation'
 import { topLevelCrawlPublicAccount } from '../../domain/github/crawler/crawlAccount'
+import { crawlPublicAccounts } from '../../domain/github/crawler/crawlPublicAccounts'
 
 let appState: AppState
 
@@ -38,6 +40,10 @@ export const baseHandler: Handler<unknown, unknown> = async (event) => {
 
   if (isCrawlInstallationEvent(event)) {
     return await crawlInstallation(appState, event.installation, event.lookbackDays)
+  }
+
+  if (isCrawlPublicAccountsEvent(event)) {
+    return await crawlPublicAccounts(appState, event.lookbackHours)
   }
 
   if (isCrawlPublicAccountEvent(event)) {

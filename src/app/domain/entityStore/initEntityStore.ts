@@ -111,6 +111,7 @@ function entityStoreConfigFor(tableNames: TableNames, tableId: CicadaTableId): T
   const config = tableConfigurations[tableId]
   return {
     tableName: tableNames[tableId],
+    allowScans: config.allowScans,
     metaAttributeNames: {
       pk: 'PK',
       entityType: '_et',

@@ -1,7 +1,8 @@
 export const CRAWLABLE_RESOURCES = {
   INSTALLATIONS: 'installations',
   INSTALLATION: 'installation',
-  PUBLIC_ACCOUNT: 'public_account'
+  PUBLIC_ACCOUNTS: 'publicAccounts',
+  PUBLIC_ACCOUNT: 'publicAccount'
 } as const
 
 export type CrawlableResource = (typeof CRAWLABLE_RESOURCES)[keyof typeof CRAWLABLE_RESOURCES]
