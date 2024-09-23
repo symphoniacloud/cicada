@@ -22,9 +22,24 @@ test('repository-crawler-for-personal-account-installation', async () => {
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
   githubInstallationClient.stubInstallationRepositories = [example_personal_account_repo]
+  githubInstallationClient.stubMostRecentEventsForRepo.addResponse(
+    {
+      owner: 'cicada-test-user',
+      repo: 'personal-test-repo'
+    },
+    []
+  )
+  githubInstallationClient.stubWorkflowRunsForRepo.addResponse(
+    {
+      owner: 'cicada-test-user',
+      repo: 'personal-test-repo',
+      created: '>2024-02-02T16:00:00.000Z'
+    },
+    []
+  )
 
   // A
-  await crawlRepositories(appState, testPersonalInstallation, githubInstallationClient)
+  await crawlRepositories(appState, testPersonalInstallation, githubInstallationClient, 3)
 
   // A
   expectBatchWritesLength(appState).toEqual(1)
@@ -36,9 +51,39 @@ test('repository-crawler-for-org-installation', async () => {
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
   githubInstallationClient.stubOrganizationRepositories.addResponse('cicada-test-org', example_org_repos)
+  githubInstallationClient.stubMostRecentEventsForRepo.addResponse(
+    {
+      owner: 'cicada-test-org',
+      repo: 'org-test-repo-one'
+    },
+    []
+  )
+  githubInstallationClient.stubMostRecentEventsForRepo.addResponse(
+    {
+      owner: 'cicada-test-org',
+      repo: 'org-test-repo-two'
+    },
+    []
+  )
+  githubInstallationClient.stubWorkflowRunsForRepo.addResponse(
+    {
+      owner: 'cicada-test-org',
+      repo: 'org-test-repo-one',
+      created: '>2024-02-02T16:00:00.000Z'
+    },
+    []
+  )
+  githubInstallationClient.stubWorkflowRunsForRepo.addResponse(
+    {
+      owner: 'cicada-test-org',
+      repo: 'org-test-repo-two',
+      created: '>2024-02-02T16:00:00.000Z'
+    },
+    []
+  )
 
   // A
-  await crawlRepositories(appState, testOrgInstallation, githubInstallationClient)
+  await crawlRepositories(appState, testOrgInstallation, githubInstallationClient, 3)
 
   // A
   expectBatchWritesLength(appState).toEqual(1)

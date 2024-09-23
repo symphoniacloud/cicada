@@ -6,8 +6,14 @@ import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { logger } from '../../util/logging'
 import { isFailure } from '../../util/structuredResult'
 import { crawlInstallations } from '../../domain/github/crawler/crawlInstallations'
-import { isCrawlEvent, isCrawlInstallationEvent, isCrawlInstallationsEvent } from './githubCrawlTaskEvents'
+import {
+  isCrawlEvent,
+  isCrawlInstallationEvent,
+  isCrawlInstallationsEvent,
+  isCrawlPublicAccountEvent
+} from './githubCrawlTaskEvents'
 import { crawlInstallation } from '../../domain/github/crawler/crawlInstallation'
+import { topLevelCrawlPublicAccount } from '../../domain/github/crawler/crawlAccount'
 
 let appState: AppState
 
@@ -32,6 +38,15 @@ export const baseHandler: Handler<unknown, unknown> = async (event) => {
 
   if (isCrawlInstallationEvent(event)) {
     return await crawlInstallation(appState, event.installation, event.lookbackDays)
+  }
+
+  if (isCrawlPublicAccountEvent(event)) {
+    return await topLevelCrawlPublicAccount(
+      appState,
+      event.installation,
+      event.publicAccountId,
+      event.lookbackHours
+    )
   }
 
   throw new Error(`unknown event format: ${event}`)

@@ -2,10 +2,8 @@ import { test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
 import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient'
 import {
-  testOrgInstallation,
   testOrgTestRepoOne,
   testOrgTestRepoOnePush,
-  testPersonalInstallation,
   testPersonalTestRepo,
   testPersonalTestRepoPush
 } from '../../../../../examples/cicada/githubDomainObjects'
@@ -34,7 +32,7 @@ test('repo-crawler-for-personal-account-installation', async () => {
   )
 
   // A
-  await crawlPushes(appState, testPersonalInstallation, testPersonalTestRepo, githubInstallationClient)
+  await crawlPushes(appState, testPersonalTestRepo, githubInstallationClient)
 
   // A
   expectPutsLength(appState).toEqual(2)
@@ -56,7 +54,7 @@ test('repo-crawler-for-org-installation', async () => {
   )
 
   // A
-  await crawlPushes(appState, testOrgInstallation, testOrgTestRepoOne, githubInstallationClient)
+  await crawlPushes(appState, testOrgTestRepoOne, githubInstallationClient)
 
   // A
   expectPutsLength(appState).toEqual(2)

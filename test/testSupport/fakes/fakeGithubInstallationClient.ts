@@ -12,6 +12,7 @@ import { Result } from '../../../src/app/util/structuredResult'
 export class FakeGithubInstallationClient implements GithubInstallationClient {
   public stubOrganizationRepositories = arrayStubResponse<string, RawGithubRepository[]>()
   public stubInstallationRepositories: RawGithubRepository[] = []
+  public stubPublicRepositoriesForUser = arrayStubResponse<string, RawGithubRepository[]>()
   public stubOrganizationMembers = arrayStubResponse<string, RawGithubUser[]>()
   public stubUsers = arrayStubResponse<string, Result<RawGithubUser>>()
 
@@ -37,6 +38,10 @@ export class FakeGithubInstallationClient implements GithubInstallationClient {
 
   async listInstallationRepositories(): Promise<RawGithubRepository[]> {
     return this.stubInstallationRepositories
+  }
+
+  async listPublicRepositoriesForUser(accountName: string): Promise<RawGithubRepository[]> {
+    return this.stubPublicRepositoriesForUser.getResponseOrThrow(accountName)
   }
 
   async listOrganizationMembers(org: string): Promise<RawGithubUser[]> {

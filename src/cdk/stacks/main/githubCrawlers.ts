@@ -18,6 +18,7 @@ import { Duration } from 'aws-cdk-lib'
 
 export function defineGithubCrawlers(scope: Construct, props: MainStackProps) {
   const crawlerFunction = defineGithubCrawlerFunction(scope, props)
+  const publicAccountCrawler = definePublicAccountCrawler(scope, props, crawlerFunction)
   const installationCrawler = defineInstallationCrawler(scope, props, crawlerFunction)
   const allInstallationsCrawler = defineAllInstallationsCrawler(
     scope,
@@ -26,6 +27,7 @@ export function defineGithubCrawlers(scope: Construct, props: MainStackProps) {
     installationCrawler
   )
   defineOnInstallationUpdatedProcessor(scope, props, installationCrawler)
+  defineOnPublicAccountUpdatedProcessor(scope, props, publicAccountCrawler)
   defineSchedules(scope, allInstallationsCrawler)
 }
 
@@ -42,7 +44,8 @@ function defineGithubCrawlerFunction(scope: Construct, props: MainStackProps) {
         'github-repositories',
         'github-repo-activity',
         'github-latest-workflow-runs',
-        'github-latest-pushes-per-ref'
+        'github-latest-pushes-per-ref',
+        'github-public-accounts'
       ]
     })
   )
@@ -115,6 +118,31 @@ function defineAllInstallationsCrawler(
   })
 }
 
+function definePublicAccountCrawler(
+  scope: Construct,
+  props: MainStackProps,
+  crawlerFunction: CicadaFunction
+) {
+  const crawlInstallation = new LambdaInvoke(scope, 'crawlPublicAccount', {
+    lambdaFunction: crawlerFunction,
+    payload: TaskInput.fromObject({
+      resourceType: CRAWLABLE_RESOURCES.PUBLIC_ACCOUNT,
+      installation: JsonPath.objectAt('$.installation'),
+      publicAccountId: JsonPath.numberAt('$.publicAccountId'),
+      lookbackHours: JsonPath.numberAt('$.lookbackHours')
+    }),
+    // Pass through original input to next state
+    resultPath: JsonPath.DISCARD
+  })
+
+  return new StateMachine(scope, 'publicAccountCrawler', {
+    stateMachineName: `${props.appName}-public-account`,
+    comment: 'Crawl a Public Account and child resources',
+    definitionBody: DefinitionBody.fromChainable(crawlInstallation),
+    tracingEnabled: true
+  })
+}
+
 function defineOnInstallationUpdatedProcessor(
   scope: Construct,
   props: MainStackProps,
@@ -122,7 +150,7 @@ function defineOnInstallationUpdatedProcessor(
 ) {
   // In theory I think it should be possible just to use event manipulation in the event rule,
   // rather than a whole new step function, but I couldn't figure out how to merge dynamic and static
-  // content in the even rule target properties
+  // content in the event rule target properties
 
   const onInstallationUpdatedProcessor = new StateMachine(scope, 'onInstallationUpdatedProcessor', {
     stateMachineName: `${props.appName}-on-installation-updated`,
@@ -149,6 +177,43 @@ function defineOnInstallationUpdatedProcessor(
       detailType: [EVENTBRIDGE_DETAIL_TYPES.INSTALLATION_UPDATED]
     },
     targets: [new SfnStateMachine(onInstallationUpdatedProcessor)]
+  })
+}
+
+function defineOnPublicAccountUpdatedProcessor(
+  scope: Construct,
+  props: MainStackProps,
+  publicAccountCrawler: StateMachine
+) {
+  // In theory I think it should be possible just to use event manipulation in the event rule,
+  // rather than a whole new step function, but I couldn't figure out how to merge dynamic and static
+  // content in the event rule target properties
+
+  const processor = new StateMachine(scope, 'onPublicAccountUpdatedProcessor', {
+    stateMachineName: `${props.appName}-on-public-account-updated`,
+    comment: 'Crawl a Public Account and child resources when public account updated',
+    definitionBody: DefinitionBody.fromChainable(
+      new StepFunctionsStartExecution(scope, 'onPublicAccountUpdatedInvokePublicAccountUpdatedCrawler', {
+        stateMachine: publicAccountCrawler,
+        integrationPattern: IntegrationPattern.RUN_JOB,
+        associateWithParent: true,
+        input: TaskInput.fromObject({
+          installation: JsonPath.objectAt('$.detail.data.installation'),
+          publicAccountId: JsonPath.numberAt('$.detail.data.publicAccountId'),
+          lookbackHours: 7 * 24
+        })
+      })
+    ),
+    tracingEnabled: true
+  })
+
+  new Rule(scope, 'publicAccountUpdatedStepFunctionRule', {
+    description: `Run Public Account Crawler when public account updated`,
+    eventPattern: {
+      source: [props.appName],
+      detailType: [EVENTBRIDGE_DETAIL_TYPES.PUBLIC_ACCOUNT_UPDATED]
+    },
+    targets: [new SfnStateMachine(processor)]
   })
 }
 

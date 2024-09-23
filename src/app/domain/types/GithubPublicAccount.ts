@@ -1,9 +1,11 @@
 import { GithubAccountId, isGithubAccountId } from './GithubKeys'
 import { isNotNullObject } from '../../util/types'
+import { GithubAccountType } from './GithubAccountType'
 
 export interface GithubPublicAccount {
   accountId: GithubAccountId
   username: string
+  accountType: GithubAccountType
   ownerType: 'GithubAccount'
   ownerAccountId: GithubAccountId
 }

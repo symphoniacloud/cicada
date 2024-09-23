@@ -16,6 +16,8 @@ export interface GithubInstallationClient {
   // Use when installation is for a personal user, not an organization
   listInstallationRepositories(): Promise<RawGithubRepository[]>
 
+  listPublicRepositoriesForUser(accountName: string): Promise<RawGithubRepository[]>
+
   listOrganizationMembers(org: string): Promise<RawGithubUser[]>
 
   listMostRecentEventsForRepo(owner: string, repo: string): Promise<RawGithubEvent[]>
@@ -105,6 +107,13 @@ export function createRealGithubInstallationClient(
         octokit.paginate.iterator(octokit.apps.listReposAccessibleToInstallation, {})
       )
     },
+    async listPublicRepositoriesForUser(accountName: string): Promise<RawGithubRepository[]> {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      return processOctokitIterator(
+        octokit.paginate.iterator(octokit.repos.listForUser, { username: accountName })
+      )
+    },
     async listOrganizationMembers(org: string): Promise<RawGithubUser[]> {
       return processOctokitIterator(octokit.paginate.iterator(octokit.orgs.listMembers, { org }))
     },
@@ -116,7 +125,7 @@ export function createRealGithubInstallationClient(
     async getUser(username: string): Promise<Result<RawGithubUser>> {
       try {
         const octokitResponse = processOctokitResponse(await octokit.users.getByUsername({ username }))
-        return successWith(octokitResponse.data)
+        return successWith(octokitResponse)
       } catch (e) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore

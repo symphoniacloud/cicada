@@ -3,7 +3,6 @@ import { GithubRepositorySummary } from '../../types/GithubRepository'
 import { isRawGithubPushEventEvent } from '../../types/rawGithub/RawGithubAPIPushEventEvent'
 import { fromRawGithubPushEventEvent, GithubPush } from '../../types/GithubPush'
 import { processPushes } from '../githubPush'
-import { GithubInstallation } from '../../types/GithubInstallation'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient'
 
 // TOEventually - only get all pushes back to lookback in crawl configuration, however GitHub doesn't keep
@@ -11,7 +10,6 @@ import { GithubInstallationClient } from '../../../outboundInterfaces/githubInst
 export async function crawlPushes(
   appState: AppState,
   // the owner ID on repo isn't sufficient when we are crawling public repos from other accounts
-  installation: GithubInstallation,
   repo: GithubRepositorySummary,
   githubClient: GithubInstallationClient
 ) {
