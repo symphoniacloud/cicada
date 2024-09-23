@@ -6,7 +6,6 @@ import { RawGithubUser } from '../domain/types/rawGithub/RawGithubUser'
 import { RawGithubEvent } from '../domain/types/rawGithub/RawGithubEvent'
 import { metrics } from '../util/metrics'
 import { MetricUnit } from '@aws-lambda-powertools/metrics'
-import { logger } from '../util/logging'
 import { failedWith, Result, successWith } from '../util/structuredResult'
 
 export interface GithubInstallationClient {
