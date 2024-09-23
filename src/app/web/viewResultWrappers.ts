@@ -3,6 +3,7 @@ import { html } from './hiccough/hiccoughCore'
 import { element, HiccoughContent } from './hiccough/hiccoughElement'
 import { DOCTYPE_HTML5 } from './hiccough/hiccoughPage'
 import { htmlOkResponse } from './htmlResponses'
+import { adminPageRoute } from './pages/adminPage'
 
 const hiccoughOptions = {
   newLines: true,
@@ -51,8 +52,9 @@ export function pageView(
             element('hr'),
             ...(options.loggedIn ?? true
               ? [
-                  p(a('/userSettings', 'User Settings')),
                   p(a('/', 'Back to home')),
+                  p(a('/userSettings', 'User Settings')),
+                  p(a(adminPageRoute.path, 'Global admin')),
                   p(a('/github/auth/logout', 'Logout'))
                 ]
               : [p(a('/', 'Back to home'))])

@@ -96,10 +96,13 @@ test('failedOauthCallback', async () => {
       <p>Unable to login because there was no code on request</p>
       <hr></hr>
       <p>
+        <a href="/">Back to home</a>
+      </p>
+      <p>
         <a href="/userSettings">User Settings</a>
       </p>
       <p>
-        <a href="/">Back to home</a>
+        <a href="/app/admin">Global admin</a>
       </p>
       <p>
         <a href="/github/auth/logout">Logout</a>
