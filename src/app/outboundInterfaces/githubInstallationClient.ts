@@ -4,7 +4,6 @@ import { RawGithubWorkflowRunEvent } from '../domain/types/rawGithub/RawGithubWo
 import { RawGithubRepository } from '../domain/types/rawGithub/RawGithubRepository'
 import { RawGithubUser } from '../domain/types/rawGithub/RawGithubUser'
 import { RawGithubEvent } from '../domain/types/rawGithub/RawGithubEvent'
-import { GithubInstallation } from '../domain/types/GithubInstallation'
 import { metrics } from '../util/metrics'
 import { MetricUnit } from '@aws-lambda-powertools/metrics'
 
@@ -132,13 +131,13 @@ export type OctokitResponseHeaders = {
 }
 
 // ToEventually - move this into the actual GithubInstallationClient object
-export function publishGithubInstallationClientMetrics(
-  installation: GithubInstallation,
-  githubInstallationClient: GithubInstallationClient
-) {
+export function publishGithubInstallationClientMetrics(githubInstallationClient: GithubInstallationClient) {
+  // Eventually considering adding "installation" as a dimension here to allow different metrics / alarms
+  // for different installations. The reason I didn't just do that immediately is that, for now, Alarms
+  // are defined at deployment time, but installations are a runtime concept.
   const rateLimitMetric = metrics.singleMetric()
-  rateLimitMetric.addDimension('installationAccount', installation.accountLogin)
   rateLimitMetric.addMetric(
+    // ToEventually - this is a shared string with CDK so move to constant
     'githubRateLimitRemaining',
     MetricUnit.Count,
     githubInstallationClient.meta().ratelimitRemaining

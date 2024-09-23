@@ -9,6 +9,7 @@ import { saveInSSMViaCloudFormation } from '../../support/ssm'
 import { SSM_PARAM_NAMES, SsmParamName } from '../../../multipleContexts/ssmParams'
 import { defineGithubCrawlers } from './githubCrawlers'
 import { ReportingStack } from './reporting/ReportingStack'
+import { defineMonitoring } from './monitoring'
 
 export class MainStack extends Stack {
   constructor(scope: Construct, id: string, props: AllStacksProps) {
@@ -31,6 +32,8 @@ export class MainStack extends Stack {
     defineGithubCrawlers(this, mainStackProps)
 
     savePreGeneratedConfiguration(this, props)
+
+    defineMonitoring(this, mainStackProps)
 
     new ReportingStack(this, 'ReportingStack', {
       ...props,

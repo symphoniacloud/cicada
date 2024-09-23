@@ -15,7 +15,7 @@ export async function crawlInstallation(
   logger.info(`Crawling Installation for ${installation.accountLogin}`)
   const githubInstallationClient = appState.githubClient.clientForInstallation(installation.installationId)
   await crawlUsers(appState, installation, githubInstallationClient)
-  publishGithubInstallationClientMetrics(installation, githubInstallationClient)
+  publishGithubInstallationClientMetrics(githubInstallationClient)
   const repos = await crawlRepositories(appState, installation, githubInstallationClient)
   // Eventually consider doing some parallelization here (or move back to step function) but
   // need to be careful since GitHub gets twitchy about concurrent requests to the API
@@ -25,6 +25,6 @@ export async function crawlInstallation(
     await crawlPushes(appState, installation, repo, githubInstallationClient)
     await crawlWorkflowRunEvents(appState, installation, repo, lookbackDays, githubInstallationClient)
   }
-  publishGithubInstallationClientMetrics(installation, githubInstallationClient)
+  publishGithubInstallationClientMetrics(githubInstallationClient)
   logger.info('Github Metadata after crawls', { ...githubInstallationClient.meta() })
 }
