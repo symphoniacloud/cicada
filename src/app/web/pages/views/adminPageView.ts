@@ -12,6 +12,10 @@ export function createAdminPageResponse(publicAccounts: GithubPublicAccount[]) {
       h2('Additional Public GitHub Accounts'),
       // TOEventually - make this nicer by adding some headers, maybe
       ...publicAccounts.map(toPublicAccountRow),
+      div(
+        { class: 'alert alert-warning', role: 'alert' },
+        '<b>Careful!</b> If you add large public accounts, or many public accounts, you may have problems with Cicada being rate limited by GitHub while accessing the GitHub API.'
+      ),
       form(
         { class: 'row mt-3' },
         colAuto(label({ for: 'newPublicAccountInput', class: 'col-form-label' }, 'New Account')),
