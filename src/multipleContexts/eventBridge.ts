@@ -4,6 +4,7 @@ export const EVENTBRIDGE_DETAIL_TYPES = {
   GITHUB_NEW_WORKFLOW_RUN_EVENT: 'GithubNewWorkflowRunEvent',
   WEB_PUSH_TEST: 'WebPushTest',
   INSTALLATION_UPDATED: 'InstallationUpdated',
+  PUBLIC_ACCOUNT_UPDATED: 'PublicAccountUpdated',
   GITHUB_REPO_ACTIVITY_TABLE_UPDATED: 'GithubRepoActivityTableUpdated'
 } as const
 

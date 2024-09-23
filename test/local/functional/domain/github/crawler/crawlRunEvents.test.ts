@@ -2,10 +2,8 @@ import { test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
 import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient'
 import {
-  testOrgInstallation,
   testOrgTestRepoOne,
   testOrgTestRepoOneWorkflowRunOne,
-  testPersonalInstallation,
   testPersonalTestRepo,
   testPersonalTestRepoWorkflowRun
 } from '../../../../../examples/cicada/githubDomainObjects'
@@ -31,19 +29,13 @@ test('repo-crawler-for-personal-account-installation', async () => {
     {
       owner: 'cicada-test-user',
       repo: 'personal-test-repo',
-      created: '>2024-01-23T19:00:00.000Z'
+      created: '>2024-02-02T09:00:00.000Z'
     },
     [example_personal_workflow_run]
   )
 
   // A
-  await crawlWorkflowRunEvents(
-    appState,
-    testPersonalInstallation,
-    testPersonalTestRepo,
-    10,
-    githubInstallationClient
-  )
+  await crawlWorkflowRunEvents(appState, testPersonalTestRepo, 10, githubInstallationClient)
 
   // A
   expectPutsLength(appState).toEqual(3)
@@ -60,19 +52,13 @@ test('repo-crawler-for-org-installation', async () => {
     {
       owner: 'cicada-test-org',
       repo: 'org-test-repo-one',
-      created: '>2024-01-23T19:00:00.000Z'
+      created: '>2024-02-02T09:00:00.000Z'
     },
     [example_org_workflow_run]
   )
 
   // A
-  await crawlWorkflowRunEvents(
-    appState,
-    testOrgInstallation,
-    testOrgTestRepoOne,
-    10,
-    githubInstallationClient
-  )
+  await crawlWorkflowRunEvents(appState, testOrgTestRepoOne, 10, githubInstallationClient)
 
   // A
   expectPutsLength(appState).toEqual(3)

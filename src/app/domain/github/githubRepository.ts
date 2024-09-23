@@ -1,6 +1,6 @@
 import { AppState } from '../../environment/AppState'
 import { RawGithubRepository } from '../types/rawGithub/RawGithubRepository'
-import { fromRawGithubRepository, GithubRepository, GithubRepositorySummary } from '../types/GithubRepository'
+import { fromRawGithubRepository, GithubRepository } from '../types/GithubRepository'
 import { GithubRepositoryEntity } from '../entityStore/entities/GithubRepositoryEntity'
 import { GithubRepoKey } from '../types/GithubKeys'
 
@@ -16,20 +16,4 @@ async function saveRepositories(appState: AppState, repos: GithubRepository[]) {
 
 export async function getRepository(appState: AppState, { ownerId, repoId }: GithubRepoKey) {
   return appState.entityStore.for(GithubRepositoryEntity).getOrUndefined({ ownerId, id: repoId })
-}
-
-export function toRepositorySummary({
-  id,
-  name,
-  ownerId,
-  ownerName,
-  ownerType
-}: GithubRepository): GithubRepositorySummary {
-  return {
-    id,
-    name,
-    ownerId,
-    ownerName,
-    ownerType
-  }
 }

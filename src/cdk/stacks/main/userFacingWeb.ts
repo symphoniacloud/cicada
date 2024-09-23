@@ -52,6 +52,7 @@ function defineAuthenticatedWeb(scope: Construct, props: UserFacingWebEndpointsP
       tablesReadWriteAccess: ['github-user-tokens', 'user-settings', 'github-public-accounts']
     })
   )
+  grantLambdaFunctionPermissionToPutEvents(lambdaFunction, props)
   props.restApi.root
     .addResource('app')
     .addResource('{proxy+}')

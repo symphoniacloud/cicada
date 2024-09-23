@@ -8,6 +8,9 @@ import {
 } from '../entityStore/entities/GithubPublicAccountEntity'
 import { getAllAccountIdsForUser } from './githubMembership'
 import { getInstallationForAccount } from './githubInstallation'
+import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../types/GithubAccountType'
+import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
+import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
 
 export async function savePublicAccountWithName(
   appState: AppState,
@@ -27,24 +30,41 @@ export async function savePublicAccountWithName(
   }
 
   const githubUser = githubUserResult.result
-  return successWith(
-    await savePublicAccount(appState.entityStore, {
-      accountId: githubUser.id,
-      username: githubUser.login,
-      ownerType: 'GithubAccount',
-      ownerAccountId: installationAccountId
-    })
-  )
+  const githubUserType = githubUser.type.toLowerCase()
+  if (!(githubUserType === ORGANIZATION_ACCOUNT_TYPE || githubUserType === USER_ACCOUNT_TYPE))
+    throw new Error(`Unexpected GitHub Account type for public account: ${githubUserType}`)
+
+  const result = await savePublicAccount(appState.entityStore, {
+    accountId: githubUser.id,
+    username: githubUser.login,
+    accountType: githubUserType,
+    ownerType: 'GithubAccount',
+    ownerAccountId: installationAccountId
+  })
+
+  // Trigger crawling public account
+  await sendToEventBridge(appState, EVENTBRIDGE_DETAIL_TYPES.PUBLIC_ACCOUNT_UPDATED, {
+    installation: githubAppInstallation,
+    publicAccountId: githubUser.id
+  })
+
+  return successWith(result)
 }
 
 export async function getPublicAccountsForUser(
   appState: AppState,
   userId: GithubAccountId
 ): Promise<GithubPublicAccount[]> {
-  const accountIds = await getAllAccountIdsForUser(appState, userId)
+  return await getPublicAccountsForOwnerAccountIds(appState, await getAllAccountIdsForUser(appState, userId))
+}
+
+export async function getPublicAccountsForOwnerAccountIds(
+  appState: AppState,
+  ownerAccountIds: GithubAccountId[]
+): Promise<GithubPublicAccount[]> {
   return (
     await Promise.all(
-      accountIds.map(async (accountId) => getPublicAccountsForOwner(appState.entityStore, accountId))
+      ownerAccountIds.map(async (accountId) => getPublicAccountsForOwner(appState.entityStore, accountId))
     )
   ).flat()
 }

@@ -5,7 +5,8 @@ import {
   CrawlableResource,
   isCrawlableResource
 } from '../../../multipleContexts/githubCrawler'
-import { isNotNullObject } from '../../util/types' // TOEventually - safer type checking here
+import { isNotNullObject } from '../../util/types'
+import { GithubAccountId, isGithubAccountId } from '../../domain/types/GithubKeys' // TOEventually - safer type checking here
 
 export type CrawlEvent = { resourceType: CrawlableResource }
 
@@ -21,6 +22,13 @@ export type CrawlInstallationEvent = {
   lookbackDays: number
 }
 
+export type CrawlPublicAccountEvent = {
+  resourceType: 'public_account'
+  installation: GithubInstallation
+  publicAccountId: GithubAccountId
+  lookbackHours: number
+}
+
 export function isCrawlInstallationsEvent(x: CrawlEvent): x is CrawlInstallationsEvent {
   return x.resourceType === CRAWLABLE_RESOURCES.INSTALLATIONS
 }
@@ -33,5 +41,18 @@ export function isCrawlInstallationEvent(x: CrawlEvent): x is CrawlInstallationE
       'lookbackDays' in x &&
       typeof x.lookbackDays === 'number') ||
     throwError(`Invalid object for ${CRAWLABLE_RESOURCES.INSTALLATION} : ${JSON.stringify(x)}`)()
+  )
+}
+
+export function isCrawlPublicAccountEvent(x: CrawlEvent): x is CrawlPublicAccountEvent {
+  if (x.resourceType !== CRAWLABLE_RESOURCES.PUBLIC_ACCOUNT) return false
+  return (
+    ('installation' in x &&
+      isGithubInstallation(x.installation) &&
+      'publicAccountId' in x &&
+      isGithubAccountId(x.publicAccountId) &&
+      'lookbackHours' in x &&
+      typeof x.lookbackHours === 'number') ||
+    throwError(`Invalid object for ${CRAWLABLE_RESOURCES.PUBLIC_ACCOUNT} : ${JSON.stringify(x)}`)()
   )
 }

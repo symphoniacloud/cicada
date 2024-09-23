@@ -32,3 +32,14 @@ export async function getPublicAccountsForOwner(
 ) {
   return await thisEntityStore(entityStore).queryAllByPk({ ownerAccountId })
 }
+
+export async function getPublicAccount(
+  entityStore: AllEntitiesStore,
+  ownerAccountId: GithubAccountId,
+  accountId: GithubAccountId
+) {
+  return await thisEntityStore(entityStore).getOrUndefined({
+    ownerAccountId,
+    accountId
+  })
+}
