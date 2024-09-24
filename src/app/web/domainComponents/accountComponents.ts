@@ -6,6 +6,10 @@ export function accountCell(account: GithubAccount) {
   return td(
     a(`/account?id=${account.accountId}`, account.accountLogin),
     '&nbsp;',
-    githubAnchor(`https://github.com/${account.accountLogin}`)
+    accountGithubAnchor(account)
   )
+}
+
+export function accountGithubAnchor(account: GithubAccount) {
+  return githubAnchor(`https://github.com/${account.accountLogin}`)
 }

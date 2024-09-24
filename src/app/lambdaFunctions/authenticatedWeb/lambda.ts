@@ -24,8 +24,10 @@ import { postResetUserSettingsFragmentRoute } from '../../web/fragments/postRese
 import { adminPageRoute } from '../../web/pages/adminPage'
 import { adminAddPublicAccountPageRoute } from '../../web/pages/adminAddPublicAccountPage'
 import { allAvailableAccountsRoute } from '../../web/fragments/allAvailableAccounts'
+import { accountHeadingFragmentRoute } from '../../web/fragments/accountHeading'
 
 const router = createRouter([
+  accountHeadingFragmentRoute,
   repoHeadingFragmentRoute,
   workflowHeadingFragmentRoute,
   actionsStatusFragmentRoute,

@@ -35,6 +35,14 @@ export async function getAllAccountsForUser(
   return [...memberAccounts, ...publicAccountsWithType]
 }
 
+export async function getAccountForUser(
+  appState: AppState,
+  userId: GithubUserId,
+  accountId: GithubAccountId
+) {
+  return (await getAllAccountsForUser(appState, userId)).find((account) => account.accountId === accountId)
+}
+
 async function memberAccountIdsAndPublicAccounts(appState: AppState, userId: GithubUserId) {
   const memberAccountIds = await getIdsOfAccountsWhichUserIsMemberOf(appState, userId)
   const publicAccounts = await getPublicAccountsForOwnerAccountIds(appState, memberAccountIds)
