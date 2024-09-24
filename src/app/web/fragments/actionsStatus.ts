@@ -8,10 +8,12 @@ import { createWorkflowRunEventTableResponse } from './views/activityAndStatusVi
 import { getOptionalRepoCoordinates } from './requestParsing/getOptionalRepoCoordinates'
 import {
   getLatestWorkflowRunEventsForUser,
-  getLatestWorkflowRunEventsForRepoForUser
+  getLatestWorkflowRunEventsForRepoForUser,
+  getLatestWorkflowRunEventsForAccountForUser
 } from '../../domain/user/userVisible'
-import { GithubRepoKey } from '../../domain/types/GithubKeys'
+import { GithubAccountId, GithubRepoKey, GithubUserId } from '../../domain/types/GithubKeys'
 import { fragmentPath } from '../routingCommon'
+import { getAccountForUser } from '../../domain/github/githubAccount'
 
 export const actionsStatusFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('actionsStatus'),
@@ -25,15 +27,23 @@ export async function actionsStatus(appState: AppState, event: CicadaAuthorizedA
   const { ownerId, repoId } = coordinatesResult.result
 
   if (ownerId && repoId) return await actionsStatusForRepo(appState, event.userId, { ownerId, repoId })
-  if (!ownerId && !repoId) return actionsStatusForHome(appState, event.userId)
+  if (ownerId) return await actionsStatusForAccount(appState, event.userId, ownerId)
+  if (!ownerId && !repoId) return await actionsStatusForHome(appState, event.userId)
   return invalidRequestResponse
 }
 
-async function actionsStatusForRepo(appState: AppState, userId: number, repoKey: GithubRepoKey) {
+async function actionsStatusForRepo(appState: AppState, userId: GithubUserId, repoKey: GithubRepoKey) {
   if (!(await getRepository(appState, repoKey))) return notFoundHTMLResponse
 
   const latestEvents = await getLatestWorkflowRunEventsForRepoForUser(appState, userId, repoKey)
   return createWorkflowRunEventTableResponse('repoStatus', appState.clock, latestEvents)
+}
+
+async function actionsStatusForAccount(appState: AppState, userId: GithubUserId, accountId: GithubAccountId) {
+  if (!(await getAccountForUser(appState, userId, accountId))) return notFoundHTMLResponse
+
+  const latestEvents = await getLatestWorkflowRunEventsForAccountForUser(appState, userId, accountId)
+  return createWorkflowRunEventTableResponse('accountStatus', appState.clock, latestEvents)
 }
 
 async function actionsStatusForHome(appState: AppState, userId: number) {

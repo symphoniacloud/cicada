@@ -1,6 +1,7 @@
 import { AppState } from '../../environment/AppState'
 import { getAllAccountIdsForUser } from '../github/githubAccount'
 import {
+  latestWorkflowRunEventsPerWorkflowForOwner,
   latestWorkflowRunEventsPerWorkflowForOwners,
   latestWorkflowRunEventsPerWorkflowForRepo
 } from '../github/githubLatestWorkflowRunEvents'
@@ -9,7 +10,7 @@ import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
 import { getUserSettings } from './persistedUserSettings'
 import { calculateUserSettings } from './calculatedUserSettings'
 import { CalculatedUserSettings } from '../types/UserSettings'
-import { GithubRepoKey, GithubUserId, GithubWorkflowKey } from '../types/GithubKeys'
+import { GithubAccountId, GithubRepoKey, GithubUserId, GithubWorkflowKey } from '../types/GithubKeys'
 import { recentActiveBranchesForOwners } from '../github/githubLatestPushesPerRef'
 import { GithubPush } from '../types/GithubPush'
 import { getRunEventsForWorkflow } from '../github/githubWorkflowRunEvent'
@@ -33,6 +34,19 @@ export async function getLatestWorkflowRunEventsForUser(
 ): Promise<VisibleWorkflowRunEvents> {
   const allEvents = await getAllLatestRunEventsForUser(appState, userId)
   const userSettings = calculateUserSettings(await getUserSettings(appState, userId), allEvents)
+  return toVisibleEvents(allEvents, userSettings)
+}
+
+export async function getLatestWorkflowRunEventsForAccountForUser(
+  appState: AppState,
+  userId: GithubUserId,
+  accountId: GithubAccountId
+): Promise<VisibleWorkflowRunEvents> {
+  const allEvents = await latestWorkflowRunEventsPerWorkflowForOwner(appState, accountId)
+  const userSettings = calculateUserSettings(
+    await getUserSettings(appState, userId),
+    await getWorkflowsForUser(appState, userId)
+  )
   return toVisibleEvents(allEvents, userSettings)
 }
 
@@ -84,6 +98,19 @@ export async function getRecentActiveBranchesForUser(appState: AppState, userId:
     appState,
     await getAllAccountIdsForUser(appState, userId)
   )
+  const userSettings = calculateUserSettings(
+    await getUserSettings(appState, userId),
+    await getWorkflowsForUser(appState, userId)
+  )
+  return toVisiblePushes(allActivity, userSettings)
+}
+
+export async function getRecentActiveBranchesForUserAndAccount(
+  appState: AppState,
+  userId: GithubUserId,
+  accountId: GithubAccountId
+) {
+  const allActivity = await recentActiveBranchesForOwners(appState, [accountId])
   const userSettings = calculateUserSettings(
     await getUserSettings(appState, userId),
     await getWorkflowsForUser(appState, userId)
