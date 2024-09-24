@@ -1,8 +1,10 @@
 import { AppState } from '../../../src/app/environment/AppState'
-import { GithubLatestWorkflowRunEventEntity } from '../../../src/app/domain/entityStore/entities/GithubLatestWorkflowRunEventEntity'
+import {
+  GithubLatestWorkflowRunEventEntity,
+  latestWorkflowRunEventsPerWorkflowForOwner
+} from '../../../src/app/domain/entityStore/entities/GithubLatestWorkflowRunEventEntity'
 import { throwError } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubWorkflowRunEventEntity } from '../../../src/app/domain/entityStore/entities/GithubWorkflowRunEventEntity'
-import { latestWorkflowRunEventsPerWorkflowForOwner } from '../../../src/app/domain/github/githubLatestWorkflowRunEvents'
 
 export async function deleteWorkflowRunActivityForOwner(appState: AppState, ownerId: number) {
   await deleteRunEventsForOwner(appState, ownerId)
@@ -24,7 +26,7 @@ export async function getRunEventsForOwner(appState: AppState, ownerId: number) 
 }
 
 export async function deleteLatestRunEventsPerWorkflowForOwner(appState: AppState, ownerId: number) {
-  const events = await latestWorkflowRunEventsPerWorkflowForOwner(appState, ownerId)
+  const events = await latestWorkflowRunEventsPerWorkflowForOwner(appState.entityStore, ownerId)
   console.log(`Found ${events.length} latest run events to delete`)
   if (events.length > 0) {
     await appState.entityStore.for(GithubLatestWorkflowRunEventEntity).advancedOperations.batchDelete(

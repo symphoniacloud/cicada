@@ -17,15 +17,15 @@ const DEFAULT_ACCOUNT_NOTIFY = true
 
 export function calculateUserSettings(
   settings: PersistedUserSettings,
-  allRepoKeys: GithubRepoKey[],
-  allWorkflows: GithubWorkflow[]
+  repoKeys: GithubRepoKey[],
+  workflows: GithubWorkflow[]
 ): CalculatedUserSettings {
   return {
     userId: settings.userId,
     github: {
       accounts: Object.fromEntries(
-        findUniqueAccountIds(allRepoKeys).map((id) => {
-          return [id, calculateAccountSettings(settings.github.accounts[id], id, allRepoKeys, allWorkflows)]
+        findUniqueAccountIds(repoKeys).map((id) => {
+          return [id, calculateAccountSettings(settings.github.accounts[id], id, repoKeys, workflows)]
         })
       )
     }
@@ -35,19 +35,19 @@ export function calculateUserSettings(
 export function calculateAccountSettings(
   settings: PersistedGithubAccountSettings | undefined,
   accountId: GithubAccountId,
-  allRepoKeys: GithubRepoKey[],
-  allWorkflows: GithubWorkflow[]
+  repoKeys: GithubRepoKey[],
+  workflows: GithubWorkflow[]
 ): CalculatedGithubAccountSettings {
   const visibleAndNotify = calculateVisibleAndNotifyConfigurable(settings, DEFAULT_ACCOUNT_NOTIFY)
   const repos = visibleAndNotify.visible
     ? Object.fromEntries(
-        toUniqueRepoIdsForAccount(allRepoKeys, accountId).map((repoId) => {
+        toUniqueRepoIdsForAccount(repoKeys, accountId).map((repoId) => {
           return [
             repoId,
             calculateRepoSettings(
               settings?.repos[repoId],
               { ownerId: accountId, repoId },
-              allWorkflows,
+              workflows,
               visibleAndNotify.notify
             )
           ]
