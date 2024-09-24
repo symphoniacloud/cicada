@@ -5,6 +5,7 @@ import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport
 import {
   stubQueryLatestPushesPerRef,
   stubQueryLatestWorkflowRuns,
+  stubQueryRepositories,
   stubSetupUserRecords
 } from '../../../../testSupport/fakes/tableRecordReadStubs'
 
@@ -12,6 +13,7 @@ test('get-user-settings-html', async () => {
   const appState = new FakeAppState()
   stubSetupUserRecords(appState)
   stubQueryLatestPushesPerRef(appState)
+  stubQueryRepositories(appState)
   // Used when loading "all workflows" for user settings lookup. Eventually consider adding a workflows entity
   stubQueryLatestWorkflowRuns(appState)
 

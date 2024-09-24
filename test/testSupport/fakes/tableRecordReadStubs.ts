@@ -13,6 +13,7 @@ import {
   GITHUB_ACCOUNT_MEMBERSHIP,
   GITHUB_LATEST_PUSH_PER_REF,
   GITHUB_LATEST_WORKFLOW_RUN_EVENT,
+  GITHUB_REPOSITORY,
   GITHUB_WORKFLOW_RUN,
   WEB_PUSH_SUBSCRIPTION
 } from '../../../src/app/domain/entityStore/entityTypes'
@@ -79,6 +80,15 @@ export function stubQueryAccountMembershipsByAccount(
     'ACCOUNT#162483619',
     memberships,
     GITHUB_ACCOUNT_MEMBERSHIP
+  )
+}
+
+export function stubQueryRepositories(appState: FakeAppState) {
+  stubber(appState).queryAllPages.ofTableByPk(
+    fakeTableNames['github-repositories'],
+    'OWNER#162483619',
+    [testOrgTestRepoOne],
+    GITHUB_REPOSITORY
   )
 }
 

@@ -51,6 +51,15 @@ test('toDisplayableRepoSettings', () => {
     [
       {
         ownerId: 123,
+        id: 456,
+        ownerName: 'account1',
+        name: 'repo1',
+        ownerType: USER_ACCOUNT_TYPE
+      }
+    ],
+    [
+      {
+        ownerId: 123,
         repoId: 456,
         workflowId: 789,
         workflowName: 'workflow1',
@@ -95,6 +104,15 @@ test('toDisplayableAccountSettings', () => {
         }
       }
     },
+    [
+      {
+        ownerId: 123,
+        id: 456,
+        ownerName: 'account1',
+        name: 'repo1',
+        ownerType: USER_ACCOUNT_TYPE
+      }
+    ],
     [
       {
         ownerId: 123,
@@ -147,6 +165,15 @@ test('toCalculatedAndDisplayableUserSettings', () => {
         }
       }
     },
+    [
+      {
+        ownerId: 123,
+        id: 456,
+        ownerName: 'account1',
+        name: 'repo1',
+        ownerType: USER_ACCOUNT_TYPE
+      }
+    ],
     [
       {
         ownerId: 123,

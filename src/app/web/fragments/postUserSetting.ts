@@ -32,6 +32,8 @@ import { getWorkflowsForUser } from '../../domain/user/userVisible'
 import { calculateAccountSettings, calculateUserSettings } from '../../domain/user/calculatedUserSettings'
 import { UserSetting } from '../../domain/types/UserSettings'
 import { fragmentPath } from '../routingCommon'
+import { getRepositoriesForAccount, repositorySummaryToKey } from '../../domain/github/githubRepository'
+import { getRepository } from '../../domain/entityStore/entities/GithubRepositoryEntity'
 
 export const postUserSettingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('userSetting'),
@@ -74,6 +76,8 @@ async function processUpdateAccountSetting(
   enabled: boolean
 ) {
   logger.debug('processUpdateAccountSetting')
+  const allRepos = await getRepositoriesForAccount(appState, ownerId)
+  // TODO - only need workflows for account
   const allWorkflows = await getWorkflowsForUser(appState, userId)
   const updatedSettings = await updateAndSaveAccountSetting(appState, userId, ownerId, setting, enabled)
   const updatedAccountSettings =
@@ -84,7 +88,13 @@ async function processUpdateAccountSetting(
     ownerId,
     toDisplayableAccountSettings(
       ownerId,
-      calculateAccountSettings(updatedAccountSettings, ownerId, allWorkflows),
+      calculateAccountSettings(
+        updatedAccountSettings,
+        ownerId,
+        allRepos.map(repositorySummaryToKey),
+        allWorkflows
+      ),
+      allRepos,
       allWorkflows
     )
   )
@@ -101,15 +111,18 @@ async function processUpdateRepoSetting(
   await updateAndSaveRepoSetting(appState, userId, repoKey, setting, enabled)
 
   const newPersistedUserSettings = await getUserSettings(appState, userId)
+  const repoSummary =
+    (await getRepository(appState.entityStore, repoKey)) ??
+    throwFunction(`Unable to find repo for key ${JSON.stringify(repoKey)}`)()
   const allWorkflows = await getWorkflowsForUser(appState, userId)
-  const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, allWorkflows)
+  const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, [repoKey], allWorkflows)
   const newCalculatedRepoSettings =
     newCalculatedUserSettings.github.accounts[repoKey.ownerId]?.repos[repoKey.repoId] ??
     throwFunction('Internal error in processUpdateRepoSetting - no repo settings')()
 
   return createUpdateUserRepoSettingResponse(
     repoKey,
-    toDisplayableRepoSettings(repoKey, newCalculatedRepoSettings, allWorkflows)
+    toDisplayableRepoSettings(repoKey, newCalculatedRepoSettings, [repoSummary], allWorkflows)
   )
 }
 
@@ -124,8 +137,13 @@ async function processUpdateWorkflowSetting(
   await updateAndSaveWorkflowSetting(appState, userId, workflowKey, setting, enabled)
 
   const newPersistedUserSettings = await getUserSettings(appState, userId)
+  // TODO - we can just get the workflow referenced by the key
   const allWorkflows = await getWorkflowsForUser(appState, userId)
-  const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, allWorkflows)
+  const newCalculatedUserSettings = calculateUserSettings(
+    newPersistedUserSettings,
+    [workflowKey],
+    allWorkflows
+  )
   const newCalculatedWorkflowSettings =
     newCalculatedUserSettings.github.accounts[workflowKey.ownerId]?.repos[workflowKey.repoId]?.workflows[
       workflowKey.workflowId
