@@ -1,51 +1,36 @@
 import { AppState } from '../../environment/AppState'
 import { GithubUser } from '../types/GithubUser'
-import { GithubAccountMembershipEntity } from '../entityStore/entities/GithubAccountMembershipEntity'
-import { GithubAccountMembership } from '../types/GithubAccountMembership'
+import {
+  deleteMemberships,
+  getAllMembershipsForAccount,
+  getAllMembershipsForUserId,
+  putMemberships
+} from '../entityStore/entities/GithubAccountMembershipEntity'
 import { arrayDifferenceDeep } from '../../util/collections'
 import { GithubAccountId, GithubUserId } from '../types/GithubKeys'
-import { getPublicAccountsForOwnerAccountIds } from './githubPublicAccountEntity'
 
 export async function setMemberships(
   appState: AppState,
   latestMembers: GithubUser[],
   accountId: GithubAccountId
 ) {
-  const store = membershipStore(appState)
-  const { newMemberships, expiredMemberships } = calculateMembershipUpdates(
-    latestMembers.map(({ id }) => ({
-      userId: id,
-      accountId
-    })),
-    await store.queryAllByPk({ accountId })
-  )
+  const memberships = latestMembers.map(({ id }) => ({
+    userId: id,
+    accountId
+  }))
+  const previousMemberships = await getAllMembershipsForAccount(appState.entityStore, accountId)
 
-  if (newMemberships.length > 0) await store.advancedOperations.batchPut(newMemberships)
-  if (expiredMemberships.length > 0) await store.advancedOperations.batchDelete(expiredMemberships)
+  await putMemberships(appState.entityStore, arrayDifferenceDeep(memberships, previousMemberships))
+  await deleteMemberships(appState.entityStore, arrayDifferenceDeep(previousMemberships, memberships))
 }
 
-export function calculateMembershipUpdates(
-  currentMemberships: GithubAccountMembership[],
-  previousMemberships: GithubAccountMembership[]
-) {
-  return {
-    newMemberships: arrayDifferenceDeep(currentMemberships, previousMemberships),
-    expiredMemberships: arrayDifferenceDeep(previousMemberships, currentMemberships)
-  }
+export async function getIdsOfAccountsWhichUserIsMemberOf(
+  appState: AppState,
+  userId: GithubUserId
+): Promise<GithubAccountId[]> {
+  return (await getAllMembershipsForUserId(appState.entityStore, userId)).map(({ accountId }) => accountId)
 }
 
-export async function getAllAccountIdsForUser(appState: AppState, userId: GithubUserId): Promise<number[]> {
-  const memberAccountIds = (
-    await membershipStore(appState).queryAllWithGsiByPk({ userId }, { gsiId: 'gsi1' })
-  ).map(({ accountId }) => accountId)
-  const publicAccounts = await getPublicAccountsForOwnerAccountIds(appState, memberAccountIds)
-  return [...memberAccountIds, ...publicAccounts.map(({ accountId }) => accountId)]
-}
-
-function membershipStore(appState: AppState) {
-  return appState.entityStore.for(GithubAccountMembershipEntity)
-}
-
-export async function getMemberIds(appState: AppState, accountId: GithubAccountId) {
-  return (await membershipStore(appState).queryAllByPk({ accountId })).map(({ userId }) => userId)
+export async function getMemberUserIdsForAccount(appState: AppState, accountId: GithubAccountId) {
+  return (await getAllMembershipsForAccount(appState.entityStore, accountId)).map(({ userId }) => userId)
 }

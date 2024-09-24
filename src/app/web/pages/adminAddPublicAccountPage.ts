@@ -7,7 +7,7 @@ import { foundRedirectResponse } from '../../inboundInterfaces/httpResponses'
 import { getAddPublicAccountParameter } from './requestParsing/getAddPublicAccountParameter'
 import { isFailure } from '../../util/structuredResult'
 import { createBadRequestResponse } from './views/badRequestView'
-import { savePublicAccountWithName } from '../../domain/github/githubPublicAccountEntity'
+import { savePublicAccountWithName } from '../../domain/github/githubPublicAccount'
 import { internalErrorHTMLResponse } from '../htmlResponses'
 
 export const adminAddPublicAccountPageRoute: Route<CicadaAuthorizedAPIEvent> = {

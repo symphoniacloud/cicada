@@ -1,6 +1,7 @@
-import { Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { AllEntitiesStore, Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubAccountMembership, isGithubOrganizationMembership } from '../../types/GithubAccountMembership'
 import { GITHUB_ACCOUNT_MEMBERSHIP } from '../entityTypes'
+import { GithubAccountId, GithubUserId } from '../../types/GithubKeys'
 
 export const GithubAccountMembershipEntity: Entity<
   GithubAccountMembership,
@@ -25,4 +26,29 @@ export const GithubAccountMembershipEntity: Entity<
       }
     }
   }
+}
+
+export async function putMemberships(entityStore: AllEntitiesStore, memberships: GithubAccountMembership[]) {
+  if (memberships.length === 0) return
+  await store(entityStore).advancedOperations.batchPut(memberships)
+}
+
+export async function deleteMemberships(
+  entityStore: AllEntitiesStore,
+  memberships: GithubAccountMembership[]
+) {
+  if (memberships.length === 0) return
+  await store(entityStore).advancedOperations.batchDelete(memberships)
+}
+
+export async function getAllMembershipsForAccount(entityStore: AllEntitiesStore, accountId: GithubAccountId) {
+  return store(entityStore).queryAllByPk({ accountId })
+}
+
+export async function getAllMembershipsForUserId(entityStore: AllEntitiesStore, userId: GithubUserId) {
+  return store(entityStore).queryAllWithGsiByPk({ userId }, { gsiId: 'gsi1' })
+}
+
+function store(entityStore: AllEntitiesStore) {
+  return entityStore.for(GithubAccountMembershipEntity)
 }

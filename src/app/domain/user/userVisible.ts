@@ -1,5 +1,5 @@
 import { AppState } from '../../environment/AppState'
-import { getAllAccountIdsForUser } from '../github/githubMembership'
+import { getAllAccountIdsForUser } from '../github/githubAccount'
 import {
   latestWorkflowRunEventsPerWorkflowForOwners,
   latestWorkflowRunEventsPerWorkflowForRepo

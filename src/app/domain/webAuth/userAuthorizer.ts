@@ -2,10 +2,10 @@ import { AppState } from '../../environment/AppState'
 import { logger } from '../../util/logging'
 import { isTestUserToken, processTestToken } from './userAuthorizerForTests'
 import { getUserByTokenRecord } from '../github/githubUser'
-import { getAllAccountIdsForUser } from '../github/githubMembership'
 import { getToken } from './webAuthToken'
 import { WithHeadersEvent } from '../../inboundInterfaces/lambdaTypes'
 import { getGithubUserTokenOrUndefined } from '../github/githubUserToken'
+import { getIdsOfAccountsWhichUserIsMemberOf } from '../github/githubMembership'
 
 export type AuthorizationResult = SuccessfulAuthorizationResult | undefined
 
@@ -40,8 +40,8 @@ export async function authorizeUserRequest(
 
   // If the user exists in Cicada, but no longer has any memberships, then unauthorized
   // This is the case if the user is removed from a GitHub organization
-  const accountIds = await getAllAccountIdsForUser(appState, cicadaUser.id)
-  if (accountIds.length === 0) return undefined
+  const memberOfAccountIds = await getIdsOfAccountsWhichUserIsMemberOf(appState, cicadaUser.id)
+  if (memberOfAccountIds.length === 0) return undefined
 
   // Authorization successful
   return {

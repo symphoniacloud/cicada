@@ -4,7 +4,7 @@ import { GithubAccountType } from './GithubAccountType'
 
 export interface GithubPublicAccount {
   accountId: GithubAccountId
-  username: string
+  accountLogin: string
   accountType: GithubAccountType
   ownerType: 'GithubAccount'
   ownerAccountId: GithubAccountId
@@ -15,8 +15,8 @@ export function isGithubPublicAccount(x: unknown): x is GithubPublicAccount {
     isNotNullObject(x) &&
     'accountId' in x &&
     isGithubAccountId(x.accountId) &&
-    'username' in x &&
-    typeof x.username === 'string' &&
+    'accountLogin' in x &&
+    typeof x.accountLogin === 'string' &&
     'ownerType' in x &&
     x.ownerType === 'GithubAccount' &&
     'ownerAccountId' in x &&

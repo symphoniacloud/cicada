@@ -18,19 +18,19 @@ export const GithubPublicAccountEntity: Entity<
   }
 }
 
-function thisEntityStore(entityStore: AllEntitiesStore) {
+function store(entityStore: AllEntitiesStore) {
   return entityStore.for(GithubPublicAccountEntity)
 }
 
 export async function savePublicAccount(entityStore: AllEntitiesStore, account: GithubPublicAccount) {
-  return await thisEntityStore(entityStore).put(account)
+  return await store(entityStore).put(account)
 }
 
 export async function getPublicAccountsForOwner(
   entityStore: AllEntitiesStore,
   ownerAccountId: GithubAccountId
 ) {
-  return await thisEntityStore(entityStore).queryAllByPk({ ownerAccountId })
+  return await store(entityStore).queryAllByPk({ ownerAccountId })
 }
 
 export async function getPublicAccount(
@@ -38,7 +38,7 @@ export async function getPublicAccount(
   ownerAccountId: GithubAccountId,
   accountId: GithubAccountId
 ) {
-  return await thisEntityStore(entityStore).getOrUndefined({
+  return await store(entityStore).getOrUndefined({
     ownerAccountId,
     accountId
   })

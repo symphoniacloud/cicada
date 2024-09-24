@@ -23,12 +23,14 @@ import { postUserSettingFragmentRoute } from '../../web/fragments/postUserSettin
 import { postResetUserSettingsFragmentRoute } from '../../web/fragments/postResetUserSettings'
 import { adminPageRoute } from '../../web/pages/adminPage'
 import { adminAddPublicAccountPageRoute } from '../../web/pages/adminAddPublicAccountPage'
+import { allAvailableAccountsRoute } from '../../web/fragments/allAvailableAccounts'
 
 const router = createRouter([
   repoHeadingFragmentRoute,
   workflowHeadingFragmentRoute,
   actionsStatusFragmentRoute,
   gitHubActivityFragmentRoute,
+  allAvailableAccountsRoute,
   getUserSettingsFragmentRoute,
   postUserSettingFragmentRoute,
   postResetUserSettingsFragmentRoute,
