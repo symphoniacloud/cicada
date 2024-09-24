@@ -178,28 +178,42 @@ test('repo settings when visible true notify false', () => {
 })
 
 test('account settings when none persisted', () => {
-  const calculated = calculateAccountSettings(undefined, 111, [
-    {
-      ownerId: 111,
-      repoId: 123,
-      workflowId: 789,
-      workflowName: 'workflow1',
-      ownerType: USER_ACCOUNT_TYPE,
-      ownerName: '',
-      repoName: '',
-      path: ''
-    },
-    {
-      ownerId: 111,
-      repoId: 456,
-      workflowId: 790,
-      workflowName: 'workflow2',
-      ownerType: USER_ACCOUNT_TYPE,
-      ownerName: '',
-      repoName: '',
-      path: ''
-    }
-  ])
+  const calculated = calculateAccountSettings(
+    undefined,
+    111,
+    [
+      {
+        ownerId: 111,
+        repoId: 123
+      },
+      {
+        ownerId: 111,
+        repoId: 456
+      }
+    ],
+    [
+      {
+        ownerId: 111,
+        repoId: 123,
+        workflowId: 789,
+        workflowName: 'workflow1',
+        ownerType: USER_ACCOUNT_TYPE,
+        ownerName: '',
+        repoName: '',
+        path: ''
+      },
+      {
+        ownerId: 111,
+        repoId: 456,
+        workflowId: 790,
+        workflowName: 'workflow2',
+        ownerType: USER_ACCOUNT_TYPE,
+        ownerName: '',
+        repoName: '',
+        path: ''
+      }
+    ]
+  )
 
   expect(calculated).toEqual({
     visible: true,
@@ -243,28 +257,42 @@ test('account settings ', () => {
     }
   }
 
-  const calculated = calculateAccountSettings(persistedAccountSettings, 111, [
-    {
-      ownerId: 111,
-      repoId: 123,
-      workflowId: 789,
-      workflowName: 'workflow1',
-      ownerType: USER_ACCOUNT_TYPE,
-      ownerName: '',
-      repoName: '',
-      path: ''
-    },
-    {
-      ownerId: 111,
-      repoId: 456,
-      workflowId: 790,
-      workflowName: 'workflow2',
-      ownerType: USER_ACCOUNT_TYPE,
-      ownerName: '',
-      repoName: '',
-      path: ''
-    }
-  ])
+  const calculated = calculateAccountSettings(
+    persistedAccountSettings,
+    111,
+    [
+      {
+        ownerId: 111,
+        repoId: 123
+      },
+      {
+        ownerId: 111,
+        repoId: 456
+      }
+    ],
+    [
+      {
+        ownerId: 111,
+        repoId: 123,
+        workflowId: 789,
+        workflowName: 'workflow1',
+        ownerType: USER_ACCOUNT_TYPE,
+        ownerName: '',
+        repoName: '',
+        path: ''
+      },
+      {
+        ownerId: 111,
+        repoId: 456,
+        workflowId: 790,
+        workflowName: 'workflow2',
+        ownerType: USER_ACCOUNT_TYPE,
+        ownerName: '',
+        repoName: '',
+        path: ''
+      }
+    ]
+  )
 
   expect(calculated).toEqual({
     visible: true,
@@ -297,6 +325,16 @@ test('user settings when empty persisted', () => {
         accounts: {}
       }
     },
+    [
+      {
+        ownerId: 111,
+        repoId: 123
+      },
+      {
+        ownerId: 111,
+        repoId: 456
+      }
+    ],
     [
       {
         ownerId: 111,
@@ -374,6 +412,16 @@ test('user settings when some persisted', () => {
         }
       }
     },
+    [
+      {
+        ownerId: 111,
+        repoId: 123
+      },
+      {
+        ownerId: 111,
+        repoId: 456
+      }
+    ],
     [
       {
         ownerId: 111,

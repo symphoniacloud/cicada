@@ -10,24 +10,22 @@ import {
 } from '../types/UserSettings'
 import { GithubWorkflow } from '../types/GithubWorkflow'
 import { GithubAccountId, GithubRepoKey } from '../types/GithubKeys'
-import {
-  findUniqueAccountIds,
-  findUniqueRepoIdsForAccount,
-  findWorkflowsForRepo
-} from '../github/githubWorkflow'
+import { findWorkflowsForRepo } from '../github/githubWorkflow'
+import { findUniqueAccountIds, toUniqueRepoIdsForAccount } from '../github/githubRepository'
 
 const DEFAULT_ACCOUNT_NOTIFY = true
 
 export function calculateUserSettings(
   settings: PersistedUserSettings,
+  allRepoKeys: GithubRepoKey[],
   allWorkflows: GithubWorkflow[]
 ): CalculatedUserSettings {
   return {
     userId: settings.userId,
     github: {
       accounts: Object.fromEntries(
-        findUniqueAccountIds(allWorkflows).map((id) => {
-          return [id, calculateAccountSettings(settings.github.accounts[id], id, allWorkflows)]
+        findUniqueAccountIds(allRepoKeys).map((id) => {
+          return [id, calculateAccountSettings(settings.github.accounts[id], id, allRepoKeys, allWorkflows)]
         })
       )
     }
@@ -37,12 +35,13 @@ export function calculateUserSettings(
 export function calculateAccountSettings(
   settings: PersistedGithubAccountSettings | undefined,
   accountId: GithubAccountId,
+  allRepoKeys: GithubRepoKey[],
   allWorkflows: GithubWorkflow[]
 ): CalculatedGithubAccountSettings {
   const visibleAndNotify = calculateVisibleAndNotifyConfigurable(settings, DEFAULT_ACCOUNT_NOTIFY)
   const repos = visibleAndNotify.visible
     ? Object.fromEntries(
-        findUniqueRepoIdsForAccount(allWorkflows, accountId).map((repoId) => {
+        toUniqueRepoIdsForAccount(allRepoKeys, accountId).map((repoId) => {
           return [
             repoId,
             calculateRepoSettings(

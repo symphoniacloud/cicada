@@ -26,6 +26,9 @@ export async function getWorkflowNotifyEnabledForUser(
 ) {
   const userSettings = calculateUserSettings(
     await getUserSettings(appState, userId),
+    // We can use the workflow event as the list of all repos for the sake of calculating notifyibilty
+    [workflow],
+    // TODO - can just use one workflow here?
     await getWorkflowsForUser(appState, userId)
   )
   const yesNotify =

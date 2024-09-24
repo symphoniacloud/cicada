@@ -47,11 +47,16 @@ export function accountControlsRow(
 
 export function repoControlsRow(repoKey: GithubRepoKey, repoSettings: DisplayableGithubRepoSettings) {
   const workflowRows: HiccoughElement[] = []
-  if (repoSettings.visible) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const workflowEntries = Object.entries(repoSettings.workflows).sort(([_, a], [__, b]) =>
+    a.name < b.name ? -1 : 1
+  )
+  if (repoSettings.visible && workflowEntries.length > 0) {
     workflowRows.push(divRow(colSm(2), colSm(10, b('Workflow'))))
-    for (const [workflowId, workflowSettings] of Object.entries(repoSettings.workflows)) {
+    for (const [workflowId, workflowSettings] of workflowEntries) {
       workflowRows.push(workflowControlsRow({ ...repoKey, workflowId: Number(workflowId) }, workflowSettings))
     }
+    workflowRows.push(divRow('&nbsp;'))
   }
 
   const { ownerId, repoId } = repoKey
@@ -64,8 +69,7 @@ export function repoControlsRow(repoKey: GithubRepoKey, repoSettings: Displayabl
       11,
       ...[
         divRow(colSm(6, repoSettings.name), ...switchCells(repoSettings, partialQs, targetId)),
-        ...workflowRows,
-        divRow('&nbsp;')
+        ...workflowRows
       ]
     )
   )

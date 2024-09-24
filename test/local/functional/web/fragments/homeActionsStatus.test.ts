@@ -4,12 +4,14 @@ import { handleWebRequest } from '../../../../../src/app/lambdaFunctions/authent
 import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport/fakes/awsStubs'
 import {
   stubQueryLatestWorkflowRuns,
+  stubQueryRepositories,
   stubSetupUserRecords
 } from '../../../../testSupport/fakes/tableRecordReadStubs'
 
 test('home-actions-status', async () => {
   const appState = new FakeAppState()
   stubSetupUserRecords(appState)
+  stubQueryRepositories(appState)
   stubQueryLatestWorkflowRuns(appState)
 
   const latestActivity = await handleWebRequest(

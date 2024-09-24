@@ -11,18 +11,30 @@ import {
 } from '../types/UserSettings'
 import { GithubWorkflow } from '../types/GithubWorkflow'
 import { GithubAccountId, GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys'
-import { findAccountName, findRepoName, findWorkflowName } from '../github/githubWorkflow'
+import { findWorkflowName } from '../github/githubWorkflow'
 import { calculateUserSettings } from './calculatedUserSettings'
+import { GithubRepositorySummary } from '../types/GithubRepository'
+import {
+  findAccountNameFromRepositories,
+  findRepoNameFromRepositories,
+  repositorySummaryToKey
+} from '../github/githubRepository'
 
 export function toCalculatedAndDisplayableUserSettings(
   userSettings: PersistedUserSettings,
+  allRepoSummaries: GithubRepositorySummary[],
   workflows: GithubWorkflow[]
 ): DisplayableUserSettings {
-  return toDisplayableUserSettings(calculateUserSettings(userSettings, workflows), workflows)
+  return toDisplayableUserSettings(
+    calculateUserSettings(userSettings, allRepoSummaries.map(repositorySummaryToKey), workflows),
+    allRepoSummaries,
+    workflows
+  )
 }
 
 function toDisplayableUserSettings(
   userSettings: CalculatedUserSettings,
+  allRepoSummaries: GithubRepositorySummary[],
   workflows: GithubWorkflow[]
 ): DisplayableUserSettings {
   return {
@@ -31,7 +43,7 @@ function toDisplayableUserSettings(
       accounts: Object.fromEntries(
         Object.entries(userSettings.github.accounts).map(([accountId, accountSettings]) => [
           accountId,
-          toDisplayableAccountSettings(Number(accountId), accountSettings, workflows)
+          toDisplayableAccountSettings(Number(accountId), accountSettings, allRepoSummaries, workflows)
         ])
       )
     }
@@ -41,11 +53,12 @@ function toDisplayableUserSettings(
 export function toDisplayableAccountSettings(
   accountId: GithubAccountId,
   accountSettings: CalculatedGithubAccountSettings,
+  allRepoSummaries: GithubRepositorySummary[],
   allWorkflows: GithubWorkflow[]
 ): DisplayableGithubAccountSettings {
   return {
     ...accountSettings,
-    name: findAccountName(allWorkflows, accountId),
+    name: findAccountNameFromRepositories(allRepoSummaries, accountId),
     repos: Object.fromEntries(
       Object.entries(accountSettings.repos).map(([repoId, repoSettings]) => [
         repoId,
@@ -55,6 +68,7 @@ export function toDisplayableAccountSettings(
             repoId: Number(repoId)
           },
           repoSettings,
+          allRepoSummaries,
           allWorkflows
         )
       ])
@@ -65,11 +79,12 @@ export function toDisplayableAccountSettings(
 export function toDisplayableRepoSettings(
   repoKey: GithubRepoKey,
   repoSettings: CalculatedGithubRepoSettings,
+  allRepoSummaries: GithubRepositorySummary[],
   allWorkflows: GithubWorkflow[]
 ): DisplayableGithubRepoSettings {
   return {
     ...repoSettings,
-    name: findRepoName(allWorkflows, repoKey),
+    name: findRepoNameFromRepositories(allRepoSummaries, repoKey),
     workflows: Object.fromEntries(
       Object.entries(repoSettings.workflows).map(([workflowId, workflowSettings]) => [
         workflowId,

@@ -2,7 +2,6 @@ import { AppState } from '../../environment/AppState'
 import { Route } from '../../internalHttpRouter/internalHttpRoute'
 import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { isFailure } from '../../util/structuredResult'
-import { getRepository } from '../../domain/github/githubRepository'
 import { invalidRequestResponse, notFoundHTMLResponse } from '../htmlResponses'
 import {
   createGithubActivityResponse,
@@ -18,13 +17,14 @@ import {
   GithubWorkflowKey
 } from '../../domain/types/GithubKeys'
 import {
-  getRecentActiveBranchesForUser,
+  getRecentActiveBranchesForUserWithUserSettings,
   getRecentActiveBranchesForUserAndAccount,
   getRecentActivityForRepoForUser,
   getRunEventsForWorkflowForUser
 } from '../../domain/user/userVisible'
 import { fragmentPath } from '../routingCommon'
 import { getAccountForUser } from '../../domain/github/githubAccount'
+import { getRepository } from '../../domain/entityStore/entities/GithubRepositoryEntity'
 
 export const gitHubActivityFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('gitHubActivity'),
@@ -41,41 +41,24 @@ export async function gitHubActivity(appState: AppState, event: CicadaAuthorized
   if (ownerId) {
     if (repoId) {
       if (workflowId) {
-        return await githubActivityForWorkflow(appState, userId, { ownerId, repoId, workflowId })
+        return await githubActivityForWorkflow(appState, { ownerId, repoId, workflowId })
       } else {
-        return await githubActivityForRepo(appState, userId, { ownerId, repoId })
+        return await githubActivityForRepo(appState, { ownerId, repoId })
       }
     } else {
       return await githubActivityForAccount(appState, userId, ownerId)
     }
   }
-  if (!ownerId && !repoId && !workflowId) return await githubActivityForHome(appState, userId)
+  if (!ownerId && !repoId && !workflowId) return await githubActivityForDashboard(appState, userId)
   return invalidRequestResponse
 }
 
-async function githubActivityForWorkflow(
-  appState: AppState,
-  userId: GithubUserId,
-  workflow: GithubWorkflowKey
-) {
-  logger.debug('githubActivityForWorkflow', { workflow })
-  // TODO - check workflow exists
-
-  return createWorkflowRunEventTableResponse(
-    'workflowActivity',
+async function githubActivityForDashboard(appState: AppState, userId: GithubUserId) {
+  logger.debug('githubActivityForDashboard')
+  return createGithubPushTableResponse(
+    'homeActivity',
     appState.clock,
-    await getRunEventsForWorkflowForUser(appState, userId, workflow)
-  )
-}
-
-async function githubActivityForRepo(appState: AppState, userId: GithubUserId, repoKey: GithubRepoKey) {
-  logger.debug('githubActivityForRepo')
-  if (!(await getRepository(appState, repoKey))) return notFoundHTMLResponse
-
-  return createGithubActivityResponse(
-    'repoActivity',
-    appState.clock,
-    await getRecentActivityForRepoForUser(appState, userId, repoKey)
+    await getRecentActiveBranchesForUserWithUserSettings(appState, userId)
   )
 }
 
@@ -90,15 +73,28 @@ async function githubActivityForAccount(
   return createGithubPushTableResponse(
     'accountActivity',
     appState.clock,
-    await getRecentActiveBranchesForUserAndAccount(appState, userId, accountId)
+    await getRecentActiveBranchesForUserAndAccount(appState, accountId)
   )
 }
 
-async function githubActivityForHome(appState: AppState, userId: GithubUserId) {
-  logger.debug('githubActivityForHome')
-  return createGithubPushTableResponse(
-    'homeActivity',
+async function githubActivityForRepo(appState: AppState, repoKey: GithubRepoKey) {
+  logger.debug('githubActivityForRepo')
+  if (!(await getRepository(appState.entityStore, repoKey))) return notFoundHTMLResponse
+
+  return createGithubActivityResponse(
+    'repoActivity',
     appState.clock,
-    await getRecentActiveBranchesForUser(appState, userId)
+    await getRecentActivityForRepoForUser(appState, repoKey)
+  )
+}
+
+async function githubActivityForWorkflow(appState: AppState, workflow: GithubWorkflowKey) {
+  logger.debug('githubActivityForWorkflow', { workflow })
+  // TODO - check workflow exists
+
+  return createWorkflowRunEventTableResponse(
+    'workflowActivity',
+    appState.clock,
+    await getRunEventsForWorkflowForUser(appState, workflow)
   )
 }
