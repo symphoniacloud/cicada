@@ -3,7 +3,7 @@ import { Route } from '../../internalHttpRouter/internalHttpRoute'
 import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { pagePath } from '../routingCommon'
 import { createAdminPageResponse } from './views/adminPageView'
-import { getPublicAccountsForUser } from '../../domain/github/githubPublicAccountEntity'
+import { getPublicAccountsForUser } from '../../domain/github/githubPublicAccount'
 
 export const adminPageRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: pagePath('admin'),

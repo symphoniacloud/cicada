@@ -6,11 +6,11 @@ import {
   getPublicAccountsForOwner,
   savePublicAccount
 } from '../entityStore/entities/GithubPublicAccountEntity'
-import { getAllAccountIdsForUser } from './githubMembership'
 import { getInstallationForAccount } from './githubInstallation'
 import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../types/GithubAccountType'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
+import { getIdsOfAccountsWhichUserIsMemberOf } from './githubMembership'
 
 export async function savePublicAccountWithName(
   appState: AppState,
@@ -19,8 +19,8 @@ export async function savePublicAccountWithName(
 ): Promise<Result<GithubPublicAccount>> {
   // TOEventually - when a user can be a member of multiple installed accounts then need to
   // have them choose which one to add the public account for
-  const installationAccountId = (await getAllAccountIdsForUser(appState, adminUserId))[0]
-  const githubAppInstallation = await getInstallationForAccount(appState, installationAccountId)
+  const ownerAccountId = (await getIdsOfAccountsWhichUserIsMemberOf(appState, adminUserId))[0]
+  const githubAppInstallation = await getInstallationForAccount(appState, ownerAccountId)
   const githubUserResult = await appState.githubClient
     .clientForInstallation(githubAppInstallation.installationId)
     .getUser(accountName)
@@ -36,10 +36,10 @@ export async function savePublicAccountWithName(
 
   const result = await savePublicAccount(appState.entityStore, {
     accountId: githubUser.id,
-    username: githubUser.login,
+    accountLogin: githubUser.login,
     accountType: githubUserType,
     ownerType: 'GithubAccount',
-    ownerAccountId: installationAccountId
+    ownerAccountId
   })
 
   // Trigger crawling public account
@@ -55,7 +55,10 @@ export async function getPublicAccountsForUser(
   appState: AppState,
   userId: GithubAccountId
 ): Promise<GithubPublicAccount[]> {
-  return await getPublicAccountsForOwnerAccountIds(appState, await getAllAccountIdsForUser(appState, userId))
+  return await getPublicAccountsForOwnerAccountIds(
+    appState,
+    await getIdsOfAccountsWhichUserIsMemberOf(appState, userId)
+  )
 }
 
 export async function getPublicAccountsForOwnerAccountIds(

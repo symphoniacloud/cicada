@@ -34,8 +34,8 @@ export async function crawlRepositoriesForPublicAccount(
 ) {
   const rawRepos =
     account.accountType === ORGANIZATION_ACCOUNT_TYPE
-      ? await githubClient.listOrganizationRepositories(account.username)
-      : await githubClient.listPublicRepositoriesForUser(account.username)
+      ? await githubClient.listOrganizationRepositories(account.accountLogin)
+      : await githubClient.listPublicRepositoriesForUser(account.accountLogin)
 
   await processReposAndCrawlElements(appState, githubClient, rawRepos, lookbackHours)
 }

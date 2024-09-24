@@ -1,17 +1,19 @@
 import { GithubPublicAccount } from '../../../domain/types/GithubPublicAccount'
 import { pageViewResponse } from '../../viewResultWrappers'
-import { b, button, div, form, h1, h2, input, label } from '../../hiccough/hiccoughElements'
-import { colAuto, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements'
-import { githubAnchor } from '../../domainComponents/genericComponents'
+import { button, div, form, h1, h2, input, label, td, tr } from '../../hiccough/hiccoughElements'
+import { colAuto } from '../../hiccoughCicada/hiccoughBootstrapElements'
+import { standardTable } from '../../domainComponents/genericComponents'
 import { adminAddPublicAccountPageRoute } from '../adminAddPublicAccountPage'
+import { ORGANIZATION_ACCOUNT_TYPE } from '../../../domain/types/GithubAccountType'
+import { PUBLIC_ACCOUNT_TYPE } from '../../../domain/types/GithubAccount'
+import { accountCell } from '../../domainComponents/accountComponents'
 
-export function createAdminPageResponse(publicAccounts: GithubPublicAccount[]) {
+export function createAdminPageResponse(accounts: GithubPublicAccount[]) {
   return pageViewResponse(
     [
       h1({ class: 'display-3 mt-4' }, 'Cicada Admin'),
       h2('Additional Public GitHub Accounts'),
-      // TOEventually - make this nicer by adding some headers, maybe
-      ...publicAccounts.map(toPublicAccountRow),
+      standardTable(['Account', 'Type'], accounts.map(accountRow)),
       div(
         { class: 'alert alert-warning', role: 'alert' },
         '<b>Careful!</b> If you add large public accounts, or many public accounts, you may have problems with Cicada being rate limited by GitHub while accessing the GitHub API.'
@@ -39,6 +41,11 @@ export function createAdminPageResponse(publicAccounts: GithubPublicAccount[]) {
   )
 }
 
-function toPublicAccountRow({ username }: GithubPublicAccount) {
-  return divRow(div({ class: 'col mt-1' }, b(`${username}`), githubAnchor(`https://github.com/${username}`)))
+function accountRow(account: GithubPublicAccount) {
+  return tr(
+    ...[
+      accountCell({ ...account, cicadaAccountType: PUBLIC_ACCOUNT_TYPE }),
+      td(account.accountType === ORGANIZATION_ACCOUNT_TYPE ? 'Organization' : 'Personal Account')
+    ]
+  )
 }

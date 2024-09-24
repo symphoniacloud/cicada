@@ -24,6 +24,11 @@
        hx-trigger='load'
        hx-swap='outerHTML'>Loading Recent Activity...
   </div>
+  <h3 class="mt-4">All Available Accounts</h3>
+  <div hx-get='/app/fragment/allAvailableAccounts'
+       hx-trigger='load'
+       hx-swap='outerHTML'>Loading Accounts...
+  </div>
   <hr />
   <p><a href="/userSettings">User Settings</a></p>
   <p><a href="/app/admin">Global admin</a></p>
