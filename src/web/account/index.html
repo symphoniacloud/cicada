@@ -27,17 +27,17 @@
        hx-swap='outerHTML'>Finding repository details...
   </div>
   <h4 class="mt-4">GitHub Actions Status</h4>
-<!--  <div hx-get='/app/fragment/actionsStatus'-->
-<!--       hx-trigger='load'-->
-<!--       hx-vals='js:{ ...accountKey }'-->
-<!--       hx-swap='outerHTML'>Loading GitHub Actions Status...-->
-<!--  </div>-->
-  <h4 class="mt-4">Recent Activity</h4>
-<!--  <div hx-get='/app/fragment/gitHubActivity'-->
-<!--       hx-trigger='load'-->
-<!--       hx-vals='js:{ ...accountKey }'-->
-<!--       hx-swap='outerHTML'>Loading Recent Activity...-->
-<!--  </div>-->
+  <div hx-get='/app/fragment/actionsStatus'
+       hx-trigger='load'
+       hx-vals='js:{ ...accountKey }'
+       hx-swap='outerHTML'>Loading GitHub Actions Status...
+  </div>
+  <h4 class="mt-4">Recent Active Branches</h4>
+  <div hx-get='/app/fragment/gitHubActivity'
+       hx-trigger='load'
+       hx-vals='js:{ ...accountKey }'
+       hx-swap='outerHTML'>Loading Recent Active Branches...
+  </div>
   <hr />
   <p><a href="/">Back to home</a></p>
   <p><a href="/userSettings">User Settings</a></p>

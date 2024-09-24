@@ -10,8 +10,8 @@ import { a, i, p } from '../../hiccough/hiccoughElements'
 import { workflowRow, WorkflowRowOptions } from '../../domainComponents/workflowComponents'
 import { VisibleActivity, VisiblePushes, VisibleWorkflowRunEvents } from '../../../domain/user/userVisible'
 
-export type WorkflowRunEventTableType = 'homeStatus' | 'repoStatus' | 'workflowActivity'
-export type GithubPushTableType = 'homeActivity'
+export type WorkflowRunEventTableType = 'homeStatus' | 'accountStatus' | 'repoStatus' | 'workflowActivity'
+export type GithubPushTableType = 'homeActivity' | 'accountActivity'
 export type GithubActivityTableType = 'repoActivity'
 
 export function createWorkflowRunEventTableResponse(
@@ -58,6 +58,8 @@ type TableType = WorkflowRunEventTableType | GithubPushTableType | GithubActivit
 const columnTitles: Record<TableType, string[]> = {
   homeStatus: ['Repo', 'Workflow', 'Status', 'When', 'Duration', 'By', 'Commit'],
   homeActivity: ['Repo', 'Branch', 'When', 'By', 'Commit'],
+  accountStatus: ['Repo', 'Workflow', 'Status', 'When', 'Duration', 'By', 'Commit'],
+  accountActivity: ['Repo', 'Branch', 'When', 'By', 'Commit'],
   repoStatus: ['Workflow', 'Status', 'When', 'Duration', 'By', 'Commit'],
   repoActivity: ['Type', 'Activity', 'When', 'By', 'Commit'],
   workflowActivity: ['Result', 'When', 'Elapsed time', 'By', 'Commit']
@@ -84,6 +86,7 @@ function createResponseContent(mode: TableType, rows: HiccoughElement[], someEve
 type WorkflowRowMode = WorkflowRunEventTableType | GithubActivityTableType
 const workflowRowConfig: Record<WorkflowRowMode, WorkflowRowOptions> = {
   homeStatus: { showRepo: true, showWorkflow: true, showElapsed: true },
+  accountStatus: { showRepo: true, showWorkflow: true, showElapsed: true },
   repoStatus: { showWorkflow: true, showElapsed: true },
   repoActivity: { showDescription: true, showWorkflow: true },
   workflowActivity: { showElapsed: true }
@@ -96,6 +99,7 @@ export function workflowRowForMode(mode: WorkflowRowMode, clock: Clock, event: G
 type PushRowMode = GithubPushTableType | GithubActivityTableType
 const pushRowConfig: Record<PushRowMode, PushRowOptions> = {
   homeActivity: { showDescription: false, showRepo: true },
+  accountActivity: { showDescription: false, showRepo: true },
   repoActivity: { showDescription: true, showRepo: false }
 }
 

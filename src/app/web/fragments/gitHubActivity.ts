@@ -11,13 +11,20 @@ import {
 } from './views/activityAndStatusView'
 import { getOptionalWorkflowCoordinates } from './requestParsing/getOptionalWorkflowCoordinates'
 import { logger } from '../../util/logging'
-import { GithubRepoKey, GithubUserId, GithubWorkflowKey } from '../../domain/types/GithubKeys'
+import {
+  GithubAccountId,
+  GithubRepoKey,
+  GithubUserId,
+  GithubWorkflowKey
+} from '../../domain/types/GithubKeys'
 import {
   getRecentActiveBranchesForUser,
+  getRecentActiveBranchesForUserAndAccount,
   getRecentActivityForRepoForUser,
   getRunEventsForWorkflowForUser
 } from '../../domain/user/userVisible'
 import { fragmentPath } from '../routingCommon'
+import { getAccountForUser } from '../../domain/github/githubAccount'
 
 export const gitHubActivityFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('gitHubActivity'),
@@ -31,12 +38,18 @@ export async function gitHubActivity(appState: AppState, event: CicadaAuthorized
   const { ownerId, repoId, workflowId } = coordinatesResult.result
   const { userId } = event
 
-  if (ownerId && repoId) {
-    return workflowId
-      ? await githubActivityForWorkflow(appState, userId, { ownerId, repoId, workflowId })
-      : await githubActivityForRepo(appState, userId, { ownerId, repoId })
+  if (ownerId) {
+    if (repoId) {
+      if (workflowId) {
+        return await githubActivityForWorkflow(appState, userId, { ownerId, repoId, workflowId })
+      } else {
+        return await githubActivityForRepo(appState, userId, { ownerId, repoId })
+      }
+    } else {
+      return await githubActivityForAccount(appState, userId, ownerId)
+    }
   }
-  if (!ownerId && !repoId) return await githubActivityForHome(appState, userId)
+  if (!ownerId && !repoId && !workflowId) return await githubActivityForHome(appState, userId)
   return invalidRequestResponse
 }
 
@@ -63,6 +76,21 @@ async function githubActivityForRepo(appState: AppState, userId: GithubUserId, r
     'repoActivity',
     appState.clock,
     await getRecentActivityForRepoForUser(appState, userId, repoKey)
+  )
+}
+
+async function githubActivityForAccount(
+  appState: AppState,
+  userId: GithubUserId,
+  accountId: GithubAccountId
+) {
+  logger.debug('githubActivityForAccount')
+  if (!(await getAccountForUser(appState, userId, accountId))) return notFoundHTMLResponse
+
+  return createGithubPushTableResponse(
+    'accountActivity',
+    appState.clock,
+    await getRecentActiveBranchesForUserAndAccount(appState, userId, accountId)
   )
 }
 
