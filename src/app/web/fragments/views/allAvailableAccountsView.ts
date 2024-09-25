@@ -17,8 +17,13 @@ function accountRow(account: GithubAccount) {
   const isInstalledAccount = account.cicadaAccountType === INSTALLED_ACCOUNT_TYPE
   const isOrganizationAccount = account.accountType === ORGANIZATION_ACCOUNT_TYPE
 
-  const baseComment = isOrganizationAccount ? 'You are a member' : 'Your personal account'
-  const comment = isInstalledAccount ? baseComment : `${baseComment} (only delayed public data)`
+  const comment = isInstalledAccount
+    ? isOrganizationAccount
+      ? 'You are a member'
+      : 'Your personal account'
+    : isOrganizationAccount
+    ? 'Organization Account (only delayed public data)'
+    : 'Your personal account (only delayed public data)'
 
   return tr(
     { class: isInstalledAccount ? 'table-primary' : 'table-light' },
