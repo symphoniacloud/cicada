@@ -6,13 +6,13 @@ import { Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-sto
 // Multiple events per run might have same ID but we differentiate by updated_time and status (this allows for same second multiple events)
 export const GithubWorkflowRunEventEntity: Entity<
   GithubWorkflowRunEvent,
-  Pick<GithubWorkflowRunEvent, 'ownerId'>,
+  Pick<GithubWorkflowRunEvent, 'accountId'>,
   Pick<GithubWorkflowRunEvent, 'repoId' | 'updatedAt' | 'workflowId' | 'id' | 'status'>
 > = {
   type: GITHUB_WORKFLOW_RUN_EVENT,
   parse: typePredicateParser(isGithubWorkflowRunEvent, GITHUB_WORKFLOW_RUN_EVENT),
-  pk(source: Pick<GithubWorkflowRunEvent, 'ownerId'>) {
-    return `ACCOUNT#${source.ownerId}`
+  pk(source: Pick<GithubWorkflowRunEvent, 'accountId'>) {
+    return `ACCOUNT#${source.accountId}`
   },
   // UPDATED_AT goes before RUN_ID for when querying activity per workflow, by date
   sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'updatedAt' | 'workflowId' | 'id' | 'status'>) {
@@ -23,8 +23,8 @@ export const GithubWorkflowRunEventEntity: Entity<
   gsis: {
     // Used when getting all activity per repo, so shared with GithubPushEntity
     gsi1: {
-      pk(source: Pick<GithubWorkflowRunEvent, 'ownerId'>) {
-        return `ACCOUNT#${source.ownerId}`
+      pk(source: Pick<GithubWorkflowRunEvent, 'accountId'>) {
+        return `ACCOUNT#${source.accountId}`
       },
       sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'updatedAt'>) {
         return `${githubWorkflowRunEventGsiSkPrefix(source)}#DATETIME#${source.updatedAt}`

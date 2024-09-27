@@ -32,7 +32,7 @@ export async function topLevelCrawlPublicAccount(
   const publicAccount = await getPublicAccount(appState.entityStore, installation.accountId, publicAccountId)
   if (!publicAccount) {
     logger.error(
-      `Unable to crawl public account - no public account ${publicAccountId} exists for owner account ${installation.accountId}`
+      `Unable to crawl public account - no public account ${publicAccountId} exists for installation account ${installation.accountId}`
     )
     return
   }

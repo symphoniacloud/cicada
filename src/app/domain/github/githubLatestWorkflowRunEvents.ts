@@ -2,7 +2,7 @@ import { AppState } from '../../environment/AppState'
 import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
 import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport'
 import {
-  latestWorkflowRunEventsPerWorkflowForOwner,
+  latestWorkflowRunEventsPerWorkflowForAccount,
   putIfNoKeyExistsOrNewerThanExisting
 } from '../entityStore/entities/GithubLatestWorkflowRunEventEntity'
 
@@ -16,11 +16,14 @@ export async function saveLatestEvents(appState: AppState, newEvents: GithubWork
   }
 }
 
-export async function latestWorkflowRunEventsPerWorkflowForOwners(appState: AppState, accountIds: number[]) {
+export async function latestWorkflowRunEventsPerWorkflowForAccounts(
+  appState: AppState,
+  accountIds: number[]
+) {
   return (
     await Promise.all(
       accountIds.map(async (accountId) =>
-        latestWorkflowRunEventsPerWorkflowForOwner(appState.entityStore, accountId)
+        latestWorkflowRunEventsPerWorkflowForAccount(appState.entityStore, accountId)
       )
     )
   ).flat()

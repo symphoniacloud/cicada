@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS %%DATABASE_NAME%%.github_workflow_run_events
 (
-    owner_id bigint,
-    owner_name string,
-    owner_type string,
+    account_id bigint,
+    account_name string,
+    account_type string,
     repo_id bigint,
     repo_name string,
     repo_html_url string,

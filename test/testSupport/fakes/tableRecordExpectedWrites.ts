@@ -25,9 +25,9 @@ export function expectedPutGithubPush(push: GithubPush) {
     'fakeGithubRepoActivityTable',
     'githubPush',
     {
-      PK: `ACCOUNT#${push.ownerId}`,
+      PK: `ACCOUNT#${push.accountId}`,
       SK: `REPO#${push.repoId}#REF#${push.ref}#PUSH#COMMIT#${push.commits[0].sha}`,
-      GSI1PK: `ACCOUNT#${push.ownerId}`,
+      GSI1PK: `ACCOUNT#${push.accountId}`,
       GSI1SK: `REPO#${push.repoId}#DATETIME#${push.dateTime}`,
       ...push
     },
@@ -42,9 +42,9 @@ export function expectedPutLatestGithubPush(push: GithubPush) {
     'fakeGithubLatestPushesPerRefTable',
     'githubLatestPushPerRef',
     {
-      PK: `ACCOUNT#${push.ownerId}`,
+      PK: `ACCOUNT#${push.accountId}`,
       SK: `REPO#${push.repoId}#REF#${push.ref}`,
-      GSI1PK: `ACCOUNT#${push.ownerId}`,
+      GSI1PK: `ACCOUNT#${push.accountId}`,
       GSI1SK: `DATETIME#${push.dateTime}`,
       ...push
     },
@@ -65,9 +65,9 @@ export function expectedPutGithubWorkflowRunEvent(event: GithubWorkflowRunEvent)
     'fakeGithubRepoActivityTable',
     'githubWorkflowRunEvent',
     {
-      PK: `ACCOUNT#${event.ownerId}`,
+      PK: `ACCOUNT#${event.accountId}`,
       SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}#WORKFLOW_RUN_EVENT#UPDATED_AT#${event.updatedAt}#RUN#${event.id}#STATUS#${event.status}`,
-      GSI1PK: `ACCOUNT#${event.ownerId}`,
+      GSI1PK: `ACCOUNT#${event.accountId}`,
       GSI1SK: `REPO#${event.repoId}#DATETIME#${event.updatedAt}`,
       ...event
     },
@@ -82,9 +82,9 @@ export function expectedPutGithubWorkflowRun(event: GithubWorkflowRunEvent) {
     'fakeGithubRepoActivityTable',
     'githubWorkflowRun',
     {
-      PK: `ACCOUNT#${event.ownerId}`,
+      PK: `ACCOUNT#${event.accountId}`,
       SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}#WORKFLOW_RUN#RUN#${event.id}`,
-      GSI1PK: `ACCOUNT#${event.ownerId}`,
+      GSI1PK: `ACCOUNT#${event.accountId}`,
       GSI1SK: `REPO#${event.repoId}#DATETIME#${event.updatedAt}`,
       ...event
     },
@@ -105,9 +105,9 @@ export function expectedPutLatestGithubWorkflowRunEvent(event: GithubWorkflowRun
     'fakeGithubLatestWorkflowRunsTable',
     'githubLatestWorkflowRunEvent',
     {
-      PK: `ACCOUNT#${event.ownerId}`,
+      PK: `ACCOUNT#${event.accountId}`,
       SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}`,
-      GSI1PK: `ACCOUNT#${event.ownerId}`,
+      GSI1PK: `ACCOUNT#${event.accountId}`,
       GSI1SK: `DATETIME#${event.updatedAt}`,
       ...event
     },
@@ -128,7 +128,7 @@ export function expectedBatchWriteGithubRepositories(repos: GithubRepository[]) 
     'fakeGithubRepositoriesTable',
     'githubRepository',
     repos.map((repo) => ({
-      PK: `OWNER#${repo.ownerId}`,
+      PK: `ACCOUNT#${repo.accountId}`,
       SK: `REPO#${repo.id}`,
       ...repo
     }))

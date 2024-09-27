@@ -18,7 +18,7 @@ export async function accountHeading(appState: AppState, event: CicadaAuthorized
 
   if (isFailure(accountCoordinatesResult)) return accountCoordinatesResult.failureResult
 
-  const account = await getAccountForUser(appState, event.userId, accountCoordinatesResult.result.ownerId)
+  const account = await getAccountForUser(appState, event.userId, accountCoordinatesResult.result.accountId)
   if (!account) return notFoundHTMLResponse
 
   return createAccountHeadingResponse(account)

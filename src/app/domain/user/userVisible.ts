@@ -1,20 +1,20 @@
 import { AppState } from '../../environment/AppState'
 import { getAllAccountIdsForUser } from '../github/githubAccount'
-import { latestWorkflowRunEventsPerWorkflowForOwners } from '../github/githubLatestWorkflowRunEvents'
+import { latestWorkflowRunEventsPerWorkflowForAccounts } from '../github/githubLatestWorkflowRunEvents'
 import { GithubWorkflow } from '../types/GithubWorkflow'
 import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
 import { getUserSettings } from './persistedUserSettings'
 import { calculateUserSettings } from './calculatedUserSettings'
 import { CalculatedUserSettings } from '../types/UserSettings'
 import { GithubAccountId, GithubRepoKey, GithubUserId, GithubWorkflowKey } from '../types/GithubKeys'
-import { recentActiveBranchesForOwners } from '../github/githubLatestPushesPerRef'
+import { recentActiveBranchesForAccounts } from '../github/githubLatestPushesPerRef'
 import { GithubPush } from '../types/GithubPush'
 import { getRunEventsForWorkflow } from '../github/githubWorkflowRunEvent'
 import { getRecentActivityForRepo, GithubActivity } from '../github/githubActivity'
 import { getRepositoriesForAccount, repositorySummaryToKey } from '../github/githubRepository'
 import { GithubRepository } from '../types/GithubRepository'
 import {
-  latestWorkflowRunEventsPerWorkflowForOwner,
+  latestWorkflowRunEventsPerWorkflowForAccount,
   latestWorkflowRunEventsPerWorkflowForRepo
 } from '../entityStore/entities/GithubLatestWorkflowRunEventEntity'
 
@@ -44,7 +44,7 @@ export async function getLatestWorkflowRunEventsForAccountForUser(
   appState: AppState,
   accountId: GithubAccountId
 ): Promise<VisibleWorkflowRunEvents> {
-  return toVisibleEvents(await latestWorkflowRunEventsPerWorkflowForOwner(appState.entityStore, accountId))
+  return toVisibleEvents(await latestWorkflowRunEventsPerWorkflowForAccount(appState.entityStore, accountId))
 }
 
 export async function getLatestWorkflowRunEventsForRepoForUser(
@@ -77,7 +77,7 @@ export async function getRecentActiveBranchesForUserWithUserSettings(
   appState: AppState,
   userId: GithubUserId
 ) {
-  const allActivity = await recentActiveBranchesForOwners(
+  const allActivity = await recentActiveBranchesForAccounts(
     appState,
     await getAllAccountIdsForUser(appState, userId)
   )
@@ -93,14 +93,14 @@ export async function getRecentActiveBranchesForUserAndAccount(
   appState: AppState,
   accountId: GithubAccountId
 ) {
-  return toVisiblePushes(await recentActiveBranchesForOwners(appState, [accountId]))
+  return toVisiblePushes(await recentActiveBranchesForAccounts(appState, [accountId]))
 }
 
 function toVisibleEvents(allEvents: GithubWorkflowRunEvent[], userSettings?: CalculatedUserSettings) {
   const visibleEvents = userSettings
     ? allEvents.filter(
-        ({ ownerId, repoId, workflowId }) =>
-          userSettings.github.accounts[ownerId]?.repos[repoId]?.workflows[workflowId]?.visible ?? false
+        ({ accountId, repoId, workflowId }) =>
+          userSettings.github.accounts[accountId]?.repos[repoId]?.workflows[workflowId]?.visible ?? false
       )
     : allEvents
   return {
@@ -113,7 +113,7 @@ function toVisibleEvents(allEvents: GithubWorkflowRunEvent[], userSettings?: Cal
 function toVisiblePushes(allEvents: GithubPush[], userSettings?: CalculatedUserSettings) {
   const visibleEvents = userSettings
     ? allEvents.filter(
-        ({ ownerId, repoId }) => userSettings.github.accounts[ownerId]?.repos[repoId]?.visible ?? false
+        ({ accountId, repoId }) => userSettings.github.accounts[accountId]?.repos[repoId]?.visible ?? false
       )
     : allEvents
   return {
@@ -149,19 +149,19 @@ export async function getWorkflowsForUser(
 
 export async function getWorkflowsForAccount(
   appState: AppState,
-  ownerId: GithubAccountId
+  accountId: GithubAccountId
 ): Promise<GithubWorkflow[]> {
   // TODO - confirm user visibility
   // Workflow run events extend workflow, so we can just return the latest run events for now
   // TODOEventually have a more efficient way of doing this
-  return getAllLatestRunEventsForUser(appState, ownerId)
+  return getAllLatestRunEventsForUser(appState, accountId)
 }
 
 async function getAllLatestRunEventsForUser(
   appState: AppState,
   userId: GithubUserId
 ): Promise<GithubWorkflowRunEvent[]> {
-  return await latestWorkflowRunEventsPerWorkflowForOwners(
+  return await latestWorkflowRunEventsPerWorkflowForAccounts(
     appState,
     await getAllAccountIdsForUser(appState, userId)
   )

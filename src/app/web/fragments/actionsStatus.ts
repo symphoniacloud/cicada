@@ -24,11 +24,11 @@ export async function actionsStatus(appState: AppState, event: CicadaAuthorizedA
   const coordinatesResult = getOptionalRepoCoordinates(event)
 
   if (isFailure(coordinatesResult)) return coordinatesResult.failureResult
-  const { ownerId, repoId } = coordinatesResult.result
+  const { accountId, repoId } = coordinatesResult.result
 
-  if (ownerId && repoId) return await actionsStatusForRepo(appState, { ownerId, repoId })
-  if (ownerId) return await actionsStatusForAccount(appState, event.userId, ownerId)
-  if (!ownerId && !repoId) return await actionsStatusForDashboard(appState, event.userId)
+  if (accountId && repoId) return await actionsStatusForRepo(appState, { accountId: accountId, repoId })
+  if (accountId) return await actionsStatusForAccount(appState, event.userId, accountId)
+  if (!accountId && !repoId) return await actionsStatusForDashboard(appState, event.userId)
   return invalidRequestResponse
 }
 

@@ -13,7 +13,7 @@ export async function crawlWorkflowRunEvents(
   const startTime = `${dateTimeAddHours(appState.clock.now(), -1 * lookbackHours).toISOString()}`
 
   const recentRunEvents = await githubClient.listWorkflowRunsForRepo(
-    repo.ownerName,
+    repo.accountName,
     repo.name,
     `>${startTime}`
   )

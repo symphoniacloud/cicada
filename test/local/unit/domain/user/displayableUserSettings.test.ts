@@ -9,19 +9,19 @@ import {
 
 test('toDisplayableWorkflowSettings', () => {
   const displayable = toDisplayableWorkflowSettings(
-    { ownerId: 123, repoId: 456, workflowId: 789 },
+    { accountId: 123, repoId: 456, workflowId: 789 },
     {
       visible: true,
       notify: true
     },
     [
       {
-        ownerId: 123,
+        accountId: 123,
         repoId: 456,
         workflowId: 789,
         workflowName: 'workflow1',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       }
@@ -37,7 +37,7 @@ test('toDisplayableWorkflowSettings', () => {
 
 test('toDisplayableRepoSettings', () => {
   const displayable = toDisplayableRepoSettings(
-    { ownerId: 123, repoId: 456 },
+    { accountId: 123, repoId: 456 },
     {
       visible: true,
       notify: true,
@@ -50,21 +50,21 @@ test('toDisplayableRepoSettings', () => {
     },
     [
       {
-        ownerId: 123,
+        accountId: 123,
         id: 456,
-        ownerName: 'account1',
+        accountName: 'account1',
         name: 'repo1',
-        ownerType: USER_ACCOUNT_TYPE
+        accountType: USER_ACCOUNT_TYPE
       }
     ],
     [
       {
-        ownerId: 123,
+        accountId: 123,
         repoId: 456,
         workflowId: 789,
         workflowName: 'workflow1',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: 'repo1',
         path: ''
       }
@@ -106,21 +106,21 @@ test('toDisplayableAccountSettings', () => {
     },
     [
       {
-        ownerId: 123,
+        accountId: 123,
         id: 456,
-        ownerName: 'account1',
+        accountName: 'account1',
         name: 'repo1',
-        ownerType: USER_ACCOUNT_TYPE
+        accountType: USER_ACCOUNT_TYPE
       }
     ],
     [
       {
-        ownerId: 123,
+        accountId: 123,
         repoId: 456,
         workflowId: 789,
         workflowName: 'workflow1',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: 'account1',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: 'account1',
         repoName: 'repo1',
         path: ''
       }
@@ -167,21 +167,21 @@ test('toCalculatedAndDisplayableUserSettings', () => {
     },
     [
       {
-        ownerId: 123,
+        accountId: 123,
         id: 456,
-        ownerName: 'account1',
+        accountName: 'account1',
         name: 'repo1',
-        ownerType: USER_ACCOUNT_TYPE
+        accountType: USER_ACCOUNT_TYPE
       }
     ],
     [
       {
-        ownerId: 123,
+        accountId: 123,
         repoId: 456,
         workflowId: 789,
         workflowName: 'workflow1',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: 'account1',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: 'account1',
         repoName: 'repo1',
         path: ''
       }

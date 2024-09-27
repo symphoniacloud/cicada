@@ -42,7 +42,7 @@ test('home-recent-activity', async () => {
   <tbody>
     <tr class="table-light">
       <td>
-        <a href="/repo?ownerId=162483619&repoId=768206479">org-test-repo-one</a>
+        <a href="/repo?accountId=162483619&repoId=768206479">org-test-repo-one</a>
 &nbsp;
         <a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a>
       </td>

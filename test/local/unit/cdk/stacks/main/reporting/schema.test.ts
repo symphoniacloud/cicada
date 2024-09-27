@@ -7,9 +7,9 @@ import {
 
 test('glue schema', () => {
   expect(githubWorkflowGlueSchema).toEqual([
-    { name: 'owner_id', type: 'bigint' },
-    { name: 'owner_name', type: 'string' },
-    { name: 'owner_type', type: 'string' },
+    { name: 'account_id', type: 'bigint' },
+    { name: 'account_name', type: 'string' },
+    { name: 'account_type', type: 'string' },
     { name: 'repo_id', type: 'bigint' },
     { name: 'repo_name', type: 'string' },
     { name: 'repo_html_url', type: 'string' },
@@ -39,9 +39,9 @@ test('glue schema', () => {
 })
 
 test('athena schema', () => {
-  expect(githubWorkflowAthenaSchema).toEqual(`owner_id bigint,
-    owner_name string,
-    owner_type string,
+  expect(githubWorkflowAthenaSchema).toEqual(`account_id bigint,
+    account_name string,
+    account_type string,
     repo_id bigint,
     repo_name string,
     repo_html_url string,
@@ -68,9 +68,9 @@ test('athena schema', () => {
 
 test('top level fields', () => {
   expect(topLevelGlueFields).toEqual([
-    'owner_id',
-    'owner_name',
-    'owner_type',
+    'account_id',
+    'account_name',
+    'account_type',
     'repo_id',
     'repo_name',
     'repo_html_url',

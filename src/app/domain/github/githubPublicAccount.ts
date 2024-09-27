@@ -3,7 +3,7 @@ import { GithubPublicAccount } from '../types/GithubPublicAccount'
 import { isSuccess, Result, successWith } from '../../util/structuredResult'
 import { GithubAccountId } from '../types/GithubKeys'
 import {
-  getPublicAccountsForOwner,
+  getPublicAccountsForInstallationAccount,
   savePublicAccount
 } from '../entityStore/entities/GithubPublicAccountEntity'
 import { getInstallationForAccount } from './githubInstallation'
@@ -19,8 +19,8 @@ export async function savePublicAccountWithName(
 ): Promise<Result<GithubPublicAccount>> {
   // TOEventually - when a user can be a member of multiple installed accounts then need to
   // have them choose which one to add the public account for
-  const ownerAccountId = (await getIdsOfAccountsWhichUserIsMemberOf(appState, adminUserId))[0]
-  const githubAppInstallation = await getInstallationForAccount(appState, ownerAccountId)
+  const installationAccountId = (await getIdsOfAccountsWhichUserIsMemberOf(appState, adminUserId))[0]
+  const githubAppInstallation = await getInstallationForAccount(appState, installationAccountId)
   const githubUserResult = await appState.githubClient
     .clientForInstallation(githubAppInstallation.installationId)
     .getUser(accountName)
@@ -38,8 +38,7 @@ export async function savePublicAccountWithName(
     accountId: githubUser.id,
     accountLogin: githubUser.login,
     accountType: githubUserType,
-    ownerType: 'GithubAccount',
-    ownerAccountId
+    installationAccountId: installationAccountId
   })
 
   // Trigger crawling public account
@@ -55,19 +54,21 @@ export async function getPublicAccountsForUser(
   appState: AppState,
   userId: GithubAccountId
 ): Promise<GithubPublicAccount[]> {
-  return await getPublicAccountsForOwnerAccountIds(
+  return await getPublicAccountsForInstallationAccountIds(
     appState,
     await getIdsOfAccountsWhichUserIsMemberOf(appState, userId)
   )
 }
 
-export async function getPublicAccountsForOwnerAccountIds(
+export async function getPublicAccountsForInstallationAccountIds(
   appState: AppState,
-  ownerAccountIds: GithubAccountId[]
+  installationAccountIds: GithubAccountId[]
 ): Promise<GithubPublicAccount[]> {
   return (
     await Promise.all(
-      ownerAccountIds.map(async (accountId) => getPublicAccountsForOwner(appState.entityStore, accountId))
+      installationAccountIds.map(async (accountId) =>
+        getPublicAccountsForInstallationAccount(appState.entityStore, accountId)
+      )
     )
   ).flat()
 }

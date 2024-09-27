@@ -8,7 +8,7 @@ export type GithubInstallationId = number
 export type GithubAppId = number
 
 export interface GithubAccountKey {
-  ownerId: GithubAccountId
+  accountId: GithubAccountId
 }
 
 export interface GithubRepoKey extends GithubAccountKey {
@@ -27,7 +27,7 @@ export const isGithubInstallationId = isNumber
 export const isGithubAppId = isNumber
 
 export function isGithubAccountKey(x: unknown): x is GithubAccountKey {
-  return isNotNullObject(x) && 'ownerId' in x && isGithubAccountId(x.ownerId)
+  return isNotNullObject(x) && 'accountId' in x && isGithubAccountId(x.accountId)
 }
 
 export function isGithubRepoKey(x: unknown): x is GithubRepoKey {

@@ -1,9 +1,9 @@
 // TODO - eventually use the same runtime schema used in app code, e.g. using Powertools schema
 
 const githubWorkflowRunBaseSchema = {
-  ownerId: 'number',
-  ownerName: 'string',
-  ownerType: 'string',
+  accountId: 'number',
+  accountName: 'string',
+  accountType: 'string',
   repoId: 'number',
   repoName: 'string',
   repoHtmlUrl: 'string',

@@ -64,7 +64,7 @@ export function toDisplayableAccountSettings(
         repoId,
         toDisplayableRepoSettings(
           {
-            ownerId: accountId,
+            accountId: accountId,
             repoId: Number(repoId)
           },
           repoSettings,

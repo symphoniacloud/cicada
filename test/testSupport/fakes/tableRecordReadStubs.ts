@@ -86,7 +86,7 @@ export function stubQueryAccountMembershipsByAccount(
 export function stubQueryRepositories(appState: FakeAppState) {
   stubber(appState).queryAllPages.ofTableByPk(
     fakeTableNames['github-repositories'],
-    'OWNER#162483619',
+    'ACCOUNT#162483619',
     [testOrgTestRepoOne],
     GITHUB_REPOSITORY
   )
@@ -140,7 +140,7 @@ export function stubQueryLatestPushesPerRef(appState: FakeAppState) {
 export function stubGetRepo(appState: FakeAppState) {
   stubber(appState).stubGet.byPkAndSk(
     fakeTableNames['github-repositories'],
-    'OWNER#162483619',
+    'ACCOUNT#162483619',
     'REPO#768206479',
     testOrgTestRepoOne
   )

@@ -46,7 +46,7 @@ export function calculateAccountSettings(
             repoId,
             calculateRepoSettings(
               settings?.repos[repoId],
-              { ownerId: accountId, repoId },
+              { accountId: accountId, repoId },
               workflows,
               visibleAndNotify.notify
             )

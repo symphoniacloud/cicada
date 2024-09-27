@@ -20,18 +20,18 @@ export async function saveLatestPushes(appState: AppState, newPushes: GithubPush
   }
 }
 
-export async function recentActiveBranchesForOwners(appState: AppState, accountIds: number[]) {
+export async function recentActiveBranchesForAccounts(appState: AppState, accountIds: number[]) {
   return (
     await Promise.all(accountIds.map(async (accountId) => recentActiveBranches(appState, accountId)))
   ).flat()
 }
 
-export async function recentActiveBranches(appState: AppState, ownerId: number) {
+export async function recentActiveBranches(appState: AppState, accountId: number) {
   const startOfTimeRange = dateTimeAddDays(appState.clock.now(), -14).toISOString()
   return await appState.entityStore
     .for(GithubLatestPushPerRefEntity)
     .queryAllWithGsiByPkAndSk(
-      { ownerId },
+      { accountId },
       rangeWhereSkGreaterThan(githubLatestPushPerRefGsiSk({ dateTime: startOfTimeRange })),
       {
         scanIndexForward: false

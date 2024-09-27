@@ -1,7 +1,7 @@
 import { AppState } from '../../../environment/AppState'
 import { logger } from '../../../util/logging'
 import { crawlPublicAccount } from './crawlAccount'
-import { getPublicAccountsForOwner } from '../../entityStore/entities/GithubPublicAccountEntity'
+import { getPublicAccountsForInstallationAccount } from '../../entityStore/entities/GithubPublicAccountEntity'
 import { getAllInstallations } from '../githubInstallation'
 
 export async function crawlPublicAccounts(appState: AppState, lookbackHours: number) {
@@ -10,7 +10,10 @@ export async function crawlPublicAccounts(appState: AppState, lookbackHours: num
     logger.info(`Crawling Public Accounts for ${installation.accountLogin}`)
     const githubInstallationClient = appState.githubClient.clientForInstallation(installation.installationId)
 
-    const publicAccounts = await getPublicAccountsForOwner(appState.entityStore, installation.accountId)
+    const publicAccounts = await getPublicAccountsForInstallationAccount(
+      appState.entityStore,
+      installation.accountId
+    )
     for (const account of publicAccounts) {
       await crawlPublicAccount(appState, githubInstallationClient, account, lookbackHours)
     }

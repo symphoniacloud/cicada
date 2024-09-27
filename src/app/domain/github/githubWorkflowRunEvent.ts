@@ -46,7 +46,7 @@ export async function getRelatedMemberIdsForRunEvent(
   appState: AppState,
   runEvent: GithubWorkflowRunEvent
 ): Promise<number[]> {
-  return getMemberUserIdsForAccount(appState, runEvent.ownerId)
+  return getMemberUserIdsForAccount(appState, runEvent.accountId)
 }
 
 // Returns *all* the run events for each run (including in_progress) even if the run is complete
@@ -61,7 +61,7 @@ export async function getRunEventsForWorkflow(appState: AppState, key: GithubWor
 
 export async function getRunEventsForWorkflowPage(
   appState: AppState,
-  ownerId: number,
+  accountId: number,
   repoId: number,
   workflowId: number,
   limit?: number
@@ -69,7 +69,7 @@ export async function getRunEventsForWorkflowPage(
   return await appState.entityStore
     .for(GithubWorkflowRunEventEntity)
     .queryOnePageByPkAndSk(
-      { ownerId },
+      { accountId },
       rangeWhereSkBeginsWith(githubWorkflowRunEventSkPrefix({ repoId, workflowId })),
       { scanIndexForward: false, ...(limit ? { limit } : {}) }
     )

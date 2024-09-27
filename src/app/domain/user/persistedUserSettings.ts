@@ -47,16 +47,16 @@ function initialUserSettings(userId: GithubUserId): PersistedUserSettings {
 export async function updateAndSaveAccountSetting(
   appState: AppState,
   userId: GithubUserId,
-  ownerId: GithubAccountId,
+  accountId: GithubAccountId,
   setting: UserSetting,
   value: boolean
 ) {
-  return updateAndSaveSettings(appState, userId, accountUpdater(ownerId, setting, value))
+  return updateAndSaveSettings(appState, userId, accountUpdater(accountId, setting, value))
 }
 
-export function accountUpdater(ownerId: GithubAccountId, setting: UserSetting, value: boolean) {
+export function accountUpdater(accountId: GithubAccountId, setting: UserSetting, value: boolean) {
   return (settings: PersistedUserSettings) => {
-    const accountSettings = getOrCreateAndReturnAccountSettings(settings, ownerId)
+    const accountSettings = getOrCreateAndReturnAccountSettings(settings, accountId)
     accountSettings[setting] = value
     return settings
   }
@@ -119,7 +119,7 @@ function getOrCreateAndReturnRepoSettings(
   settings: PersistedUserSettings,
   repoKey: GithubRepoKey
 ): PersistedGithubRepoSettings {
-  const accountSettings = getOrCreateAndReturnAccountSettings(settings, repoKey.ownerId)
+  const accountSettings = getOrCreateAndReturnAccountSettings(settings, repoKey.accountId)
   return getOrSetNewAndReturn(accountSettings.repos, `${repoKey.repoId}`, () => ({
     workflows: {}
   }))

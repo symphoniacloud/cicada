@@ -47,9 +47,9 @@ export function isGithubWorkflowRunEvent(x: unknown): x is GithubWorkflowRunEven
 // TOEventually - consider dateTimes, e.g. for Pushes we get localized times
 export function fromRawGithubWorkflowRunEvent(raw: RawGithubWorkflowRunEvent): GithubWorkflowRunEvent {
   return {
-    ownerId: raw.repository.owner.id,
-    ownerName: raw.repository.owner.login,
-    ownerType: fromRawAccountType(raw.repository.owner.type),
+    accountId: raw.repository.owner.id,
+    accountName: raw.repository.owner.login,
+    accountType: fromRawAccountType(raw.repository.owner.type),
     repoId: raw.repository.id,
     repoName: raw.repository.name,
     repoHtmlUrl: raw.repository.html_url,
