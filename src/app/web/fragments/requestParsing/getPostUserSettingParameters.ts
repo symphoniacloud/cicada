@@ -31,11 +31,11 @@ export function getPostUserSettingParameters(event: CicadaAuthorizedAPIEvent): R
 
   // TODO - need to check valid types
   return successWith({
-    accountId: parseInt(accountId),
+    accountId,
     setting,
     enabled: enabled.toLowerCase() === 'true',
-    ...(repoId ? { repoId: parseInt(repoId) } : {}),
-    ...(workflowId ? { workflowId: parseInt(workflowId) } : {})
+    ...(repoId ? { repoId } : {}),
+    ...(workflowId ? { workflowId } : {})
   })
 }
 

@@ -43,7 +43,7 @@ function toDisplayableUserSettings(
       accounts: Object.fromEntries(
         Object.entries(userSettings.github.accounts).map(([accountId, accountSettings]) => [
           accountId,
-          toDisplayableAccountSettings(Number(accountId), accountSettings, allRepoSummaries, workflows)
+          toDisplayableAccountSettings(accountId, accountSettings, allRepoSummaries, workflows)
         ])
       )
     }
@@ -65,7 +65,7 @@ export function toDisplayableAccountSettings(
         toDisplayableRepoSettings(
           {
             accountId: accountId,
-            repoId: Number(repoId)
+            repoId
           },
           repoSettings,
           allRepoSummaries,
@@ -88,11 +88,7 @@ export function toDisplayableRepoSettings(
     workflows: Object.fromEntries(
       Object.entries(repoSettings.workflows).map(([workflowId, workflowSettings]) => [
         workflowId,
-        toDisplayableWorkflowSettings(
-          { ...repoKey, workflowId: Number(workflowId) },
-          workflowSettings,
-          allWorkflows
-        )
+        toDisplayableWorkflowSettings({ ...repoKey, workflowId }, workflowSettings, allWorkflows)
       ])
     )
   }

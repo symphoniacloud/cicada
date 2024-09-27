@@ -28,6 +28,6 @@ test('installation-webhook-for-org-account-installation', async () => {
   expect(appState.eventBridgeBus.sentEvents[0]).toEqual({
     detailType: 'InstallationUpdated',
     detail:
-      '{"data":{"installationId":48133709,"appId":850768,"appSlug":"cicada-test-org","accountLogin":"cicada-test-org","accountId":162483619,"accountType":"organization"}}'
+      '{"data":{"installationId":48133709,"appId":850768,"appSlug":"cicada-test-org","accountLogin":"cicada-test-org","accountId":"162483619","accountType":"organization"}}'
   })
 })

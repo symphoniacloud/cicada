@@ -1,10 +1,16 @@
 import { GithubAccountType, isGithubAccountType } from './GithubAccountType'
-import { GithubAccountKey, GithubRepoKey, isGithubAccountKey, isGithubRepoKey } from './GithubKeys'
+import {
+  GithubAccountId,
+  GithubAccountKey,
+  GithubRepoKey,
+  isGithubAccountKey,
+  isGithubRepoKey
+} from './GithubKeys'
 
 // TODO - need better names for these
 
 export interface GithubAccountElement extends GithubAccountKey {
-  accountId: number
+  accountId: GithubAccountId
   accountName: string
   accountType: GithubAccountType
 }

@@ -71,7 +71,7 @@ test('user-crawler-for-org-installation', async () => {
   expectBatchWrites(appState, 2).toEqual(
     expectedBatchDeleteGithubMemberships([
       {
-        accountId: 162483619,
+        accountId: '162483619',
         userId: 9786
       }
     ])

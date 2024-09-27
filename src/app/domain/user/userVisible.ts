@@ -147,16 +147,6 @@ export async function getWorkflowsForUser(
   return getAllLatestRunEventsForUser(appState, userId)
 }
 
-export async function getWorkflowsForAccount(
-  appState: AppState,
-  accountId: GithubAccountId
-): Promise<GithubWorkflow[]> {
-  // TODO - confirm user visibility
-  // Workflow run events extend workflow, so we can just return the latest run events for now
-  // TODOEventually have a more efficient way of doing this
-  return getAllLatestRunEventsForUser(appState, accountId)
-}
-
 async function getAllLatestRunEventsForUser(
   appState: AppState,
   userId: GithubUserId

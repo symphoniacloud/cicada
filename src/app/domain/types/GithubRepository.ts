@@ -53,11 +53,11 @@ export function isGithubRepository(x: unknown): x is GithubRepository {
 
 export function fromRawGithubRepository(raw: RawGithubRepository): GithubRepository {
   return {
-    id: raw.id,
+    id: `${raw.id}`,
     name: raw.name,
     fullName: raw.full_name,
     private: raw.private,
-    accountId: raw.owner.id,
+    accountId: `${raw.owner.id}`,
     accountName: raw.owner.login,
     accountType: fromRawAccountType(raw.owner.type),
     htmlUrl: raw.html_url,

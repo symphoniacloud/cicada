@@ -43,7 +43,7 @@ export function fromRawGithubInstallation(raw: RawGithubInstallation): GithubIns
     appId: raw.app_id,
     appSlug: raw.app_slug,
     accountLogin: raw.account.login,
-    accountId: raw.account.id,
+    accountId: `${raw.account.id}`,
     accountType: fromRawAccountType(raw.target_type)
   }
 }

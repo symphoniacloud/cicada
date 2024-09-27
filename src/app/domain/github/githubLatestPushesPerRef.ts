@@ -7,6 +7,7 @@ import {
 } from '../entityStore/entities/GithubLatestPushPerRefEntity'
 import { rangeWhereSkGreaterThan } from '@symphoniacloud/dynamodb-entity-store/dist/cjs/support/querySupport'
 import { dateTimeAddDays } from '../../util/dateAndTime'
+import { GithubAccountId } from '../types/GithubKeys'
 
 export async function saveLatestPushes(appState: AppState, newPushes: GithubPush[]) {
   for (const newPush of newPushes) {
@@ -20,13 +21,13 @@ export async function saveLatestPushes(appState: AppState, newPushes: GithubPush
   }
 }
 
-export async function recentActiveBranchesForAccounts(appState: AppState, accountIds: number[]) {
+export async function recentActiveBranchesForAccounts(appState: AppState, accountIds: GithubAccountId[]) {
   return (
     await Promise.all(accountIds.map(async (accountId) => recentActiveBranches(appState, accountId)))
   ).flat()
 }
 
-export async function recentActiveBranches(appState: AppState, accountId: number) {
+export async function recentActiveBranches(appState: AppState, accountId: GithubAccountId) {
   const startOfTimeRange = dateTimeAddDays(appState.clock.now(), -14).toISOString()
   return await appState.entityStore
     .for(GithubLatestPushPerRefEntity)

@@ -5,6 +5,7 @@ import {
   latestWorkflowRunEventsPerWorkflowForAccount,
   putIfNoKeyExistsOrNewerThanExisting
 } from '../entityStore/entities/GithubLatestWorkflowRunEventEntity'
+import { GithubAccountId } from '../types/GithubKeys'
 
 export async function saveLatestEvents(appState: AppState, newEvents: GithubWorkflowRunEvent[]) {
   // Update latest events if they are newer
@@ -18,7 +19,7 @@ export async function saveLatestEvents(appState: AppState, newEvents: GithubWork
 
 export async function latestWorkflowRunEventsPerWorkflowForAccounts(
   appState: AppState,
-  accountIds: number[]
+  accountIds: GithubAccountId[]
 ) {
   return (
     await Promise.all(

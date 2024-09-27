@@ -1,8 +1,8 @@
-import { isNotNullObject, isNumber } from '../../util/types'
+import { isNotNullObject, isNumber, isString } from '../../util/types'
 
-export type GithubAccountId = number
-export type GithubRepoId = number
-export type GithubWorkflowId = number
+export type GithubAccountId = string
+export type GithubRepoId = string
+export type GithubWorkflowId = string
 export type GithubUserId = number
 export type GithubInstallationId = number
 export type GithubAppId = number
@@ -19,9 +19,9 @@ export interface GithubWorkflowKey extends GithubRepoKey {
   workflowId: GithubWorkflowId
 }
 
-export const isGithubAccountId = isNumber
-export const isGithubRepoId = isNumber
-export const isGithubWorkflowId = isNumber
+export const isGithubAccountId = isString
+export const isGithubRepoId = isString
+export const isGithubWorkflowId = isString
 export const isGithubUserId = isNumber
 export const isGithubInstallationId = isNumber
 export const isGithubAppId = isNumber

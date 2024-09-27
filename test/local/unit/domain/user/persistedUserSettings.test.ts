@@ -17,9 +17,9 @@ function emptySettings(userId: GithubUserId): PersistedUserSettings {
 }
 
 test('update settings new account', () => {
-  const newSettings = accountUpdater(123, 'visible', true)(emptySettings(11))
+  const newSettings = accountUpdater('123', 'visible', true)(emptySettings(11))
   expect(newSettings.github.accounts).toEqual({
-    123: {
+    '123': {
       visible: true,
       repos: {}
     }
@@ -28,14 +28,14 @@ test('update settings new account', () => {
 
 test('update settings existing account', () => {
   const settings = emptySettings(11)
-  settings.github.accounts[123] = {
+  settings.github.accounts['123'] = {
     notify: true,
     repos: {}
   }
 
-  const newSettings = accountUpdater(123, 'visible', true)(settings)
+  const newSettings = accountUpdater('123', 'visible', true)(settings)
   expect(newSettings.github.accounts).toEqual({
-    123: {
+    '123': {
       notify: true,
       visible: true,
       repos: {}
@@ -44,10 +44,10 @@ test('update settings existing account', () => {
 })
 
 test('update settings new repo', () => {
-  const newSettings = repoUpdater({ accountId: 123, repoId: 456 }, 'visible', true)(emptySettings(11))
-  expect(newSettings.github.accounts[123]).toEqual({
+  const newSettings = repoUpdater({ accountId: '123', repoId: '456' }, 'visible', true)(emptySettings(11))
+  expect(newSettings.github.accounts['123']).toEqual({
     repos: {
-      456: {
+      '456': {
         visible: true,
         workflows: {}
       }
@@ -57,36 +57,36 @@ test('update settings new repo', () => {
 
 test('update settings existing repo', () => {
   const settings = emptySettings(11)
-  settings.github.accounts[123] = {
+  settings.github.accounts['123'] = {
     notify: true,
     repos: {
-      456: {
+      '456': {
         notify: true,
         workflows: {}
       }
     }
   }
 
-  const newSettings = repoUpdater({ accountId: 123, repoId: 456 }, 'visible', true)(settings)
-  expect(newSettings.github.accounts[123]).toEqual({
+  const newSettings = repoUpdater({ accountId: '123', repoId: '456' }, 'visible', true)(settings)
+  expect(newSettings.github.accounts['123']).toEqual({
     notify: true,
-    repos: { 456: { notify: true, visible: true, workflows: {} } }
+    repos: { '456': { notify: true, visible: true, workflows: {} } }
   })
 })
 
 test('update settings new workflow', () => {
   const newSettings = workflowUpdater(
-    { accountId: 123, repoId: 456, workflowId: 789 },
+    { accountId: '123', repoId: '456', workflowId: '789' },
     'visible',
     true
   )(emptySettings(11))
 
   expect(newSettings.github.accounts).toEqual({
-    123: {
+    '123': {
       repos: {
-        456: {
+        '456': {
           workflows: {
-            789: {
+            '789': {
               visible: true
             }
           }
@@ -98,13 +98,13 @@ test('update settings new workflow', () => {
 
 test('update settings existing repo', () => {
   const settings = emptySettings(11)
-  settings.github.accounts[123] = {
+  settings.github.accounts['123'] = {
     notify: true,
     repos: {
-      456: {
+      '456': {
         notify: true,
         workflows: {
-          789: {
+          '789': {
             notify: true
           }
         }
@@ -113,19 +113,19 @@ test('update settings existing repo', () => {
   }
 
   const newSettings = workflowUpdater(
-    { accountId: 123, repoId: 456, workflowId: 789 },
+    { accountId: '123', repoId: '456', workflowId: '789' },
     'visible',
     true
   )(settings)
 
   expect(newSettings.github.accounts).toEqual({
-    123: {
+    '123': {
       notify: true,
       repos: {
-        456: {
+        '456': {
           notify: true,
           workflows: {
-            789: {
+            '789': {
               notify: true,
               visible: true
             }
