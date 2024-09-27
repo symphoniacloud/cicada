@@ -9,19 +9,18 @@ import { WorkflowCoordinatesQueryStringParameters, workflowCoordinatesSchema } f
 
 export function getOptionalWorkflowCoordinates(
   event: CicadaAuthorizedAPIEvent
-): Result<{ accountId?: number; repoId?: number; workflowId?: number }, APIGatewayProxyResult> {
+): Result<{ accountId?: string; repoId?: string; workflowId?: string }, APIGatewayProxyResult> {
   const parseResult = parser(event.queryStringParameters ?? {})
   if (isFailure(parseResult)) {
     logger.warn('Invalid request in getOptionalWorkflowCoordinates', { reason: parseResult.reason })
     return failedWithResult('Failed to parse', invalidRequestResponse)
   }
 
-  // TODO - can we just define the schema with ints?
   const { accountId, repoId, workflowId } = parseResult.result
   return successWith({
-    ...(accountId ? { accountId: parseInt(accountId) } : {}),
-    ...(repoId ? { repoId: parseInt(repoId) } : {}),
-    ...(workflowId ? { workflowId: parseInt(workflowId) } : {})
+    ...(accountId ? { accountId } : {}),
+    ...(repoId ? { repoId } : {}),
+    ...(workflowId ? { workflowId } : {})
   })
 }
 

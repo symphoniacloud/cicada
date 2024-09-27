@@ -28,7 +28,7 @@ import {
   updateAndSaveRepoSetting,
   updateAndSaveWorkflowSetting
 } from '../../domain/user/persistedUserSettings'
-import { getWorkflowsForAccount, getWorkflowsForUser } from '../../domain/user/userVisible'
+import { getWorkflowsForUser } from '../../domain/user/userVisible'
 import { calculateAccountSettings, calculateUserSettings } from '../../domain/user/calculatedUserSettings'
 import { UserSetting } from '../../domain/types/UserSettings'
 import { fragmentPath } from '../routingCommon'
@@ -84,7 +84,7 @@ async function processUpdateAccountSetting(
 ) {
   logger.debug('processUpdateAccountSetting')
   const accountRepos = await getRepositoriesForAccount(appState, accountId)
-  const accountWorkflows = await getWorkflowsForAccount(appState, userId)
+  const accountWorkflows = await getWorkflowsForUser(appState, userId)
   const updatedSettings = await updateAndSaveAccountSetting(appState, userId, accountId, setting, enabled)
   const updatedAccountSettings =
     updatedSettings.github.accounts[accountId] ??

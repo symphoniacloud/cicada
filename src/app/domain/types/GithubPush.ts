@@ -62,10 +62,10 @@ export function fromRawGithubWebhookPush(raw: unknown): GithubPush | undefined {
   }
 
   return {
-    accountId: raw.repository.owner.id,
+    accountId: `${raw.repository.owner.id}`,
     accountName: raw.repository.owner.name,
     accountType: fromRawAccountType(raw.repository.owner.type),
-    repoId: raw.repository.id,
+    repoId: `${raw.repository.id}`,
     repoName: raw.repository.name,
     repoUrl: raw.repository.html_url,
     actor: {

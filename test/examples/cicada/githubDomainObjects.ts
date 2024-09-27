@@ -7,7 +7,7 @@ import { GithubPush } from '../../../src/app/domain/types/GithubPush'
 import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken'
 
 export const testPersonalInstallation: GithubInstallation = {
-  accountId: 162360409,
+  accountId: '162360409',
   accountLogin: 'cicada-test-user',
   accountType: 'user',
   appId: 849936,
@@ -16,7 +16,7 @@ export const testPersonalInstallation: GithubInstallation = {
 }
 
 export const testOrgInstallation: GithubInstallation = {
-  accountId: 162483619,
+  accountId: '162483619',
   accountLogin: 'cicada-test-org',
   accountType: 'organization',
   appId: 850768,
@@ -48,22 +48,22 @@ export const testMikeRobertsUser: GithubUser = {
 }
 
 export const testTestUserMembershipOfPersonalInstallation: GithubAccountMembership = {
-  accountId: 162360409,
+  accountId: '162360409',
   userId: 162360409
 }
 
 export const testTestUserMembershipOfOrg: GithubAccountMembership = {
-  accountId: 162483619,
+  accountId: '162483619',
   userId: 162360409
 }
 
 export const testMikeRobertsUserMembershipOfOrg: GithubAccountMembership = {
-  accountId: 162483619,
+  accountId: '162483619',
   userId: 49635
 }
 
 export const accountMemberships: Record<number, GithubAccountMembership> = {
-  162360409: testTestUserMembershipOfOrg,
+  '162360409': testTestUserMembershipOfOrg,
   49635: testMikeRobertsUserMembershipOfOrg
 }
 
@@ -77,9 +77,9 @@ export const testPersonalTestRepo: GithubRepository = {
   fullName: 'cicada-test-user/personal-test-repo',
   homepage: '',
   htmlUrl: 'https://github.com/cicada-test-user/personal-test-repo',
-  id: 767679529,
+  id: '767679529',
   name: 'personal-test-repo',
-  accountId: 162360409,
+  accountId: '162360409',
   accountName: 'cicada-test-user',
   accountType: 'user',
   private: true,
@@ -99,9 +99,9 @@ export const testOrgTestRepoOne: GithubRepository = {
   fullName: 'cicada-test-org/org-test-repo-one',
   homepage: '',
   htmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one',
-  id: 768206479,
+  id: '768206479',
   name: 'org-test-repo-one',
-  accountId: 162483619,
+  accountId: '162483619',
   accountName: 'cicada-test-org',
   accountType: 'organization',
   private: true,
@@ -121,9 +121,9 @@ export const testOrgTestRepoTwo: GithubRepository = {
   fullName: 'cicada-test-org/org-test-repo-two',
   homepage: '',
   htmlUrl: 'https://github.com/cicada-test-org/org-test-repo-two',
-  id: 768207426,
+  id: '768207426',
   name: 'org-test-repo-two',
-  accountId: 162483619,
+  accountId: '162483619',
   accountName: 'cicada-test-org',
   accountType: 'organization',
   private: true,
@@ -148,12 +148,12 @@ export const testPersonalTestRepoWorkflowRun: GithubWorkflowRunEvent = {
   headSha: 'dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c',
   htmlUrl: 'https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530',
   id: 8160866530,
-  accountId: 162360409,
+  accountId: '162360409',
   accountName: 'cicada-test-user',
   accountType: 'user',
   path: '.github/workflows/test.yml',
   repoHtmlUrl: 'https://github.com/cicada-test-user/personal-test-repo',
-  repoId: 767679529,
+  repoId: '767679529',
   repoName: 'personal-test-repo',
   runAttempt: 1,
   runNumber: 1,
@@ -162,7 +162,7 @@ export const testPersonalTestRepoWorkflowRun: GithubWorkflowRunEvent = {
   updatedAt: '2024-03-05T18:01:40Z',
   workflowBadgeUrl: undefined,
   workflowHtmlUrl: undefined,
-  workflowId: 88508779,
+  workflowId: '88508779',
   workflowName: 'Test Workflow'
 }
 
@@ -181,12 +181,12 @@ export const testOrgTestRepoOneWorkflowRunOne: GithubWorkflowRunEvent = {
   headSha: '8c3aa1cb0316ea23abeb2612457edb80868f53c8',
   htmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8175883775',
   id: 8175883775,
-  accountId: 162483619,
+  accountId: '162483619',
   accountName: 'cicada-test-org',
   accountType: 'organization',
   path: '.github/workflows/test.yml',
   repoHtmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one',
-  repoId: 768206479,
+  repoId: '768206479',
   repoName: 'org-test-repo-one',
   runAttempt: 1,
   runNumber: 1,
@@ -195,7 +195,7 @@ export const testOrgTestRepoOneWorkflowRunOne: GithubWorkflowRunEvent = {
   updatedAt: '2024-03-06T17:02:54Z',
   workflowBadgeUrl: undefined,
   workflowHtmlUrl: undefined,
-  workflowId: 88647110,
+  workflowId: '88647110',
   workflowName: 'Test Repo One Workflow'
 }
 
@@ -212,10 +212,10 @@ export const testOrgTestRepoOneWorkflowRunThree: GithubWorkflowRunEvent = {
   headBranch: 'main',
   htmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236',
   id: 8177622236,
-  accountId: 162483619,
+  accountId: '162483619',
   accountName: 'cicada-test-org',
   accountType: 'organization',
-  repoId: 768206479,
+  repoId: '768206479',
   repoName: 'org-test-repo-one',
   runAttempt: 1,
   runNumber: 3,
@@ -224,7 +224,7 @@ export const testOrgTestRepoOneWorkflowRunThree: GithubWorkflowRunEvent = {
   updatedAt: '2024-03-06T19:25:42Z',
   workflowBadgeUrl: undefined,
   workflowHtmlUrl: undefined,
-  workflowId: 88647110,
+  workflowId: '88647110',
   workflowName: 'Test Repo One Workflow',
   event: 'workflow_dispatch',
   path: '.github/workflows/test.yml',
@@ -251,11 +251,11 @@ export const testPersonalTestRepoPush: GithubPush = {
     }
   ],
   dateTime: '2024-03-05T18:01:12Z',
-  accountId: 162360409,
+  accountId: '162360409',
   accountName: 'cicada-test-user',
   accountType: 'user',
   ref: 'refs/heads/main',
-  repoId: 767679529,
+  repoId: '767679529',
   repoName: 'personal-test-repo'
 }
 
@@ -278,11 +278,11 @@ export const testOrgTestRepoOnePush: GithubPush = {
     }
   ],
   dateTime: '2024-03-06T17:00:40Z',
-  accountId: 162483619,
+  accountId: '162483619',
   accountName: 'cicada-test-org',
   accountType: 'organization',
   ref: 'refs/heads/main',
-  repoId: 768206479,
+  repoId: '768206479',
   repoName: 'org-test-repo-one'
 }
 
@@ -305,11 +305,11 @@ export const testOrgTestRepoOnePushFC94: GithubPush = {
     }
   ],
   dateTime: '2024-03-06T21:26:18.000Z',
-  accountId: 162483619,
+  accountId: '162483619',
   accountName: 'cicada-test-org',
   accountType: 'organization',
   ref: 'refs/heads/main',
-  repoId: 768206479,
+  repoId: '768206479',
   repoName: 'org-test-repo-one',
   repoUrl: 'https://github.com/cicada-test-org/org-test-repo-one'
 }

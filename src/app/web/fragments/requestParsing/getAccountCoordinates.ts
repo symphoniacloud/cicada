@@ -8,16 +8,15 @@ import { invalidRequestResponse } from '../../htmlResponses'
 
 export function getAccountCoordinates(
   event: CicadaAuthorizedAPIEvent
-): Result<{ accountId: number }, APIGatewayProxyResult> {
+): Result<{ accountId: string }, APIGatewayProxyResult> {
   const parseResult = parser(event.queryStringParameters)
   if (isFailure(parseResult)) {
     logger.warn('Invalid request in getAccountCoordinates', { reason: parseResult.reason })
     return failedWithResult('Failed to parse', invalidRequestResponse)
   }
 
-  // TODO - can we just define the schema with ints?
   const { accountId } = parseResult.result
-  return successWith({ accountId: parseInt(accountId) })
+  return successWith({ accountId })
 }
 
 export interface AccountCoordinatesQueryStringParameters {

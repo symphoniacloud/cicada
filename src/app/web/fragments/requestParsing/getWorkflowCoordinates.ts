@@ -9,7 +9,7 @@ import { RepoCoordinatesQueryStringParameters, repoCoordinatesSchema } from './g
 
 export function getWorkflowCoordinates(
   event: CicadaAuthorizedAPIEvent
-): Result<{ accountId: number; repoId: number; workflowId: number }, APIGatewayProxyResult> {
+): Result<{ accountId: string; repoId: string; workflowId: string }, APIGatewayProxyResult> {
   const parseResult = qsParser(event.queryStringParameters)
   if (isFailure(parseResult)) {
     logger.warn('Invalid request in getWorkflowCoordinates', { reason: parseResult.reason })
@@ -19,9 +19,9 @@ export function getWorkflowCoordinates(
   // TODO - can we just define the schema with ints?
   const { accountId, repoId, workflowId } = parseResult.result
   return successWith({
-    accountId: parseInt(accountId),
-    repoId: parseInt(repoId),
-    workflowId: parseInt(workflowId)
+    accountId,
+    repoId,
+    workflowId
   })
 }
 

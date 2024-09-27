@@ -1,7 +1,7 @@
 import { AppState } from '../../environment/AppState'
 import { GithubPublicAccount } from '../types/GithubPublicAccount'
 import { isSuccess, Result, successWith } from '../../util/structuredResult'
-import { GithubAccountId } from '../types/GithubKeys'
+import { GithubAccountId, GithubUserId } from '../types/GithubKeys'
 import {
   getPublicAccountsForInstallationAccount,
   savePublicAccount
@@ -14,7 +14,7 @@ import { getIdsOfAccountsWhichUserIsMemberOf } from './githubMembership'
 
 export async function savePublicAccountWithName(
   appState: AppState,
-  adminUserId: GithubAccountId,
+  adminUserId: GithubUserId,
   accountName: string
 ): Promise<Result<GithubPublicAccount>> {
   // TOEventually - when a user can be a member of multiple installed accounts then need to
@@ -35,7 +35,8 @@ export async function savePublicAccountWithName(
     throw new Error(`Unexpected GitHub Account type for public account: ${githubUserType}`)
 
   const result = await savePublicAccount(appState.entityStore, {
-    accountId: githubUser.id,
+    // TODO - should this be the account ID???!!!
+    accountId: `${githubUser.id}`,
     accountLogin: githubUser.login,
     accountType: githubUserType,
     installationAccountId: installationAccountId
@@ -44,7 +45,8 @@ export async function savePublicAccountWithName(
   // Trigger crawling public account
   await sendToEventBridge(appState, EVENTBRIDGE_DETAIL_TYPES.PUBLIC_ACCOUNT_UPDATED, {
     installation: githubAppInstallation,
-    publicAccountId: githubUser.id
+    // TODO - should this be the account ID???!!!
+    publicAccountId: `${githubUser.id}`
   })
 
   return successWith(result)
@@ -52,7 +54,7 @@ export async function savePublicAccountWithName(
 
 export async function getPublicAccountsForUser(
   appState: AppState,
-  userId: GithubAccountId
+  userId: GithubUserId
 ): Promise<GithubPublicAccount[]> {
   return await getPublicAccountsForInstallationAccountIds(
     appState,

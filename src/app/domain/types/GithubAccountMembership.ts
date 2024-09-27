@@ -1,4 +1,4 @@
-import { GithubAccountId, GithubUserId, isGithubUserId } from './GithubKeys'
+import { GithubAccountId, GithubUserId, isGithubAccountId, isGithubUserId } from './GithubKeys'
 import { isNotNullObject } from '../../util/types'
 
 export interface GithubAccountMembership {
@@ -12,6 +12,6 @@ export function isGithubOrganizationMembership(x: unknown): x is GithubAccountMe
     'userId' in x &&
     isGithubUserId(x.userId) &&
     'accountId' in x &&
-    isGithubUserId(x.accountId)
+    isGithubAccountId(x.accountId)
   )
 }
