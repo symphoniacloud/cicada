@@ -62,9 +62,9 @@ export function fromRawGithubWebhookPush(raw: unknown): GithubPush | undefined {
   }
 
   return {
-    ownerId: raw.repository.owner.id,
-    ownerName: raw.repository.owner.name,
-    ownerType: fromRawAccountType(raw.repository.owner.type),
+    accountId: raw.repository.owner.id,
+    accountName: raw.repository.owner.name,
+    accountType: fromRawAccountType(raw.repository.owner.type),
     repoId: raw.repository.id,
     repoName: raw.repository.name,
     repoUrl: raw.repository.html_url,
@@ -98,7 +98,7 @@ function fromRawGithubWebhookPushCommit(commit: RawGithubWebhookPushCommit) {
 }
 
 export function fromRawGithubPushEventEvent(
-  { ownerId, ownerName, name: repoName, id: repoId, ownerType }: GithubRepositorySummary,
+  { accountId, accountName, name: repoName, id: repoId, accountType }: GithubRepositorySummary,
   raw: RawGithubAPIPushEventEvent
 ): GithubPush | undefined {
   if (raw.payload.commits.length < 1) {
@@ -107,9 +107,9 @@ export function fromRawGithubPushEventEvent(
   }
 
   return {
-    ownerId,
-    ownerName,
-    ownerType,
+    accountId: accountId,
+    accountName: accountName,
+    accountType: accountType,
     repoId,
     repoName,
     actor: {

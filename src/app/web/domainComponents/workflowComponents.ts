@@ -76,7 +76,7 @@ function workflowCell(
   const workflowPath = `${event.path.substring(event.path.indexOf('/') + 1)}`
   return td(
     a(
-      `/workflow?ownerId=${event.ownerId}&repoId=${event.repoId}&workflowId=${event.workflowId}`,
+      `/workflow?accountId=${event.accountId}&repoId=${event.repoId}&workflowId=${event.workflowId}`,
       event.workflowName ?? workflowPath
     ),
     '&nbsp;',

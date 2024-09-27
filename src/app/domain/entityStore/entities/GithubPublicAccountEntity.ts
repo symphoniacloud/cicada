@@ -5,13 +5,13 @@ import { GithubAccountId } from '../../types/GithubKeys'
 
 export const GithubPublicAccountEntity: Entity<
   GithubPublicAccount,
-  Pick<GithubPublicAccount, 'ownerAccountId'>,
+  Pick<GithubPublicAccount, 'installationAccountId'>,
   Pick<GithubPublicAccount, 'accountId'>
 > = {
   type: GITHUB_PUBLIC_ACCOUNT,
   parse: typePredicateParser(isGithubPublicAccount, GITHUB_PUBLIC_ACCOUNT),
-  pk(source: Pick<GithubPublicAccount, 'ownerAccountId'>) {
-    return `OWNER_ACCOUNT#${source.ownerAccountId}`
+  pk(source: Pick<GithubPublicAccount, 'installationAccountId'>) {
+    return `INSTALLATION_ACCOUNT#${source.installationAccountId}`
   },
   sk(source: Pick<GithubPublicAccount, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
@@ -26,20 +26,20 @@ export async function savePublicAccount(entityStore: AllEntitiesStore, account: 
   return await store(entityStore).put(account)
 }
 
-export async function getPublicAccountsForOwner(
+export async function getPublicAccountsForInstallationAccount(
   entityStore: AllEntitiesStore,
-  ownerAccountId: GithubAccountId
+  installationAccountId: GithubAccountId
 ) {
-  return await store(entityStore).queryAllByPk({ ownerAccountId })
+  return await store(entityStore).queryAllByPk({ installationAccountId })
 }
 
 export async function getPublicAccount(
   entityStore: AllEntitiesStore,
-  ownerAccountId: GithubAccountId,
+  installationAccountId: GithubAccountId,
   accountId: GithubAccountId
 ) {
   return await store(entityStore).getOrUndefined({
-    ownerAccountId,
+    installationAccountId,
     accountId
   })
 }

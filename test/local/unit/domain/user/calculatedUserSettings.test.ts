@@ -46,15 +46,15 @@ test('calculateVisibleAndNotifyConfigurable / calculateWorkflowSettings', () => 
 test('repo settings when no workflow settings', () => {
   const calculated = calculateRepoSettings(
     { workflows: {} },
-    { ownerId: 123, repoId: 456 },
+    { accountId: 123, repoId: 456 },
     [
       {
-        ownerId: 123,
+        accountId: 123,
         repoId: 456,
         workflowId: 789,
         workflowName: 'workflow1',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       }
@@ -77,15 +77,15 @@ test('repo settings when no workflow settings', () => {
 test('repo settings when workflow settings', () => {
   const calculated = calculateRepoSettings(
     { workflows: { 789: { notify: false } } },
-    { ownerId: 123, repoId: 456 },
+    { accountId: 123, repoId: 456 },
     [
       {
-        ownerId: 123,
+        accountId: 123,
         repoId: 456,
         workflowId: 789,
         workflowName: 'workflow1',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       }
@@ -108,15 +108,15 @@ test('repo settings when workflow settings', () => {
 test('repo settings when visible false', () => {
   const calculated = calculateRepoSettings(
     { workflows: { 789: { notify: false } }, visible: false },
-    { ownerId: 123, repoId: 456 },
+    { accountId: 123, repoId: 456 },
     [
       {
-        ownerId: 123,
+        accountId: 123,
         repoId: 456,
         workflowId: 789,
         workflowName: 'workflow1',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       }
@@ -141,25 +141,25 @@ test('repo settings when visible true notify false', () => {
       visible: true,
       notify: false
     },
-    { ownerId: 123, repoId: 456 },
+    { accountId: 123, repoId: 456 },
     [
       {
-        ownerId: 123,
+        accountId: 123,
         repoId: 456,
         workflowId: 789,
         workflowName: 'workflow1',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       },
       {
-        ownerId: 123,
+        accountId: 123,
         repoId: 456,
         workflowId: 790,
         workflowName: 'workflow2',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       }
@@ -183,32 +183,32 @@ test('account settings when none persisted', () => {
     111,
     [
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 123
       },
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 456
       }
     ],
     [
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 123,
         workflowId: 789,
         workflowName: 'workflow1',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       },
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 456,
         workflowId: 790,
         workflowName: 'workflow2',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       }
@@ -262,32 +262,32 @@ test('account settings ', () => {
     111,
     [
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 123
       },
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 456
       }
     ],
     [
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 123,
         workflowId: 789,
         workflowName: 'workflow1',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       },
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 456,
         workflowId: 790,
         workflowName: 'workflow2',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       }
@@ -327,32 +327,32 @@ test('user settings when empty persisted', () => {
     },
     [
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 123
       },
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 456
       }
     ],
     [
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 123,
         workflowId: 789,
         workflowName: 'workflow1',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       },
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 456,
         workflowId: 790,
         workflowName: 'workflow2',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       }
@@ -414,32 +414,32 @@ test('user settings when some persisted', () => {
     },
     [
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 123
       },
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 456
       }
     ],
     [
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 123,
         workflowId: 789,
         workflowName: 'workflow1',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       },
       {
-        ownerId: 111,
+        accountId: 111,
         repoId: 456,
         workflowId: 790,
         workflowName: 'workflow2',
-        ownerType: USER_ACCOUNT_TYPE,
-        ownerName: '',
+        accountType: USER_ACCOUNT_TYPE,
+        accountName: '',
         repoName: '',
         path: ''
       }

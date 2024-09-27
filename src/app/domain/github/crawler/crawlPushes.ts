@@ -13,7 +13,7 @@ export async function crawlPushes(
   repo: GithubRepositorySummary,
   githubClient: GithubInstallationClient
 ) {
-  const allEventsForRepo = await githubClient.listMostRecentEventsForRepo(repo.ownerName, repo.name)
+  const allEventsForRepo = await githubClient.listMostRecentEventsForRepo(repo.accountName, repo.name)
   const rawPushes = allEventsForRepo.filter(isRawGithubPushEventEvent)
   // TODO - this comment was from pre-step-functions version. Is there something that can be improved now
   //        repo is in context?

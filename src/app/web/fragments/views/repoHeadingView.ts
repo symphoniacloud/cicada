@@ -10,7 +10,7 @@ export function createRepoHeadingResponse(repo: GithubRepository) {
 
 export function repoHeadingElement(repo: GithubRepository) {
   return h3(
-    `Repository: ${repo.ownerName}/${repo.name}`,
+    `Repository: ${repo.accountName}/${repo.name}`,
     `&nbsp;`,
     githubAnchor(
       githubRepoUrl({

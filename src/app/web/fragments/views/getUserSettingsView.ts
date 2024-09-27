@@ -33,7 +33,7 @@ export function accountControlsRow(
   if (accountSettings.visible) {
     repoRows.push(divRow(colSm(1), colSm(11, b('Repository'))))
     for (const [repoId, repoSettings] of Object.entries(accountSettings.repos)) {
-      repoRows.push(repoControlsRow({ ownerId: accountId, repoId: Number(repoId) }, repoSettings))
+      repoRows.push(repoControlsRow({ accountId: accountId, repoId: Number(repoId) }, repoSettings))
     }
   }
 
@@ -59,9 +59,9 @@ export function repoControlsRow(repoKey: GithubRepoKey, repoSettings: Displayabl
     workflowRows.push(divRow('&nbsp;'))
   }
 
-  const { ownerId, repoId } = repoKey
-  const partialQs = `accountId=${ownerId}&repoId=${repoId}`
-  const targetId = `settings-${ownerId}-${repoId}`
+  const { accountId, repoId } = repoKey
+  const partialQs = `accountId=${accountId}&repoId=${repoId}`
+  const targetId = `settings-${accountId}-${repoId}`
   return div(
     { class: 'row', id: targetId },
     colSm(1),
@@ -76,11 +76,11 @@ export function repoControlsRow(repoKey: GithubRepoKey, repoSettings: Displayabl
 }
 
 export function workflowControlsRow(
-  { ownerId, repoId, workflowId }: GithubWorkflowKey,
+  { accountId, repoId, workflowId }: GithubWorkflowKey,
   settings: DisplayableGithubWorkflowSettings
 ) {
-  const partialQs = `accountId=${ownerId}&repoId=${repoId}&workflowId=${workflowId}`
-  const targetId = `settings-${ownerId}-${repoId}-${workflowId}`
+  const partialQs = `accountId=${accountId}&repoId=${repoId}&workflowId=${workflowId}`
+  const targetId = `settings-${accountId}-${repoId}-${workflowId}`
   return div(
     { class: 'row', id: targetId },
     colSm(2),

@@ -14,38 +14,41 @@ async function saveRepositories(appState: AppState, repos: GithubRepository[]) {
   return repos
 }
 
-export async function getRepositoriesForAccount(appState: AppState, ownerId: GithubAccountId) {
-  return (await getRepositories(appState.entityStore, ownerId)).filter(({ archived }) => !archived)
+export async function getRepositoriesForAccount(appState: AppState, accountId: GithubAccountId) {
+  return (await getRepositories(appState.entityStore, accountId)).filter(({ archived }) => !archived)
 }
 
 export function toUniqueRepoIdsForAccount(repos: GithubRepoKey[], accountId: GithubAccountId) {
-  return [...new Set(repos.filter((repo) => repo.ownerId === accountId).map((repo) => repo.repoId))]
+  return [...new Set(repos.filter((repo) => repo.accountId === accountId).map((repo) => repo.repoId))]
 }
 
 export function findUniqueAccountIds(repos: GithubRepoKey[]) {
-  return [...new Set(repos.map((repo) => repo.ownerId))]
+  return [...new Set(repos.map((repo) => repo.accountId))]
 }
 
 export function repositorySummaryToKey(repo: GithubRepositorySummary): GithubRepoKey {
   return {
-    ownerId: repo.ownerId,
+    accountId: repo.accountId,
     repoId: repo.id
   }
 }
 
-export function findAccountNameFromRepositories(repos: GithubRepositorySummary[], ownerId: GithubAccountId) {
-  const repoInAccount = repos.find((r) => r.ownerId === ownerId)
+export function findAccountNameFromRepositories(
+  repos: GithubRepositorySummary[],
+  accountId: GithubAccountId
+) {
+  const repoInAccount = repos.find((r) => r.accountId === accountId)
   // TODO - this will actually occur if we remove the account from Cicada, so need to handle
-  if (!repoInAccount) throw new Error(`Unable to find a repo for accountId ${ownerId}`)
-  return repoInAccount.ownerName
+  if (!repoInAccount) throw new Error(`Unable to find a repo for accountId ${accountId}`)
+  return repoInAccount.accountName
 }
 
 export function findRepoNameFromRepositories(
   repos: GithubRepositorySummary[],
-  { ownerId, repoId }: GithubRepoKey
+  { accountId, repoId }: GithubRepoKey
 ) {
-  const repo = repos.find((repo) => repo.ownerId === ownerId && repo.id === repoId)
+  const repo = repos.find((repo) => repo.accountId === accountId && repo.id === repoId)
   // TODO - this will actually occur if the repo is removed from Cicada, so need to handle
-  if (!repo) throw new Error(`Unable to find a repo for ownerId ${ownerId}, repoId ${repoId}`)
+  if (!repo) throw new Error(`Unable to find a repo for accountId ${accountId}, repoId ${repoId}`)
   return repo.name
 }

@@ -1,7 +1,7 @@
 import { AppState } from '../../environment/AppState'
 import { GithubAccountId, GithubUserId } from '../types/GithubKeys'
 import { getIdsOfAccountsWhichUserIsMemberOf } from './githubMembership'
-import { getPublicAccountsForOwnerAccountIds } from './githubPublicAccount'
+import { getPublicAccountsForInstallationAccountIds } from './githubPublicAccount'
 import { GithubAccount, INSTALLED_ACCOUNT_TYPE, PUBLIC_ACCOUNT_TYPE } from '../types/GithubAccount'
 import { getInstallationForAccount } from './githubInstallation'
 
@@ -45,7 +45,7 @@ export async function getAccountForUser(
 
 async function memberAccountIdsAndPublicAccounts(appState: AppState, userId: GithubUserId) {
   const memberAccountIds = await getIdsOfAccountsWhichUserIsMemberOf(appState, userId)
-  const publicAccounts = await getPublicAccountsForOwnerAccountIds(appState, memberAccountIds)
+  const publicAccounts = await getPublicAccountsForInstallationAccountIds(appState, memberAccountIds)
 
   return {
     memberAccountIds,

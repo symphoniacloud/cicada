@@ -4,9 +4,9 @@ import { GithubAccountKey, GithubRepoKey, isGithubAccountKey, isGithubRepoKey } 
 // TODO - need better names for these
 
 export interface GithubAccountElement extends GithubAccountKey {
-  ownerId: number
-  ownerName: string
-  ownerType: GithubAccountType
+  accountId: number
+  accountName: string
+  accountType: GithubAccountType
 }
 
 export interface GithubRepositoryElement extends GithubAccountElement, GithubRepoKey {
@@ -16,10 +16,10 @@ export interface GithubRepositoryElement extends GithubAccountElement, GithubRep
 export function isGithubAccountElement(x: unknown): x is GithubAccountElement {
   return (
     isGithubAccountKey(x) &&
-    'ownerName' in x &&
-    typeof x.ownerName === 'string' &&
-    'ownerType' in x &&
-    isGithubAccountType(x.ownerType)
+    'accountName' in x &&
+    typeof x.accountName === 'string' &&
+    'accountType' in x &&
+    isGithubAccountType(x.accountType)
   )
 }
 

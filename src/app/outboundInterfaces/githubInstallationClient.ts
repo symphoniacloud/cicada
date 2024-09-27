@@ -9,7 +9,11 @@ import { MetricUnit } from '@aws-lambda-powertools/metrics'
 import { failedWith, Result, successWith } from '../util/structuredResult'
 
 export interface GithubInstallationClient {
-  listWorkflowRunsForRepo(owner: string, repo: string, created?: string): Promise<RawGithubWorkflowRunEvent[]>
+  listWorkflowRunsForRepo(
+    account: string,
+    repo: string,
+    created?: string
+  ): Promise<RawGithubWorkflowRunEvent[]>
 
   listOrganizationRepositories(org: string): Promise<RawGithubRepository[]>
 
@@ -20,7 +24,7 @@ export interface GithubInstallationClient {
 
   listOrganizationMembers(org: string): Promise<RawGithubUser[]>
 
-  listMostRecentEventsForRepo(owner: string, repo: string): Promise<RawGithubEvent[]>
+  listMostRecentEventsForRepo(account: string, repo: string): Promise<RawGithubEvent[]>
 
   getUser(username: string): Promise<Result<RawGithubUser>>
 
@@ -89,10 +93,10 @@ export function createRealGithubInstallationClient(
   }
 
   return {
-    async listWorkflowRunsForRepo(owner: string, repo: string, created?: string) {
+    async listWorkflowRunsForRepo(account: string, repo: string, created?: string) {
       return processOctokitIterator(
         octokit.paginate.iterator(octokit.actions.listWorkflowRunsForRepo, {
-          owner,
+          owner: account,
           repo,
           created
         })
@@ -119,8 +123,10 @@ export function createRealGithubInstallationClient(
     },
     // For now, hard code page size to 10
     // GitHub doesn't retain these for long - so anything older than a few days won't be returned
-    async listMostRecentEventsForRepo(owner: string, repo: string): Promise<RawGithubEvent[]> {
-      return processOctokitResponse(await octokit.activity.listRepoEvents({ owner, repo, per_page: 10 }))
+    async listMostRecentEventsForRepo(account: string, repo: string): Promise<RawGithubEvent[]> {
+      return processOctokitResponse(
+        await octokit.activity.listRepoEvents({ owner: account, repo, per_page: 10 })
+      )
     },
     async getUser(username: string): Promise<Result<RawGithubUser>> {
       try {

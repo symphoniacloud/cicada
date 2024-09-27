@@ -37,8 +37,8 @@ async function processRedirect(appState: GithubSetupAppState, event: APIGatewayP
   await saveGithubAppConfiguration(appState.appName, appDetails)
 
   const installationsPath =
-    appDetails.ownerType === ORGANIZATION_ACCOUNT_TYPE
-      ? `https://github.com/organizations/${appDetails.ownerLogin}/settings/apps/${appDetails.appName}/installations`
+    appDetails.accountType === ORGANIZATION_ACCOUNT_TYPE
+      ? `https://github.com/organizations/${appDetails.accountLogin}/settings/apps/${appDetails.appName}/installations`
       : `https://github.com/settings/apps/${appDetails.appName}/installations`
 
   return pageViewResponse(
@@ -65,8 +65,8 @@ export async function callGithubToFinishAppCreation(code: string) {
     clientSecret: result.data.client_secret,
     privateKey: result.data.pem,
     webhookSecret: result.data.webhook_secret,
-    ownerLogin: result.data.owner.login,
-    ownerType: fromRawAccountType(result.data.owner.type)
+    accountLogin: result.data.owner.login,
+    accountType: fromRawAccountType(result.data.owner.type)
   }
 }
 

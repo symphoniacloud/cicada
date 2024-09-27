@@ -12,21 +12,21 @@ import { getEventUpdatedTimestamp } from '../../github/githubCommon'
 
 export const GithubLatestWorkflowRunEventEntity: Entity<
   GithubWorkflowRunEvent,
-  Pick<GithubWorkflowRunEvent, 'ownerId'>,
+  Pick<GithubWorkflowRunEvent, 'accountId'>,
   Pick<GithubWorkflowRunEvent, 'repoId' | 'workflowId'>
 > = {
   type: GITHUB_LATEST_WORKFLOW_RUN_EVENT,
   parse: typePredicateParser(isGithubWorkflowRunEvent, GITHUB_LATEST_WORKFLOW_RUN_EVENT),
-  pk(source: Pick<GithubWorkflowRunEvent, 'ownerId'>) {
-    return `ACCOUNT#${source.ownerId}`
+  pk(source: Pick<GithubWorkflowRunEvent, 'accountId'>) {
+    return `ACCOUNT#${source.accountId}`
   },
   sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'workflowId'>) {
     return `${githubLatestWorkflowRunEventSkPrefix(source)}#WORKFLOW#${source.workflowId}`
   },
   gsis: {
     gsi1: {
-      pk(source: Pick<GithubWorkflowRunEvent, 'ownerId'>) {
-        return `ACCOUNT#${source.ownerId}`
+      pk(source: Pick<GithubWorkflowRunEvent, 'accountId'>) {
+        return `ACCOUNT#${source.accountId}`
       },
       sk(source: Pick<GithubWorkflowRunEvent, 'updatedAt'>) {
         return `DATETIME#${source.updatedAt}`
@@ -57,12 +57,12 @@ export async function latestWorkflowRunEventForWorkflow(
   return store(entityStore).getOrUndefined(workflowKey)
 }
 
-export async function latestWorkflowRunEventsPerWorkflowForOwner(
+export async function latestWorkflowRunEventsPerWorkflowForAccount(
   entityStore: AllEntitiesStore,
-  ownerId: GithubAccountId
+  accountId: GithubAccountId
 ) {
   return store(entityStore).queryAllWithGsiByPk(
-    { ownerId },
+    { accountId },
     {
       scanIndexForward: false
     }

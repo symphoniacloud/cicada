@@ -35,21 +35,21 @@ export async function gitHubActivity(appState: AppState, event: CicadaAuthorized
   const coordinatesResult = getOptionalWorkflowCoordinates(event)
 
   if (isFailure(coordinatesResult)) return coordinatesResult.failureResult
-  const { ownerId, repoId, workflowId } = coordinatesResult.result
+  const { accountId, repoId, workflowId } = coordinatesResult.result
   const { userId } = event
 
-  if (ownerId) {
+  if (accountId) {
     if (repoId) {
       if (workflowId) {
-        return await githubActivityForWorkflow(appState, { ownerId, repoId, workflowId })
+        return await githubActivityForWorkflow(appState, { accountId, repoId, workflowId })
       } else {
-        return await githubActivityForRepo(appState, { ownerId, repoId })
+        return await githubActivityForRepo(appState, { accountId, repoId })
       }
     } else {
-      return await githubActivityForAccount(appState, userId, ownerId)
+      return await githubActivityForAccount(appState, userId, accountId)
     }
   }
-  if (!ownerId && !repoId && !workflowId) return await githubActivityForDashboard(appState, userId)
+  if (!accountId && !repoId && !workflowId) return await githubActivityForDashboard(appState, userId)
   return invalidRequestResponse
 }
 

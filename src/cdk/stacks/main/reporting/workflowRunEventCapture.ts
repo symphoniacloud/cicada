@@ -39,9 +39,9 @@ function defineCapturePipe(scope: Construct, props: ReportingStackProps, firehos
       // TODO - consider using a Lambda enrichment function for this instead
       inputTemplate:
         '{' +
-        '"owner_id": <$.body.detail.dynamodb.NewImage.ownerId.N>,' +
-        '"owner_name": <$.body.detail.dynamodb.NewImage.ownerName.S>,' +
-        '"owner_type": <$.body.detail.dynamodb.NewImage.ownerType.S>,' +
+        '"account_id": <$.body.detail.dynamodb.NewImage.accountId.N>,' +
+        '"account_name": <$.body.detail.dynamodb.NewImage.ownerName.S>,' +
+        '"account_type": <$.body.detail.dynamodb.NewImage.ownerType.S>,' +
         '"repo_id": <$.body.detail.dynamodb.NewImage.repoId.N>,' +
         '"repo_name": <$.body.detail.dynamodb.NewImage.repoName.S>,' +
         '"repo_html_url": <$.body.detail.dynamodb.NewImage.repoHtmlUrl.S>,' +

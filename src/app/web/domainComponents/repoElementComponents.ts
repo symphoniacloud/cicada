@@ -3,21 +3,21 @@ import { a, td } from '../hiccough/hiccoughElements'
 import { githubAnchor } from './genericComponents'
 
 export function repoCell({
-  ownerId,
+  accountId,
   repoId,
   repoName,
   repoHtmlUrl
 }: GithubRepositoryElement & {
   repoHtmlUrl: string
 }) {
-  return td(a(`/repo?ownerId=${ownerId}&repoId=${repoId}`, repoName), '&nbsp;', githubAnchor(repoHtmlUrl))
+  return td(a(`/repo?accountId=${accountId}&repoId=${repoId}`, repoName), '&nbsp;', githubAnchor(repoHtmlUrl))
 }
 
 export function githubRepoUrl({
-  ownerName,
+  accountName,
   repoName
-}: Pick<GithubRepositoryElement, 'ownerName' | 'repoName'>) {
-  return `https://github.com/${ownerName}/${repoName}`
+}: Pick<GithubRepositoryElement, 'accountName' | 'repoName'>) {
+  return `https://github.com/${accountName}/${repoName}`
 }
 
 export function commitCell(

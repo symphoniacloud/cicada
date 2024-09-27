@@ -44,7 +44,7 @@ test('update settings existing account', () => {
 })
 
 test('update settings new repo', () => {
-  const newSettings = repoUpdater({ ownerId: 123, repoId: 456 }, 'visible', true)(emptySettings(11))
+  const newSettings = repoUpdater({ accountId: 123, repoId: 456 }, 'visible', true)(emptySettings(11))
   expect(newSettings.github.accounts[123]).toEqual({
     repos: {
       456: {
@@ -67,7 +67,7 @@ test('update settings existing repo', () => {
     }
   }
 
-  const newSettings = repoUpdater({ ownerId: 123, repoId: 456 }, 'visible', true)(settings)
+  const newSettings = repoUpdater({ accountId: 123, repoId: 456 }, 'visible', true)(settings)
   expect(newSettings.github.accounts[123]).toEqual({
     notify: true,
     repos: { 456: { notify: true, visible: true, workflows: {} } }
@@ -76,7 +76,7 @@ test('update settings existing repo', () => {
 
 test('update settings new workflow', () => {
   const newSettings = workflowUpdater(
-    { ownerId: 123, repoId: 456, workflowId: 789 },
+    { accountId: 123, repoId: 456, workflowId: 789 },
     'visible',
     true
   )(emptySettings(11))
@@ -113,7 +113,7 @@ test('update settings existing repo', () => {
   }
 
   const newSettings = workflowUpdater(
-    { ownerId: 123, repoId: 456, workflowId: 789 },
+    { accountId: 123, repoId: 456, workflowId: 789 },
     'visible',
     true
   )(settings)

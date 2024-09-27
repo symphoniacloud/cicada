@@ -5,8 +5,8 @@ import { randomUUID } from 'node:crypto'
 import example_workflow_run from '../examples/github/org/webhook/workflowRunCompleted.json'
 import { realS3 } from '../../src/app/outboundInterfaces/s3Wrapper'
 import {
-  deleteWorkflowRunActivityForOwner,
-  getRunEventsForOwner
+  deleteWorkflowRunActivityForAccount,
+  getRunEventsForAccount
 } from './integrationTestSupport/githubActivity'
 import { sleep } from './integrationTestSupport/utils'
 import { createSignatureHeader } from '../../src/app/domain/github/webhookProcessor/githubWebhookProcessor'
@@ -19,9 +19,9 @@ test('webhook test', async () => {
   const deliveryId = `fake-integration-${randomUUID()}`
   const rawBody = JSON.stringify(example_workflow_run)
   const sigHeader = createSignatureHeader(rawBody, (await appState.config.github()).webhookSecret)
-  const testOwnerId = example_workflow_run.organization.id
+  const testAccountId = example_workflow_run.organization.id
   // Delete previous activity
-  await deleteWorkflowRunActivityForOwner(appState, testOwnerId)
+  await deleteWorkflowRunActivityForAccount(appState, testAccountId)
 
   // 1 - Make actual webhook call to Cicada API
   const webhookResponse = await fetch(
@@ -69,7 +69,7 @@ test('webhook test', async () => {
     }
     await sleep(1000)
 
-    const runEvents = await getRunEventsForOwner(appState, testOwnerId)
+    const runEvents = await getRunEventsForAccount(appState, testAccountId)
     if (runEvents.length > 0) {
       expect(runEvents[0]).toEqual({
         actor: {
@@ -86,9 +86,9 @@ test('webhook test', async () => {
         headSha: '8c3aa1cb0316ea23abeb2612457edb80868f53c8',
         htmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236',
         id: 8177622236,
-        ownerId: 162483619,
-        ownerName: 'cicada-test-org',
-        ownerType: 'organization',
+        accountId: 162483619,
+        accountName: 'cicada-test-org',
+        accountType: 'organization',
         path: '.github/workflows/test.yml',
         repoHtmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one',
         repoId: 768206479,

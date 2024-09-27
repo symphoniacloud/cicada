@@ -8,7 +8,7 @@ import { invalidRequestResponse } from '../../htmlResponses'
 
 export function getRepoCoordinates(
   event: CicadaAuthorizedAPIEvent
-): Result<{ ownerId: number; repoId: number }, APIGatewayProxyResult> {
+): Result<{ accountId: number; repoId: number }, APIGatewayProxyResult> {
   const parseResult = parser(event.queryStringParameters)
   if (isFailure(parseResult)) {
     logger.warn('Invalid request in getRepoCoordinates', { reason: parseResult.reason })
@@ -16,18 +16,18 @@ export function getRepoCoordinates(
   }
 
   // TODO - can we just define the schema with ints?
-  const { ownerId, repoId } = parseResult.result
-  return successWith({ ownerId: parseInt(ownerId), repoId: parseInt(repoId) })
+  const { accountId, repoId } = parseResult.result
+  return successWith({ accountId: parseInt(accountId), repoId: parseInt(repoId) })
 }
 
 export interface RepoCoordinatesQueryStringParameters {
-  ownerId: string
+  accountId: string
   repoId: string
 }
 
 export const repoCoordinatesSchema: JTDSchemaType<RepoCoordinatesQueryStringParameters> = {
   properties: {
-    ownerId: { type: 'string' },
+    accountId: { type: 'string' },
     repoId: { type: 'string' }
   }
 }

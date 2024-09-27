@@ -9,7 +9,7 @@ import { RepoCoordinatesQueryStringParameters, repoCoordinatesSchema } from './g
 
 export function getOptionalRepoCoordinates(
   event: CicadaAuthorizedAPIEvent
-): Result<{ ownerId?: number; repoId?: number }, APIGatewayProxyResult> {
+): Result<{ accountId?: number; repoId?: number }, APIGatewayProxyResult> {
   const parseResult = parser(event.queryStringParameters ?? {})
   if (isFailure(parseResult)) {
     logger.warn('Invalid request in getOptionalRepoCoordinates', { reason: parseResult.reason })
@@ -17,9 +17,9 @@ export function getOptionalRepoCoordinates(
   }
 
   // TODO - can we just define the schema with ints?
-  const { ownerId, repoId } = parseResult.result
+  const { accountId, repoId } = parseResult.result
   return successWith({
-    ...(ownerId ? { ownerId: parseInt(ownerId) } : {}),
+    ...(accountId ? { accountId: parseInt(accountId) } : {}),
     ...(repoId ? { repoId: parseInt(repoId) } : {})
   })
 }

@@ -14,7 +14,7 @@ test('view-repo-heading', async () => {
     appState,
     createStubApiGatewayProxyEventWithToken('validUserToken', {
       path: '/app/fragment/repo/heading',
-      queryStringParameters: { ownerId: '162483619', repoId: '768206479' }
+      queryStringParameters: { accountId: '162483619', repoId: '768206479' }
     })
   )
 

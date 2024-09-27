@@ -57,13 +57,19 @@ export async function updateUserSetting(appState: AppState, event: CicadaAuthori
     return processUpdateWorkflowSetting(
       appState,
       event.userId,
-      { ownerId: accountId, repoId, workflowId },
+      { accountId: accountId, repoId, workflowId },
       setting,
       enabled
     )
   }
   if (repoId) {
-    return processUpdateRepoSetting(appState, event.userId, { ownerId: accountId, repoId }, setting, enabled)
+    return processUpdateRepoSetting(
+      appState,
+      event.userId,
+      { accountId: accountId, repoId },
+      setting,
+      enabled
+    )
   }
 
   return processUpdateAccountSetting(appState, event.userId, accountId, setting, enabled)
@@ -72,25 +78,25 @@ export async function updateUserSetting(appState: AppState, event: CicadaAuthori
 async function processUpdateAccountSetting(
   appState: AppState,
   userId: GithubUserId,
-  ownerId: GithubAccountId,
+  accountId: GithubAccountId,
   setting: UserSetting,
   enabled: boolean
 ) {
   logger.debug('processUpdateAccountSetting')
-  const accountRepos = await getRepositoriesForAccount(appState, ownerId)
+  const accountRepos = await getRepositoriesForAccount(appState, accountId)
   const accountWorkflows = await getWorkflowsForAccount(appState, userId)
-  const updatedSettings = await updateAndSaveAccountSetting(appState, userId, ownerId, setting, enabled)
+  const updatedSettings = await updateAndSaveAccountSetting(appState, userId, accountId, setting, enabled)
   const updatedAccountSettings =
-    updatedSettings.github.accounts[ownerId] ??
+    updatedSettings.github.accounts[accountId] ??
     throwFunction('Internal error in processUpdateAccountSetting - no account settings')()
 
   return createUpdateUserAccountSettingResponse(
-    ownerId,
+    accountId,
     toDisplayableAccountSettings(
-      ownerId,
+      accountId,
       calculateAccountSettings(
         updatedAccountSettings,
-        ownerId,
+        accountId,
         accountRepos.map(repositorySummaryToKey),
         accountWorkflows
       ),
@@ -117,7 +123,7 @@ async function processUpdateRepoSetting(
   const allWorkflows = await getWorkflowsForUser(appState, userId)
   const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, [repoKey], allWorkflows)
   const newCalculatedRepoSettings =
-    newCalculatedUserSettings.github.accounts[repoKey.ownerId]?.repos[repoKey.repoId] ??
+    newCalculatedUserSettings.github.accounts[repoKey.accountId]?.repos[repoKey.repoId] ??
     throwFunction('Internal error in processUpdateRepoSetting - no repo settings')()
 
   return createUpdateUserRepoSettingResponse(
@@ -144,7 +150,7 @@ async function processUpdateWorkflowSetting(
   const allWorkflows = [workflow]
   const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, [workflowKey], [workflow])
   const newCalculatedWorkflowSettings =
-    newCalculatedUserSettings.github.accounts[workflowKey.ownerId]?.repos[workflowKey.repoId]?.workflows[
+    newCalculatedUserSettings.github.accounts[workflowKey.accountId]?.repos[workflowKey.repoId]?.workflows[
       workflowKey.workflowId
     ] ?? throwFunction('Internal error in processUpdateWorkflowSetting - no workflow settings')()
 

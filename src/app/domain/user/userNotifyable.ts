@@ -27,7 +27,7 @@ async function getWorkflowNotifyEnabledForUser(
   // We can use the workflow event as the list of all repos and workflows for the sake of calculating notifyibilty
   const userSettings = calculateUserSettings(await getUserSettings(appState, userId), [workflow], [workflow])
   const yesNotify =
-    userSettings.github.accounts[workflow.ownerId]?.repos[workflow.repoId]?.workflows[workflow.workflowId]
+    userSettings.github.accounts[workflow.accountId]?.repos[workflow.repoId]?.workflows[workflow.workflowId]
       .notify
   if (yesNotify === undefined) {
     logger.warn(`No calculated user notify setting for workflow`, { workflow, userSettings })

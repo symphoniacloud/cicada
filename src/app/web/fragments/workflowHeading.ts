@@ -16,9 +16,9 @@ export async function workflowHeading(appState: AppState, event: CicadaAuthorize
   const workflowCoordinatesResult = getWorkflowCoordinates(event)
 
   if (isFailure(workflowCoordinatesResult)) return workflowCoordinatesResult.failureResult
-  const { ownerId, repoId, workflowId } = workflowCoordinatesResult.result
+  const { accountId, repoId, workflowId } = workflowCoordinatesResult.result
 
-  const result = await getRunEventsForWorkflowPage(appState, ownerId, repoId, workflowId, 1)
+  const result = await getRunEventsForWorkflowPage(appState, accountId, repoId, workflowId, 1)
   const run = result.items.length > 0 ? result.items[0] : undefined
 
   // TODO eventually - make sure user has permission for this
