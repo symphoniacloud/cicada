@@ -1,5 +1,6 @@
-import { GithubAccountId, GithubUserId, isGithubAccountId, isGithubUserId } from './GithubKeys'
 import { isNotNullObject } from '../../util/types'
+import { GithubAccountId, isGithubAccountId } from './GithubAccountId'
+import { GithubUserId, isGithubUserId } from './GithubUserId'
 
 export interface GithubAccountMembership {
   userId: GithubUserId

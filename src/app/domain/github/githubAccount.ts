@@ -1,5 +1,6 @@
 import { AppState } from '../../environment/AppState'
-import { GithubAccountId, GithubUserId } from '../types/GithubKeys'
+import { GithubAccountId } from '../types/GithubAccountId'
+import { GithubUserId } from '../types/GithubUserId'
 import { getIdsOfAccountsWhichUserIsMemberOf } from './githubMembership'
 import { getPublicAccountsForInstallationAccountIds } from './githubPublicAccount'
 import { GithubAccount, INSTALLED_ACCOUNT_TYPE, PUBLIC_ACCOUNT_TYPE } from '../types/GithubAccount'

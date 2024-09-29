@@ -35,7 +35,7 @@ test('web push test', async () => {
   })
   expect(appState.eventBridgeBus.sentEvents.length).toEqual(1)
   expect(appState.eventBridgeBus.sentEvents[0]).toEqual({
-    detail: JSON.stringify({ data: { userId: 162360409 } }),
+    detail: JSON.stringify({ data: { userId: 'GHUser162360409' } }),
     detailType: 'WebPushTest'
   })
 })

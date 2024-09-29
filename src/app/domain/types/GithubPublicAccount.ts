@@ -1,4 +1,4 @@
-import { GithubAccountId, isGithubAccountId } from './GithubKeys'
+import { GithubAccountId, isGithubAccountId } from './GithubAccountId'
 import { isNotNullObject } from '../../util/types'
 import { GithubAccountType } from './GithubAccountType'
 

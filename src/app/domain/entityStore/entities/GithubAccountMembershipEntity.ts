@@ -1,7 +1,8 @@
 import { AllEntitiesStore, Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubAccountMembership, isGithubOrganizationMembership } from '../../types/GithubAccountMembership'
 import { GITHUB_ACCOUNT_MEMBERSHIP } from '../entityTypes'
-import { GithubAccountId, GithubUserId } from '../../types/GithubKeys'
+import { GithubAccountId } from '../../types/GithubAccountId'
+import { GithubUserId } from '../../types/GithubUserId'
 
 export const GithubAccountMembershipEntity: Entity<
   GithubAccountMembership,

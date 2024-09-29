@@ -10,21 +10,18 @@ import {
 } from './views/activityAndStatusView'
 import { getOptionalWorkflowCoordinates } from './requestParsing/getOptionalWorkflowCoordinates'
 import { logger } from '../../util/logging'
+import { GithubRepoKey, GithubWorkflowKey } from '../../domain/types/GithubKeys'
 import {
-  GithubAccountId,
-  GithubRepoKey,
-  GithubUserId,
-  GithubWorkflowKey
-} from '../../domain/types/GithubKeys'
-import {
-  getRecentActiveBranchesForUserWithUserSettings,
   getRecentActiveBranchesForUserAndAccount,
+  getRecentActiveBranchesForUserWithUserSettings,
   getRecentActivityForRepoForUser,
   getRunEventsForWorkflowForUser
 } from '../../domain/user/userVisible'
 import { fragmentPath } from '../routingCommon'
 import { getAccountForUser } from '../../domain/github/githubAccount'
 import { getRepository } from '../../domain/entityStore/entities/GithubRepositoryEntity'
+import { GithubAccountId } from '../../domain/types/GithubAccountId'
+import { GithubUserId } from '../../domain/types/GithubUserId'
 
 export const gitHubActivityFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('gitHubActivity'),

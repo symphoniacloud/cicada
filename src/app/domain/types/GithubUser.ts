@@ -1,5 +1,5 @@
 import { RawGithubUser } from './rawGithub/RawGithubUser'
-import { GithubUserId, isGithubUserId } from './GithubKeys'
+import { fromRawGithubUserId, GithubUserId, isGithubUserId } from './GithubUserId'
 import { isNotNullObject, isString } from '../../util/types'
 
 export interface GithubUser {
@@ -28,7 +28,7 @@ export function isGithubUser(x: unknown): x is GithubUser {
 
 export function fromRawGithubUser(raw: RawGithubUser): GithubUser {
   return {
-    id: raw.id,
+    id: fromRawGithubUserId(raw.id),
     login: raw.login,
     url: raw.url,
     avatarUrl: raw.avatar_url,

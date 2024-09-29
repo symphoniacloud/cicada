@@ -19,6 +19,8 @@ import {
   expectedPutLatestGithubPush
 } from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
 
+import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/types/GithubInstallationId'
+
 test('repo-crawler-for-personal-account-installation', async () => {
   // A
   const appState = new FakeAppState()
@@ -44,7 +46,10 @@ test('repo-crawler-for-org-installation', async () => {
   // A
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
-  appState.githubClient.fakeClientsForInstallation.addResponse(48133709, githubInstallationClient)
+  appState.githubClient.fakeClientsForInstallation.addResponse(
+    fromRawGithubInstallationId(48133709),
+    githubInstallationClient
+  )
   githubInstallationClient.stubMostRecentEventsForRepo.addResponse(
     {
       owner: 'cicada-test-org',

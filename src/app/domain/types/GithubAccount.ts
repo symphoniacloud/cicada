@@ -1,4 +1,4 @@
-import { GithubAccountId } from './GithubKeys'
+import { GithubAccountId } from './GithubAccountId'
 import { GithubAccountType } from './GithubAccountType'
 
 export const INSTALLED_ACCOUNT_TYPE = 'installed'

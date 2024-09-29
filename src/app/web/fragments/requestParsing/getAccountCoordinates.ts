@@ -5,10 +5,11 @@ import { failedWithResult, isFailure, Result, successWith } from '../../../util/
 import { logger } from '../../../util/logging'
 import { APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
 import { invalidRequestResponse } from '../../htmlResponses'
+import { GithubAccountId, isGithubAccountId } from '../../../domain/types/GithubAccountId'
 
 export function getAccountCoordinates(
   event: CicadaAuthorizedAPIEvent
-): Result<{ accountId: string }, APIGatewayProxyResult> {
+): Result<{ accountId: GithubAccountId }, APIGatewayProxyResult> {
   const parseResult = parser(event.queryStringParameters)
   if (isFailure(parseResult)) {
     logger.warn('Invalid request in getAccountCoordinates', { reason: parseResult.reason })
@@ -16,6 +17,12 @@ export function getAccountCoordinates(
   }
 
   const { accountId } = parseResult.result
+  // TOEventually - put this into AJV parser
+  if (!isGithubAccountId(accountId)) {
+    logger.warn('Invalid request in getAccountCoordinates', { reason: 'Invalid type of Account ID' })
+    return failedWithResult('Invalid type of Account ID', invalidRequestResponse)
+  }
+
   return successWith({ accountId })
 }
 

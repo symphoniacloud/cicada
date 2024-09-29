@@ -7,6 +7,8 @@ import { RawGithubEvent } from '../domain/types/rawGithub/RawGithubEvent'
 import { metrics } from '../util/metrics'
 import { MetricUnit } from '@aws-lambda-powertools/metrics'
 import { failedWith, Result, successWith } from '../util/structuredResult'
+import { GithubAppId, toRawGithubAppId } from '../domain/types/GithubAppId'
+import { GithubInstallationId, toRawGithubInstallationId } from '../domain/types/GithubInstallationId'
 
 export interface GithubInstallationClient {
   listWorkflowRunsForRepo(
@@ -41,20 +43,20 @@ export interface GithubInstallationClientMeta {
 }
 
 export function createRealGithubInstallationClient(
-  appId: string,
+  appId: GithubAppId,
   privateKey: string,
   clientId: string,
   clientSecret: string,
-  installationId: number
+  installationId: GithubInstallationId
 ): GithubInstallationClient {
   const octokit = new Octokit({
     authStrategy: createAppAuth,
     auth: {
-      appId,
+      appId: toRawGithubAppId(appId),
       privateKey,
       clientId,
       clientSecret,
-      installationId
+      installationId: toRawGithubInstallationId(installationId)
     }
   })
   const rateLimitData: {

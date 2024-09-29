@@ -9,9 +9,10 @@ import {
   PersistedVisibleAndNotifyConfigurable
 } from '../types/UserSettings'
 import { GithubWorkflow } from '../types/GithubWorkflow'
-import { GithubAccountId, GithubRepoKey } from '../types/GithubKeys'
+import { GithubRepoKey } from '../types/GithubKeys'
 import { findWorkflowsForRepo } from '../github/githubWorkflow'
 import { findUniqueAccountIds, toUniqueRepoIdsForAccount } from '../github/githubRepository'
+import { GithubAccountId } from '../types/GithubAccountId'
 
 const DEFAULT_ACCOUNT_NOTIFY = true
 

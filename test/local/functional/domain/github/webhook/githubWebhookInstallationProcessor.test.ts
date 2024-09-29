@@ -10,12 +10,14 @@ import {
 } from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
 import { expectedPutGithubInstallation } from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
 
+import { fromRawGithubAppId } from '../../../../../../src/app/domain/types/GithubAppId'
+
 test('installation-webhook-for-org-account-installation', async () => {
   // A
   const appState = new FakeAppState()
   appState.config.fakeGithubConfig = {
     ...appState.config.fakeGithubConfig,
-    appId: '850768'
+    appId: fromRawGithubAppId(850768)
   }
 
   // A
@@ -28,6 +30,6 @@ test('installation-webhook-for-org-account-installation', async () => {
   expect(appState.eventBridgeBus.sentEvents[0]).toEqual({
     detailType: 'InstallationUpdated',
     detail:
-      '{"data":{"installationId":48133709,"appId":850768,"appSlug":"cicada-test-org","accountLogin":"cicada-test-org","accountId":"162483619","accountType":"organization"}}'
+      '{"data":{"installationId":"GHInstallation48133709","appId":"GHApp850768","appSlug":"cicada-test-org","accountLogin":"cicada-test-org","accountId":"GHAccount162483619","accountType":"organization"}}'
   })
 })

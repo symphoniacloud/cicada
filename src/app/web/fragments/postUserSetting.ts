@@ -10,12 +10,7 @@ import { logger } from '../../util/logging'
 import { getPostUserSettingParameters } from './requestParsing/getPostUserSettingParameters'
 import { isFailure } from '../../util/structuredResult'
 import { invalidRequestResponse } from '../htmlResponses'
-import {
-  GithubAccountId,
-  GithubRepoKey,
-  GithubUserId,
-  GithubWorkflowKey
-} from '../../domain/types/GithubKeys'
+import { GithubRepoKey, GithubWorkflowKey } from '../../domain/types/GithubKeys'
 import {
   toDisplayableAccountSettings,
   toDisplayableRepoSettings,
@@ -35,6 +30,8 @@ import { fragmentPath } from '../routingCommon'
 import { getRepositoriesForAccount, repositorySummaryToKey } from '../../domain/github/githubRepository'
 import { getRepository } from '../../domain/entityStore/entities/GithubRepositoryEntity'
 import { latestWorkflowRunEventForWorkflow } from '../../domain/entityStore/entities/GithubLatestWorkflowRunEventEntity'
+import { GithubAccountId } from '../../domain/types/GithubAccountId'
+import { GithubUserId } from '../../domain/types/GithubUserId'
 
 export const postUserSettingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('userSetting'),

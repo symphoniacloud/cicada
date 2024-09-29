@@ -1,5 +1,8 @@
-import { GithubUserId, isGithubUserId } from './GithubKeys'
 import { isNotNullObject } from '../../util/types'
+import { GithubAccountId } from './GithubAccountId'
+import { GithubUserId, isGithubUserId } from './GithubUserId'
+import { GithubRepoId } from './GithubRepoId'
+import { GithubWorkflowId } from './GithubWorkflowId'
 
 export type UserSetting = 'visible' | 'notify'
 
@@ -52,18 +55,18 @@ export type PersistedGithubWorkflowSettings = PersistedVisibleAndNotifyConfigura
 export interface CalculatedUserSettings {
   userId: GithubUserId
   github: {
-    accounts: Record<string, CalculatedGithubAccountSettings>
+    accounts: Record<GithubAccountId, CalculatedGithubAccountSettings>
   }
 }
 
 export type CalculatedVisibleAndNotifyConfigurable = Required<PersistedVisibleAndNotifyConfigurable>
 
 export interface CalculatedGithubAccountSettings extends CalculatedVisibleAndNotifyConfigurable {
-  repos: Record<string, CalculatedGithubRepoSettings>
+  repos: Record<GithubRepoId, CalculatedGithubRepoSettings>
 }
 
 export interface CalculatedGithubRepoSettings extends CalculatedVisibleAndNotifyConfigurable {
-  workflows: Record<string, CalculatedGithubWorkflowSettings>
+  workflows: Record<GithubWorkflowId, CalculatedGithubWorkflowSettings>
 }
 
 export type CalculatedGithubWorkflowSettings = CalculatedVisibleAndNotifyConfigurable
@@ -73,7 +76,7 @@ export type CalculatedGithubWorkflowSettings = CalculatedVisibleAndNotifyConfigu
 export interface DisplayableUserSettings {
   userId: GithubUserId
   github: {
-    accounts: Record<string, DisplayableGithubAccountSettings>
+    accounts: Record<GithubAccountId, DisplayableGithubAccountSettings>
   }
 }
 
@@ -84,11 +87,11 @@ export interface Displayable {
 export interface DisplayableGithubAccountSettings
   extends CalculatedVisibleAndNotifyConfigurable,
     Displayable {
-  repos: Record<string, DisplayableGithubRepoSettings>
+  repos: Record<GithubRepoId, DisplayableGithubRepoSettings>
 }
 
 export interface DisplayableGithubRepoSettings extends CalculatedVisibleAndNotifyConfigurable, Displayable {
-  workflows: Record<string, DisplayableGithubWorkflowSettings>
+  workflows: Record<GithubWorkflowId, DisplayableGithubWorkflowSettings>
 }
 
 export type DisplayableGithubWorkflowSettings = CalculatedGithubWorkflowSettings & Displayable

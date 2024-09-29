@@ -10,12 +10,15 @@ test('successful row, all Repos', () => {
     tr(
       { class: 'table-success' },
       td(
-        a(`/repo?accountId=162360409&repoId=767679529`, 'personal-test-repo'),
+        a(`/repo?accountId=GHAccount162360409&repoId=GHRepo767679529`, 'personal-test-repo'),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo')
       ),
       td(
-        a(`/workflow?accountId=162360409&repoId=767679529&workflowId=88508779`, 'Test Workflow'),
+        a(
+          `/workflow?accountId=GHAccount162360409&repoId=GHRepo767679529&workflowId=GHWorkflow88508779`,
+          'Test Workflow'
+        ),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
@@ -44,7 +47,10 @@ test('successful run, repo activity', () => {
       { class: 'table-success' },
       td('Successful Run'),
       td(
-        a(`/workflow?accountId=162360409&repoId=767679529&workflowId=88508779`, 'Test Workflow'),
+        a(
+          `/workflow?accountId=GHAccount162360409&repoId=GHRepo767679529&workflowId=GHWorkflow88508779`,
+          'Test Workflow'
+        ),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
@@ -75,12 +81,15 @@ test('unsuccessful run, all Repos', () => {
     tr(
       { class: 'table-danger' },
       td(
-        a(`/repo?accountId=162360409&repoId=767679529`, 'personal-test-repo'),
+        a(`/repo?accountId=GHAccount162360409&repoId=GHRepo767679529`, 'personal-test-repo'),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo')
       ),
       td(
-        a(`/workflow?accountId=162360409&repoId=767679529&workflowId=88508779`, 'Test Workflow'),
+        a(
+          `/workflow?accountId=GHAccount162360409&repoId=GHRepo767679529&workflowId=GHWorkflow88508779`,
+          'Test Workflow'
+        ),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
@@ -114,7 +123,10 @@ test('failed run, repo Activity', () => {
       { class: 'table-danger' },
       td('Failed Run'),
       td(
-        a(`/workflow?accountId=162360409&repoId=767679529&workflowId=88508779`, 'Test Workflow'),
+        a(
+          `/workflow?accountId=GHAccount162360409&repoId=GHRepo767679529&workflowId=GHWorkflow88508779`,
+          'Test Workflow'
+        ),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
@@ -146,12 +158,15 @@ test('in progress run, all repos', () => {
     tr(
       { class: 'table-warning' },
       td(
-        a(`/repo?accountId=162360409&repoId=767679529`, 'personal-test-repo'),
+        a(`/repo?accountId=GHAccount162360409&repoId=GHRepo767679529`, 'personal-test-repo'),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo')
       ),
       td(
-        a(`/workflow?accountId=162360409&repoId=767679529&workflowId=88508779`, 'Test Workflow'),
+        a(
+          `/workflow?accountId=GHAccount162360409&repoId=GHRepo767679529&workflowId=GHWorkflow88508779`,
+          'Test Workflow'
+        ),
         '&nbsp;',
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),

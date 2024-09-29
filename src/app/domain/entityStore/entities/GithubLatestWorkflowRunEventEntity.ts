@@ -6,7 +6,8 @@ import {
   rangeWhereSkBeginsWith,
   typePredicateParser
 } from '@symphoniacloud/dynamodb-entity-store'
-import { GithubAccountId, GithubRepoKey, GithubWorkflowKey } from '../../types/GithubKeys'
+import { GithubAccountId } from '../../types/GithubAccountId'
+import { GithubRepoKey, GithubWorkflowKey } from '../../types/GithubKeys'
 import { sortBy } from '../../../util/collections'
 import { getEventUpdatedTimestamp } from '../../github/githubCommon'
 

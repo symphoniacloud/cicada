@@ -1,7 +1,8 @@
 import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription'
+import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId'
 
 export const testTestUserPushSubscription: WebPushSubscription = {
-  userId: 162360409,
+  userId: fromRawGithubUserId(162360409),
   username: 'cicada-test-user',
   endpoint: 'https://web.push.apple.com/TestOne',
   keys: {
@@ -10,7 +11,7 @@ export const testTestUserPushSubscription: WebPushSubscription = {
   }
 }
 export const testMikeRobertsPushSubscriptionTwo: WebPushSubscription = {
-  userId: 49635,
+  userId: fromRawGithubUserId(49635),
   username: 'mikebroberts',
   endpoint: 'https://web.push.apple.com/TestTwo',
   keys: {
@@ -19,7 +20,7 @@ export const testMikeRobertsPushSubscriptionTwo: WebPushSubscription = {
   }
 }
 export const testMikeRobertsPushSubscriptionThree: WebPushSubscription = {
-  userId: 49635,
+  userId: fromRawGithubUserId(49635),
   username: 'mikebroberts',
   endpoint: 'https://web.push.apple.com/TestThree',
   keys: {

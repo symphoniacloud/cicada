@@ -12,6 +12,7 @@ import {
 import { logger } from '../../../util/logging'
 import { fromRawAccountType, ORGANIZATION_ACCOUNT_TYPE } from '../../types/GithubAccountType'
 import { a, p } from '../../../web/hiccough/hiccoughElements'
+import { fromRawGithubAppId, GithubAppId } from '../../types/GithubAppId'
 
 export const setupRedirectRoute: Route<APIGatewayProxyEvent, GithubSetupAppState> = {
   path: '/github/setup/redirect',
@@ -53,13 +54,22 @@ async function processRedirect(appState: GithubSetupAppState, event: APIGatewayP
   )
 }
 
-export async function callGithubToFinishAppCreation(code: string) {
+export async function callGithubToFinishAppCreation(code: string): Promise<{
+  appId: GithubAppId
+  appName: string
+  clientId: string
+  clientSecret: string
+  privateKey: string
+  webhookSecret: string
+  accountLogin: string
+  accountType: string
+}> {
   const result = await new Octokit().apps.createFromManifest({ code })
   if (!result.data.webhook_secret) throw new Error("GitHub didn't return webhook secret")
   if (!result.data.owner) throw new Error("GitHub didn't return owner")
 
   return {
-    appId: `${result.data.id}`,
+    appId: fromRawGithubAppId(result.data.id),
     appName: result.data.name,
     clientId: result.data.client_id,
     clientSecret: result.data.client_secret,
@@ -81,7 +91,7 @@ async function saveGithubAppConfiguration(
     privateKey,
     webhookSecret
   }: {
-    appId: string
+    appId: GithubAppId
     clientId: string
     clientSecret: string
     privateKey: string

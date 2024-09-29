@@ -1,5 +1,5 @@
 import { AppState } from '../../environment/AppState'
-import { GithubUserId } from '../types/GithubKeys'
+import { GithubUserId } from '../types/GithubUserId'
 import { calculateUserSettings } from './calculatedUserSettings'
 import { getUserSettings } from './persistedUserSettings'
 import { logger } from '../../util/logging'
@@ -10,7 +10,7 @@ export async function filterWorkflowNotifyEnabled(
   userIds: GithubUserId[],
   workflow: GithubWorkflow
 ): Promise<GithubUserId[]> {
-  const enabledUserIds = []
+  const enabledUserIds: GithubUserId[] = []
   for (const userId of userIds) {
     if (await getWorkflowNotifyEnabledForUser(appState, userId, workflow)) {
       enabledUserIds.push(userId)

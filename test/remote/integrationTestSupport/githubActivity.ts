@@ -5,7 +5,7 @@ import {
 } from '../../../src/app/domain/entityStore/entities/GithubLatestWorkflowRunEventEntity'
 import { throwError } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubWorkflowRunEventEntity } from '../../../src/app/domain/entityStore/entities/GithubWorkflowRunEventEntity'
-import { GithubAccountId } from '../../../src/app/domain/types/GithubKeys'
+import { GithubAccountId } from '../../../src/app/domain/types/GithubAccountId'
 
 export async function deleteWorkflowRunActivityForAccount(appState: AppState, accountId: GithubAccountId) {
   await deleteRunEventsForAccount(appState, accountId)

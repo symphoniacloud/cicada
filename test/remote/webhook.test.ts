@@ -10,6 +10,7 @@ import {
 } from './integrationTestSupport/githubActivity'
 import { sleep } from './integrationTestSupport/utils'
 import { createSignatureHeader } from '../../src/app/domain/github/webhookProcessor/githubWebhookProcessor'
+import { fromRawGithubAccountId } from '../../src/app/domain/types/GithubAccountId'
 
 // GitHub Webhook - these are directly stored in S3, and then async processing occurs
 test('webhook test', async () => {
@@ -19,7 +20,7 @@ test('webhook test', async () => {
   const deliveryId = `fake-integration-${randomUUID()}`
   const rawBody = JSON.stringify(example_workflow_run)
   const sigHeader = createSignatureHeader(rawBody, (await appState.config.github()).webhookSecret)
-  const testAccountId = `${example_workflow_run.organization.id}`
+  const testAccountId = fromRawGithubAccountId(`${example_workflow_run.organization.id}`)
   // Delete previous activity
   await deleteWorkflowRunActivityForAccount(appState, testAccountId)
 

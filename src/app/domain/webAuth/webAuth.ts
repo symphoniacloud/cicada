@@ -1,16 +1,19 @@
 // If token valid then username will be available here
 
 import { CicadaAPIAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
+import { logger } from '../../util/logging'
+import { GithubUserId, isGithubUserId } from '../types/GithubUserId'
 
-export function userIdFromEvent(event: CicadaAPIAuthorizedAPIEvent): number | undefined {
+export function userIdFromEvent(event: CicadaAPIAuthorizedAPIEvent): GithubUserId {
   const userId = event.requestContext.authorizer.userId
-  if (userId !== undefined) {
-    const parsed = parseInt(userId)
-    if (!isNaN(parsed)) {
-      return parsed
-    }
+
+  if (!isGithubUserId(userId)) {
+    const message = `Invalid Github User ID on API Event: ${userId}`
+    logger.error(message)
+    throw new Error(message)
   }
-  return undefined
+
+  return userId
 }
 
 export function usernameFromEvent(event: CicadaAPIAuthorizedAPIEvent): string | undefined {

@@ -1,7 +1,8 @@
 import { AllEntitiesStore, Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubRepository, isGithubRepository } from '../../types/GithubRepository'
 import { GITHUB_REPOSITORY } from '../entityTypes'
-import { GithubAccountId, GithubRepoKey } from '../../types/GithubKeys'
+import { GithubRepoKey } from '../../types/GithubKeys'
+import { GithubAccountId } from '../../types/GithubAccountId'
 
 export const GithubRepositoryEntity: Entity<
   GithubRepository,

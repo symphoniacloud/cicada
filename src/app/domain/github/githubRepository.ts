@@ -2,7 +2,8 @@ import { AppState } from '../../environment/AppState'
 import { RawGithubRepository } from '../types/rawGithub/RawGithubRepository'
 import { fromRawGithubRepository, GithubRepository, GithubRepositorySummary } from '../types/GithubRepository'
 import { getRepositories, putRepositories } from '../entityStore/entities/GithubRepositoryEntity'
-import { GithubAccountId, GithubRepoKey } from '../types/GithubKeys'
+import { GithubRepoKey } from '../types/GithubKeys'
+import { GithubAccountId } from '../types/GithubAccountId'
 
 export async function processRawRepositories(appState: AppState, rawRepos: RawGithubRepository[]) {
   return await saveRepositories(appState, rawRepos.map(fromRawGithubRepository))

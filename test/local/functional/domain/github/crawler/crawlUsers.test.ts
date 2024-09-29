@@ -25,6 +25,8 @@ import {
   expectedBatchWriteGithubUsers
 } from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
 import { successWith } from '../../../../../../src/app/util/structuredResult'
+import { fromRawGithubAccountId } from '../../../../../../src/app/domain/types/GithubAccountId'
+import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/GithubUserId'
 
 test('user-crawler-for-personal-account-installation', async () => {
   // A
@@ -55,7 +57,7 @@ test('user-crawler-for-org-installation', async () => {
   stubQueryAccountMembershipsByAccount(appState, [
     testTestUserMembershipOfOrg,
     // Old membership that will be deleted
-    { ...testTestUserMembershipOfOrg, userId: 9786 }
+    { ...testTestUserMembershipOfOrg, userId: fromRawGithubUserId(9786) }
   ])
 
   // A
@@ -71,8 +73,8 @@ test('user-crawler-for-org-installation', async () => {
   expectBatchWrites(appState, 2).toEqual(
     expectedBatchDeleteGithubMemberships([
       {
-        accountId: '162483619',
-        userId: 9786
+        accountId: fromRawGithubAccountId(162483619),
+        userId: fromRawGithubUserId(9786)
       }
     ])
   )

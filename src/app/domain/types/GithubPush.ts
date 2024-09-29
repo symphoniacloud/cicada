@@ -9,7 +9,9 @@ import { GithubRepositorySummary } from './GithubRepository'
 import { NonEmptyArray } from '../../util/collections'
 import { GithubRepositoryElement, isGithubRepositoryElement } from './GithubElements'
 import { timestampToIso } from '../../util/dateAndTime'
-import { GithubUserId } from './GithubKeys'
+import { fromRawGithubAccountId } from './GithubAccountId'
+import { fromRawGithubUserId, GithubUserId } from './GithubUserId'
+import { fromRawGithubRepoId } from './GithubRepoId'
 
 // There's no consistent ID between pushes sourced from Webhooks vs Events, so use combination
 // of owner, repo, ref, and first commit SHA to create a key
@@ -62,14 +64,14 @@ export function fromRawGithubWebhookPush(raw: unknown): GithubPush | undefined {
   }
 
   return {
-    accountId: `${raw.repository.owner.id}`,
+    accountId: fromRawGithubAccountId(raw.repository.owner.id),
     accountName: raw.repository.owner.name,
     accountType: fromRawAccountType(raw.repository.owner.type),
-    repoId: `${raw.repository.id}`,
+    repoId: fromRawGithubRepoId(raw.repository.id),
     repoName: raw.repository.name,
     repoUrl: raw.repository.html_url,
     actor: {
-      id: raw.sender.id,
+      id: fromRawGithubUserId(raw.sender.id),
       login: raw.sender.login,
       avatarUrl: raw.sender.avatar_url
     },
@@ -113,7 +115,7 @@ export function fromRawGithubPushEventEvent(
     repoId,
     repoName,
     actor: {
-      id: raw.actor.id,
+      id: fromRawGithubUserId(raw.actor.id),
       login: raw.actor.login,
       avatarUrl: raw.actor.avatar_url
     },
