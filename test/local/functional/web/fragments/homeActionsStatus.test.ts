@@ -41,12 +41,12 @@ test('home-actions-status', async () => {
   <tbody>
     <tr class="table-success">
       <td>
-        <a href="/repo?accountId=162483619&repoId=768206479">org-test-repo-one</a>
+        <a href="/repo?accountId=GHAccount162483619&repoId=GHRepo768206479">org-test-repo-one</a>
 &nbsp;
         <a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a>
       </td>
       <td>
-        <a href="/workflow?accountId=162483619&repoId=768206479&workflowId=88647110">Test Repo One Workflow</a>
+        <a href="/workflow?accountId=GHAccount162483619&repoId=GHRepo768206479&workflowId=GHWorkflow88647110">Test Repo One Workflow</a>
 &nbsp;
         <a href="https://github.com/cicada-test-org/org-test-repo-one/actions/workflows/test.yml"><i class='bi bi-github' style='color: #6e5494'></i></a>
       </td>

@@ -13,17 +13,18 @@ import {
   stubQueryLatestWorkflowRuns,
   stubQueryWebPushSubscription
 } from '../../../../../testSupport/fakes/tableRecordReadStubs'
+import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/GithubUserId'
 
 test('newWorkflowRunEvent', async () => {
   const appState = new FakeAppState()
   stubQueryAccountMembershipsByAccount(appState)
 
   stubQueryAccountMembershipsByUser(appState)
-  stubQueryAccountMembershipsByUser(appState, 49635)
+  stubQueryAccountMembershipsByUser(appState, fromRawGithubUserId(49635))
   stubQueryLatestWorkflowRuns(appState)
   stubQueryWebPushSubscription(appState)
   stubQueryWebPushSubscription(appState, {
-    userId: 49635,
+    userId: fromRawGithubUserId(49635),
     subscriptions: [testMikeRobertsPushSubscriptionTwo, testMikeRobertsPushSubscriptionThree]
   })
 
@@ -111,7 +112,7 @@ test('newPushTest', async () => {
     resources: [],
     detail: {
       data: {
-        userId: 162360409
+        userId: fromRawGithubUserId(162360409)
       }
     }
   })

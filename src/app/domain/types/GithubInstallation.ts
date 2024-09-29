@@ -1,14 +1,13 @@
 import { RawGithubInstallation } from './rawGithub/RawGithubInstallation'
 import { fromRawAccountType, GithubAccountType, isGithubAccountType } from './GithubAccountType'
-import {
-  GithubAccountId,
-  GithubAppId,
-  GithubInstallationId,
-  isGithubAccountId,
-  isGithubAppId,
-  isGithubInstallationId
-} from './GithubKeys'
 import { isNotNullObject, isString } from '../../util/types'
+import { fromRawGithubAccountId, GithubAccountId, isGithubAccountId } from './GithubAccountId'
+import { fromRawGithubAppId, GithubAppId, isGithubAppId } from './GithubAppId'
+import {
+  fromRawGithubInstallationId,
+  GithubInstallationId,
+  isGithubInstallationId
+} from './GithubInstallationId'
 
 export interface GithubInstallation {
   installationId: GithubInstallationId
@@ -39,11 +38,11 @@ export function isGithubInstallation(x: unknown): x is GithubInstallation {
 
 export function fromRawGithubInstallation(raw: RawGithubInstallation): GithubInstallation {
   return {
-    installationId: raw.id,
-    appId: raw.app_id,
+    installationId: fromRawGithubInstallationId(raw.id),
+    appId: fromRawGithubAppId(raw.app_id),
     appSlug: raw.app_slug,
     accountLogin: raw.account.login,
-    accountId: `${raw.account.id}`,
+    accountId: fromRawGithubAccountId(raw.account.id),
     accountType: fromRawAccountType(raw.target_type)
   }
 }

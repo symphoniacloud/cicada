@@ -1,8 +1,9 @@
 import { RawGithubRepository } from './rawGithub/RawGithubRepository'
 import { fromRawAccountType } from './GithubAccountType'
 import { GithubAccountElement, isGithubAccountElement } from './GithubElements'
-import { GithubRepoId, isGithubRepoId } from './GithubKeys'
 import { isString } from '../../util/types'
+import { fromRawGithubAccountId } from './GithubAccountId'
+import { fromRawGithubRepoId, GithubRepoId, isGithubRepoId } from './GithubRepoId'
 
 export interface GithubRepositorySummary extends GithubAccountElement {
   id: GithubRepoId
@@ -53,11 +54,11 @@ export function isGithubRepository(x: unknown): x is GithubRepository {
 
 export function fromRawGithubRepository(raw: RawGithubRepository): GithubRepository {
   return {
-    id: `${raw.id}`,
+    id: fromRawGithubRepoId(raw.id),
     name: raw.name,
     fullName: raw.full_name,
     private: raw.private,
-    accountId: `${raw.owner.id}`,
+    accountId: fromRawGithubAccountId(raw.owner.id),
     accountName: raw.owner.login,
     accountType: fromRawAccountType(raw.owner.type),
     htmlUrl: raw.html_url,

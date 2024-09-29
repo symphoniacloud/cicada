@@ -1,6 +1,9 @@
 import { RawGithubWorkflowRunEvent } from './rawGithub/RawGithubWorkflowRunEvent'
 import { fromRawAccountType } from './GithubAccountType'
 import { GithubWorkflow, isGithubWorkflow } from './GithubWorkflow'
+import { fromRawGithubAccountId } from './GithubAccountId'
+import { fromRawGithubRepoId } from './GithubRepoId'
+import { fromRawGithubWorkflowId } from './GithubWorkflowId'
 
 export interface GithubWorkflowRunEvent extends GithubWorkflow {
   repoHtmlUrl: string
@@ -47,13 +50,13 @@ export function isGithubWorkflowRunEvent(x: unknown): x is GithubWorkflowRunEven
 // TOEventually - consider dateTimes, e.g. for Pushes we get localized times
 export function fromRawGithubWorkflowRunEvent(raw: RawGithubWorkflowRunEvent): GithubWorkflowRunEvent {
   return {
-    accountId: `${raw.repository.owner.id}`,
+    accountId: fromRawGithubAccountId(raw.repository.owner.id),
     accountName: raw.repository.owner.login,
     accountType: fromRawAccountType(raw.repository.owner.type),
-    repoId: `${raw.repository.id}`,
+    repoId: fromRawGithubRepoId(raw.repository.id),
     repoName: raw.repository.name,
     repoHtmlUrl: raw.repository.html_url,
-    workflowId: `${raw.workflow_id}`,
+    workflowId: fromRawGithubWorkflowId(raw.workflow_id),
     id: raw.id,
     runNumber: raw.run_number,
     runAttempt: raw.run_attempt,

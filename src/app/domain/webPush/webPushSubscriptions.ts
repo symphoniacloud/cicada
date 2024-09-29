@@ -3,10 +3,11 @@ import { logger } from '../../util/logging'
 import { isWebPushSubscription, WebPushSubscription } from '../types/WebPushSubscription'
 import { WebPushSubscriptionEntity } from '../entityStore/entities/WebPushSubscriptionEntity'
 import { emptySuccess, failedWith } from '../../util/structuredResult'
+import { GithubUserId } from '../types/GithubUserId'
 
 export async function registerSubscription(
   appState: AppState,
-  userId: number,
+  userId: GithubUserId,
   username: string,
   rawSubscription: string
 ) {
@@ -25,7 +26,11 @@ export async function registerSubscription(
   return emptySuccess
 }
 
-export async function deregisterSubscription(appState: AppState, userId: number, rawSubscription: string) {
+export async function deregisterSubscription(
+  appState: AppState,
+  userId: GithubUserId,
+  rawSubscription: string
+) {
   logger.debug(`Deregistering web push subscription for ${userId}`)
   const endpoint = JSON.parse(rawSubscription)?.endpoint
   if (!(typeof endpoint === 'string')) {
@@ -39,7 +44,7 @@ export async function deregisterSubscription(appState: AppState, userId: number,
   return emptySuccess
 }
 
-export async function getAllSubscriptionsForUser(appState: AppState, userId: number) {
+export async function getAllSubscriptionsForUser(appState: AppState, userId: GithubUserId) {
   return await webPushStore(appState).queryAllByPk({ userId })
 }
 

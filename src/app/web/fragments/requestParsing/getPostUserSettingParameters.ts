@@ -5,8 +5,10 @@ import { failedWithResult, isFailure, Result, successWith } from '../../../util/
 import { logger } from '../../../util/logging'
 import { invalidRequestResponse } from '../../htmlResponses'
 import { APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
-import { GithubAccountId, GithubRepoId, GithubWorkflowId } from '../../../domain/types/GithubKeys'
 import { isUserSetting, UserSetting } from '../../../domain/types/UserSettings'
+import { GithubAccountId, isGithubAccountId } from '../../../domain/types/GithubAccountId'
+import { GithubRepoId, isGithubRepoId } from '../../../domain/types/GithubRepoId'
+import { GithubWorkflowId, isGithubWorkflowId } from '../../../domain/types/GithubWorkflowId'
 
 export function getPostUserSettingParameters(event: CicadaAuthorizedAPIEvent): Result<
   {
@@ -28,14 +30,27 @@ export function getPostUserSettingParameters(event: CicadaAuthorizedAPIEvent): R
     logger.warn(`Invalid request in getPostUserSettingParameters - setting ${setting} is not a valid setting`)
     return failedWithResult('Failed to parse', invalidRequestResponse)
   }
+  // TOEventually - put this into AJV parser
+  if (!isGithubAccountId(accountId)) {
+    logger.warn('Invalid request in getPostUserSettingParameters', { reason: 'Invalid type of Account ID' })
+    return failedWithResult('Invalid type of Account ID', invalidRequestResponse)
+  }
+  if (!isGithubRepoId(repoId)) {
+    logger.warn('Invalid request in getPostUserSettingParameters', { reason: 'Invalid type of Repo ID' })
+    return failedWithResult('Invalid type of Repo ID', invalidRequestResponse)
+  }
+  if (!isGithubWorkflowId(workflowId)) {
+    logger.warn('Invalid request in getPostUserSettingParameters', { reason: 'Invalid type of Workflow ID' })
+    return failedWithResult('Invalid type of Workflow ID', invalidRequestResponse)
+  }
 
   // TODO - need to check valid types
   return successWith({
     accountId,
+    repoId,
+    workflowId,
     setting,
-    enabled: enabled.toLowerCase() === 'true',
-    ...(repoId ? { repoId } : {}),
-    ...(workflowId ? { workflowId } : {})
+    enabled: enabled.toLowerCase() === 'true'
   })
 }
 

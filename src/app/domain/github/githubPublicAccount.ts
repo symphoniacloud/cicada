@@ -1,7 +1,6 @@
 import { AppState } from '../../environment/AppState'
 import { GithubPublicAccount } from '../types/GithubPublicAccount'
 import { isSuccess, Result, successWith } from '../../util/structuredResult'
-import { GithubAccountId, GithubUserId } from '../types/GithubKeys'
 import {
   getPublicAccountsForInstallationAccount,
   savePublicAccount
@@ -11,6 +10,8 @@ import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../types/GithubAcc
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
 import { getIdsOfAccountsWhichUserIsMemberOf } from './githubMembership'
+import { fromRawGithubAccountId, GithubAccountId } from '../types/GithubAccountId'
+import { GithubUserId } from '../types/GithubUserId'
 
 export async function savePublicAccountWithName(
   appState: AppState,
@@ -34,9 +35,9 @@ export async function savePublicAccountWithName(
   if (!(githubUserType === ORGANIZATION_ACCOUNT_TYPE || githubUserType === USER_ACCOUNT_TYPE))
     throw new Error(`Unexpected GitHub Account type for public account: ${githubUserType}`)
 
+  const accountId = fromRawGithubAccountId(githubUser.id)
   const result = await savePublicAccount(appState.entityStore, {
-    // TODO - should this be the account ID???!!!
-    accountId: `${githubUser.id}`,
+    accountId,
     accountLogin: githubUser.login,
     accountType: githubUserType,
     installationAccountId: installationAccountId
@@ -45,8 +46,7 @@ export async function savePublicAccountWithName(
   // Trigger crawling public account
   await sendToEventBridge(appState, EVENTBRIDGE_DETAIL_TYPES.PUBLIC_ACCOUNT_UPDATED, {
     installation: githubAppInstallation,
-    // TODO - should this be the account ID???!!!
-    publicAccountId: `${githubUser.id}`
+    publicAccountId: accountId
   })
 
   return successWith(result)

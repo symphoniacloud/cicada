@@ -10,8 +10,9 @@ import { GithubRepository } from '../../../src/app/domain/types/GithubRepository
 import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWorkflowRunEvent'
 import { GithubUser } from '../../../src/app/domain/types/GithubUser'
 import { GithubAccountMembership } from '../../../src/app/domain/types/GithubAccountMembership'
-import { GithubAccountId, GithubUserId } from '../../../src/app/domain/types/GithubKeys'
 import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription'
+import { GithubAccountId } from '../../../src/app/domain/types/GithubAccountId'
+import { GithubUserId } from '../../../src/app/domain/types/GithubUserId'
 
 export function expectedPutGithubInstallation(installation: GithubInstallation) {
   return buildPut('fakeGithubInstallationsTable', 'githubInstallation', {

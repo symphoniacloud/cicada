@@ -4,7 +4,7 @@ import { GithubInstallationEntity } from '../entityStore/entities/GithubInstalla
 import { logger } from '../../util/logging'
 import deepEqual from 'deep-equal'
 import { RawGithubInstallation } from '../types/rawGithub/RawGithubInstallation'
-import { GithubAccountId } from '../types/GithubKeys'
+import { GithubAccountId } from '../types/GithubAccountId'
 
 export async function processRawInstallation(appState: AppState, rawInstallation: RawGithubInstallation) {
   return await processInstallation(appState, fromRawGithubInstallation(rawInstallation))

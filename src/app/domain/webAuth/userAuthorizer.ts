@@ -7,11 +7,13 @@ import { WithHeadersEvent } from '../../inboundInterfaces/lambdaTypes'
 import { getGithubUserTokenOrUndefined } from '../github/githubUserToken'
 import { getIdsOfAccountsWhichUserIsMemberOf } from '../github/githubMembership'
 
+import { GithubUserId } from '../types/GithubUserId'
+
 export type AuthorizationResult = SuccessfulAuthorizationResult | undefined
 
 export type SuccessfulAuthorizationResult = {
   username: string
-  userId: number
+  userId: GithubUserId
 }
 
 // Common code used by both API Gateway Lambda Authorizer AND /appa/... Lambda function

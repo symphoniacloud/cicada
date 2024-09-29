@@ -1,4 +1,4 @@
-import { GithubUserId, isGithubUserId } from './GithubKeys'
+import { GithubUserId, isGithubUserId } from './GithubUserId'
 import { isNotNullObject, isNumber, isString } from '../../util/types'
 
 export interface GithubUserToken {

@@ -8,8 +8,11 @@ import {
   PersistedVisibleAndNotifyConfigurable
 } from '../../../domain/types/UserSettings'
 import { HiccoughElement } from '../../hiccough/hiccoughElement'
-import { GithubAccountId, GithubRepoKey, GithubWorkflowKey } from '../../../domain/types/GithubKeys'
+import { GithubRepoKey, GithubWorkflowKey } from '../../../domain/types/GithubKeys'
 import { colSm, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements'
+import { GithubAccountId } from '../../../domain/types/GithubAccountId'
+import { GithubRepoId } from '../../../domain/types/GithubRepoId'
+import { GithubWorkflowId } from '../../../domain/types/GithubWorkflowId'
 
 export function createGetUserSettingsResponse(settings: DisplayableUserSettings) {
   return fragmentViewResult(...userSettingsElement(settings))
@@ -18,7 +21,7 @@ export function createGetUserSettingsResponse(settings: DisplayableUserSettings)
 export function userSettingsElement(settings: DisplayableUserSettings) {
   const elements = []
   for (const [accountId, accountSettings] of Object.entries(settings.github.accounts)) {
-    elements.push(accountControlsRow(accountId, accountSettings))
+    elements.push(accountControlsRow(accountId as GithubAccountId, accountSettings))
   }
   return elements
 }
@@ -33,7 +36,7 @@ export function accountControlsRow(
   if (accountSettings.visible) {
     repoRows.push(divRow(colSm(1), colSm(11, b('Repository'))))
     for (const [repoId, repoSettings] of Object.entries(accountSettings.repos)) {
-      repoRows.push(repoControlsRow({ accountId, repoId }, repoSettings))
+      repoRows.push(repoControlsRow({ accountId, repoId: repoId as GithubRepoId }, repoSettings))
     }
   }
 
@@ -54,7 +57,9 @@ export function repoControlsRow(repoKey: GithubRepoKey, repoSettings: Displayabl
   if (repoSettings.visible && workflowEntries.length > 0) {
     workflowRows.push(divRow(colSm(2), colSm(10, b('Workflow'))))
     for (const [workflowId, workflowSettings] of workflowEntries) {
-      workflowRows.push(workflowControlsRow({ ...repoKey, workflowId }, workflowSettings))
+      workflowRows.push(
+        workflowControlsRow({ ...repoKey, workflowId: workflowId as GithubWorkflowId }, workflowSettings)
+      )
     }
     workflowRows.push(divRow('&nbsp;'))
   }

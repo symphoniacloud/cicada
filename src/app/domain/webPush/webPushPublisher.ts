@@ -3,10 +3,12 @@ import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper'
 import { getAllSubscriptionsForUser } from './webPushSubscriptions'
 import { WebPushSubscription } from '../types/WebPushSubscription'
 
+import { GithubUserId } from '../types/GithubUserId'
+
 // TOEventually - consider parallel processing
 export async function publishToSubscriptionsForUsers(
   appState: AppState,
-  userIds: number[],
+  userIds: GithubUserId[],
   notification: CicadaWebNotification
 ) {
   for (const userId of userIds) {
@@ -18,7 +20,7 @@ export async function publishToSubscriptionsForUsers(
 // TOEventually - consider parallel processing
 export async function publishToSubscriptionsForUser(
   appState: AppState,
-  userId: number,
+  userId: GithubUserId,
   notification: CicadaWebNotification
 ) {
   for (const subscription of await getAllSubscriptionsForUser(appState, userId)) {

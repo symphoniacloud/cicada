@@ -1,5 +1,5 @@
 import { PushSubscription } from 'web-push'
-import { GithubUserId, isGithubUserId } from './GithubKeys'
+import { GithubUserId, isGithubUserId } from './GithubUserId'
 import { isString } from '../../util/types'
 
 export interface WebPushSubscription extends PushSubscription {

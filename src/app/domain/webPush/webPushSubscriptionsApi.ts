@@ -8,10 +8,7 @@ import {
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
 import { userIdFromEvent, usernameFromEvent } from '../webAuth/webAuth'
-import {
-  userIdFieldMissingFromContextResponse,
-  usernameFieldMissingFromContextResponse
-} from '../../inboundInterfaces/standardHttpResponses'
+import { usernameFieldMissingFromContextResponse } from '../../inboundInterfaces/standardHttpResponses'
 import { CicadaAPIAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { isSuccess } from '../../util/structuredResult'
 
@@ -19,7 +16,6 @@ export async function handleWebPushSubscribe(appState: AppState, event: CicadaAP
   const username = usernameFromEvent(event),
     userId = userIdFromEvent(event)
   if (!username) return usernameFieldMissingFromContextResponse()
-  if (!userId) return userIdFieldMissingFromContextResponse()
 
   const response = await registerSubscription(appState, userId, username, event.body ?? '')
   return isSuccess(response)
@@ -29,7 +25,6 @@ export async function handleWebPushSubscribe(appState: AppState, event: CicadaAP
 
 export async function handleWebPushUnsubscribe(appState: AppState, event: CicadaAPIAuthorizedAPIEvent) {
   const userId = userIdFromEvent(event)
-  if (!userId) return userIdFieldMissingFromContextResponse()
 
   const response = await deregisterSubscription(appState, userId, event.body ?? '')
   return isSuccess(response)
@@ -39,7 +34,6 @@ export async function handleWebPushUnsubscribe(appState: AppState, event: Cicada
 
 export async function handleWebPushTest(appState: AppState, event: CicadaAPIAuthorizedAPIEvent) {
   const userId = userIdFromEvent(event)
-  if (!userId) return userIdFieldMissingFromContextResponse()
 
   await sendToEventBridge(appState, EVENTBRIDGE_DETAIL_TYPES.WEB_PUSH_TEST, {
     userId

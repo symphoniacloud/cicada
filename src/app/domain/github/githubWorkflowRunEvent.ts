@@ -11,7 +11,11 @@ import { getMemberUserIdsForAccount } from './githubMembership'
 import { saveRuns } from './githubWorkflowRun'
 import { rangeWhereSkBeginsWith } from '@symphoniacloud/dynamodb-entity-store'
 import { isoDifferenceMs } from '../../util/dateAndTime'
-import { GithubAccountId, GithubRepoId, GithubWorkflowId, GithubWorkflowKey } from '../types/GithubKeys'
+import { GithubWorkflowKey } from '../types/GithubKeys'
+import { GithubAccountId } from '../types/GithubAccountId'
+import { GithubUserId } from '../types/GithubUserId'
+import { GithubRepoId } from '../types/GithubRepoId'
+import { GithubWorkflowId } from '../types/GithubWorkflowId'
 
 export async function processRawRunEvents(
   appState: AppState,
@@ -45,7 +49,7 @@ async function saveEvents(appState: AppState, eventsToKeep: GithubWorkflowRunEve
 export async function getRelatedMemberIdsForRunEvent(
   appState: AppState,
   runEvent: GithubWorkflowRunEvent
-): Promise<number[]> {
+): Promise<GithubUserId[]> {
   return getMemberUserIdsForAccount(appState, runEvent.accountId)
 }
 

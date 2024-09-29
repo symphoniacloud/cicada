@@ -13,12 +13,14 @@ import {
 } from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
 import { expectedPutGithubInstallation } from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
 
+import { fromRawGithubAppId } from '../../../../../../src/app/domain/types/GithubAppId'
+
 test('app-crawler-for-personal-account-installation', async () => {
   // A
   const appState = new FakeAppState()
   appState.config.fakeGithubConfig = {
     ...appState.config.fakeGithubConfig,
-    appId: '849936'
+    appId: fromRawGithubAppId(849936)
   }
   appState.githubClient.stubInstallations = [example_personal_account_installation]
 
@@ -36,7 +38,7 @@ test('app-crawler-for-org-installation', async () => {
   const appState = new FakeAppState()
   appState.config.fakeGithubConfig = {
     ...appState.config.fakeGithubConfig,
-    appId: '850768'
+    appId: fromRawGithubAppId(850768)
   }
   appState.githubClient.stubInstallations = [example_org_installation]
 

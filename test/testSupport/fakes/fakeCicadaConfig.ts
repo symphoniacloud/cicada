@@ -4,6 +4,7 @@ import {
   TableNames,
   WebPushVapidConfig
 } from '../../../src/app/environment/config'
+import { fromRawGithubAppId } from '../../../src/app/domain/types/GithubAppId'
 
 export const defaultFakeWebHostname = 'fake-cicada.example.com'
 
@@ -31,7 +32,7 @@ export class FakeCicadaConfig implements CicadaConfig {
     publicKey: 'fakeWebpushPublicKey'
   }
   public fakeGithubConfig: GithubConfig = {
-    appId: '',
+    appId: fromRawGithubAppId(123),
     clientId: '',
     clientSecret: '',
     privateKey: '',

@@ -7,7 +7,7 @@ import {
   publishGithubInstallationClientMetrics
 } from '../../../outboundInterfaces/githubInstallationClient'
 import { crawlRepositories, crawlRepositoriesForPublicAccount } from './crawlRepositories'
-import { GithubAccountId } from '../../types/GithubKeys'
+import { GithubAccountId } from '../../types/GithubAccountId'
 import { getPublicAccount } from '../../entityStore/entities/GithubPublicAccountEntity'
 import { GithubPublicAccount } from '../../types/GithubPublicAccount'
 

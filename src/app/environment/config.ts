@@ -3,6 +3,7 @@ import { SSM_PARAM_NAMES, SsmParamName, ssmTableNamePath } from '../../multipleC
 import { throwFunction } from '../../multipleContexts/errors'
 import { CICADA_TABLE_IDS, CicadaTableId } from '../../multipleContexts/dynamoDBTables'
 import type { SSMGetParametersByNameOptions } from '@aws-lambda-powertools/parameters/lib/esm/types/SSMProvider'
+import { GithubAppId, isGithubAppId } from '../domain/types/GithubAppId'
 
 // Some of these are async because implementations may cache values retrieved from external services
 export interface CicadaConfig {
@@ -20,7 +21,7 @@ export interface CicadaConfig {
 export type TableNames = Record<CicadaTableId, string>
 
 export interface GithubConfig {
-  readonly appId: string
+  readonly appId: GithubAppId
   readonly clientId: string
   readonly githubCallbackState: string
   readonly privateKey: string
@@ -43,8 +44,10 @@ export function realCicadaConfig(appName: string): CicadaConfig {
   return {
     appName,
     async github() {
+      const appId = await params.getParam(SSM_PARAM_NAMES.GITHUB_APP_ID)
+      if (!isGithubAppId(appId)) throw new Error(`Invalid Github App ID: ${appId}`)
       return {
-        appId: await params.getParam(SSM_PARAM_NAMES.GITHUB_APP_ID),
+        appId: appId,
         clientId: await params.getParam(SSM_PARAM_NAMES.GITHUB_CLIENT_ID),
         githubCallbackState: await params.getParam(SSM_PARAM_NAMES.GITHUB_CALLBACK_STATE),
         privateKey: await params.getParam(SSM_PARAM_NAMES.GITHUB_PRIVATE_KEY),

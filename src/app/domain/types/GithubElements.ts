@@ -1,11 +1,6 @@
 import { GithubAccountType, isGithubAccountType } from './GithubAccountType'
-import {
-  GithubAccountId,
-  GithubAccountKey,
-  GithubRepoKey,
-  isGithubAccountKey,
-  isGithubRepoKey
-} from './GithubKeys'
+import { GithubAccountKey, GithubRepoKey, isGithubAccountKey, isGithubRepoKey } from './GithubKeys'
+import { GithubAccountId } from './GithubAccountId'
 
 // TODO - need better names for these
 

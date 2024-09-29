@@ -2,6 +2,7 @@ import { APIGatewayEventDefaultAuthorizerContext } from 'aws-lambda/common/api-g
 import { APIGatewayEventRequestContextWithAuthorizer, APIGatewayProxyEvent } from 'aws-lambda'
 import { APIGatewayRequestAuthorizerEvent } from 'aws-lambda/trigger/api-gateway-authorizer'
 import { CicadaAPIAuthorizedAPIEvent } from '../../../src/app/inboundInterfaces/lambdaTypes'
+import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId'
 
 export function createStubApiGatewayProxyEvent(
   overrides: Partial<APIGatewayProxyEvent> = {}
@@ -48,7 +49,7 @@ export function createStubApiGatewayProxyEventWithToken(
 
 export function createAPIGatewayProxyWithLambdaAuthorizerEvent(
   username: string,
-  userId: number,
+  rawUserId: number,
   overrides: Partial<CicadaAPIAuthorizedAPIEvent> = {}
 ): CicadaAPIAuthorizedAPIEvent {
   return {
@@ -66,7 +67,7 @@ export function createAPIGatewayProxyWithLambdaAuthorizerEvent(
     requestContext: {
       authorizer: {
         username,
-        userId: `${userId}`,
+        userId: fromRawGithubUserId(rawUserId),
         principalId: '',
         integrationLatency: 0
       },

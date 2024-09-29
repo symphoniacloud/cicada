@@ -10,10 +10,12 @@ import {
   getLatestWorkflowRunEventsForRepoForUser,
   getLatestWorkflowRunEventsForUserWithUserSettings
 } from '../../domain/user/userVisible'
-import { GithubAccountId, GithubRepoKey, GithubUserId } from '../../domain/types/GithubKeys'
+import { GithubRepoKey } from '../../domain/types/GithubKeys'
 import { fragmentPath } from '../routingCommon'
 import { getAccountForUser } from '../../domain/github/githubAccount'
 import { getRepository } from '../../domain/entityStore/entities/GithubRepositoryEntity'
+import { GithubAccountId } from '../../domain/types/GithubAccountId'
+import { GithubUserId } from '../../domain/types/GithubUserId'
 
 export const actionsStatusFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('actionsStatus'),
@@ -26,13 +28,13 @@ export async function actionsStatus(appState: AppState, event: CicadaAuthorizedA
   if (isFailure(coordinatesResult)) return coordinatesResult.failureResult
   const { accountId, repoId } = coordinatesResult.result
 
-  if (accountId && repoId) return await actionsStatusForRepo(appState, { accountId: accountId, repoId })
+  if (accountId && repoId) return await actionsStatusForRepo(appState, { accountId, repoId })
   if (accountId) return await actionsStatusForAccount(appState, event.userId, accountId)
   if (!accountId && !repoId) return await actionsStatusForDashboard(appState, event.userId)
   return invalidRequestResponse
 }
 
-async function actionsStatusForDashboard(appState: AppState, userId: number) {
+async function actionsStatusForDashboard(appState: AppState, userId: GithubUserId) {
   const latestEvents = await getLatestWorkflowRunEventsForUserWithUserSettings(appState, userId)
   return createWorkflowRunEventTableResponse('homeStatus', appState.clock, latestEvents)
 }

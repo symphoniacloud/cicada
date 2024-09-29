@@ -134,7 +134,7 @@ function defineOnInstallationUpdatedProcessor(
               lambdaFunction: crawlerFunction,
               payload: TaskInput.fromObject({
                 resourceType: CRAWLABLE_RESOURCES.INSTALLATION,
-                installation: JsonPath.objectAt('$.detail.data.installation'),
+                installation: JsonPath.objectAt('$.detail.data'),
                 lookbackDays: 30
               })
             })

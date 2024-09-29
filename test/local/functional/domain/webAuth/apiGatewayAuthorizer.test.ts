@@ -59,7 +59,7 @@ test('successful-auth', async () => {
     // Means that the user details are available to target lambda function
     context: {
       username: 'cicada-test-user',
-      userId: '162360409'
+      userId: 'GHUser162360409'
     }
   })
 })

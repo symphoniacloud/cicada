@@ -5,28 +5,33 @@ import { GithubRepository } from '../../../src/app/domain/types/GithubRepository
 import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWorkflowRunEvent'
 import { GithubPush } from '../../../src/app/domain/types/GithubPush'
 import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken'
+import { fromRawGithubAccountId } from '../../../src/app/domain/types/GithubAccountId'
+import { fromRawGithubUserId, GithubUserId } from '../../../src/app/domain/types/GithubUserId'
+import { fromRawGithubInstallationId } from '../../../src/app/domain/types/GithubInstallationId'
+import { fromRawGithubRepoId } from '../../../src/app/domain/types/GithubRepoId'
+import { fromRawGithubWorkflowId } from '../../../src/app/domain/types/GithubWorkflowId'
 
 export const testPersonalInstallation: GithubInstallation = {
-  accountId: '162360409',
+  accountId: fromRawGithubAccountId(162360409),
   accountLogin: 'cicada-test-user',
   accountType: 'user',
-  appId: 849936,
+  appId: 'GHApp849936',
   appSlug: 'cicada-test-personal',
-  installationId: 48093071
+  installationId: fromRawGithubInstallationId(48093071)
 }
 
 export const testOrgInstallation: GithubInstallation = {
-  accountId: '162483619',
+  accountId: fromRawGithubAccountId(162483619),
   accountLogin: 'cicada-test-org',
   accountType: 'organization',
-  appId: 850768,
+  appId: 'GHApp850768',
   appSlug: 'cicada-test-org',
-  installationId: 48133709
+  installationId: fromRawGithubInstallationId(48133709)
 }
 
 export const testTestUserTokenRecord: GithubUserToken = {
   token: 'validUserToken',
-  userId: 162360409,
+  userId: fromRawGithubUserId(162360409),
   userLogin: 'cicada-test-user',
   nextCheckTime: 1800000000
 }
@@ -34,7 +39,7 @@ export const testTestUserTokenRecord: GithubUserToken = {
 export const testTestUser: GithubUser = {
   avatarUrl: 'https://avatars.githubusercontent.com/u/162360409?v=4',
   htmlUrl: 'https://github.com/cicada-test-user',
-  id: 162360409,
+  id: fromRawGithubUserId(162360409),
   login: 'cicada-test-user',
   url: 'https://api.github.com/users/cicada-test-user'
 }
@@ -42,29 +47,29 @@ export const testTestUser: GithubUser = {
 export const testMikeRobertsUser: GithubUser = {
   avatarUrl: 'https://avatars.githubusercontent.com/u/49635?v=4',
   htmlUrl: 'https://github.com/mikebroberts',
-  id: 49635,
+  id: fromRawGithubUserId(49635),
   login: 'mikebroberts',
   url: 'https://api.github.com/users/mikebroberts'
 }
 
 export const testTestUserMembershipOfPersonalInstallation: GithubAccountMembership = {
-  accountId: '162360409',
-  userId: 162360409
+  accountId: fromRawGithubAccountId(162360409),
+  userId: fromRawGithubUserId(162360409)
 }
 
 export const testTestUserMembershipOfOrg: GithubAccountMembership = {
-  accountId: '162483619',
-  userId: 162360409
+  accountId: fromRawGithubAccountId(162483619),
+  userId: fromRawGithubUserId(162360409)
 }
 
 export const testMikeRobertsUserMembershipOfOrg: GithubAccountMembership = {
-  accountId: '162483619',
-  userId: 49635
+  accountId: fromRawGithubAccountId(162483619),
+  userId: fromRawGithubUserId(49635)
 }
 
-export const accountMemberships: Record<number, GithubAccountMembership> = {
-  '162360409': testTestUserMembershipOfOrg,
-  49635: testMikeRobertsUserMembershipOfOrg
+export const accountMemberships: Record<GithubUserId, GithubAccountMembership> = {
+  GHUser162360409: testTestUserMembershipOfOrg,
+  GHUser49635: testMikeRobertsUserMembershipOfOrg
 }
 
 export const testPersonalTestRepo: GithubRepository = {
@@ -77,9 +82,9 @@ export const testPersonalTestRepo: GithubRepository = {
   fullName: 'cicada-test-user/personal-test-repo',
   homepage: '',
   htmlUrl: 'https://github.com/cicada-test-user/personal-test-repo',
-  id: '767679529',
+  id: fromRawGithubRepoId(767679529),
   name: 'personal-test-repo',
-  accountId: '162360409',
+  accountId: fromRawGithubAccountId(162360409),
   accountName: 'cicada-test-user',
   accountType: 'user',
   private: true,
@@ -99,9 +104,9 @@ export const testOrgTestRepoOne: GithubRepository = {
   fullName: 'cicada-test-org/org-test-repo-one',
   homepage: '',
   htmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one',
-  id: '768206479',
+  id: fromRawGithubRepoId(768206479),
   name: 'org-test-repo-one',
-  accountId: '162483619',
+  accountId: fromRawGithubAccountId(162483619),
   accountName: 'cicada-test-org',
   accountType: 'organization',
   private: true,
@@ -121,9 +126,9 @@ export const testOrgTestRepoTwo: GithubRepository = {
   fullName: 'cicada-test-org/org-test-repo-two',
   homepage: '',
   htmlUrl: 'https://github.com/cicada-test-org/org-test-repo-two',
-  id: '768207426',
+  id: fromRawGithubRepoId(768207426),
   name: 'org-test-repo-two',
-  accountId: '162483619',
+  accountId: fromRawGithubAccountId(162483619),
   accountName: 'cicada-test-org',
   accountType: 'organization',
   private: true,
@@ -148,12 +153,12 @@ export const testPersonalTestRepoWorkflowRun: GithubWorkflowRunEvent = {
   headSha: 'dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c',
   htmlUrl: 'https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530',
   id: 8160866530,
-  accountId: '162360409',
+  accountId: fromRawGithubAccountId(162360409),
   accountName: 'cicada-test-user',
   accountType: 'user',
   path: '.github/workflows/test.yml',
   repoHtmlUrl: 'https://github.com/cicada-test-user/personal-test-repo',
-  repoId: '767679529',
+  repoId: fromRawGithubRepoId(767679529),
   repoName: 'personal-test-repo',
   runAttempt: 1,
   runNumber: 1,
@@ -162,7 +167,7 @@ export const testPersonalTestRepoWorkflowRun: GithubWorkflowRunEvent = {
   updatedAt: '2024-03-05T18:01:40Z',
   workflowBadgeUrl: undefined,
   workflowHtmlUrl: undefined,
-  workflowId: '88508779',
+  workflowId: fromRawGithubWorkflowId(88508779),
   workflowName: 'Test Workflow'
 }
 
@@ -181,12 +186,12 @@ export const testOrgTestRepoOneWorkflowRunOne: GithubWorkflowRunEvent = {
   headSha: '8c3aa1cb0316ea23abeb2612457edb80868f53c8',
   htmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8175883775',
   id: 8175883775,
-  accountId: '162483619',
+  accountId: fromRawGithubAccountId(162483619),
   accountName: 'cicada-test-org',
   accountType: 'organization',
   path: '.github/workflows/test.yml',
   repoHtmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one',
-  repoId: '768206479',
+  repoId: fromRawGithubRepoId(768206479),
   repoName: 'org-test-repo-one',
   runAttempt: 1,
   runNumber: 1,
@@ -195,7 +200,7 @@ export const testOrgTestRepoOneWorkflowRunOne: GithubWorkflowRunEvent = {
   updatedAt: '2024-03-06T17:02:54Z',
   workflowBadgeUrl: undefined,
   workflowHtmlUrl: undefined,
-  workflowId: '88647110',
+  workflowId: fromRawGithubWorkflowId(88647110),
   workflowName: 'Test Repo One Workflow'
 }
 
@@ -212,10 +217,10 @@ export const testOrgTestRepoOneWorkflowRunThree: GithubWorkflowRunEvent = {
   headBranch: 'main',
   htmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236',
   id: 8177622236,
-  accountId: '162483619',
+  accountId: fromRawGithubAccountId(162483619),
   accountName: 'cicada-test-org',
   accountType: 'organization',
-  repoId: '768206479',
+  repoId: fromRawGithubRepoId(768206479),
   repoName: 'org-test-repo-one',
   runAttempt: 1,
   runNumber: 3,
@@ -224,7 +229,7 @@ export const testOrgTestRepoOneWorkflowRunThree: GithubWorkflowRunEvent = {
   updatedAt: '2024-03-06T19:25:42Z',
   workflowBadgeUrl: undefined,
   workflowHtmlUrl: undefined,
-  workflowId: '88647110',
+  workflowId: fromRawGithubWorkflowId(88647110),
   workflowName: 'Test Repo One Workflow',
   event: 'workflow_dispatch',
   path: '.github/workflows/test.yml',
@@ -235,7 +240,7 @@ export const testOrgTestRepoOneWorkflowRunThree: GithubWorkflowRunEvent = {
 export const testPersonalTestRepoPush: GithubPush = {
   actor: {
     avatarUrl: 'https://avatars.githubusercontent.com/u/162360409?',
-    id: 162360409,
+    id: fromRawGithubUserId(162360409),
     login: 'cicada-test-user'
   },
   before: 'd6a1d5f977eb569d382e9cf4c90abf54ff2ce7ec',
@@ -251,18 +256,18 @@ export const testPersonalTestRepoPush: GithubPush = {
     }
   ],
   dateTime: '2024-03-05T18:01:12Z',
-  accountId: '162360409',
+  accountId: fromRawGithubAccountId(162360409),
   accountName: 'cicada-test-user',
   accountType: 'user',
   ref: 'refs/heads/main',
-  repoId: '767679529',
+  repoId: fromRawGithubRepoId(767679529),
   repoName: 'personal-test-repo'
 }
 
 export const testOrgTestRepoOnePush: GithubPush = {
   actor: {
     avatarUrl: 'https://avatars.githubusercontent.com/u/49635?',
-    id: 49635,
+    id: fromRawGithubUserId(49635),
     login: 'mikebroberts'
   },
   before: '5fb00e703f342fd6e28a332c39456277936d71e5',
@@ -278,18 +283,18 @@ export const testOrgTestRepoOnePush: GithubPush = {
     }
   ],
   dateTime: '2024-03-06T17:00:40Z',
-  accountId: '162483619',
+  accountId: fromRawGithubAccountId(162483619),
   accountName: 'cicada-test-org',
   accountType: 'organization',
   ref: 'refs/heads/main',
-  repoId: '768206479',
+  repoId: fromRawGithubRepoId(768206479),
   repoName: 'org-test-repo-one'
 }
 
 export const testOrgTestRepoOnePushFC94: GithubPush = {
   actor: {
     avatarUrl: 'https://avatars.githubusercontent.com/u/49635?v=4',
-    id: 49635,
+    id: fromRawGithubUserId(49635),
     login: 'mikebroberts'
   },
   before: '8c3aa1cb0316ea23abeb2612457edb80868f53c8',
@@ -305,11 +310,11 @@ export const testOrgTestRepoOnePushFC94: GithubPush = {
     }
   ],
   dateTime: '2024-03-06T21:26:18.000Z',
-  accountId: '162483619',
+  accountId: fromRawGithubAccountId(162483619),
   accountName: 'cicada-test-org',
   accountType: 'organization',
   ref: 'refs/heads/main',
-  repoId: '768206479',
+  repoId: fromRawGithubRepoId(768206479),
   repoName: 'org-test-repo-one',
   repoUrl: 'https://github.com/cicada-test-org/org-test-repo-one'
 }

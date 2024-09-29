@@ -6,6 +6,7 @@ import { RawGithubUser } from '../types/rawGithub/RawGithubUser'
 import { setMemberships } from './githubMembership'
 import { GithubUserToken } from '../types/GithubUserToken'
 import { isGithubCheckRequired, saveOrRefreshGithubUserToken } from './githubUserToken'
+import { fromRawGithubUserId, GithubUserId } from '../types/GithubUserId'
 
 export async function processRawUsers(
   appState: AppState,
@@ -28,7 +29,7 @@ export async function getUserByAuthToken(appState: AppState, token: string) {
   const rawGithubUser = await appState.githubClient.getGithubUser(token)
   if (!rawGithubUser) return undefined
 
-  const cicadaUser = await getUserById(appState, rawGithubUser.id)
+  const cicadaUser = await getUserById(appState, fromRawGithubUserId(rawGithubUser.id))
   if (cicadaUser)
     await saveOrRefreshGithubUserToken(appState, {
       token,
@@ -45,6 +46,6 @@ export async function getUserByTokenRecord(appState: AppState, tokenRecord: Gith
     : getUserById(appState, tokenRecord.userId)
 }
 
-export async function getUserById(appState: AppState, id: number) {
+export async function getUserById(appState: AppState, id: GithubUserId) {
   return await appState.entityStore.for(GithubUserEntity).getOrUndefined({ id })
 }

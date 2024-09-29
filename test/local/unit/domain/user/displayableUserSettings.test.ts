@@ -6,19 +6,27 @@ import {
   toDisplayableRepoSettings,
   toDisplayableWorkflowSettings
 } from '../../../../../src/app/domain/user/displayableUserSettings'
+import { fromRawGithubAccountId } from '../../../../../src/app/domain/types/GithubAccountId'
+import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId'
+import { fromRawGithubRepoId } from '../../../../../src/app/domain/types/GithubRepoId'
+import { fromRawGithubWorkflowId } from '../../../../../src/app/domain/types/GithubWorkflowId'
 
 test('toDisplayableWorkflowSettings', () => {
   const displayable = toDisplayableWorkflowSettings(
-    { accountId: '123', repoId: '456', workflowId: '789' },
+    {
+      accountId: fromRawGithubAccountId(123),
+      repoId: fromRawGithubRepoId(456),
+      workflowId: fromRawGithubWorkflowId(789)
+    },
     {
       visible: true,
       notify: true
     },
     [
       {
-        accountId: '123',
-        repoId: '456',
-        workflowId: '789',
+        accountId: fromRawGithubAccountId(123),
+        repoId: fromRawGithubRepoId(456),
+        workflowId: fromRawGithubWorkflowId(789),
         workflowName: 'workflow1',
         accountType: USER_ACCOUNT_TYPE,
         accountName: '',
@@ -37,12 +45,12 @@ test('toDisplayableWorkflowSettings', () => {
 
 test('toDisplayableRepoSettings', () => {
   const displayable = toDisplayableRepoSettings(
-    { accountId: '123', repoId: '456' },
+    { accountId: fromRawGithubAccountId(123), repoId: fromRawGithubRepoId(456) },
     {
       visible: true,
       notify: true,
       workflows: {
-        '789': {
+        GHWorkflow789: {
           visible: true,
           notify: true
         }
@@ -50,8 +58,8 @@ test('toDisplayableRepoSettings', () => {
     },
     [
       {
-        accountId: '123',
-        id: '456',
+        accountId: fromRawGithubAccountId(123),
+        id: fromRawGithubRepoId(456),
         accountName: 'account1',
         name: 'repo1',
         accountType: USER_ACCOUNT_TYPE
@@ -59,9 +67,9 @@ test('toDisplayableRepoSettings', () => {
     ],
     [
       {
-        accountId: '123',
-        repoId: '456',
-        workflowId: '789',
+        accountId: fromRawGithubAccountId(123),
+        repoId: fromRawGithubRepoId(456),
+        workflowId: fromRawGithubWorkflowId(789),
         workflowName: 'workflow1',
         accountType: USER_ACCOUNT_TYPE,
         accountName: '',
@@ -76,7 +84,7 @@ test('toDisplayableRepoSettings', () => {
     visible: true,
     notify: true,
     workflows: {
-      '789': {
+      GHWorkflow789: {
         visible: true,
         notify: true,
         name: 'workflow1'
@@ -87,16 +95,16 @@ test('toDisplayableRepoSettings', () => {
 
 test('toDisplayableAccountSettings', () => {
   const displayable = toDisplayableAccountSettings(
-    '123',
+    fromRawGithubAccountId(123),
     {
       visible: true,
       notify: true,
       repos: {
-        '456': {
+        GHRepo456: {
           visible: true,
           notify: true,
           workflows: {
-            '789': {
+            GHWorkflow789: {
               visible: true,
               notify: true
             }
@@ -106,8 +114,8 @@ test('toDisplayableAccountSettings', () => {
     },
     [
       {
-        accountId: '123',
-        id: '456',
+        accountId: fromRawGithubAccountId(123),
+        id: fromRawGithubRepoId(456),
         accountName: 'account1',
         name: 'repo1',
         accountType: USER_ACCOUNT_TYPE
@@ -115,9 +123,9 @@ test('toDisplayableAccountSettings', () => {
     ],
     [
       {
-        accountId: '123',
-        repoId: '456',
-        workflowId: '789',
+        accountId: fromRawGithubAccountId(123),
+        repoId: fromRawGithubRepoId(456),
+        workflowId: fromRawGithubWorkflowId(789),
         workflowName: 'workflow1',
         accountType: USER_ACCOUNT_TYPE,
         accountName: 'account1',
@@ -132,12 +140,12 @@ test('toDisplayableAccountSettings', () => {
     visible: true,
     notify: true,
     repos: {
-      '456': {
+      GHRepo456: {
         name: 'repo1',
         visible: true,
         notify: true,
         workflows: {
-          '789': {
+          GHWorkflow789: {
             visible: true,
             notify: true,
             name: 'workflow1'
@@ -151,12 +159,12 @@ test('toDisplayableAccountSettings', () => {
 test('toCalculatedAndDisplayableUserSettings', () => {
   const displayable = toCalculatedAndDisplayableUserSettings(
     {
-      userId: 111,
+      userId: fromRawGithubUserId(111),
       github: {
         accounts: {
-          '123': {
+          GHAccount123: {
             repos: {
-              '456': {
+              GHRepo456: {
                 notify: false,
                 workflows: {}
               }
@@ -167,8 +175,8 @@ test('toCalculatedAndDisplayableUserSettings', () => {
     },
     [
       {
-        accountId: '123',
-        id: '456',
+        accountId: fromRawGithubAccountId(123),
+        id: fromRawGithubRepoId(456),
         accountName: 'account1',
         name: 'repo1',
         accountType: USER_ACCOUNT_TYPE
@@ -176,9 +184,9 @@ test('toCalculatedAndDisplayableUserSettings', () => {
     ],
     [
       {
-        accountId: '123',
-        repoId: '456',
-        workflowId: '789',
+        accountId: fromRawGithubAccountId(123),
+        repoId: fromRawGithubRepoId(456),
+        workflowId: fromRawGithubWorkflowId(789),
         workflowName: 'workflow1',
         accountType: USER_ACCOUNT_TYPE,
         accountName: 'account1',
@@ -189,20 +197,20 @@ test('toCalculatedAndDisplayableUserSettings', () => {
   )
 
   expect(displayable).toEqual({
-    userId: 111,
+    userId: fromRawGithubUserId(111),
     github: {
       accounts: {
-        '123': {
+        GHAccount123: {
           name: 'account1',
           visible: true,
           notify: true,
           repos: {
-            '456': {
+            GHRepo456: {
               name: 'repo1',
               visible: true,
               notify: false,
               workflows: {
-                '789': {
+                GHWorkflow789: {
                   visible: true,
                   notify: false,
                   name: 'workflow1'

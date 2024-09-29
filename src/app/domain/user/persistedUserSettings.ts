@@ -6,9 +6,11 @@ import {
   PersistedUserSettings,
   UserSetting
 } from '../types/UserSettings'
-import { GithubAccountId, GithubRepoKey, GithubUserId, GithubWorkflowKey } from '../types/GithubKeys'
+import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys'
 import { UserSettingsEntity } from '../entityStore/entities/UserSettingsEntity'
 import { getOrSetNewAndReturn } from '../../util/collections'
+import { GithubAccountId } from '../types/GithubAccountId'
+import { GithubUserId } from '../types/GithubUserId'
 
 function userSettingsEntity(appState: AppState) {
   return appState.entityStore.for(UserSettingsEntity)

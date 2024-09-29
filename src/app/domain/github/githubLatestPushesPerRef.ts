@@ -7,7 +7,7 @@ import {
 } from '../entityStore/entities/GithubLatestPushPerRefEntity'
 import { rangeWhereSkGreaterThan } from '@symphoniacloud/dynamodb-entity-store/dist/cjs/support/querySupport'
 import { dateTimeAddDays } from '../../util/dateAndTime'
-import { GithubAccountId } from '../types/GithubKeys'
+import { GithubAccountId } from '../types/GithubAccountId'
 
 export async function saveLatestPushes(appState: AppState, newPushes: GithubPush[]) {
   for (const newPush of newPushes) {
