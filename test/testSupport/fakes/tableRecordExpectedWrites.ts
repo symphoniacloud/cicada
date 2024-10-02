@@ -67,7 +67,7 @@ export function expectedPutGithubWorkflowRunEvent(event: GithubWorkflowRunEvent)
     'githubWorkflowRunEvent',
     {
       PK: `ACCOUNT#${event.accountId}`,
-      SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}#WORKFLOW_RUN_EVENT#UPDATED_AT#${event.updatedAt}#RUN#${event.id}#STATUS#${event.status}`,
+      SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}#WORKFLOW_RUN_EVENT#UPDATED_AT#${event.updatedAt}#RUN#${event.workflowRunId}#STATUS#${event.status}`,
       GSI1PK: `ACCOUNT#${event.accountId}`,
       GSI1SK: `REPO#${event.repoId}#DATETIME#${event.updatedAt}`,
       ...event
@@ -84,7 +84,7 @@ export function expectedPutGithubWorkflowRun(event: GithubWorkflowRunEvent) {
     'githubWorkflowRun',
     {
       PK: `ACCOUNT#${event.accountId}`,
-      SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}#WORKFLOW_RUN#RUN#${event.id}`,
+      SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}#WORKFLOW_RUN#RUN#${event.workflowRunId}`,
       GSI1PK: `ACCOUNT#${event.accountId}`,
       GSI1SK: `REPO#${event.repoId}#DATETIME#${event.updatedAt}`,
       ...event

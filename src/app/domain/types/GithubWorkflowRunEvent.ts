@@ -5,12 +5,13 @@ import { fromRawGithubAccountId } from './GithubAccountId'
 import { fromRawGithubRepoId } from './GithubRepoId'
 import { fromRawGithubWorkflowId } from './GithubWorkflowId'
 import { fromRawGithubUserId } from './GithubUserId'
-import { GithubUserSummary } from './GithubSummaries'
+import { GithubUserSummary, isGithubUserSummary } from './GithubSummaries'
+import { fromRawGithubWorkflowRunId, GithubWorkflowRunId, isGithubWorkflowRunId } from './GithubWorkflowRunId'
+import { isString } from '../../util/types'
 
 export interface GithubWorkflowRunEvent extends GithubWorkflow {
   repoHtmlUrl: string
-  // TODO - change ID here
-  id: number
+  workflowRunId: GithubWorkflowRunId
   runNumber: number
   runAttempt?: number
   displayTitle: string
@@ -33,25 +34,30 @@ export interface GithubWorkflowRunEventActor extends GithubUserSummary {
 }
 
 export function isGithubWorkflowRunEvent(x: unknown): x is GithubWorkflowRunEvent {
-  if (!isGithubWorkflow(x)) return false
-
-  const candidate = x as GithubWorkflowRunEvent
-  // TOEventually - actually check type of fields, e.g. with AJV
   return (
-    candidate.repoHtmlUrl !== undefined &&
-    candidate.id !== undefined &&
-    candidate.runNumber !== undefined &&
-    candidate.displayTitle !== undefined &&
-    candidate.event !== undefined &&
-    candidate.headSha !== undefined &&
-    candidate.createdAt !== undefined &&
-    candidate.updatedAt !== undefined &&
-    candidate.htmlUrl !== undefined &&
-    (candidate.actor === undefined ||
-      (candidate.actor.userName !== undefined &&
-        candidate.actor.userId !== undefined &&
-        candidate.actor.avatarUrl !== undefined &&
-        candidate.actor.htmlUrl !== undefined))
+    isGithubWorkflow(x) &&
+    'repoHtmlUrl' in x &&
+    isString(x.repoHtmlUrl) &&
+    'workflowRunId' in x &&
+    isGithubWorkflowRunId(x.workflowRunId) &&
+    'runNumber' in x &&
+    'event' in x &&
+    'headSha' in x &&
+    'createdAt' in x &&
+    'updatedAt' in x &&
+    'htmlUrl' in x &&
+    'workflowRunId' in x &&
+    (!('actor' in x) || isGithubWorkflowRunEventActor(x.actor))
+  )
+}
+
+export function isGithubWorkflowRunEventActor(x: unknown): x is GithubWorkflowRunEventActor {
+  return (
+    isGithubUserSummary(x) &&
+    'avatarUrl' in x &&
+    isString(x.avatarUrl) &&
+    'htmlUrl' in x &&
+    isString(x.htmlUrl)
   )
 }
 
@@ -66,7 +72,7 @@ export function fromRawGithubWorkflowRunEvent(raw: RawGithubWorkflowRunEvent): G
     workflowId: fromRawGithubWorkflowId(raw.workflow_id),
     path: raw.path,
     workflowName: raw.name ?? raw.workflow?.name ?? undefined,
-    id: raw.id,
+    workflowRunId: fromRawGithubWorkflowRunId(raw.id),
     repoHtmlUrl: raw.repository.html_url,
     runNumber: raw.run_number,
     runAttempt: raw.run_attempt,
