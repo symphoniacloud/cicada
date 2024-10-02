@@ -4,10 +4,10 @@ import {
   GithubInstallationClient,
   publishGithubInstallationClientMetrics
 } from '../../../outboundInterfaces/githubInstallationClient'
-import { processRawRepositories } from '../githubRepository'
+import { processRawRepositories } from '../githubRepo'
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../types/GithubAccountType'
 import { GithubPublicAccount } from '../../types/GithubPublicAccount'
-import { RawGithubRepository } from '../../types/rawGithub/RawGithubRepository'
+import { RawGithubRepo } from '../../types/rawGithub/RawGithubRepo'
 import { crawlPushes } from './crawlPushes'
 import { crawlWorkflowRunEvents } from './crawlRunEvents'
 import { logger } from '../../../util/logging'
@@ -20,7 +20,7 @@ export async function crawlRepositories(
 ) {
   const rawRepos =
     installation.accountType === ORGANIZATION_ACCOUNT_TYPE
-      ? await githubClient.listOrganizationRepositories(installation.accountLogin)
+      ? await githubClient.listOrganizationRepositories(installation.accountName)
       : await githubClient.listInstallationRepositories()
 
   await processReposAndCrawlElements(appState, githubClient, rawRepos, lookbackHours)
@@ -34,8 +34,8 @@ export async function crawlRepositoriesForPublicAccount(
 ) {
   const rawRepos =
     account.accountType === ORGANIZATION_ACCOUNT_TYPE
-      ? await githubClient.listOrganizationRepositories(account.accountLogin)
-      : await githubClient.listPublicRepositoriesForUser(account.accountLogin)
+      ? await githubClient.listOrganizationRepositories(account.accountName)
+      : await githubClient.listPublicRepositoriesForUser(account.accountName)
 
   await processReposAndCrawlElements(appState, githubClient, rawRepos, lookbackHours)
 }
@@ -43,7 +43,7 @@ export async function crawlRepositoriesForPublicAccount(
 async function processReposAndCrawlElements(
   appState: AppState,
   githubClient: GithubInstallationClient,
-  rawRepos: RawGithubRepository[],
+  rawRepos: RawGithubRepo[],
   lookbackHours: number
 ) {
   const repos = await processRawRepositories(appState, rawRepos)

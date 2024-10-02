@@ -1,7 +1,7 @@
 import { Octokit } from '@octokit/rest'
 import { createAppAuth } from '@octokit/auth-app'
 import { RawGithubWorkflowRunEvent } from '../domain/types/rawGithub/RawGithubWorkflowRunEvent'
-import { RawGithubRepository } from '../domain/types/rawGithub/RawGithubRepository'
+import { RawGithubRepo } from '../domain/types/rawGithub/RawGithubRepo'
 import { RawGithubUser } from '../domain/types/rawGithub/RawGithubUser'
 import { RawGithubEvent } from '../domain/types/rawGithub/RawGithubEvent'
 import { metrics } from '../util/metrics'
@@ -17,12 +17,12 @@ export interface GithubInstallationClient {
     created?: string
   ): Promise<RawGithubWorkflowRunEvent[]>
 
-  listOrganizationRepositories(org: string): Promise<RawGithubRepository[]>
+  listOrganizationRepositories(org: string): Promise<RawGithubRepo[]>
 
   // Use when installation is for a personal user, not an organization
-  listInstallationRepositories(): Promise<RawGithubRepository[]>
+  listInstallationRepositories(): Promise<RawGithubRepo[]>
 
-  listPublicRepositoriesForUser(accountName: string): Promise<RawGithubRepository[]>
+  listPublicRepositoriesForUser(accountName: string): Promise<RawGithubRepo[]>
 
   listOrganizationMembers(org: string): Promise<RawGithubUser[]>
 
@@ -105,15 +105,15 @@ export function createRealGithubInstallationClient(
       )
     },
     // TOMaybe - consider other options here, e.g. type, sort
-    async listOrganizationRepositories(org: string): Promise<RawGithubRepository[]> {
+    async listOrganizationRepositories(org: string): Promise<RawGithubRepo[]> {
       return processOctokitIterator(octokit.paginate.iterator(octokit.repos.listForOrg, { org }))
     },
-    async listInstallationRepositories(): Promise<RawGithubRepository[]> {
+    async listInstallationRepositories(): Promise<RawGithubRepo[]> {
       return processOctokitIterator(
         octokit.paginate.iterator(octokit.apps.listReposAccessibleToInstallation, {})
       )
     },
-    async listPublicRepositoriesForUser(accountName: string): Promise<RawGithubRepository[]> {
+    async listPublicRepositoriesForUser(accountName: string): Promise<RawGithubRepo[]> {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       return processOctokitIterator(

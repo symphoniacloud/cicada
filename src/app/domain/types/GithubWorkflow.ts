@@ -1,14 +1,16 @@
-import { GithubRepositoryElement, isGithubRepositoryElement } from './GithubElements'
-import { GithubWorkflowKey, isGithubWorkflowKey } from './GithubKeys'
+import { GithubWorkflowSummary, isGithubWorkflowSummary } from './GithubSummaries'
+import { isStringOrUndefined } from '../../util/types'
 
-export interface GithubWorkflow extends GithubWorkflowKey, GithubRepositoryElement {
-  path: string
-  workflowName?: string
+export interface GithubWorkflow extends GithubWorkflowSummary {
   // Not available on all source data from GitHub
   workflowHtmlUrl?: string
   workflowBadgeUrl?: string
 }
 
 export function isGithubWorkflow(x: unknown): x is GithubWorkflow {
-  return isGithubWorkflowKey(x) && isGithubRepositoryElement(x) && 'path' in x && typeof x.path === 'string'
+  return (
+    isGithubWorkflowSummary(x) &&
+    (!('workflowHtmlUrl' in x) || isStringOrUndefined(x.workflowHtmlUrl)) &&
+    (!('workflowBadgeUrl' in x) || isStringOrUndefined(x.workflowBadgeUrl))
+  )
 }

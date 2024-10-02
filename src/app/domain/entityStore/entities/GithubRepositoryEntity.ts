@@ -1,33 +1,39 @@
 import { AllEntitiesStore, Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
-import { GithubRepository, isGithubRepository } from '../../types/GithubRepository'
+import { GithubRepo, isGithubRepo } from '../../types/GithubRepo'
 import { GITHUB_REPOSITORY } from '../entityTypes'
 import { GithubRepoKey } from '../../types/GithubKeys'
 import { GithubAccountId } from '../../types/GithubAccountId'
 
 export const GithubRepositoryEntity: Entity<
-  GithubRepository,
-  Pick<GithubRepository, 'accountId'>,
-  Pick<GithubRepository, 'id'>
+  GithubRepo,
+  Pick<GithubRepo, 'accountId'>,
+  Pick<GithubRepo, 'repoId'>
 > = {
   type: GITHUB_REPOSITORY,
-  parse: typePredicateParser(isGithubRepository, GITHUB_REPOSITORY),
-  pk(source: Pick<GithubRepository, 'accountId'>) {
+  parse: typePredicateParser(isGithubRepo, GITHUB_REPOSITORY),
+  pk(source: Pick<GithubRepo, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   },
-  sk(source: Pick<GithubRepository, 'id'>) {
-    return `REPO#${source.id}`
+  sk(source: Pick<GithubRepo, 'repoId'>) {
+    return `REPO#${source.repoId}`
   }
 }
 
-export async function putRepositories(entityStore: AllEntitiesStore, repos: GithubRepository[]) {
+export async function putRepositories(entityStore: AllEntitiesStore, repos: GithubRepo[]) {
   await store(entityStore).advancedOperations.batchPut(repos)
 }
 
-export async function getRepository(entityStore: AllEntitiesStore, { accountId, repoId }: GithubRepoKey) {
-  return store(entityStore).getOrUndefined({ accountId: accountId, id: repoId })
+export async function getRepository(
+  entityStore: AllEntitiesStore,
+  repoKey: GithubRepoKey
+): Promise<GithubRepo | undefined> {
+  return store(entityStore).getOrUndefined(repoKey)
 }
 
-export async function getRepositories(entityStore: AllEntitiesStore, accountId: GithubAccountId) {
+export async function getRepositories(
+  entityStore: AllEntitiesStore,
+  accountId: GithubAccountId
+): Promise<GithubRepo[]> {
   return store(entityStore).queryAllByPk({ accountId })
 }
 

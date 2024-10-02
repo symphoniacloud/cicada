@@ -1,20 +1,34 @@
 import { fragmentViewResult } from '../../viewResultWrappers'
-import { GithubAccount, INSTALLED_ACCOUNT_TYPE } from '../../../domain/types/GithubAccount'
 import { standardTable } from '../../domainComponents/genericComponents'
 import { td, tr } from '../../hiccough/hiccoughElements'
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../../domain/types/GithubAccountType'
 import { accountCell } from '../../domainComponents/accountComponents'
+import { GithubAccountSummary } from '../../../domain/types/GithubSummaries'
+import { GithubPublicAccount } from '../../../domain/types/GithubPublicAccount'
 
-export function createAllAvailableAccountsResponse(accounts: GithubAccount[]) {
-  return fragmentViewResult(...allAvailableAccountsResponse(accounts))
+export function createAllAvailableAccountsResponse(
+  memberAccounts: GithubAccountSummary[],
+  publicAccounts: GithubPublicAccount[]
+) {
+  return fragmentViewResult(...allAvailableAccountsResponse(memberAccounts, publicAccounts))
 }
 
-export function allAvailableAccountsResponse(accounts: GithubAccount[]) {
-  return [standardTable(['Account', 'Type', 'Comment'], accounts.map(accountRow))]
+export function allAvailableAccountsResponse(
+  memberAccounts: GithubAccountSummary[],
+  publicAccounts: GithubPublicAccount[]
+) {
+  return [
+    standardTable(
+      ['Account', 'Type', 'Comment'],
+      [
+        ...memberAccounts.map((acc) => accountRow(acc, true)),
+        ...publicAccounts.map((acc) => accountRow(acc, false))
+      ]
+    )
+  ]
 }
 
-function accountRow(account: GithubAccount) {
-  const isInstalledAccount = account.cicadaAccountType === INSTALLED_ACCOUNT_TYPE
+function accountRow(account: GithubAccountSummary, isInstalledAccount: boolean) {
   const isOrganizationAccount = account.accountType === ORGANIZATION_ACCOUNT_TYPE
 
   const comment = isInstalledAccount

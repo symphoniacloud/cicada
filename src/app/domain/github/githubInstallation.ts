@@ -1,10 +1,9 @@
 import { AppState } from '../../environment/AppState'
 import { fromRawGithubInstallation, GithubInstallation } from '../types/GithubInstallation'
-import { GithubInstallationEntity } from '../entityStore/entities/GithubInstallationEntity'
+import { getInstallationOrUndefined, putInstallation } from '../entityStore/entities/GithubInstallationEntity'
 import { logger } from '../../util/logging'
 import deepEqual from 'deep-equal'
 import { RawGithubInstallation } from '../types/rawGithub/RawGithubInstallation'
-import { GithubAccountId } from '../types/GithubAccountId'
 
 export async function processRawInstallation(appState: AppState, rawInstallation: RawGithubInstallation) {
   return await processInstallation(appState, fromRawGithubInstallation(rawInstallation))
@@ -20,41 +19,22 @@ export async function processInstallation(appState: AppState, installation: Gith
 }
 
 async function saveInstallation(appState: AppState, installation: GithubInstallation) {
-  const installationsStore = appState.entityStore.for(GithubInstallationEntity)
-  const previousInstallationForAccount = await installationsStore.getOrUndefined({
-    accountId: installation.accountId
-  })
-  const newAccount = previousInstallationForAccount === undefined
-  const installationChanged =
-    previousInstallationForAccount !== undefined &&
-    !installationsEqual(previousInstallationForAccount, installation)
+  const previousInstallation = await getInstallationOrUndefined(appState.entityStore, installation.accountId)
+  const isNewInstallation = previousInstallation === undefined
+  const installationChanged = !isNewInstallation && !deepEqual(previousInstallation, installation)
 
-  if (newAccount) {
-    logger.info(`New account installation for ${installation.accountLogin} / ${installation.accountId}`)
+  if (isNewInstallation) {
+    logger.info(`New installation for ${installation.accountName} / ${installation.accountId}`)
   }
   if (installationChanged) {
     logger.info(
-      `Installation details have changed for ${installation.accountLogin} / ${installation.accountId}`
+      `Installation details have changed for ${installation.accountName} / ${installation.accountId}`
     )
   }
 
-  const installationStateChanged = newAccount || installationChanged
-
-  if (installationStateChanged) {
-    await installationsStore.put(installation)
+  if (isNewInstallation || installationChanged) {
+    await putInstallation(appState.entityStore, installation)
   }
 
   return installation
-}
-
-export function installationsEqual(x: GithubInstallation, y: GithubInstallation) {
-  return deepEqual(x, y)
-}
-
-export async function getInstallationForAccount(appState: AppState, accountId: GithubAccountId) {
-  return appState.entityStore.for(GithubInstallationEntity).getOrThrow({ accountId })
-}
-
-export async function getAllInstallations(appState: AppState) {
-  return appState.entityStore.for(GithubInstallationEntity).scanAll()
 }

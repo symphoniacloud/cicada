@@ -1,5 +1,5 @@
 import { RawGithubEvent } from '../../../src/app/domain/types/rawGithub/RawGithubEvent'
-import { RawGithubRepository } from '../../../src/app/domain/types/rawGithub/RawGithubRepository'
+import { RawGithubRepo } from '../../../src/app/domain/types/rawGithub/RawGithubRepo'
 import { RawGithubUser } from '../../../src/app/domain/types/rawGithub/RawGithubUser'
 import { RawGithubWorkflowRunEvent } from '../../../src/app/domain/types/rawGithub/RawGithubWorkflowRunEvent'
 import {
@@ -10,9 +10,9 @@ import { arrayStubResponse } from './fakeSupport'
 import { Result } from '../../../src/app/util/structuredResult'
 
 export class FakeGithubInstallationClient implements GithubInstallationClient {
-  public stubOrganizationRepositories = arrayStubResponse<string, RawGithubRepository[]>()
-  public stubInstallationRepositories: RawGithubRepository[] = []
-  public stubPublicRepositoriesForUser = arrayStubResponse<string, RawGithubRepository[]>()
+  public stubOrganizationRepositories = arrayStubResponse<string, RawGithubRepo[]>()
+  public stubInstallationRepositories: RawGithubRepo[] = []
+  public stubPublicRepositoriesForUser = arrayStubResponse<string, RawGithubRepo[]>()
   public stubOrganizationMembers = arrayStubResponse<string, RawGithubUser[]>()
   public stubUsers = arrayStubResponse<string, Result<RawGithubUser>>()
 
@@ -32,15 +32,15 @@ export class FakeGithubInstallationClient implements GithubInstallationClient {
     RawGithubEvent[]
   >()
 
-  async listOrganizationRepositories(org: string): Promise<RawGithubRepository[]> {
+  async listOrganizationRepositories(org: string): Promise<RawGithubRepo[]> {
     return this.stubOrganizationRepositories.getResponseOrThrow(org)
   }
 
-  async listInstallationRepositories(): Promise<RawGithubRepository[]> {
+  async listInstallationRepositories(): Promise<RawGithubRepo[]> {
     return this.stubInstallationRepositories
   }
 
-  async listPublicRepositoriesForUser(accountName: string): Promise<RawGithubRepository[]> {
+  async listPublicRepositoriesForUser(accountName: string): Promise<RawGithubRepo[]> {
     return this.stubPublicRepositoriesForUser.getResponseOrThrow(accountName)
   }
 

@@ -11,5 +11,6 @@ export const allAvailableAccountsRoute: Route<CicadaAuthorizedAPIEvent> = {
 }
 
 export async function allAvailableAccounts(appState: AppState, event: CicadaAuthorizedAPIEvent) {
-  return createAllAvailableAccountsResponse(await getAllAccountsForUser(appState, event.userId))
+  const { memberAccounts, publicAccounts } = await getAllAccountsForUser(appState, event.userId)
+  return createAllAvailableAccountsResponse(memberAccounts, publicAccounts)
 }

@@ -1,4 +1,4 @@
-export interface RawGithubRepository {
+export interface RawGithubRepo {
   id: number
   name: string
   full_name: string

@@ -1,19 +1,12 @@
 import { PushSubscription } from 'web-push'
-import { GithubUserId, isGithubUserId } from './GithubUserId'
-import { isString } from '../../util/types'
+import { GithubUserSummary, isGithubUserSummary } from './GithubSummaries'
 
-export interface WebPushSubscription extends PushSubscription {
-  userId: GithubUserId
-  username: string
-}
+export interface WebPushSubscription extends PushSubscription, GithubUserSummary {}
 
 export function isWebPushSubscription(x: unknown): x is WebPushSubscription {
   const candidate = x as WebPushSubscription
   return (
-    candidate.userId !== undefined &&
-    isGithubUserId(candidate.userId) &&
-    candidate.username !== undefined &&
-    isString(candidate.username) &&
+    isGithubUserSummary(x) &&
     candidate.endpoint !== undefined &&
     candidate.keys !== undefined &&
     candidate.keys.p256dh !== undefined &&

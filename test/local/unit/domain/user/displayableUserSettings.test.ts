@@ -59,9 +59,9 @@ test('toDisplayableRepoSettings', () => {
     [
       {
         accountId: fromRawGithubAccountId(123),
-        id: fromRawGithubRepoId(456),
+        repoId: fromRawGithubRepoId(456),
         accountName: 'account1',
-        name: 'repo1',
+        repoName: 'repo1',
         accountType: USER_ACCOUNT_TYPE
       }
     ],
@@ -115,9 +115,9 @@ test('toDisplayableAccountSettings', () => {
     [
       {
         accountId: fromRawGithubAccountId(123),
-        id: fromRawGithubRepoId(456),
+        repoId: fromRawGithubRepoId(456),
         accountName: 'account1',
-        name: 'repo1',
+        repoName: 'repo1',
         accountType: USER_ACCOUNT_TYPE
       }
     ],
@@ -176,9 +176,9 @@ test('toCalculatedAndDisplayableUserSettings', () => {
     [
       {
         accountId: fromRawGithubAccountId(123),
-        id: fromRawGithubRepoId(456),
+        repoId: fromRawGithubRepoId(456),
         accountName: 'account1',
-        name: 'repo1',
+        repoName: 'repo1',
         accountType: USER_ACCOUNT_TYPE
       }
     ],

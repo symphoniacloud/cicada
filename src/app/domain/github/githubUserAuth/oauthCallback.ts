@@ -50,7 +50,7 @@ async function tryOauthCallback(
 
   // For now we just validate that the user is / was ever a cicada user
   // TOEventually - check memberships too, just like we do in userAuthorizer
-  logger.debug(`Valid user: ${cicadaUser.login}`)
+  logger.debug(`Valid user: ${cicadaUser.userName}`)
 
   // For now the cookie token Cicada uses is precisely the GitHub user token. In theory Cicada
   // could generate its own tokens and then keep a database table mapping those tokens to users, but

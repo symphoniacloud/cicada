@@ -16,9 +16,9 @@ export async function crawlUsers(
 
 async function readRawUsers(installation: GithubInstallation, githubClient: GithubInstallationClient) {
   if (installation.accountType === ORGANIZATION_ACCOUNT_TYPE) {
-    return await githubClient.listOrganizationMembers(installation.accountLogin)
+    return await githubClient.listOrganizationMembers(installation.accountName)
   } else if (installation.accountType === USER_ACCOUNT_TYPE) {
-    const getUserResult = await githubClient.getUser(installation.accountLogin)
+    const getUserResult = await githubClient.getUser(installation.accountName)
     if (isSuccess(getUserResult)) {
       return [getUserResult.result]
     } else {

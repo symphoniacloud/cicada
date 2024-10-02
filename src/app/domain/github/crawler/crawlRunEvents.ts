@@ -1,12 +1,12 @@
 import { AppState } from '../../../environment/AppState'
-import { GithubRepositorySummary } from '../../types/GithubRepository'
 import { dateTimeAddHours } from '../../../util/dateAndTime'
 import { processRawRunEvents } from '../githubWorkflowRunEvent'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient'
+import { GithubRepoSummary } from '../../types/GithubSummaries'
 
 export async function crawlWorkflowRunEvents(
   appState: AppState,
-  repo: GithubRepositorySummary,
+  repo: GithubRepoSummary,
   lookbackHours: number,
   githubClient: GithubInstallationClient
 ) {
@@ -14,7 +14,7 @@ export async function crawlWorkflowRunEvents(
 
   const recentRunEvents = await githubClient.listWorkflowRunsForRepo(
     repo.accountName,
-    repo.name,
+    repo.repoName,
     `>${startTime}`
   )
   await processRawRunEvents(appState, recentRunEvents, false)

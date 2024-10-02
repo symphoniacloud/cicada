@@ -11,6 +11,7 @@ import {
 import { isCicadaEventBridgeDetail } from '../../outboundInterfaces/eventBridgeBus'
 import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper'
 import { filterWorkflowNotifyEnabled } from '../user/userNotifyable'
+import { usableWorkflowName } from '../github/githubWorkflow'
 
 // TOEventually - these are going to create a lot of queries for subscription lookup for large organizations
 // May be better to have one table / index for this.
@@ -40,10 +41,11 @@ export function generateRunEventNotification(
 ): CicadaWebNotification {
   const titleIcon = runBasicStatus(workflowRunEvent)
   const bodyStatus = friendlyStatus(workflowRunEvent)
+  const workflowName = usableWorkflowName(workflowRunEvent)
 
   return {
-    title: `${titleIcon} ${workflowRunEvent.workflowName}`,
-    body: `Workflow ${workflowRunEvent.workflowName} in Repo ${workflowRunEvent.repoName} ${bodyStatus}`,
+    title: `${titleIcon} ${workflowName}`,
+    body: `Workflow ${workflowName} in Repo ${workflowRunEvent.repoName} ${bodyStatus}`,
     data: { url: workflowRunEvent.htmlUrl }
   }
 }

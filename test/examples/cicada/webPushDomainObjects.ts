@@ -3,7 +3,7 @@ import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId'
 
 export const testTestUserPushSubscription: WebPushSubscription = {
   userId: fromRawGithubUserId(162360409),
-  username: 'cicada-test-user',
+  userName: 'cicada-test-user',
   endpoint: 'https://web.push.apple.com/TestOne',
   keys: {
     p256dh: 'testkey1',
@@ -12,7 +12,7 @@ export const testTestUserPushSubscription: WebPushSubscription = {
 }
 export const testMikeRobertsPushSubscriptionTwo: WebPushSubscription = {
   userId: fromRawGithubUserId(49635),
-  username: 'mikebroberts',
+  userName: 'mikebroberts',
   endpoint: 'https://web.push.apple.com/TestTwo',
   keys: {
     p256dh: 'testkey2',
@@ -21,7 +21,7 @@ export const testMikeRobertsPushSubscriptionTwo: WebPushSubscription = {
 }
 export const testMikeRobertsPushSubscriptionThree: WebPushSubscription = {
   userId: fromRawGithubUserId(49635),
-  username: 'mikebroberts',
+  userName: 'mikebroberts',
   endpoint: 'https://web.push.apple.com/TestThree',
   keys: {
     p256dh: 'testkey3',

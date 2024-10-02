@@ -1,10 +1,9 @@
 import { RawGithubUser } from './rawGithub/RawGithubUser'
-import { fromRawGithubUserId, GithubUserId, isGithubUserId } from './GithubUserId'
-import { isNotNullObject, isString } from '../../util/types'
+import { fromRawGithubUserId } from './GithubUserId'
+import { isString } from '../../util/types'
+import { GithubUserSummary, isGithubUserSummary } from './GithubSummaries'
 
-export interface GithubUser {
-  login: string
-  id: GithubUserId
+export interface GithubUser extends GithubUserSummary {
   avatarUrl: string
   htmlUrl: string
   url: string
@@ -12,11 +11,7 @@ export interface GithubUser {
 
 export function isGithubUser(x: unknown): x is GithubUser {
   return (
-    isNotNullObject(x) &&
-    'login' in x &&
-    isString(x.login) &&
-    'id' in x &&
-    isGithubUserId(x.id) &&
+    isGithubUserSummary(x) &&
     'avatarUrl' in x &&
     isString(x.avatarUrl) &&
     'htmlUrl' in x &&
@@ -28,8 +23,8 @@ export function isGithubUser(x: unknown): x is GithubUser {
 
 export function fromRawGithubUser(raw: RawGithubUser): GithubUser {
   return {
-    id: fromRawGithubUserId(raw.id),
-    login: raw.login,
+    userId: fromRawGithubUserId(raw.id),
+    userName: raw.login,
     url: raw.url,
     avatarUrl: raw.avatar_url,
     htmlUrl: raw.html_url

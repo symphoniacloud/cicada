@@ -6,7 +6,7 @@ import {
 } from './dynamoDB/fakeDynamoDBInterfaceExpectations'
 import { GithubInstallation } from '../../../src/app/domain/types/GithubInstallation'
 import { GithubPush } from '../../../src/app/domain/types/GithubPush'
-import { GithubRepository } from '../../../src/app/domain/types/GithubRepository'
+import { GithubRepo } from '../../../src/app/domain/types/GithubRepo'
 import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWorkflowRunEvent'
 import { GithubUser } from '../../../src/app/domain/types/GithubUser'
 import { GithubAccountMembership } from '../../../src/app/domain/types/GithubAccountMembership'
@@ -124,13 +124,13 @@ export function expectedPutLatestGithubWorkflowRunEvent(event: GithubWorkflowRun
   )
 }
 
-export function expectedBatchWriteGithubRepositories(repos: GithubRepository[]) {
+export function expectedBatchWriteGithubRepositories(repos: GithubRepo[]) {
   return buildBatchWriteForEntity(
     'fakeGithubRepositoriesTable',
     'githubRepository',
     repos.map((repo) => ({
       PK: `ACCOUNT#${repo.accountId}`,
-      SK: `REPO#${repo.id}`,
+      SK: `REPO#${repo.repoId}`,
       ...repo
     }))
   )
@@ -141,7 +141,7 @@ export function expectedBatchWriteGithubUsers(users: GithubUser[]) {
     'fakeGithubUsersTable',
     'githubUser',
     users.map((user) => ({
-      PK: `USER#${user.id}`,
+      PK: `USER#${user.userId}`,
       ...user
     }))
   )

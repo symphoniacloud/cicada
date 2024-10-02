@@ -5,13 +5,13 @@ import {
   getPublicAccountsForInstallationAccount,
   savePublicAccount
 } from '../entityStore/entities/GithubPublicAccountEntity'
-import { getInstallationForAccount } from './githubInstallation'
 import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../types/GithubAccountType'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
 import { getIdsOfAccountsWhichUserIsMemberOf } from './githubMembership'
 import { fromRawGithubAccountId, GithubAccountId } from '../types/GithubAccountId'
 import { GithubUserId } from '../types/GithubUserId'
+import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity'
 
 export async function savePublicAccountWithName(
   appState: AppState,
@@ -21,7 +21,7 @@ export async function savePublicAccountWithName(
   // TOEventually - when a user can be a member of multiple installed accounts then need to
   // have them choose which one to add the public account for
   const installationAccountId = (await getIdsOfAccountsWhichUserIsMemberOf(appState, adminUserId))[0]
-  const githubAppInstallation = await getInstallationForAccount(appState, installationAccountId)
+  const githubAppInstallation = await getInstallationOrThrow(appState.entityStore, installationAccountId)
   const githubUserResult = await appState.githubClient
     .clientForInstallation(githubAppInstallation.installationId)
     .getUser(accountName)
@@ -30,15 +30,15 @@ export async function savePublicAccountWithName(
     return githubUserResult
   }
 
-  const githubUser = githubUserResult.result
-  const githubUserType = githubUser.type.toLowerCase()
+  const rawGithubUser = githubUserResult.result
+  const githubUserType = rawGithubUser.type.toLowerCase()
   if (!(githubUserType === ORGANIZATION_ACCOUNT_TYPE || githubUserType === USER_ACCOUNT_TYPE))
     throw new Error(`Unexpected GitHub Account type for public account: ${githubUserType}`)
 
-  const accountId = fromRawGithubAccountId(githubUser.id)
+  const accountId = fromRawGithubAccountId(rawGithubUser.id)
   const result = await savePublicAccount(appState.entityStore, {
     accountId,
-    accountLogin: githubUser.login,
+    accountName: rawGithubUser.login,
     accountType: githubUserType,
     installationAccountId: installationAccountId
   })

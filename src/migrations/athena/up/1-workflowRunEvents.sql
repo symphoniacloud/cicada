@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS %%DATABASE_NAME%%.github_workflow_run_events
     updated_at string,
     run_started_at string,
     html_url string,
-    actor struct<login:string,id:bigint,avatar_url:string,html_url:string>
+    actor struct<userId:string,userName:string,avatar_url:string,html_url:string>
 )
     LOCATION 's3://%%BUCKET_NAME%%/tables/github_workflow_run_events/'
     TBLPROPERTIES

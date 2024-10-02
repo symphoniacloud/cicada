@@ -5,7 +5,6 @@ import { colAuto } from '../../hiccoughCicada/hiccoughBootstrapElements'
 import { standardTable } from '../../domainComponents/genericComponents'
 import { adminAddPublicAccountPageRoute } from '../adminAddPublicAccountPage'
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../../domain/types/GithubAccountType'
-import { PUBLIC_ACCOUNT_TYPE } from '../../../domain/types/GithubAccount'
 import { accountCell } from '../../domainComponents/accountComponents'
 
 export function createAdminPageResponse(accounts: GithubPublicAccount[]) {
@@ -44,7 +43,7 @@ export function createAdminPageResponse(accounts: GithubPublicAccount[]) {
 function accountRow(account: GithubPublicAccount) {
   return tr(
     ...[
-      accountCell({ ...account, cicadaAccountType: PUBLIC_ACCOUNT_TYPE }),
+      accountCell({ ...account }),
       td(account.accountType === ORGANIZATION_ACCOUNT_TYPE ? 'Organization' : 'Personal Account')
     ]
   )
