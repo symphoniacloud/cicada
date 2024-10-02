@@ -8,12 +8,12 @@ import { GithubUserId } from '../types/GithubUserId'
 export async function registerSubscription(
   appState: AppState,
   userId: GithubUserId,
-  username: string,
+  userName: string,
   rawSubscription: string
 ) {
   logger.debug(`Registering new web push subscription for ${userId}`)
   const webPushSubscription: WebPushSubscription = {
-    username,
+    userName,
     userId,
     ...JSON.parse(rawSubscription)
   }

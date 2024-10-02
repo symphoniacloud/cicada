@@ -46,7 +46,7 @@ export async function crawlPublicAccount(
   account: GithubPublicAccount,
   lookbackHours: number
 ) {
-  logger.info(`Crawling Public Account ${account.accountLogin}`)
+  logger.info(`Crawling Public Account ${account.accountName}`)
   // TODO - crawl users but not memberships
   await crawlRepositoriesForPublicAccount(appState, githubClient, account, lookbackHours)
 }

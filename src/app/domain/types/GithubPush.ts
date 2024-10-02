@@ -5,29 +5,28 @@ import {
   RawGithubAPIPushEventEventCommit
 } from './rawGithub/RawGithubAPIPushEventEvent'
 import { fromRawAccountType } from './GithubAccountType'
-import { GithubRepositorySummary } from './GithubRepository'
 import { NonEmptyArray } from '../../util/collections'
-import { GithubRepositoryElement, isGithubRepositoryElement } from './GithubElements'
 import { timestampToIso } from '../../util/dateAndTime'
 import { fromRawGithubAccountId } from './GithubAccountId'
-import { fromRawGithubUserId, GithubUserId } from './GithubUserId'
+import { fromRawGithubUserId } from './GithubUserId'
 import { fromRawGithubRepoId } from './GithubRepoId'
+import { GithubRepoSummary, GithubUserSummary, isGithubRepoSummary } from './GithubSummaries'
 
 // There's no consistent ID between pushes sourced from Webhooks vs Events, so use combination
 // of owner, repo, ref, and first commit SHA to create a key
-export interface GithubPush extends GithubRepositoryElement {
+export interface GithubPush extends GithubRepoSummary {
   // Repo URL only available from Webhook Push, not API Push
   repoUrl?: string
-  actor: {
-    id: GithubUserId
-    login: string
-    avatarUrl: string
-  }
+  actor: GithubPushActor
   // dateTime isn't guaranteed to be consistent between pushes sourced from Webhooks vs Events
   dateTime: string
   ref: string
   before: string
   commits: NonEmptyArray<GithubPushCommit>
+}
+
+export interface GithubPushActor extends GithubUserSummary {
+  avatarUrl: string
 }
 
 export interface GithubPushCommit {
@@ -40,14 +39,15 @@ export interface GithubPushCommit {
   }
 }
 
+// TODO - tighten this up
 export function isGithubPush(x: unknown): x is GithubPush {
-  if (!isGithubRepositoryElement(x)) return false
+  if (!isGithubRepoSummary(x)) return false
 
   const candidate = x as GithubPush
   return (
     candidate.actor !== undefined &&
-    candidate.actor.id !== undefined &&
-    candidate.actor.login !== undefined &&
+    candidate.actor.userId !== undefined &&
+    candidate.actor.userName !== undefined &&
     candidate.actor.avatarUrl !== undefined &&
     candidate.ref !== undefined &&
     candidate.before !== undefined &&
@@ -71,8 +71,8 @@ export function fromRawGithubWebhookPush(raw: unknown): GithubPush | undefined {
     repoName: raw.repository.name,
     repoUrl: raw.repository.html_url,
     actor: {
-      id: fromRawGithubUserId(raw.sender.id),
-      login: raw.sender.login,
+      userId: fromRawGithubUserId(raw.sender.id),
+      userName: raw.sender.login,
       avatarUrl: raw.sender.avatar_url
     },
     // Use the datetime of the **LAST** commit for the date of this event
@@ -100,7 +100,7 @@ function fromRawGithubWebhookPushCommit(commit: RawGithubWebhookPushCommit) {
 }
 
 export function fromRawGithubPushEventEvent(
-  { accountId, accountName, name: repoName, id: repoId, accountType }: GithubRepositorySummary,
+  { accountId, accountName, repoName, repoId, accountType }: GithubRepoSummary,
   raw: RawGithubAPIPushEventEvent
 ): GithubPush | undefined {
   if (raw.payload.commits.length < 1) {
@@ -109,14 +109,14 @@ export function fromRawGithubPushEventEvent(
   }
 
   return {
-    accountId: accountId,
-    accountName: accountName,
-    accountType: accountType,
+    accountId,
+    accountName,
+    accountType,
     repoId,
     repoName,
     actor: {
-      id: fromRawGithubUserId(raw.actor.id),
-      login: raw.actor.login,
+      userId: fromRawGithubUserId(raw.actor.id),
+      userName: raw.actor.login,
       avatarUrl: raw.actor.avatar_url
     },
     dateTime: raw.created_at,

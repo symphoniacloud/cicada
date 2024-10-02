@@ -13,23 +13,19 @@ import { GithubWorkflow } from '../types/GithubWorkflow'
 import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys'
 import { findWorkflowName } from '../github/githubWorkflow'
 import { calculateUserSettings } from './calculatedUserSettings'
-import { GithubRepositorySummary } from '../types/GithubRepository'
-import {
-  findAccountNameFromRepositories,
-  findRepoNameFromRepositories,
-  repositorySummaryToKey
-} from '../github/githubRepository'
+import { findAccountNameFromRepositories, findRepoNameFromRepositories } from '../github/githubRepo'
 import { GithubAccountId } from '../types/GithubAccountId'
 import { GithubRepoId } from '../types/GithubRepoId'
 import { GithubWorkflowId } from '../types/GithubWorkflowId'
+import { GithubRepoSummary } from '../types/GithubSummaries'
 
 export function toCalculatedAndDisplayableUserSettings(
   userSettings: PersistedUserSettings,
-  allRepoSummaries: GithubRepositorySummary[],
+  allRepoSummaries: GithubRepoSummary[],
   workflows: GithubWorkflow[]
 ): DisplayableUserSettings {
   return toDisplayableUserSettings(
-    calculateUserSettings(userSettings, allRepoSummaries.map(repositorySummaryToKey), workflows),
+    calculateUserSettings(userSettings, allRepoSummaries, workflows),
     allRepoSummaries,
     workflows
   )
@@ -37,7 +33,7 @@ export function toCalculatedAndDisplayableUserSettings(
 
 function toDisplayableUserSettings(
   userSettings: CalculatedUserSettings,
-  allRepoSummaries: GithubRepositorySummary[],
+  allRepoSummaries: GithubRepoSummary[],
   workflows: GithubWorkflow[]
 ): DisplayableUserSettings {
   return {
@@ -61,7 +57,7 @@ function toDisplayableUserSettings(
 export function toDisplayableAccountSettings(
   accountId: GithubAccountId,
   accountSettings: CalculatedGithubAccountSettings,
-  allRepoSummaries: GithubRepositorySummary[],
+  allRepoSummaries: GithubRepoSummary[],
   allWorkflows: GithubWorkflow[]
 ): DisplayableGithubAccountSettings {
   return {
@@ -87,7 +83,7 @@ export function toDisplayableAccountSettings(
 export function toDisplayableRepoSettings(
   repoKey: GithubRepoKey,
   repoSettings: CalculatedGithubRepoSettings,
-  allRepoSummaries: GithubRepositorySummary[],
+  allRepoSummaries: GithubRepoSummary[],
   allWorkflows: GithubWorkflow[]
 ): DisplayableGithubRepoSettings {
   return {

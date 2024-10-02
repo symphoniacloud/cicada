@@ -42,12 +42,12 @@ export async function authorizeUserRequest(
 
   // If the user exists in Cicada, but no longer has any memberships, then unauthorized
   // This is the case if the user is removed from a GitHub organization
-  const memberOfAccountIds = await getIdsOfAccountsWhichUserIsMemberOf(appState, cicadaUser.id)
+  const memberOfAccountIds = await getIdsOfAccountsWhichUserIsMemberOf(appState, cicadaUser.userId)
   if (memberOfAccountIds.length === 0) return undefined
 
   // Authorization successful
   return {
-    userId: cicadaUser.id,
-    username: cicadaUser.login
+    userId: cicadaUser.userId,
+    username: cicadaUser.userName
   }
 }

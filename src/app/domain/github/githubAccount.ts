@@ -3,10 +3,14 @@ import { GithubAccountId } from '../types/GithubAccountId'
 import { GithubUserId } from '../types/GithubUserId'
 import { getIdsOfAccountsWhichUserIsMemberOf } from './githubMembership'
 import { getPublicAccountsForInstallationAccountIds } from './githubPublicAccount'
-import { GithubAccount, INSTALLED_ACCOUNT_TYPE, PUBLIC_ACCOUNT_TYPE } from '../types/GithubAccount'
-import { getInstallationForAccount } from './githubInstallation'
+import { GithubAccountSummary } from '../types/GithubSummaries'
+import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity'
+import { GithubAccountKey } from '../types/GithubKeys'
+import { GithubPublicAccount } from '../types/GithubPublicAccount'
 
-// This is business logic for where member accounts and public accounts are grouped together
+export function isSameAccount(a1: GithubAccountKey, a2: GithubAccountKey) {
+  return a1.accountId === a2.accountId
+}
 
 export async function getAllAccountIdsForUser(
   appState: AppState,
@@ -19,21 +23,18 @@ export async function getAllAccountIdsForUser(
 export async function getAllAccountsForUser(
   appState: AppState,
   userId: GithubUserId
-): Promise<GithubAccount[]> {
+): Promise<{
+  publicAccounts: GithubPublicAccount[]
+  memberAccounts: GithubAccountSummary[]
+}> {
   const { memberAccountIds, publicAccounts } = await memberAccountIdsAndPublicAccounts(appState, userId)
-  const memberAccounts: GithubAccount[] = await Promise.all(
+  const memberAccounts: GithubAccountSummary[] = await Promise.all(
     memberAccountIds.map(async (accountId) => {
-      return {
-        ...(await getInstallationForAccount(appState, accountId)),
-        cicadaAccountType: INSTALLED_ACCOUNT_TYPE
-      }
+      return await getInstallationOrThrow(appState.entityStore, accountId)
     })
   )
-  const publicAccountsWithType: GithubAccount[] = publicAccounts.map((acc) => {
-    return { ...acc, cicadaAccountType: PUBLIC_ACCOUNT_TYPE }
-  })
 
-  return [...memberAccounts, ...publicAccountsWithType]
+  return { memberAccounts, publicAccounts }
 }
 
 export async function getAccountForUser(
@@ -41,7 +42,8 @@ export async function getAccountForUser(
   userId: GithubUserId,
   accountId: GithubAccountId
 ) {
-  return (await getAllAccountsForUser(appState, userId)).find((account) => account.accountId === accountId)
+  const { memberAccounts, publicAccounts } = await getAllAccountsForUser(appState, userId)
+  return [...memberAccounts, ...publicAccounts].find((account) => account.accountId === accountId)
 }
 
 async function memberAccountIdsAndPublicAccounts(appState: AppState, userId: GithubUserId) {

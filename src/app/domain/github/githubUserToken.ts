@@ -7,7 +7,7 @@ const EXPIRE_CACHED_GITHUB_TOKENS_HOURS = 1
 
 export async function saveOrRefreshGithubUserToken(
   appState: AppState,
-  tokenRecord: Pick<GithubUserToken, 'token' | 'userId' | 'userLogin'>
+  tokenRecord: Pick<GithubUserToken, 'token' | 'userId' | 'userName'>
 ) {
   await appState.entityStore.for(GithubUserTokenEntity).put(
     {

@@ -1,16 +1,10 @@
-import { RawGithubRepository } from './rawGithub/RawGithubRepository'
+import { RawGithubRepo } from './rawGithub/RawGithubRepo'
 import { fromRawAccountType } from './GithubAccountType'
-import { GithubAccountElement, isGithubAccountElement } from './GithubElements'
-import { isString } from '../../util/types'
 import { fromRawGithubAccountId } from './GithubAccountId'
-import { fromRawGithubRepoId, GithubRepoId, isGithubRepoId } from './GithubRepoId'
+import { fromRawGithubRepoId } from './GithubRepoId'
+import { GithubRepoSummary, isGithubRepoSummary } from './GithubSummaries'
 
-export interface GithubRepositorySummary extends GithubAccountElement {
-  id: GithubRepoId
-  name: string
-}
-
-export interface GithubRepository extends GithubRepositorySummary {
+export interface GithubRepo extends GithubRepoSummary {
   fullName: string
   private: boolean
   htmlUrl: string
@@ -27,14 +21,10 @@ export interface GithubRepository extends GithubRepositorySummary {
   defaultBranch: string
 }
 
-export function isGithubRepositorySummary(x: unknown): x is GithubRepositorySummary {
-  return isGithubAccountElement(x) && 'id' in x && isGithubRepoId(x.id) && 'name' in x && isString(x.name)
-}
-
-export function isGithubRepository(x: unknown): x is GithubRepository {
-  const candidate = x as GithubRepository
+export function isGithubRepo(x: unknown): x is GithubRepo {
+  const candidate = x as GithubRepo
   return (
-    isGithubRepositorySummary(x) &&
+    isGithubRepoSummary(x) &&
     candidate.fullName !== undefined &&
     candidate.private !== undefined &&
     candidate.htmlUrl !== undefined &&
@@ -52,15 +42,15 @@ export function isGithubRepository(x: unknown): x is GithubRepository {
   )
 }
 
-export function fromRawGithubRepository(raw: RawGithubRepository): GithubRepository {
+export function fromRawGithubRepo(raw: RawGithubRepo): GithubRepo {
   return {
-    id: fromRawGithubRepoId(raw.id),
-    name: raw.name,
-    fullName: raw.full_name,
-    private: raw.private,
     accountId: fromRawGithubAccountId(raw.owner.id),
     accountName: raw.owner.login,
     accountType: fromRawAccountType(raw.owner.type),
+    repoId: fromRawGithubRepoId(raw.id),
+    repoName: raw.name,
+    fullName: raw.full_name,
+    private: raw.private,
     htmlUrl: raw.html_url,
     description: raw.description ?? '',
     fork: raw.fork,

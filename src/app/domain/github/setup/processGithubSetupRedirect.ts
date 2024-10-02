@@ -39,7 +39,7 @@ async function processRedirect(appState: GithubSetupAppState, event: APIGatewayP
 
   const installationsPath =
     appDetails.accountType === ORGANIZATION_ACCOUNT_TYPE
-      ? `https://github.com/organizations/${appDetails.accountLogin}/settings/apps/${appDetails.appName}/installations`
+      ? `https://github.com/organizations/${appDetails.accountName}/settings/apps/${appDetails.appName}/installations`
       : `https://github.com/settings/apps/${appDetails.appName}/installations`
 
   return pageViewResponse(
@@ -61,7 +61,7 @@ export async function callGithubToFinishAppCreation(code: string): Promise<{
   clientSecret: string
   privateKey: string
   webhookSecret: string
-  accountLogin: string
+  accountName: string
   accountType: string
 }> {
   const result = await new Octokit().apps.createFromManifest({ code })
@@ -75,7 +75,7 @@ export async function callGithubToFinishAppCreation(code: string): Promise<{
     clientSecret: result.data.client_secret,
     privateKey: result.data.pem,
     webhookSecret: result.data.webhook_secret,
-    accountLogin: result.data.owner.login,
+    accountName: result.data.owner.login,
     accountType: fromRawAccountType(result.data.owner.type)
   }
 }

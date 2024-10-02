@@ -1,17 +1,18 @@
 // TODO - eventually use the same runtime schema used in app code, e.g. using Powertools schema
 
 const githubWorkflowRunBaseSchema = {
-  accountId: 'number',
+  accountId: 'string',
   accountName: 'string',
   accountType: 'string',
-  repoId: 'number',
+  repoId: 'string',
   repoName: 'string',
   repoHtmlUrl: 'string',
-  workflowId: 'number',
+  workflowId: 'string',
   workflowName: 'string',
   path: 'string',
   workflowHtmlUrl: 'string',
   workflowBadgeUrl: 'string',
+  // TODO - is this right?
   id: 'number',
   runNumber: 'number',
   runAttempt: 'number',
@@ -26,8 +27,8 @@ const githubWorkflowRunBaseSchema = {
   runStartedAt: 'string',
   htmlUrl: 'string',
   actor: {
-    login: 'string',
-    id: 'number',
+    userId: 'string',
+    userName: 'string',
     avatarUrl: 'string',
     htmlUrl: 'string'
   }

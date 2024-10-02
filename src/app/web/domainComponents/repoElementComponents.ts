@@ -1,4 +1,4 @@
-import { GithubRepositoryElement } from '../../domain/types/GithubElements'
+import { GithubRepoSummary } from '../../domain/types/GithubSummaries'
 import { a, td } from '../hiccough/hiccoughElements'
 import { githubAnchor } from './genericComponents'
 
@@ -7,7 +7,7 @@ export function repoCell({
   repoId,
   repoName,
   repoHtmlUrl
-}: GithubRepositoryElement & {
+}: GithubRepoSummary & {
   repoHtmlUrl: string
 }) {
   return td(a(`/repo?accountId=${accountId}&repoId=${repoId}`, repoName), '&nbsp;', githubAnchor(repoHtmlUrl))
@@ -16,12 +16,12 @@ export function repoCell({
 export function githubRepoUrl({
   accountName,
   repoName
-}: Pick<GithubRepositoryElement, 'accountName' | 'repoName'>) {
+}: Pick<GithubRepoSummary, 'accountName' | 'repoName'>) {
   return `https://github.com/${accountName}/${repoName}`
 }
 
 export function commitCell(
-  event: GithubRepositoryElement & {
+  event: GithubRepoSummary & {
     message: string
     repoHtmlUrl?: string
     sha: string

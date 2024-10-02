@@ -13,8 +13,8 @@ import { recentActiveBranchesForAccounts } from '../github/githubLatestPushesPer
 import { GithubPush } from '../types/GithubPush'
 import { getRunEventsForWorkflow } from '../github/githubWorkflowRunEvent'
 import { getRecentActivityForRepo, GithubActivity } from '../github/githubActivity'
-import { getRepositoriesForAccount, repositorySummaryToKey } from '../github/githubRepository'
-import { GithubRepository } from '../types/GithubRepository'
+import { getRepositoriesForAccount } from '../github/githubRepo'
+import { GithubRepo } from '../types/GithubRepo'
 import {
   latestWorkflowRunEventsPerWorkflowForAccount,
   latestWorkflowRunEventsPerWorkflowForRepo
@@ -37,7 +37,7 @@ export async function getLatestWorkflowRunEventsForUserWithUserSettings(
   userId: GithubUserId
 ): Promise<VisibleWorkflowRunEvents> {
   const allEvents = await getAllLatestRunEventsForUser(appState, userId)
-  const allRepoKeys = await getRepoKeysForUser(appState, userId)
+  const allRepoKeys = await getReposForUser(appState, userId)
   const userSettings = calculateUserSettings(await getUserSettings(appState, userId), allRepoKeys, allEvents)
   return toVisibleEvents(allEvents, userSettings)
 }
@@ -85,7 +85,7 @@ export async function getRecentActiveBranchesForUserWithUserSettings(
   )
   const userSettings = calculateUserSettings(
     await getUserSettings(appState, userId),
-    await getRepoKeysForUser(appState, userId),
+    await getReposForUser(appState, userId),
     await getWorkflowsForUser(appState, userId)
   )
   return toVisiblePushes(allActivity, userSettings)
@@ -125,7 +125,7 @@ function toVisiblePushes(allEvents: GithubPush[], userSettings?: CalculatedUserS
   }
 }
 
-export async function getReposForUser(appState: AppState, userId: GithubUserId): Promise<GithubRepository[]> {
+export async function getReposForUser(appState: AppState, userId: GithubUserId): Promise<GithubRepo[]> {
   const allAccountIds = await getAllAccountIdsForUser(appState, userId)
   return (
     await Promise.all(
@@ -134,10 +134,6 @@ export async function getReposForUser(appState: AppState, userId: GithubUserId):
       })
     )
   ).flat()
-}
-
-export async function getRepoKeysForUser(appState: AppState, userId: GithubUserId) {
-  return (await getReposForUser(appState, userId)).map(repositorySummaryToKey)
 }
 
 export async function getWorkflowsForUser(

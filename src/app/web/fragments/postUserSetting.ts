@@ -27,7 +27,7 @@ import { getWorkflowsForUser } from '../../domain/user/userVisible'
 import { calculateAccountSettings, calculateUserSettings } from '../../domain/user/calculatedUserSettings'
 import { UserSetting } from '../../domain/types/UserSettings'
 import { fragmentPath } from '../routingCommon'
-import { getRepositoriesForAccount, repositorySummaryToKey } from '../../domain/github/githubRepository'
+import { getRepositoriesForAccount } from '../../domain/github/githubRepo'
 import { getRepository } from '../../domain/entityStore/entities/GithubRepositoryEntity'
 import { latestWorkflowRunEventForWorkflow } from '../../domain/entityStore/entities/GithubLatestWorkflowRunEventEntity'
 import { GithubAccountId } from '../../domain/types/GithubAccountId'
@@ -91,12 +91,7 @@ async function processUpdateAccountSetting(
     accountId,
     toDisplayableAccountSettings(
       accountId,
-      calculateAccountSettings(
-        updatedAccountSettings,
-        accountId,
-        accountRepos.map(repositorySummaryToKey),
-        accountWorkflows
-      ),
+      calculateAccountSettings(updatedAccountSettings, accountId, accountRepos, accountWorkflows),
       accountRepos,
       accountWorkflows
     )

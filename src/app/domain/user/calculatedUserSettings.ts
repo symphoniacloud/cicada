@@ -11,7 +11,7 @@ import {
 import { GithubWorkflow } from '../types/GithubWorkflow'
 import { GithubRepoKey } from '../types/GithubKeys'
 import { findWorkflowsForRepo } from '../github/githubWorkflow'
-import { findUniqueAccountIds, toUniqueRepoIdsForAccount } from '../github/githubRepository'
+import { findUniqueAccountIds, toUniqueRepoIdsForAccount } from '../github/githubRepo'
 import { GithubAccountId } from '../types/GithubAccountId'
 
 const DEFAULT_ACCOUNT_NOTIFY = true

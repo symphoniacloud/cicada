@@ -2,21 +2,12 @@ import { fragmentViewResult } from '../../viewResultWrappers'
 import { h3 } from '../../hiccough/hiccoughElements'
 import { githubAnchor } from '../../domainComponents/genericComponents'
 import { githubRepoUrl } from '../../domainComponents/repoElementComponents'
-import { GithubRepository } from '../../../domain/types/GithubRepository'
+import { GithubRepo } from '../../../domain/types/GithubRepo'
 
-export function createRepoHeadingResponse(repo: GithubRepository) {
+export function createRepoHeadingResponse(repo: GithubRepo) {
   return fragmentViewResult(repoHeadingElement(repo))
 }
 
-export function repoHeadingElement(repo: GithubRepository) {
-  return h3(
-    `Repository: ${repo.accountName}/${repo.name}`,
-    `&nbsp;`,
-    githubAnchor(
-      githubRepoUrl({
-        ...repo,
-        repoName: repo.name
-      })
-    )
-  )
+export function repoHeadingElement(repo: GithubRepo) {
+  return h3(`Repository: ${repo.accountName}/${repo.repoName}`, `&nbsp;`, githubAnchor(githubRepoUrl(repo)))
 }

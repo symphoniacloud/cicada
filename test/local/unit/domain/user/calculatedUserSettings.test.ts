@@ -111,7 +111,7 @@ test('repo settings when workflow settings', () => {
 
 test('repo settings when visible false', () => {
   const calculated = calculateRepoSettings(
-    { workflows: { '789': { notify: false } }, visible: false },
+    { workflows: { GHWorkflow789: { notify: false } }, visible: false },
     { accountId: fromRawGithubAccountId(123), repoId: fromRawGithubRepoId(456) },
     [
       {

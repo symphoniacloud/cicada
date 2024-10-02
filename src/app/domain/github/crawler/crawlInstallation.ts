@@ -8,7 +8,7 @@ export async function crawlInstallation(
   installation: GithubInstallation,
   lookbackDays: number
 ) {
-  logger.info(`Crawling Installation for ${installation.accountLogin}`)
+  logger.info(`Crawling Installation for ${installation.accountName}`)
   const githubInstallationClient = appState.githubClient.clientForInstallation(installation.installationId)
   await crawlInstallationAccount(appState, githubInstallationClient, installation, lookbackDays)
 }

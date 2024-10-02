@@ -15,8 +15,8 @@ export async function setMemberships(
   latestMembers: GithubUser[],
   accountId: GithubAccountId
 ) {
-  const memberships = latestMembers.map(({ id }) => ({
-    userId: id,
+  const memberships = latestMembers.map(({ userId }) => ({
+    userId,
     accountId
   }))
   const previousMemberships = await getAllMembershipsForAccount(appState.entityStore, accountId)

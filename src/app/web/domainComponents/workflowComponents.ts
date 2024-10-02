@@ -1,5 +1,5 @@
 import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
-import { GithubRepositoryElement } from '../../domain/types/GithubElements'
+import { GithubRepoSummary } from '../../domain/types/GithubSummaries'
 import { a, td, tr } from '../hiccough/hiccoughElements'
 import { Clock, displayDateTime, durationAsStringFromMs } from '../../util/dateAndTime'
 import { githubAnchor } from './genericComponents'
@@ -7,6 +7,7 @@ import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents'
 import { elapsedTimeMs, runBasicStatus, WorkflowRunStatus } from '../../domain/github/githubWorkflowRunEvent'
 import { userCell } from './userComponents'
 import { removeNullAndUndefined } from '../../util/collections'
+import { usableWorkflowName } from '../../domain/github/githubWorkflow'
 
 export type WorkflowRowOptions = {
   showDescription?: boolean
@@ -70,14 +71,14 @@ function descriptionOrMessageSuffix(status: WorkflowRunStatus, event: GithubWork
 }
 
 function workflowCell(
-  event: GithubRepositoryElement &
+  event: GithubRepoSummary &
     Pick<GithubWorkflowRunEvent, 'workflowHtmlUrl' | 'workflowId' | 'workflowName' | 'path'>
 ) {
   const workflowPath = `${event.path.substring(event.path.indexOf('/') + 1)}`
   return td(
     a(
       `/workflow?accountId=${event.accountId}&repoId=${event.repoId}&workflowId=${event.workflowId}`,
-      event.workflowName ?? workflowPath
+      usableWorkflowName(event)
     ),
     '&nbsp;',
     githubAnchor(event.workflowHtmlUrl ?? `${githubRepoUrl(event)}/actions/${workflowPath}`)

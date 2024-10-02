@@ -9,6 +9,10 @@ export function isString(x: unknown): x is string {
   return typeof x === 'string'
 }
 
+export function isStringOrUndefined(x: unknown): x is string {
+  return x === undefined || typeof x === 'string'
+}
+
 export function isNotNullObject(x: unknown): x is NonNullable<object> {
   return x !== null && typeof x === 'object'
 }

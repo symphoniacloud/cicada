@@ -1,8 +1,8 @@
 import { isNotNullObject } from '../../util/types'
 import { GithubAccountId } from './GithubAccountId'
-import { GithubUserId, isGithubUserId } from './GithubUserId'
 import { GithubRepoId } from './GithubRepoId'
 import { GithubWorkflowId } from './GithubWorkflowId'
+import { GithubUserKey, isGithubUserKey } from './GithubKeys'
 
 export type UserSetting = 'visible' | 'notify'
 
@@ -10,29 +10,15 @@ export function isUserSetting(x: unknown): x is UserSetting {
   return x === 'visible' || x === 'notify'
 }
 
-export function isUserSettings(x: unknown): x is PersistedUserSettings {
-  // TODO - this needs a lot more. Perhaps with AJV?
-  return (
-    isNotNullObject(x) &&
-    'userId' in x &&
-    isGithubUserId(x.userId) &&
-    'github' in x &&
-    isNotNullObject(x.github) &&
-    'accounts' in x.github
-  )
+export interface PersistedUserSettings extends GithubUserKey {
+  github: {
+    accounts: Record<GithubAccountId, PersistedGithubAccountSettings>
+  }
 }
 
-// Various types here use a string for Record key, rather than GithubAccountID, etc.
-// That's because JavaScript always uses strings for object keys, even if the Record type says number
-// An earlier version of this code used Maps to keep the strong typing of the ID keys
-// but it made the code more verbose - especially for tests - so I decided just to suck it up
-// and go with string ID keys
-
-export interface PersistedUserSettings {
-  userId: GithubUserId
-  github: {
-    accounts: Record<string, PersistedGithubAccountSettings>
-  }
+export function isUserSettings(x: unknown): x is PersistedUserSettings {
+  // TODO - this needs a lot more. Perhaps with AJV?
+  return isGithubUserKey(x) && 'github' in x && isNotNullObject(x.github) && 'accounts' in x.github
 }
 
 export interface PersistedVisibleAndNotifyConfigurable {
@@ -41,19 +27,18 @@ export interface PersistedVisibleAndNotifyConfigurable {
 }
 
 export interface PersistedGithubAccountSettings extends PersistedVisibleAndNotifyConfigurable {
-  repos: Record<string, PersistedGithubRepoSettings>
+  repos: Record<GithubRepoId, PersistedGithubRepoSettings>
 }
 
 export interface PersistedGithubRepoSettings extends PersistedVisibleAndNotifyConfigurable {
-  workflows: Record<string, PersistedGithubWorkflowSettings>
+  workflows: Record<GithubWorkflowId, PersistedGithubWorkflowSettings>
 }
 
 export type PersistedGithubWorkflowSettings = PersistedVisibleAndNotifyConfigurable
 
 // ***
 
-export interface CalculatedUserSettings {
-  userId: GithubUserId
+export interface CalculatedUserSettings extends GithubUserKey {
   github: {
     accounts: Record<GithubAccountId, CalculatedGithubAccountSettings>
   }
@@ -73,8 +58,7 @@ export type CalculatedGithubWorkflowSettings = CalculatedVisibleAndNotifyConfigu
 
 // ***
 
-export interface DisplayableUserSettings {
-  userId: GithubUserId
+export interface DisplayableUserSettings extends GithubUserKey {
   github: {
     accounts: Record<GithubAccountId, DisplayableGithubAccountSettings>
   }

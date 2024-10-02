@@ -4,10 +4,12 @@ import { GithubWorkflow, isGithubWorkflow } from './GithubWorkflow'
 import { fromRawGithubAccountId } from './GithubAccountId'
 import { fromRawGithubRepoId } from './GithubRepoId'
 import { fromRawGithubWorkflowId } from './GithubWorkflowId'
+import { fromRawGithubUserId } from './GithubUserId'
+import { GithubUserSummary } from './GithubSummaries'
 
 export interface GithubWorkflowRunEvent extends GithubWorkflow {
   repoHtmlUrl: string
-  // Not available on all source data from GitHub
+  // TODO - change ID here
   id: number
   runNumber: number
   runAttempt?: number
@@ -22,14 +24,20 @@ export interface GithubWorkflowRunEvent extends GithubWorkflow {
   runStartedAt?: string
   htmlUrl: string
   // TOEventually - what happens here for a manual push? Do we still get an actor?
-  actor?: { login: string; id: number; avatarUrl: string; htmlUrl: string }
+  actor?: GithubWorkflowRunEventActor
+}
+
+export interface GithubWorkflowRunEventActor extends GithubUserSummary {
+  avatarUrl: string
+  htmlUrl: string
 }
 
 export function isGithubWorkflowRunEvent(x: unknown): x is GithubWorkflowRunEvent {
+  if (!isGithubWorkflow(x)) return false
+
   const candidate = x as GithubWorkflowRunEvent
   // TOEventually - actually check type of fields, e.g. with AJV
   return (
-    isGithubWorkflow(x) &&
     candidate.repoHtmlUrl !== undefined &&
     candidate.id !== undefined &&
     candidate.runNumber !== undefined &&
@@ -40,8 +48,8 @@ export function isGithubWorkflowRunEvent(x: unknown): x is GithubWorkflowRunEven
     candidate.updatedAt !== undefined &&
     candidate.htmlUrl !== undefined &&
     (candidate.actor === undefined ||
-      (candidate.actor.login !== undefined &&
-        candidate.actor.id !== undefined &&
+      (candidate.actor.userName !== undefined &&
+        candidate.actor.userId !== undefined &&
         candidate.actor.avatarUrl !== undefined &&
         candidate.actor.htmlUrl !== undefined))
   )
@@ -55,19 +63,19 @@ export function fromRawGithubWorkflowRunEvent(raw: RawGithubWorkflowRunEvent): G
     accountType: fromRawAccountType(raw.repository.owner.type),
     repoId: fromRawGithubRepoId(raw.repository.id),
     repoName: raw.repository.name,
-    repoHtmlUrl: raw.repository.html_url,
     workflowId: fromRawGithubWorkflowId(raw.workflow_id),
+    path: raw.path,
+    workflowName: raw.name ?? raw.workflow?.name ?? undefined,
     id: raw.id,
+    repoHtmlUrl: raw.repository.html_url,
     runNumber: raw.run_number,
     runAttempt: raw.run_attempt,
     event: raw.event,
-    path: raw.path,
     displayTitle: raw.display_title,
     createdAt: raw.created_at,
     updatedAt: raw.updated_at,
     runStartedAt: raw.run_started_at,
     status: raw.status ?? undefined,
-    workflowName: raw.name ?? raw.workflow?.name ?? undefined,
     workflowHtmlUrl: raw.workflow?.html_url,
     workflowBadgeUrl: raw.workflow?.badge_url,
     conclusion: raw.conclusion ?? undefined,
@@ -77,8 +85,8 @@ export function fromRawGithubWorkflowRunEvent(raw: RawGithubWorkflowRunEvent): G
     ...(raw.actor
       ? {
           actor: {
-            login: raw.actor.login,
-            id: raw.actor.id,
+            userId: fromRawGithubUserId(raw.actor.id),
+            userName: raw.actor.login,
             avatarUrl: raw.actor.avatar_url,
             htmlUrl: raw.actor.html_url
           }

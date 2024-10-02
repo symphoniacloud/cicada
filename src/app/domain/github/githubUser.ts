@@ -1,12 +1,12 @@
 import { AppState } from '../../environment/AppState'
-import { GithubUserEntity } from '../entityStore/entities/GithubUserEntity'
+import { batchPutUsers, getUserById } from '../entityStore/entities/GithubUserEntity'
 import { fromRawGithubUser, GithubUser } from '../types/GithubUser'
 import { GithubInstallation } from '../types/GithubInstallation'
 import { RawGithubUser } from '../types/rawGithub/RawGithubUser'
 import { setMemberships } from './githubMembership'
 import { GithubUserToken } from '../types/GithubUserToken'
 import { isGithubCheckRequired, saveOrRefreshGithubUserToken } from './githubUserToken'
-import { fromRawGithubUserId, GithubUserId } from '../types/GithubUserId'
+import { fromRawGithubUserId } from '../types/GithubUserId'
 
 export async function processRawUsers(
   appState: AppState,
@@ -17,24 +17,20 @@ export async function processRawUsers(
 }
 
 async function processUsers(appState: AppState, users: GithubUser[], installation: GithubInstallation) {
-  await saveUsers(appState, users)
+  await batchPutUsers(appState.entityStore, users)
   await setMemberships(appState, users, installation.accountId)
-}
-
-export async function saveUsers(appState: AppState, users: GithubUser[]) {
-  await appState.entityStore.for(GithubUserEntity).advancedOperations.batchPut(users)
 }
 
 export async function getUserByAuthToken(appState: AppState, token: string) {
   const rawGithubUser = await appState.githubClient.getGithubUser(token)
   if (!rawGithubUser) return undefined
 
-  const cicadaUser = await getUserById(appState, fromRawGithubUserId(rawGithubUser.id))
+  const cicadaUser = await getUserById(appState.entityStore, fromRawGithubUserId(rawGithubUser.id))
   if (cicadaUser)
     await saveOrRefreshGithubUserToken(appState, {
       token,
-      userId: cicadaUser.id,
-      userLogin: cicadaUser.login
+      userId: cicadaUser.userId,
+      userName: cicadaUser.userName
     })
 
   return cicadaUser
@@ -43,9 +39,5 @@ export async function getUserByAuthToken(appState: AppState, token: string) {
 export async function getUserByTokenRecord(appState: AppState, tokenRecord: GithubUserToken) {
   return isGithubCheckRequired(appState.clock, tokenRecord)
     ? getUserByAuthToken(appState, tokenRecord.token)
-    : getUserById(appState, tokenRecord.userId)
-}
-
-export async function getUserById(appState: AppState, id: GithubUserId) {
-  return await appState.entityStore.for(GithubUserEntity).getOrUndefined({ id })
+    : getUserById(appState.entityStore, tokenRecord.userId)
 }

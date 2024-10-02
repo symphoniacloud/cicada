@@ -11,6 +11,7 @@ import {
 import { sleep } from './integrationTestSupport/utils'
 import { createSignatureHeader } from '../../src/app/domain/github/webhookProcessor/githubWebhookProcessor'
 import { fromRawGithubAccountId } from '../../src/app/domain/types/GithubAccountId'
+import { fromRawGithubUserId } from '../../src/app/domain/types/GithubUserId'
 
 // GitHub Webhook - these are directly stored in S3, and then async processing occurs
 test('webhook test', async () => {
@@ -74,10 +75,10 @@ test('webhook test', async () => {
     if (runEvents.length > 0) {
       expect(runEvents[0]).toEqual({
         actor: {
+          userId: fromRawGithubUserId(49635),
+          userName: 'mikebroberts',
           avatarUrl: 'https://avatars.githubusercontent.com/u/49635?v=4',
-          htmlUrl: 'https://github.com/mikebroberts',
-          id: 49635,
-          login: 'mikebroberts'
+          htmlUrl: 'https://github.com/mikebroberts'
         },
         conclusion: 'success',
         createdAt: '2024-03-06T19:25:32Z',
