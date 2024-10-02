@@ -7,7 +7,7 @@ import { Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-sto
 export const GithubWorkflowRunEventEntity: Entity<
   GithubWorkflowRunEvent,
   Pick<GithubWorkflowRunEvent, 'accountId'>,
-  Pick<GithubWorkflowRunEvent, 'repoId' | 'updatedAt' | 'workflowId' | 'id' | 'status'>
+  Pick<GithubWorkflowRunEvent, 'repoId' | 'updatedAt' | 'workflowId' | 'workflowRunId' | 'status'>
 > = {
   type: GITHUB_WORKFLOW_RUN_EVENT,
   parse: typePredicateParser(isGithubWorkflowRunEvent, GITHUB_WORKFLOW_RUN_EVENT),
@@ -15,9 +15,11 @@ export const GithubWorkflowRunEventEntity: Entity<
     return `ACCOUNT#${source.accountId}`
   },
   // UPDATED_AT goes before RUN_ID for when querying activity per workflow, by date
-  sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'updatedAt' | 'workflowId' | 'id' | 'status'>) {
+  sk(
+    source: Pick<GithubWorkflowRunEvent, 'repoId' | 'updatedAt' | 'workflowId' | 'workflowRunId' | 'status'>
+  ) {
     return `${githubWorkflowRunEventSkPrefix(source)}#UPDATED_AT#${source.updatedAt}#RUN#${
-      source.id
+      source.workflowRunId
     }#STATUS#${source.status}`
   },
   gsis: {

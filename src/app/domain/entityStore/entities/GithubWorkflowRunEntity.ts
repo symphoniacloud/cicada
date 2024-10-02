@@ -7,15 +7,15 @@ import { githubWorkflowRunEventGsiSkPrefix } from './GithubWorkflowRunEventEntit
 export const GithubWorkflowRunEntity: Entity<
   GithubWorkflowRunEvent,
   Pick<GithubWorkflowRunEvent, 'accountId'>,
-  Pick<GithubWorkflowRunEvent, 'repoId' | 'workflowId' | 'id'>
+  Pick<GithubWorkflowRunEvent, 'repoId' | 'workflowId' | 'workflowRunId'>
 > = {
   type: GITHUB_WORKFLOW_RUN,
   parse: typePredicateParser(isGithubWorkflowRunEvent, GITHUB_WORKFLOW_RUN),
   pk(source: Pick<GithubWorkflowRunEvent, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   },
-  sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'workflowId' | 'id'>) {
-    return `REPO#${source.repoId}#WORKFLOW#${source.workflowId}#WORKFLOW_RUN#RUN#${source.id}`
+  sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'workflowId' | 'workflowRunId'>) {
+    return `REPO#${source.repoId}#WORKFLOW#${source.workflowId}#WORKFLOW_RUN#RUN#${source.workflowRunId}`
   },
   gsis: {
     // Used when getting all activity per repo, so shared with GithubPushEntity

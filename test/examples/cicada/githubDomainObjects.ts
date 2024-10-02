@@ -10,6 +10,7 @@ import { fromRawGithubUserId, GithubUserId } from '../../../src/app/domain/types
 import { fromRawGithubInstallationId } from '../../../src/app/domain/types/GithubInstallationId'
 import { fromRawGithubRepoId } from '../../../src/app/domain/types/GithubRepoId'
 import { fromRawGithubWorkflowId } from '../../../src/app/domain/types/GithubWorkflowId'
+import { fromRawGithubWorkflowRunId } from '../../../src/app/domain/types/GithubWorkflowRunId'
 
 export const testPersonalInstallation: GithubInstallation = {
   accountId: fromRawGithubAccountId(162360409),
@@ -152,7 +153,7 @@ export const testPersonalTestRepoWorkflowRun: GithubWorkflowRunEvent = {
   headBranch: 'main',
   headSha: 'dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c',
   htmlUrl: 'https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530',
-  id: 8160866530,
+  workflowRunId: fromRawGithubWorkflowRunId(8160866530),
   accountId: fromRawGithubAccountId(162360409),
   accountName: 'cicada-test-user',
   accountType: 'user',
@@ -185,7 +186,7 @@ export const testOrgTestRepoOneWorkflowRunOne: GithubWorkflowRunEvent = {
   headBranch: 'main',
   headSha: '8c3aa1cb0316ea23abeb2612457edb80868f53c8',
   htmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8175883775',
-  id: 8175883775,
+  workflowRunId: fromRawGithubWorkflowRunId(8175883775),
   accountId: fromRawGithubAccountId(162483619),
   accountName: 'cicada-test-org',
   accountType: 'organization',
@@ -216,7 +217,7 @@ export const testOrgTestRepoOneWorkflowRunThree: GithubWorkflowRunEvent = {
   displayTitle: 'Test Repo One Workflow',
   headBranch: 'main',
   htmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236',
-  id: 8177622236,
+  workflowRunId: fromRawGithubWorkflowRunId(8177622236),
   accountId: fromRawGithubAccountId(162483619),
   accountName: 'cicada-test-org',
   accountType: 'organization',
