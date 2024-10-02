@@ -12,8 +12,7 @@ const githubWorkflowRunBaseSchema = {
   path: 'string',
   workflowHtmlUrl: 'string',
   workflowBadgeUrl: 'string',
-  // TODO - is this right?
-  id: 'number',
+  workflowRunId: 'string',
   runNumber: 'number',
   runAttempt: 'number',
   displayTitle: 'string',
