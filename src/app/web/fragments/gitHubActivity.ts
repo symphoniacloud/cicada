@@ -18,10 +18,13 @@ import {
   getRunEventsForWorkflowForUser
 } from '../../domain/user/userVisible'
 import { fragmentPath } from '../routingCommon'
-import { getAccountForUser } from '../../domain/github/githubAccount'
 import { getRepository } from '../../domain/entityStore/entities/GithubRepositoryEntity'
 import { GithubAccountId } from '../../domain/types/GithubAccountId'
 import { GithubUserId } from '../../domain/types/GithubUserId'
+import {
+  accountStructureFromInstallationAccountStructure,
+  loadInstallationAccountStructureForUser
+} from '../../domain/github/githubAccountStructure'
 
 export const gitHubActivityFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('gitHubActivity'),
@@ -65,7 +68,10 @@ async function githubActivityForAccount(
   accountId: GithubAccountId
 ) {
   logger.debug('githubActivityForAccount')
-  if (!(await getAccountForUser(appState, userId, accountId))) return notFoundHTMLResponse
+  const githubInstallationAccountStructure = await loadInstallationAccountStructureForUser(appState, userId)
+
+  if (!accountStructureFromInstallationAccountStructure(githubInstallationAccountStructure, accountId))
+    return notFoundHTMLResponse
 
   return createGithubPushTableResponse(
     'accountActivity',
