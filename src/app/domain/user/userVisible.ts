@@ -1,5 +1,4 @@
 import { AppState } from '../../environment/AppState'
-import { getAllAccountIdsForUser } from '../github/githubAccount'
 import { latestWorkflowRunEventsPerWorkflowForAccounts } from '../github/githubLatestWorkflowRunEvents'
 import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
 import { getUserSettings } from './persistedUserSettings'
@@ -37,8 +36,11 @@ export async function getLatestWorkflowRunEventsForUserWithUserSettings(
   appState: AppState,
   userId: GithubUserId
 ): Promise<VisibleWorkflowRunEvents> {
-  const allEvents = await getAllLatestRunEventsForUser(appState, userId)
   const installationStructure = await loadInstallationAccountStructureForUser(appState, userId)
+  const allEvents = await latestWorkflowRunEventsPerWorkflowForAccounts(
+    appState,
+    allAccountIDsFromStructure(installationStructure)
+  )
   const userSettings = calculateUserSettings(await getUserSettings(appState, userId), installationStructure)
   return toVisibleEvents(allEvents, userSettings)
 }
@@ -121,15 +123,4 @@ function toVisiblePushes(allEvents: GithubPush[], userSettings?: CalculatedUserS
     visibleEvents,
     someEventsHidden: allEvents.length !== visibleEvents.length
   }
-}
-
-async function getAllLatestRunEventsForUser(
-  appState: AppState,
-  userId: GithubUserId
-): Promise<GithubWorkflowRunEvent[]> {
-  return await latestWorkflowRunEventsPerWorkflowForAccounts(
-    appState,
-    // TODO - use structure
-    await getAllAccountIdsForUser(appState, userId)
-  )
 }

@@ -4,25 +4,23 @@ import { td, tr } from '../../hiccough/hiccoughElements'
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../../domain/types/GithubAccountType'
 import { accountCell } from '../../domainComponents/accountComponents'
 import { GithubAccountSummary } from '../../../domain/types/GithubSummaries'
-import { GithubPublicAccount } from '../../../domain/types/GithubPublicAccount'
+import { GithubInstallationAccountStructure } from '../../../domain/types/GithubAccountStructure'
 
 export function createAllAvailableAccountsResponse(
-  memberAccounts: GithubAccountSummary[],
-  publicAccounts: GithubPublicAccount[]
+  installationAccountStructure: GithubInstallationAccountStructure
 ) {
-  return fragmentViewResult(...allAvailableAccountsResponse(memberAccounts, publicAccounts))
+  return fragmentViewResult(...allAvailableAccountsResponse(installationAccountStructure))
 }
 
 export function allAvailableAccountsResponse(
-  memberAccounts: GithubAccountSummary[],
-  publicAccounts: GithubPublicAccount[]
+  installationAccountStructure: GithubInstallationAccountStructure
 ) {
   return [
     standardTable(
       ['Account', 'Type', 'Comment'],
       [
-        ...memberAccounts.map((acc) => accountRow(acc, true)),
-        ...publicAccounts.map((acc) => accountRow(acc, false))
+        accountRow(installationAccountStructure, true),
+        ...Object.values(installationAccountStructure.publicAccounts).map((acc) => accountRow(acc, false))
       ]
     )
   ]

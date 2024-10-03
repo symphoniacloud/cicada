@@ -3,7 +3,7 @@ import { Route } from '../../internalHttpRouter/internalHttpRoute'
 import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { pagePath } from '../routingCommon'
 import { createAdminPageResponse } from './views/adminPageView'
-import { getPublicAccountsForUser } from '../../domain/github/githubPublicAccount'
+import { loadInstallationAccountStructureForUser } from '../../domain/github/githubAccountStructure'
 
 export const adminPageRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: pagePath('admin'),
@@ -11,6 +11,6 @@ export const adminPageRoute: Route<CicadaAuthorizedAPIEvent> = {
 }
 
 export async function adminPage(appState: AppState, event: CicadaAuthorizedAPIEvent) {
-  const publicAccounts = await getPublicAccountsForUser(appState, event.userId)
-  return createAdminPageResponse(publicAccounts)
+  const installationStructure = await loadInstallationAccountStructureForUser(appState, event.userId)
+  return createAdminPageResponse(Object.values(installationStructure.publicAccounts))
 }

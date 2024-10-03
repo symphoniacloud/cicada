@@ -12,10 +12,13 @@ import {
 } from '../../domain/user/userVisible'
 import { GithubRepoKey } from '../../domain/types/GithubKeys'
 import { fragmentPath } from '../routingCommon'
-import { getAccountForUser } from '../../domain/github/githubAccount'
 import { getRepository } from '../../domain/entityStore/entities/GithubRepositoryEntity'
 import { GithubAccountId } from '../../domain/types/GithubAccountId'
 import { GithubUserId } from '../../domain/types/GithubUserId'
+import {
+  accountStructureFromInstallationAccountStructure,
+  loadInstallationAccountStructureForUser
+} from '../../domain/github/githubAccountStructure'
 
 export const actionsStatusFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('actionsStatus'),
@@ -40,7 +43,9 @@ async function actionsStatusForDashboard(appState: AppState, userId: GithubUserI
 }
 
 async function actionsStatusForAccount(appState: AppState, userId: GithubUserId, accountId: GithubAccountId) {
-  if (!(await getAccountForUser(appState, userId, accountId))) return notFoundHTMLResponse
+  const githubInstallationAccountStructure = await loadInstallationAccountStructureForUser(appState, userId)
+  if (!accountStructureFromInstallationAccountStructure(githubInstallationAccountStructure, accountId))
+    return notFoundHTMLResponse
 
   const latestEvents = await getLatestWorkflowRunEventsForAccountForUser(appState, accountId)
   return createWorkflowRunEventTableResponse('accountStatus', appState.clock, latestEvents)

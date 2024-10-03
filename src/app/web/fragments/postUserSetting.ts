@@ -92,8 +92,9 @@ async function processUpdateAccountSetting(
     updatedSettings.github.accounts[accountId] ??
     throwFunction('Internal error in processUpdateAccountSetting - no account settings')()
 
-  // TODO - will throw if account ID not known - need to handle and/or change to undefined
   const accountStructure = accountStructureFromInstallationAccountStructure(installationAccount, accountId)
+  if (!accountStructure) throw new Error(`No account for account ID ${accountId}`)
+
   return createUpdateUserAccountSettingResponse(
     accountId,
     toDisplayableAccountSettings(
@@ -124,7 +125,8 @@ async function processUpdateRepoSetting(
     repoKey,
     toDisplayableRepoSettings(
       newCalculatedRepoSettings,
-      repoStructureFromInstallationAccountStructure(installationAccount, repoKey)
+      repoStructureFromInstallationAccountStructure(installationAccount, repoKey) ??
+        throwFunction(`No repo for key ${JSON.stringify(repoKey)}`)()
     )
   )
 }
@@ -154,7 +156,8 @@ async function processUpdateWorkflowSetting(
     workflowKey,
     toDisplayableWorkflowSettings(
       newCalculatedWorkflowSettings,
-      workflowSummaryFromInstallationAccountStructure(installationAccount, workflowKey)
+      workflowSummaryFromInstallationAccountStructure(installationAccount, workflowKey) ??
+        throwFunction(`No workflow for key ${JSON.stringify(workflowKey)}`)()
     )
   )
 }

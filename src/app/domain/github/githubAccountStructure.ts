@@ -14,7 +14,6 @@ import { latestWorkflowRunEventsPerWorkflowForAccount } from '../entityStore/ent
 import { getPublicAccountsForInstallationAccount } from '../entityStore/entities/GithubPublicAccountEntity'
 import { GithubAccountSummary, GithubWorkflowSummary } from '../types/GithubSummaries'
 import { toAccountSummary } from './githubAccount'
-import { throwFunction } from '../../../multipleContexts/errors'
 import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys'
 import { GithubRepo } from '../types/GithubRepo'
 import { GithubWorkflow } from '../types/GithubWorkflow'
@@ -86,29 +85,26 @@ function buildRepoStructure(repo: GithubRepo, allWorkflows: GithubWorkflow[]): G
 export function accountStructureFromInstallationAccountStructure(
   installation: GithubInstallationAccountStructure,
   accountId: GithubAccountId
-): GithubAccountStructure {
-  return installation.accountId === accountId
-    ? installation
-    : installation.publicAccounts[accountId] ?? throwFunction(`No account for account ID ${accountId}`)()
+): GithubAccountStructure | undefined {
+  return installation.accountId === accountId ? installation : installation.publicAccounts[accountId]
 }
 
 export function repoStructureFromInstallationAccountStructure(
   installation: GithubInstallationAccountStructure,
   repoKey: GithubRepoKey
-): GithubRepoStructure {
-  const account = accountStructureFromInstallationAccountStructure(installation, repoKey.accountId)
-  return account.repos[repoKey.repoId] ?? throwFunction(`No repo for repo key ${JSON.stringify(repoKey)}`)()
+): GithubRepoStructure | undefined {
+  return accountStructureFromInstallationAccountStructure(installation, repoKey.accountId)?.repos[
+    repoKey.repoId
+  ]
 }
 
 export function workflowSummaryFromInstallationAccountStructure(
   installation: GithubInstallationAccountStructure,
   workflowKey: GithubWorkflowKey
-): GithubWorkflowSummary {
-  const repo = repoStructureFromInstallationAccountStructure(installation, workflowKey)
-  return (
-    repo.workflows[workflowKey.workflowId] ??
-    throwFunction(`No workflow for workflow key ${JSON.stringify(workflowKey)}`)()
-  )
+): GithubWorkflowSummary | undefined {
+  return repoStructureFromInstallationAccountStructure(installation, workflowKey)?.workflows[
+    workflowKey.workflowId
+  ]
 }
 
 export function allAccountIDsFromStructure(

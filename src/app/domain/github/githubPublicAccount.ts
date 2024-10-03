@@ -1,15 +1,12 @@
 import { AppState } from '../../environment/AppState'
 import { GithubPublicAccount } from '../types/GithubPublicAccount'
 import { isSuccess, Result, successWith } from '../../util/structuredResult'
-import {
-  getPublicAccountsForInstallationAccount,
-  savePublicAccount
-} from '../entityStore/entities/GithubPublicAccountEntity'
+import { savePublicAccount } from '../entityStore/entities/GithubPublicAccountEntity'
 import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../types/GithubAccountType'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
 import { getIdsOfAccountsWhichUserIsMemberOf } from './githubMembership'
-import { fromRawGithubAccountId, GithubAccountId } from '../types/GithubAccountId'
+import { fromRawGithubAccountId } from '../types/GithubAccountId'
 import { GithubUserId } from '../types/GithubUserId'
 import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity'
 
@@ -50,29 +47,4 @@ export async function savePublicAccountWithName(
   })
 
   return successWith(result)
-}
-
-// TODO - update this for account structure
-export async function getPublicAccountsForUser(
-  appState: AppState,
-  userId: GithubUserId
-): Promise<GithubPublicAccount[]> {
-  return await getPublicAccountsForInstallationAccountIds(
-    appState,
-    await getIdsOfAccountsWhichUserIsMemberOf(appState, userId)
-  )
-}
-
-// TODO - update this for account structure
-export async function getPublicAccountsForInstallationAccountIds(
-  appState: AppState,
-  installationAccountIds: GithubAccountId[]
-): Promise<GithubPublicAccount[]> {
-  return (
-    await Promise.all(
-      installationAccountIds.map(async (accountId) =>
-        getPublicAccountsForInstallationAccount(appState.entityStore, accountId)
-      )
-    )
-  ).flat()
 }
