@@ -59,3 +59,16 @@ export function getOrSetNewAndReturn<TValue>(
   record[key] = newValue
   return newValue
 }
+
+export function objectMap<TInputKey extends string, TInputValue, TOutputKey extends string, TOutputValue>(
+  obj: Record<TInputKey, TInputValue>,
+  fn: (
+    key: TInputKey,
+    value: TInputValue,
+    index: number
+  ) => [outputKey: TOutputKey, outputValue: TOutputValue]
+): Record<TOutputKey, TOutputValue> {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value], i) => fn(key as TInputKey, value as TInputValue, i))
+  ) as Record<TOutputKey, TOutputValue>
+}

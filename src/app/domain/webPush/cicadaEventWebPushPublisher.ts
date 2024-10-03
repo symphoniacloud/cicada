@@ -12,6 +12,7 @@ import { isCicadaEventBridgeDetail } from '../../outboundInterfaces/eventBridgeB
 import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper'
 import { filterWorkflowNotifyEnabled } from '../user/userNotifyable'
 import { usableWorkflowName } from '../github/githubWorkflow'
+import { loadInstallationAccountStructureForUser } from '../github/githubAccountStructure'
 
 // TOEventually - these are going to create a lot of queries for subscription lookup for large organizations
 // May be better to have one table / index for this.
@@ -25,9 +26,17 @@ export async function handleNewWorkflowRunEvent(appState: AppState, eventDetail:
     return
   }
 
+  // TODO - for now assume same account structure for all. This is fine until multiple installed accounts
   const workflowRunEvent = eventDetail.data
   const userIds = await getRelatedMemberIdsForRunEvent(appState, workflowRunEvent)
-  const notifyEnabledUserIds = await filterWorkflowNotifyEnabled(appState, userIds, workflowRunEvent)
+  if (userIds.length === 0) return
+  const accountStructure = await loadInstallationAccountStructureForUser(appState, userIds[0])
+  const notifyEnabledUserIds = await filterWorkflowNotifyEnabled(
+    appState,
+    accountStructure,
+    userIds,
+    workflowRunEvent
+  )
 
   await publishToSubscriptionsForUsers(
     appState,

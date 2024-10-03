@@ -52,6 +52,7 @@ export async function savePublicAccountWithName(
   return successWith(result)
 }
 
+// TODO - update this for account structure
 export async function getPublicAccountsForUser(
   appState: AppState,
   userId: GithubUserId
@@ -62,6 +63,7 @@ export async function getPublicAccountsForUser(
   )
 }
 
+// TODO - update this for account structure
 export async function getPublicAccountsForInstallationAccountIds(
   appState: AppState,
   installationAccountIds: GithubAccountId[]

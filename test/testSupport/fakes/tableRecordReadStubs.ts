@@ -2,6 +2,7 @@ import { FakeAppState } from './fakeAppState'
 import {
   accountMemberships,
   testMikeRobertsUserMembershipOfOrg,
+  testOrgInstallation,
   testOrgTestRepoOne,
   testOrgTestRepoOnePush,
   testOrgTestRepoOneWorkflowRunThree,
@@ -41,6 +42,14 @@ const metaDataProvider: MetaDataProvider = (_tableName: string) => {
 
 function stubber(appState: FakeAppState) {
   return new FakeDynamoDBInterfaceStubber(appState.dynamoDB, metaDataProvider)
+}
+
+export function stubGetGithubInstallation(appState: FakeAppState) {
+  stubber(appState).stubGet.byPk(
+    fakeTableNames['github-installations'],
+    'ACCOUNT#GHAccount162483619',
+    testOrgInstallation
+  )
 }
 
 export function stubGetUserToken(appState: FakeAppState) {

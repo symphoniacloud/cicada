@@ -1,39 +1,27 @@
 import { expect, test } from 'vitest'
-import { USER_ACCOUNT_TYPE } from '../../../../../src/app/domain/types/GithubAccountType'
 import {
   toCalculatedAndDisplayableUserSettings,
   toDisplayableAccountSettings,
   toDisplayableRepoSettings,
   toDisplayableWorkflowSettings
 } from '../../../../../src/app/domain/user/displayableUserSettings'
-import { fromRawGithubAccountId } from '../../../../../src/app/domain/types/GithubAccountId'
 import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId'
-import { fromRawGithubRepoId } from '../../../../../src/app/domain/types/GithubRepoId'
-import { fromRawGithubWorkflowId } from '../../../../../src/app/domain/types/GithubWorkflowId'
+import {
+  buildAccountStructure,
+  buildInstallationAccountStructure,
+  buildRepoStructure,
+  buildWorkflowSummary
+} from '../../../../testSupport/builders/accountStructureBuilders'
 
 test('toDisplayableWorkflowSettings', () => {
+  const workflow = buildWorkflowSummary({ workflowName: 'workflow1' })
+
   const displayable = toDisplayableWorkflowSettings(
-    {
-      accountId: fromRawGithubAccountId(123),
-      repoId: fromRawGithubRepoId(456),
-      workflowId: fromRawGithubWorkflowId(789)
-    },
     {
       visible: true,
       notify: true
     },
-    [
-      {
-        accountId: fromRawGithubAccountId(123),
-        repoId: fromRawGithubRepoId(456),
-        workflowId: fromRawGithubWorkflowId(789),
-        workflowName: 'workflow1',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      }
-    ]
+    workflow
   )
 
   expect(displayable).toEqual({
@@ -44,8 +32,12 @@ test('toDisplayableWorkflowSettings', () => {
 })
 
 test('toDisplayableRepoSettings', () => {
+  const repo = buildRepoStructure({
+    repoName: 'repo1',
+    workflows: [buildWorkflowSummary({ workflowName: 'workflow1' })]
+  })
+
   const displayable = toDisplayableRepoSettings(
-    { accountId: fromRawGithubAccountId(123), repoId: fromRawGithubRepoId(456) },
     {
       visible: true,
       notify: true,
@@ -56,27 +48,7 @@ test('toDisplayableRepoSettings', () => {
         }
       }
     },
-    [
-      {
-        accountId: fromRawGithubAccountId(123),
-        repoId: fromRawGithubRepoId(456),
-        accountName: 'account1',
-        repoName: 'repo1',
-        accountType: USER_ACCOUNT_TYPE
-      }
-    ],
-    [
-      {
-        accountId: fromRawGithubAccountId(123),
-        repoId: fromRawGithubRepoId(456),
-        workflowId: fromRawGithubWorkflowId(789),
-        workflowName: 'workflow1',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: 'repo1',
-        path: ''
-      }
-    ]
+    repo
   )
 
   expect(displayable).toEqual({
@@ -94,8 +66,17 @@ test('toDisplayableRepoSettings', () => {
 })
 
 test('toDisplayableAccountSettings', () => {
+  const account = buildAccountStructure({
+    accountName: 'account1',
+    repos: [
+      buildRepoStructure({
+        repoName: 'repo1',
+        workflows: [buildWorkflowSummary({ workflowName: 'workflow1' })]
+      })
+    ]
+  })
+
   const displayable = toDisplayableAccountSettings(
-    fromRawGithubAccountId(123),
     {
       visible: true,
       notify: true,
@@ -112,27 +93,7 @@ test('toDisplayableAccountSettings', () => {
         }
       }
     },
-    [
-      {
-        accountId: fromRawGithubAccountId(123),
-        repoId: fromRawGithubRepoId(456),
-        accountName: 'account1',
-        repoName: 'repo1',
-        accountType: USER_ACCOUNT_TYPE
-      }
-    ],
-    [
-      {
-        accountId: fromRawGithubAccountId(123),
-        repoId: fromRawGithubRepoId(456),
-        workflowId: fromRawGithubWorkflowId(789),
-        workflowName: 'workflow1',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: 'account1',
-        repoName: 'repo1',
-        path: ''
-      }
-    ]
+    account
   )
 
   expect(displayable).toEqual({
@@ -157,6 +118,16 @@ test('toDisplayableAccountSettings', () => {
 })
 
 test('toCalculatedAndDisplayableUserSettings', () => {
+  const accountStructure = buildInstallationAccountStructure({
+    accountName: 'account1',
+    repos: [
+      buildRepoStructure({
+        repoName: 'repo1',
+        workflows: [buildWorkflowSummary({ workflowName: 'workflow1' })]
+      })
+    ]
+  })
+
   const displayable = toCalculatedAndDisplayableUserSettings(
     {
       userId: fromRawGithubUserId(111),
@@ -173,27 +144,7 @@ test('toCalculatedAndDisplayableUserSettings', () => {
         }
       }
     },
-    [
-      {
-        accountId: fromRawGithubAccountId(123),
-        repoId: fromRawGithubRepoId(456),
-        accountName: 'account1',
-        repoName: 'repo1',
-        accountType: USER_ACCOUNT_TYPE
-      }
-    ],
-    [
-      {
-        accountId: fromRawGithubAccountId(123),
-        repoId: fromRawGithubRepoId(456),
-        workflowId: fromRawGithubWorkflowId(789),
-        workflowName: 'workflow1',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: 'account1',
-        repoName: 'repo1',
-        path: ''
-      }
-    ]
+    accountStructure
   )
 
   expect(displayable).toEqual({

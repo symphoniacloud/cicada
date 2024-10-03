@@ -8,26 +8,27 @@ import {
   PersistedUserSettings,
   PersistedVisibleAndNotifyConfigurable
 } from '../types/UserSettings'
-import { GithubWorkflow } from '../types/GithubWorkflow'
-import { GithubRepoKey } from '../types/GithubKeys'
-import { findWorkflowsForRepo } from '../github/githubWorkflow'
-import { findUniqueAccountIds, toUniqueRepoIdsForAccount } from '../github/githubRepo'
-import { GithubAccountId } from '../types/GithubAccountId'
+import {
+  GithubAccountStructure,
+  GithubInstallationAccountStructure,
+  GithubRepoStructure
+} from '../types/GithubAccountStructure'
+import { objectMap } from '../../util/collections'
 
 const DEFAULT_ACCOUNT_NOTIFY = true
 
 export function calculateUserSettings(
   settings: PersistedUserSettings,
-  repoKeys: GithubRepoKey[],
-  workflows: GithubWorkflow[]
+  installationAccount: GithubInstallationAccountStructure
 ): CalculatedUserSettings {
   return {
     userId: settings.userId,
     github: {
       accounts: Object.fromEntries(
-        findUniqueAccountIds(repoKeys).map((id) => {
-          return [id, calculateAccountSettings(settings.github.accounts[id], id, repoKeys, workflows)]
-        })
+        [installationAccount, ...Object.values(installationAccount.publicAccounts)].map((account) => [
+          account.accountId,
+          calculateAccountSettings(settings.github.accounts[account.accountId], account)
+        ])
       )
     }
   }
@@ -35,54 +36,40 @@ export function calculateUserSettings(
 
 export function calculateAccountSettings(
   settings: PersistedGithubAccountSettings | undefined,
-  accountId: GithubAccountId,
-  repoKeys: GithubRepoKey[],
-  workflows: GithubWorkflow[]
+  account: GithubAccountStructure
 ): CalculatedGithubAccountSettings {
-  const visibleAndNotify = calculateVisibleAndNotifyConfigurable(settings, DEFAULT_ACCOUNT_NOTIFY)
-  const repos = visibleAndNotify.visible
-    ? Object.fromEntries(
-        toUniqueRepoIdsForAccount(repoKeys, accountId).map((repoId) => {
-          return [
-            repoId,
-            calculateRepoSettings(
-              settings?.repos[repoId],
-              { accountId: accountId, repoId },
-              workflows,
-              visibleAndNotify.notify
-            )
-          ]
-        })
-      )
-    : {}
-
-  return { ...visibleAndNotify, repos }
+  const calculatedSettings = calculateSettings(settings, DEFAULT_ACCOUNT_NOTIFY)
+  return {
+    ...calculatedSettings,
+    repos: calculatedSettings.visible
+      ? objectMap(account.repos, (repoId, repo) => [
+          repoId,
+          calculateRepoSettings(settings?.repos[repo.repoId], repo, calculatedSettings.notify)
+        ])
+      : {}
+  }
 }
 
 export function calculateRepoSettings(
-  repoSettings: PersistedGithubRepoSettings | undefined,
-  repoKey: GithubRepoKey,
-  allWorkflows: GithubWorkflow[],
+  settings: PersistedGithubRepoSettings | undefined,
+  repo: GithubRepoStructure,
   defaultNotify: boolean
 ): CalculatedGithubRepoSettings {
-  const visibleAndNotify = calculateVisibleAndNotifyConfigurable(repoSettings, defaultNotify)
-  const workflows = visibleAndNotify.visible
-    ? Object.fromEntries(
-        findWorkflowsForRepo(allWorkflows, repoKey).map((wf) => {
-          return [
-            wf.workflowId,
-            calculateWorkflowSettings(repoSettings?.workflows[wf.workflowId], visibleAndNotify.notify)
-          ]
-        })
-      )
-    : {}
-
-  return { ...visibleAndNotify, workflows }
+  const calculatedSettings = calculateSettings(settings, defaultNotify)
+  return {
+    ...calculatedSettings,
+    workflows: calculatedSettings.visible
+      ? objectMap(repo.workflows, (workflowId) => [
+          workflowId,
+          calculateWorkflowSettings(settings?.workflows[workflowId], calculatedSettings.notify)
+        ])
+      : {}
+  }
 }
 
-export const calculateWorkflowSettings = calculateVisibleAndNotifyConfigurable
+const calculateWorkflowSettings = calculateSettings
 
-export function calculateVisibleAndNotifyConfigurable(
+export function calculateSettings(
   settings: PersistedVisibleAndNotifyConfigurable | undefined,
   defaultNotify: boolean
 ): CalculatedVisibleAndNotifyConfigurable {
