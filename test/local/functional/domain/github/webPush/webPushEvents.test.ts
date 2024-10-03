@@ -8,19 +8,22 @@ import {
 } from '../../../../../examples/cicada/webPushDomainObjects'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../../../../src/multipleContexts/eventBridge'
 import {
+  stubGetGithubInstallation,
   stubQueryAccountMembershipsByAccount,
   stubQueryAccountMembershipsByUser,
   stubQueryLatestWorkflowRuns,
+  stubQueryRepositories,
   stubQueryWebPushSubscription
 } from '../../../../../testSupport/fakes/tableRecordReadStubs'
 import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/GithubUserId'
 
 test('newWorkflowRunEvent', async () => {
   const appState = new FakeAppState()
+  stubGetGithubInstallation(appState)
   stubQueryAccountMembershipsByAccount(appState)
-
   stubQueryAccountMembershipsByUser(appState)
   stubQueryAccountMembershipsByUser(appState, fromRawGithubUserId(49635))
+  stubQueryRepositories(appState)
   stubQueryLatestWorkflowRuns(appState)
   stubQueryWebPushSubscription(appState)
   stubQueryWebPushSubscription(appState, {

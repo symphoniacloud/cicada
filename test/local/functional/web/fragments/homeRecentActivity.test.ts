@@ -3,6 +3,7 @@ import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState'
 import { handleWebRequest } from '../../../../../src/app/lambdaFunctions/authenticatedWeb/lambda'
 import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport/fakes/awsStubs'
 import {
+  stubGetGithubInstallation,
   stubQueryLatestPushesPerRef,
   stubQueryLatestWorkflowRuns,
   stubQueryRepositories,
@@ -11,6 +12,7 @@ import {
 
 test('home-recent-activity', async () => {
   const appState = new FakeAppState()
+  stubGetGithubInstallation(appState)
   stubSetupUserRecords(appState)
   stubQueryLatestPushesPerRef(appState)
   stubQueryRepositories(appState)

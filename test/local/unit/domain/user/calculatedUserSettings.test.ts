@@ -2,19 +2,21 @@ import { expect, test } from 'vitest'
 import {
   calculateAccountSettings,
   calculateRepoSettings,
-  calculateUserSettings,
-  calculateVisibleAndNotifyConfigurable
+  calculateSettings,
+  calculateUserSettings
 } from '../../../../../src/app/domain/user/calculatedUserSettings'
 import {
   CalculatedVisibleAndNotifyConfigurable,
   PersistedGithubAccountSettings,
   PersistedVisibleAndNotifyConfigurable
 } from '../../../../../src/app/domain/types/UserSettings'
-import { USER_ACCOUNT_TYPE } from '../../../../../src/app/domain/types/GithubAccountType'
-import { fromRawGithubAccountId } from '../../../../../src/app/domain/types/GithubAccountId'
 import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId'
-import { fromRawGithubRepoId } from '../../../../../src/app/domain/types/GithubRepoId'
-import { fromRawGithubWorkflowId } from '../../../../../src/app/domain/types/GithubWorkflowId'
+import {
+  buildAccountStructure,
+  buildInstallationAccountStructure,
+  buildRepoStructure,
+  buildWorkflowSummary
+} from '../../../../testSupport/builders/accountStructureBuilders'
 
 test('calculateVisibleAndNotifyConfigurable / calculateWorkflowSettings', () => {
   const permutations: [
@@ -43,28 +45,14 @@ test('calculateVisibleAndNotifyConfigurable / calculateWorkflowSettings', () => 
   ]
 
   permutations.forEach(([settings, defaultNotify, expected]) => {
-    expect(calculateVisibleAndNotifyConfigurable(settings, defaultNotify)).toEqual(expected)
+    expect(calculateSettings(settings, defaultNotify)).toEqual(expected)
   })
 })
 
 test('repo settings when no workflow settings', () => {
-  const calculated = calculateRepoSettings(
-    { workflows: {} },
-    { accountId: fromRawGithubAccountId(123), repoId: fromRawGithubRepoId(456) },
-    [
-      {
-        accountId: fromRawGithubAccountId(123),
-        repoId: fromRawGithubRepoId(456),
-        workflowId: fromRawGithubWorkflowId(789),
-        workflowName: 'workflow1',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      }
-    ],
-    true
-  )
+  const repoStructure = buildRepoStructure()
+
+  const calculated = calculateRepoSettings({ workflows: {} }, repoStructure, true)
 
   expect(calculated).toEqual({
     visible: true,
@@ -79,21 +67,11 @@ test('repo settings when no workflow settings', () => {
 })
 
 test('repo settings when workflow settings', () => {
+  const repoStructure = buildRepoStructure()
+
   const calculated = calculateRepoSettings(
     { workflows: { GHWorkflow789: { notify: false } } },
-    { accountId: fromRawGithubAccountId(123), repoId: fromRawGithubRepoId(456) },
-    [
-      {
-        accountId: fromRawGithubAccountId(123),
-        repoId: fromRawGithubRepoId(456),
-        workflowId: fromRawGithubWorkflowId(789),
-        workflowName: 'workflow1',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      }
-    ],
+    repoStructure,
     true
   )
 
@@ -110,21 +88,11 @@ test('repo settings when workflow settings', () => {
 })
 
 test('repo settings when visible false', () => {
+  const repoStructure = buildRepoStructure()
+
   const calculated = calculateRepoSettings(
     { workflows: { GHWorkflow789: { notify: false } }, visible: false },
-    { accountId: fromRawGithubAccountId(123), repoId: fromRawGithubRepoId(456) },
-    [
-      {
-        accountId: fromRawGithubAccountId(123),
-        repoId: fromRawGithubRepoId(456),
-        workflowId: fromRawGithubWorkflowId(789),
-        workflowName: 'workflow1',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      }
-    ],
+    repoStructure,
     true
   )
 
@@ -136,6 +104,10 @@ test('repo settings when visible false', () => {
 })
 
 test('repo settings when visible true notify false', () => {
+  const repoStructure = buildRepoStructure({
+    workflows: [buildWorkflowSummary(), buildWorkflowSummary({ simpleWorkflowId: 790 })]
+  })
+
   const calculated = calculateRepoSettings(
     {
       workflows: {
@@ -145,29 +117,7 @@ test('repo settings when visible true notify false', () => {
       visible: true,
       notify: false
     },
-    { accountId: fromRawGithubAccountId(123), repoId: fromRawGithubRepoId(456) },
-    [
-      {
-        accountId: fromRawGithubAccountId(123),
-        repoId: fromRawGithubRepoId(456),
-        workflowId: fromRawGithubWorkflowId(789),
-        workflowName: 'workflow1',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      },
-      {
-        accountId: fromRawGithubAccountId(123),
-        repoId: fromRawGithubRepoId(456),
-        workflowId: fromRawGithubWorkflowId(790),
-        workflowName: 'workflow2',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      }
-    ],
+    repoStructure,
     true
   )
 
@@ -182,48 +132,20 @@ test('repo settings when visible true notify false', () => {
 })
 
 test('account settings when none persisted', () => {
-  const calculated = calculateAccountSettings(
-    undefined,
-    fromRawGithubAccountId(111),
-    [
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(123)
-      },
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(456)
-      }
-    ],
-    [
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(123),
-        workflowId: fromRawGithubWorkflowId(789),
-        workflowName: 'workflow1',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      },
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(456),
-        workflowId: fromRawGithubWorkflowId(790),
-        workflowName: 'workflow2',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      }
+  const accountStructure = buildAccountStructure({
+    repos: [
+      buildRepoStructure(),
+      buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflowSummary({ simpleWorkflowId: 799 })] })
     ]
-  )
+  })
+
+  const calculated = calculateAccountSettings(undefined, accountStructure)
 
   expect(calculated).toEqual({
     visible: true,
     notify: true,
     repos: {
-      GHRepo123: {
+      GHRepo456: {
         visible: true,
         notify: true,
         workflows: {
@@ -233,11 +155,11 @@ test('account settings when none persisted', () => {
           }
         }
       },
-      GHRepo456: {
+      GHRepo499: {
         visible: true,
         notify: true,
         workflows: {
-          GHWorkflow790: {
+          GHWorkflow799: {
             notify: true,
             visible: true
           }
@@ -253,7 +175,7 @@ test('account settings ', () => {
       GHRepo123: {
         workflows: {}
       },
-      GHRepo456: {
+      GHRepo499: {
         visible: false,
         notify: false,
         workflows: {}
@@ -261,48 +183,20 @@ test('account settings ', () => {
     }
   }
 
-  const calculated = calculateAccountSettings(
-    persistedAccountSettings,
-    fromRawGithubAccountId(111),
-    [
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(123)
-      },
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(456)
-      }
-    ],
-    [
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(123),
-        workflowId: fromRawGithubWorkflowId(789),
-        workflowName: 'workflow1',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      },
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(456),
-        workflowId: fromRawGithubWorkflowId(790),
-        workflowName: 'workflow2',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      }
+  const accountStructure = buildAccountStructure({
+    repos: [
+      buildRepoStructure(),
+      buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflowSummary({ simpleWorkflowId: 799 })] })
     ]
-  )
+  })
+
+  const calculated = calculateAccountSettings(persistedAccountSettings, accountStructure)
 
   expect(calculated).toEqual({
     visible: true,
     notify: true,
     repos: {
-      GHRepo123: {
+      GHRepo456: {
         visible: true,
         notify: true,
         workflows: {
@@ -312,7 +206,7 @@ test('account settings ', () => {
           }
         }
       },
-      GHRepo456: {
+      GHRepo499: {
         visible: false,
         notify: false,
         workflows: {}
@@ -322,6 +216,13 @@ test('account settings ', () => {
 })
 
 test('user settings when empty persisted', () => {
+  const accountStructure = buildInstallationAccountStructure({
+    repos: [
+      buildRepoStructure(),
+      buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflowSummary({ simpleWorkflowId: 799 })] })
+    ]
+  })
+
   const calculated = calculateUserSettings(
     {
       userId: fromRawGithubUserId(222),
@@ -329,49 +230,18 @@ test('user settings when empty persisted', () => {
         accounts: {}
       }
     },
-    [
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(123)
-      },
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(456)
-      }
-    ],
-    [
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(123),
-        workflowId: fromRawGithubWorkflowId(789),
-        workflowName: 'workflow1',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      },
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(456),
-        workflowId: fromRawGithubWorkflowId(790),
-        workflowName: 'workflow2',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      }
-    ]
+    accountStructure
   )
 
   expect(calculated).toEqual({
     userId: fromRawGithubUserId(222),
     github: {
       accounts: {
-        GHAccount111: {
+        GHAccount123: {
           visible: true,
           notify: true,
           repos: {
-            GHRepo123: {
+            GHRepo456: {
               visible: true,
               notify: true,
               workflows: {
@@ -381,11 +251,11 @@ test('user settings when empty persisted', () => {
                 }
               }
             },
-            GHRepo456: {
+            GHRepo499: {
               visible: true,
               notify: true,
               workflows: {
-                GHWorkflow790: {
+                GHWorkflow799: {
                   notify: true,
                   visible: true
                 }
@@ -399,14 +269,21 @@ test('user settings when empty persisted', () => {
 })
 
 test('user settings when some persisted', () => {
+  const accountStructure = buildInstallationAccountStructure({
+    repos: [
+      buildRepoStructure(),
+      buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflowSummary({ simpleWorkflowId: 799 })] })
+    ]
+  })
+
   const calculated = calculateUserSettings(
     {
       userId: fromRawGithubUserId(222),
       github: {
         accounts: {
-          GHAccount111: {
+          GHAccount123: {
             repos: {
-              GHRepo456: {
+              GHRepo499: {
                 visible: false,
                 notify: false,
                 workflows: {}
@@ -416,49 +293,18 @@ test('user settings when some persisted', () => {
         }
       }
     },
-    [
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(123)
-      },
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(456)
-      }
-    ],
-    [
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(123),
-        workflowId: fromRawGithubWorkflowId(789),
-        workflowName: 'workflow1',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      },
-      {
-        accountId: fromRawGithubAccountId(111),
-        repoId: fromRawGithubRepoId(456),
-        workflowId: fromRawGithubWorkflowId(790),
-        workflowName: 'workflow2',
-        accountType: USER_ACCOUNT_TYPE,
-        accountName: '',
-        repoName: '',
-        path: ''
-      }
-    ]
+    accountStructure
   )
 
   expect(calculated).toEqual({
     userId: fromRawGithubUserId(222),
     github: {
       accounts: {
-        GHAccount111: {
+        GHAccount123: {
           visible: true,
           notify: true,
           repos: {
-            GHRepo123: {
+            GHRepo456: {
               visible: true,
               notify: true,
               workflows: {
@@ -468,7 +314,7 @@ test('user settings when some persisted', () => {
                 }
               }
             },
-            GHRepo456: {
+            GHRepo499: {
               visible: false,
               notify: false,
               workflows: {}

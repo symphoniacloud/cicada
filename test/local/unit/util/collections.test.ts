@@ -3,6 +3,7 @@ import {
   arrayDifferenceDeep,
   excludeKeys,
   mergeOrderedLists,
+  objectMap,
   removeNullAndUndefined,
   selectKeys,
   sortBy
@@ -80,4 +81,9 @@ test('removeNullAndUndefined', () => {
   expect(removeNullAndUndefined([null, undefined])).toEqual([])
   expect(removeNullAndUndefined([1, null, undefined, 1])).toEqual([1, 1])
   expect(removeNullAndUndefined([null, 1, undefined, 1])).toEqual([1, 1])
+})
+
+test('objectMap', () => {
+  const mapped = objectMap({ a: 1, b: 2, c: 3 }, (key: string, value: number) => [`foo${key}`, [value + 1]])
+  expect(mapped).toEqual({ fooa: [2], foob: [3], fooc: [4] })
 })

@@ -1,7 +1,6 @@
 import { AppState } from '../../environment/AppState'
 import { getAllAccountIdsForUser } from '../github/githubAccount'
 import { latestWorkflowRunEventsPerWorkflowForAccounts } from '../github/githubLatestWorkflowRunEvents'
-import { GithubWorkflow } from '../types/GithubWorkflow'
 import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
 import { getUserSettings } from './persistedUserSettings'
 import { calculateUserSettings } from './calculatedUserSettings'
@@ -13,8 +12,10 @@ import { recentActiveBranchesForAccounts } from '../github/githubLatestPushesPer
 import { GithubPush } from '../types/GithubPush'
 import { getRunEventsForWorkflow } from '../github/githubWorkflowRunEvent'
 import { getRecentActivityForRepo, GithubActivity } from '../github/githubActivity'
-import { getRepositoriesForAccount } from '../github/githubRepo'
-import { GithubRepo } from '../types/GithubRepo'
+import {
+  allAccountIDsFromStructure,
+  loadInstallationAccountStructureForUser
+} from '../github/githubAccountStructure'
 import {
   latestWorkflowRunEventsPerWorkflowForAccount,
   latestWorkflowRunEventsPerWorkflowForRepo
@@ -37,8 +38,8 @@ export async function getLatestWorkflowRunEventsForUserWithUserSettings(
   userId: GithubUserId
 ): Promise<VisibleWorkflowRunEvents> {
   const allEvents = await getAllLatestRunEventsForUser(appState, userId)
-  const allRepoKeys = await getReposForUser(appState, userId)
-  const userSettings = calculateUserSettings(await getUserSettings(appState, userId), allRepoKeys, allEvents)
+  const installationStructure = await loadInstallationAccountStructureForUser(appState, userId)
+  const userSettings = calculateUserSettings(await getUserSettings(appState, userId), installationStructure)
   return toVisibleEvents(allEvents, userSettings)
 }
 
@@ -79,15 +80,12 @@ export async function getRecentActiveBranchesForUserWithUserSettings(
   appState: AppState,
   userId: GithubUserId
 ) {
+  const installationStructure = await loadInstallationAccountStructureForUser(appState, userId)
   const allActivity = await recentActiveBranchesForAccounts(
     appState,
-    await getAllAccountIdsForUser(appState, userId)
+    allAccountIDsFromStructure(installationStructure)
   )
-  const userSettings = calculateUserSettings(
-    await getUserSettings(appState, userId),
-    await getReposForUser(appState, userId),
-    await getWorkflowsForUser(appState, userId)
-  )
+  const userSettings = calculateUserSettings(await getUserSettings(appState, userId), installationStructure)
   return toVisiblePushes(allActivity, userSettings)
 }
 
@@ -125,32 +123,13 @@ function toVisiblePushes(allEvents: GithubPush[], userSettings?: CalculatedUserS
   }
 }
 
-export async function getReposForUser(appState: AppState, userId: GithubUserId): Promise<GithubRepo[]> {
-  const allAccountIds = await getAllAccountIdsForUser(appState, userId)
-  return (
-    await Promise.all(
-      allAccountIds.map(async (accountId) => {
-        return getRepositoriesForAccount(appState, accountId)
-      })
-    )
-  ).flat()
-}
-
-export async function getWorkflowsForUser(
-  appState: AppState,
-  userId: GithubUserId
-): Promise<GithubWorkflow[]> {
-  // Workflow run events extend workflow, so we can just return the latest run events for now
-  // TODOEventually have a more efficient way of doing this
-  return getAllLatestRunEventsForUser(appState, userId)
-}
-
 async function getAllLatestRunEventsForUser(
   appState: AppState,
   userId: GithubUserId
 ): Promise<GithubWorkflowRunEvent[]> {
   return await latestWorkflowRunEventsPerWorkflowForAccounts(
     appState,
+    // TODO - use structure
     await getAllAccountIdsForUser(appState, userId)
   )
 }

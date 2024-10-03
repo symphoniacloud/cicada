@@ -8,10 +8,23 @@ import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallati
 import { GithubAccountKey } from '../types/GithubKeys'
 import { GithubPublicAccount } from '../types/GithubPublicAccount'
 
-export function isSameAccount(a1: GithubAccountKey, a2: GithubAccountKey) {
+export function accountKeysEqual(a1: GithubAccountKey, a2: GithubAccountKey) {
   return a1.accountId === a2.accountId
 }
 
+export function toAccountSummary<T extends GithubAccountSummary>({
+  accountId,
+  accountName,
+  accountType
+}: T): GithubAccountSummary {
+  return {
+    accountId: accountId,
+    accountName: accountName,
+    accountType: accountType
+  }
+}
+
+// TODO - update this for account structure
 export async function getAllAccountIdsForUser(
   appState: AppState,
   userId: GithubUserId
@@ -20,6 +33,7 @@ export async function getAllAccountIdsForUser(
   return [...memberAccountIds, ...publicAccounts.map(({ accountId }) => accountId)]
 }
 
+// TODO - update this for account structure
 export async function getAllAccountsForUser(
   appState: AppState,
   userId: GithubUserId
@@ -37,6 +51,7 @@ export async function getAllAccountsForUser(
   return { memberAccounts, publicAccounts }
 }
 
+// TODO - update this for account structure
 export async function getAccountForUser(
   appState: AppState,
   userId: GithubUserId,
@@ -46,6 +61,7 @@ export async function getAccountForUser(
   return [...memberAccounts, ...publicAccounts].find((account) => account.accountId === accountId)
 }
 
+// TODO - update this for account structure
 async function memberAccountIdsAndPublicAccounts(appState: AppState, userId: GithubUserId) {
   const memberAccountIds = await getIdsOfAccountsWhichUserIsMemberOf(appState, userId)
   const publicAccounts = await getPublicAccountsForInstallationAccountIds(appState, memberAccountIds)

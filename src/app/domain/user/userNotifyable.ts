@@ -1,18 +1,20 @@
 import { AppState } from '../../environment/AppState'
 import { GithubUserId } from '../types/GithubUserId'
-import { calculateUserSettings } from './calculatedUserSettings'
 import { getUserSettings } from './persistedUserSettings'
 import { logger } from '../../util/logging'
 import { GithubWorkflow } from '../types/GithubWorkflow'
+import { calculateUserSettings } from './calculatedUserSettings'
+import { GithubInstallationAccountStructure } from '../types/GithubAccountStructure'
 
 export async function filterWorkflowNotifyEnabled(
   appState: AppState,
+  installationStructure: GithubInstallationAccountStructure,
   userIds: GithubUserId[],
   workflow: GithubWorkflow
 ): Promise<GithubUserId[]> {
   const enabledUserIds: GithubUserId[] = []
   for (const userId of userIds) {
-    if (await getWorkflowNotifyEnabledForUser(appState, userId, workflow)) {
+    if (await getWorkflowNotifyEnabledForUser(appState, userId, workflow, installationStructure)) {
       enabledUserIds.push(userId)
     }
   }
@@ -22,10 +24,10 @@ export async function filterWorkflowNotifyEnabled(
 async function getWorkflowNotifyEnabledForUser(
   appState: AppState,
   userId: GithubUserId,
-  workflow: GithubWorkflow
+  workflow: GithubWorkflow,
+  installationStructure: GithubInstallationAccountStructure
 ) {
-  // We can use the workflow event as the list of all repos and workflows for the sake of calculating notifyibilty
-  const userSettings = calculateUserSettings(await getUserSettings(appState, userId), [workflow], [workflow])
+  const userSettings = calculateUserSettings(await getUserSettings(appState, userId), installationStructure)
   const yesNotify =
     userSettings.github.accounts[workflow.accountId]?.repos[workflow.repoId]?.workflows[workflow.workflowId]
       .notify
