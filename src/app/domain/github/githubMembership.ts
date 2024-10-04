@@ -25,13 +25,13 @@ export async function setMemberships(
   await deleteMemberships(appState.entityStore, arrayDifferenceDeep(previousMemberships, memberships))
 }
 
-export async function getIdsOfAccountsWhichUserIsMemberOf(
+export async function getAccountIdsForUser(
   appState: AppState,
   userId: GithubUserId
 ): Promise<GithubAccountId[]> {
   return (await getAllMembershipsForUserId(appState.entityStore, userId)).map(({ accountId }) => accountId)
 }
 
-export async function getMemberUserIdsForAccount(appState: AppState, accountId: GithubAccountId) {
+export async function getUserIdsForAccount(appState: AppState, accountId: GithubAccountId) {
   return (await getAllMembershipsForAccount(appState.entityStore, accountId)).map(({ userId }) => userId)
 }
