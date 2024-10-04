@@ -5,9 +5,9 @@ import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { jsonOkResult } from '../../inboundInterfaces/httpResponses'
 import { userIdFromEvent, usernameFromEvent } from '../../domain/webAuth/webAuth'
 import {
-  handleWebPushSubscribe,
-  handleWebPushTest,
-  handleWebPushUnsubscribe
+  webPushSubscribeRoute,
+  webPushTestRoute,
+  webPushUnsubscribeRoute
 } from '../../domain/webPush/webPushSubscriptionsApi'
 import { createRouter } from '../../internalHttpRouter/internalHttpRouter'
 import {
@@ -20,29 +20,16 @@ import {
 } from '../../inboundInterfaces/lambdaTypes'
 import { logger } from '../../util/logging'
 import { isFailure } from '../../util/structuredResult'
+import { Route } from '../../internalHttpRouter/internalHttpRoute'
+import { authenticateApiPath } from '../../web/routingCommon'
 
-const router = createRouter([
-  {
-    path: '/apia/webPushSubscribe',
-    method: 'POST',
-    target: handleWebPushSubscribe
-  },
-  {
-    path: '/apia/webPushUnsubscribe',
-    method: 'POST',
-    target: handleWebPushUnsubscribe
-  },
-  {
-    path: '/apia/ping',
-    method: 'POST',
-    target: handleWebPushTest
-  },
-  {
-    path: '/apia/hello',
-    method: 'GET',
-    target: handleHello
-  }
-])
+export const apiHelloRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
+  path: authenticateApiPath('hello'),
+  method: 'GET',
+  target: handleHello
+}
+
+const router = createRouter([webPushSubscribeRoute, webPushUnsubscribeRoute, webPushTestRoute, apiHelloRoute])
 
 let appState: AppState
 
