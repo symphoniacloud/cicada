@@ -6,6 +6,7 @@ import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
 import { getInstalledAccountIdForUser } from './githubMembership'
 import { GithubUserId } from '../types/GithubUserId'
 import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity'
+import { putPublicAccount } from '../entityStore/entities/GithubPublicAccountEntity'
 
 export async function savePublicAccountWithName(
   appState: AppState,
@@ -24,6 +25,7 @@ export async function savePublicAccountWithName(
     return githubUserResult
   }
   const publicAccount = publicAccountFromRawGithubUser(githubUserResult.result, installationAccountId)
+  await putPublicAccount(appState.entityStore, publicAccount)
 
   // Trigger crawling public account
   await sendToEventBridge(appState, EVENTBRIDGE_DETAIL_TYPES.PUBLIC_ACCOUNT_UPDATED, {

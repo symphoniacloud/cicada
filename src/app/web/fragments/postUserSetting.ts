@@ -18,7 +18,7 @@ import {
 } from '../../domain/user/displayableUserSettings'
 import { throwFunction } from '../../../multipleContexts/errors'
 import {
-  getUserSettings,
+  getPersistedUserSettingsOrDefaults,
   updateAndSaveAccountSetting,
   updateAndSaveRepoSetting,
   updateAndSaveWorkflowSetting
@@ -115,7 +115,7 @@ async function processUpdateRepoSetting(
   logger.debug('processUpdateRepoSetting')
   await updateAndSaveRepoSetting(appState, userId, repoKey, setting, enabled)
 
-  const newPersistedUserSettings = await getUserSettings(appState, userId)
+  const newPersistedUserSettings = await getPersistedUserSettingsOrDefaults(appState, userId)
   const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, installationAccount)
   const newCalculatedRepoSettings =
     newCalculatedUserSettings.github.accounts[repoKey.accountId]?.repos[repoKey.repoId] ??
@@ -142,7 +142,7 @@ async function processUpdateWorkflowSetting(
   logger.debug('processUpdateWorkflowSetting')
   await updateAndSaveWorkflowSetting(appState, userId, workflowKey, setting, enabled)
 
-  const newPersistedUserSettings = await getUserSettings(appState, userId)
+  const newPersistedUserSettings = await getPersistedUserSettingsOrDefaults(appState, userId)
 
   const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, installationAccount)
   const newCalculatedWorkflowSettings =

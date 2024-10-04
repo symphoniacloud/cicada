@@ -1,8 +1,5 @@
 import { AppState } from '../../environment/AppState'
-import {
-  getGithubUserTokenOrUndefined,
-  putGithubUserToken
-} from '../entityStore/entities/GithubUserTokenEntity'
+import { getGithubUserToken, putGithubUserToken } from '../entityStore/entities/GithubUserTokenEntity'
 import { secondsTimestampInFutureHours, timestampSecondsIsInPast } from '../../util/dateAndTime'
 import { GithubUserToken } from '../types/GithubUserToken'
 import { failedWithResult, Result, successWith } from '../../util/structuredResult'
@@ -30,7 +27,7 @@ export async function getTokenRecord(
   appState: AppState,
   token: string
 ): Promise<Result<GithubUserToken, InvalidTokenStatus>> {
-  const tokenRecord = await getGithubUserTokenOrUndefined(appState.entityStore, token)
+  const tokenRecord = await getGithubUserToken(appState.entityStore, token)
   if (!tokenRecord) return failedWithResult('No token', 'NO_TOKEN')
 
   // If token record was saved more than EXPIRE_CACHED_GITHUB_TOKENS_HOURS ago then check user token with GitHub again

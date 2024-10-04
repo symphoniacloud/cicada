@@ -5,7 +5,7 @@ import { toCalculatedAndDisplayableUserSettings } from '../../domain/user/displa
 import { createGetUserSettingsResponse } from './views/getUserSettingsView'
 import { fragmentPath } from '../routingCommon'
 import { loadInstallationAccountStructureForUser } from '../../domain/github/githubAccountStructure'
-import { getUserSettings } from '../../domain/user/persistedUserSettings'
+import { getPersistedUserSettingsOrDefaults } from '../../domain/user/persistedUserSettings'
 
 export const getUserSettingsFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('userSettings'),
@@ -16,7 +16,7 @@ export const getUserSettingsFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
 export async function getUserSettingsFragment(appState: AppState, { userId }: CicadaAuthorizedAPIEvent) {
   return createGetUserSettingsResponse(
     toCalculatedAndDisplayableUserSettings(
-      await getUserSettings(appState, userId),
+      await getPersistedUserSettingsOrDefaults(appState, userId),
       await loadInstallationAccountStructureForUser(appState, userId)
     )
   )

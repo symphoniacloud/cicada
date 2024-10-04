@@ -19,7 +19,7 @@ export async function putGithubUserToken(
   return await store(entityStore).put(userToken, { ttlInFutureDays })
 }
 
-export async function getGithubUserTokenOrUndefined(entityStore: AllEntitiesStore, token: string) {
+export async function getGithubUserToken(entityStore: AllEntitiesStore, token: string) {
   return await store(entityStore).getOrUndefined({ token })
 }
 

@@ -7,34 +7,23 @@ import {
   UserSetting
 } from '../types/UserSettings'
 import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys'
-import { UserSettingsEntity } from '../entityStore/entities/UserSettingsEntity'
+import { getUserSettings, saveUserSettings } from '../entityStore/entities/UserSettingsEntity'
 import { getOrSetNewAndReturn } from '../../util/collections'
 import { GithubAccountId } from '../types/GithubAccountId'
 import { GithubUserId } from '../types/GithubUserId'
 
-function userSettingsEntity(appState: AppState) {
-  return appState.entityStore.for(UserSettingsEntity)
-}
-
-export async function saveUserSettings(
-  appState: AppState,
-  userSettings: PersistedUserSettings
-): Promise<PersistedUserSettings> {
-  return await userSettingsEntity(appState).put(userSettings)
-}
-
-export async function getUserSettings(
+export async function getPersistedUserSettingsOrDefaults(
   appState: AppState,
   userId: GithubUserId
 ): Promise<PersistedUserSettings> {
-  return (await userSettingsEntity(appState).getOrUndefined({ userId })) ?? initialUserSettings(userId)
+  return (await getUserSettings(appState.entityStore, userId)) ?? initialUserSettings(userId)
 }
 
 export async function resetPersistedUserSettings(
   appState: AppState,
   userId: GithubUserId
 ): Promise<PersistedUserSettings> {
-  return await saveUserSettings(appState, initialUserSettings(userId))
+  return await saveUserSettings(appState.entityStore, initialUserSettings(userId))
 }
 
 function initialUserSettings(userId: GithubUserId): PersistedUserSettings {
@@ -105,7 +94,10 @@ export async function updateAndSaveSettings(
   userId: GithubUserId,
   updateSettings: (settings: PersistedUserSettings) => PersistedUserSettings
 ) {
-  return await saveUserSettings(appState, updateSettings(await getUserSettings(appState, userId)))
+  return await saveUserSettings(
+    appState.entityStore,
+    updateSettings(await getPersistedUserSettingsOrDefaults(appState, userId))
+  )
 }
 
 function getOrCreateAndReturnAccountSettings(

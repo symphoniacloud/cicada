@@ -1,9 +1,9 @@
 import { AppState } from '../../environment/AppState'
 import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper'
-import { getAllSubscriptionsForUser } from './webPushSubscriptions'
 import { WebPushSubscription } from '../types/WebPushSubscription'
 
 import { GithubUserId } from '../types/GithubUserId'
+import { getAllWebPushSubscriptionsForUser } from '../entityStore/entities/WebPushSubscriptionEntity'
 
 // TOEventually - consider parallel processing
 export async function publishToSubscriptionsForUsers(
@@ -23,7 +23,7 @@ export async function publishToSubscriptionsForUser(
   userId: GithubUserId,
   notification: CicadaWebNotification
 ) {
-  for (const subscription of await getAllSubscriptionsForUser(appState, userId)) {
+  for (const subscription of await getAllWebPushSubscriptionsForUser(appState.entityStore, userId)) {
     await publishToSubscription(appState, subscription, notification)
   }
 }
