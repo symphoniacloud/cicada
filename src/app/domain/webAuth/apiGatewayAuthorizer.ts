@@ -1,7 +1,8 @@
 import { AppState } from '../../environment/AppState'
 import {
   APIGatewayAuthorizerWithContextResult,
-  APIGatewayRequestAuthorizerEvent
+  APIGatewayRequestAuthorizerEvent,
+  StatementEffect
 } from 'aws-lambda/trigger/api-gateway-authorizer'
 import { logger } from '../../util/logging'
 import { WebAuthorizerContext } from '../../inboundInterfaces/lambdaTypes'
@@ -13,27 +14,31 @@ export async function attemptToAuthorize(
 ): Promise<APIGatewayAuthorizerWithContextResult<WebAuthorizerContext>> {
   const authResult = await authorizeUserRequest(appState, event)
 
-  if (!authResult) {
-    return generateApiGatewayAuthorizerResult(event)
-  }
+  return authResult
+    ? generateApiGatewayAllowAuthorizerResult(event, authResult)
+    : generateApiGatewayDenyAuthorizerResult(event)
+}
 
-  return generateApiGatewayAuthorizerResult(event, {
-    username: authResult.username,
-    // See comment on WebAuthorizerContext for why we convert this to string
-    userId: `${authResult.userId}`
-  })
+export function generateApiGatewayAllowAuthorizerResult(
+  event: APIGatewayRequestAuthorizerEvent,
+  outputContext: WebAuthorizerContext
+): APIGatewayAuthorizerWithContextResult<WebAuthorizerContext> {
+  logger.debug(`Returning Allow response for found user ${outputContext.username}`)
+  return generateApiGatewayAuthorizerResult(event, 'Allow', outputContext)
+}
+
+export function generateApiGatewayDenyAuthorizerResult(
+  event: APIGatewayRequestAuthorizerEvent
+): APIGatewayAuthorizerWithContextResult<WebAuthorizerContext> {
+  logger.debug('Returning Deny response')
+  return generateApiGatewayAuthorizerResult(event, 'Deny', {})
 }
 
 export function generateApiGatewayAuthorizerResult(
   event: APIGatewayRequestAuthorizerEvent,
-  outputContext?: WebAuthorizerContext
+  effect: StatementEffect,
+  outputContext: WebAuthorizerContext
 ): APIGatewayAuthorizerWithContextResult<WebAuthorizerContext> {
-  if (outputContext) {
-    logger.debug(`Returning Allow response for found user ${outputContext.username}`)
-  } else {
-    logger.debug('Returning Deny response')
-  }
-
   return {
     principalId: 'restAuthorizer',
     policyDocument: {
@@ -41,7 +46,7 @@ export function generateApiGatewayAuthorizerResult(
       Statement: [
         {
           Action: 'execute-api:Invoke',
-          Effect: outputContext ? 'Allow' : 'Deny',
+          Effect: effect,
           Resource: generateResource(event.methodArn)
         }
       ]

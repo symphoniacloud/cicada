@@ -10,7 +10,7 @@ import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { logger } from '../../util/logging'
 import {
   attemptToAuthorize,
-  generateApiGatewayAuthorizerResult
+  generateApiGatewayDenyAuthorizerResult
 } from '../../domain/webAuth/apiGatewayAuthorizer'
 import { WebAuthorizerContext } from '../../inboundInterfaces/lambdaTypes'
 import { isFailure } from '../../util/structuredResult'
@@ -25,7 +25,7 @@ export const baseHandler: APIGatewayRequestAuthorizerWithContextHandler<WebAutho
 
     if (isFailure(startup)) {
       logger.info('Github App not ready, not authorizing user')
-      return generateApiGatewayAuthorizerResult(event)
+      return generateApiGatewayDenyAuthorizerResult(event)
     }
 
     appState = startup.result
@@ -35,7 +35,7 @@ export const baseHandler: APIGatewayRequestAuthorizerWithContextHandler<WebAutho
     return await attemptToAuthorize(appState, event)
   } catch (e) {
     logger.error('Error attempting to authorize', e as Error)
-    return generateApiGatewayAuthorizerResult(event)
+    return generateApiGatewayDenyAuthorizerResult(event)
   }
 }
 
