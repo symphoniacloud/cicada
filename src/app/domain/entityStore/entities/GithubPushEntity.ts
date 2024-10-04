@@ -3,7 +3,9 @@ import { GithubPush, isGithubPush } from '../../types/GithubPush'
 import { GITHUB_PUSH } from '../entityTypes'
 import { latestCommitInPush } from '../../github/githubPush'
 import { CicadaEntity } from '../entityStoreEntitySupport'
+import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkflowRunEntity'
 
+// Exported since also used by GithubWorkflowRunEntity
 export const GithubPushEntity: CicadaEntity<
   GithubPush,
   Pick<GithubPush, 'accountId'>,
@@ -19,13 +21,14 @@ export const GithubPushEntity: CicadaEntity<
     return `REPO#${source.repoId}#REF#${source.ref}#PUSH#COMMIT#${latestCommitInPush(source).sha}`
   },
   gsis: {
-    // Used when getting all activity per repo, so shared with GithubWorkflowRunEventEntity
+    // Shared format with GithubWorkflowRunEventEntity and GithubPushEntity
+    // Allows querying multiple entity types in one query operation
     gsi1: {
       pk(source: Pick<GithubPush, 'accountId'>) {
-        return `ACCOUNT#${source.accountId}`
+        return githubActivityEntityPk(source)
       },
       sk(source: Pick<GithubPush, 'repoId' | 'dateTime'>) {
-        return `REPO#${source.repoId}#DATETIME#${source.dateTime}`
+        return githubActivityEntityGSISk(source.repoId, source.dateTime)
       }
     }
   }

@@ -1,21 +1,13 @@
 import { AppState } from '../../environment/AppState'
 import { fromRawGithubWorkflowRunEvent, GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
 import { logger } from '../../util/logging'
-import {
-  GithubWorkflowRunEventEntity,
-  githubWorkflowRunEventSkPrefix
-} from '../entityStore/entities/GithubWorkflowRunEventEntity'
+import { putWorkflowRunEventIfKeyDoesntExist } from '../entityStore/entities/GithubWorkflowRunEventEntity'
 import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport'
 import { RawGithubWorkflowRunEvent } from '../types/rawGithub/RawGithubWorkflowRunEvent'
 import { getUserIdsForAccount } from './githubMembership'
 import { saveRuns } from './githubWorkflowRun'
-import { rangeWhereSkBeginsWith } from '@symphoniacloud/dynamodb-entity-store'
 import { isoDifferenceMs } from '../../util/dateAndTime'
-import { GithubWorkflowKey } from '../types/GithubKeys'
-import { GithubAccountId } from '../types/GithubAccountId'
 import { GithubUserId } from '../types/GithubUserId'
-import { GithubRepoId } from '../types/GithubRepoId'
-import { GithubWorkflowId } from '../types/GithubWorkflowId'
 
 export async function processRawRunEvents(
   appState: AppState,
@@ -34,10 +26,7 @@ async function saveEvents(appState: AppState, eventsToKeep: GithubWorkflowRunEve
     await Promise.all(
       eventsToKeep.map(async (runEvent) => {
         return executeAndCatchConditionalCheckFailed(async () => {
-          await appState.entityStore.for(GithubWorkflowRunEventEntity).put(runEvent, {
-            conditionExpression: 'attribute_not_exists(PK)'
-          })
-          return runEvent
+          return await putWorkflowRunEventIfKeyDoesntExist(appState.entityStore, runEvent)
         })
       })
     )
@@ -51,32 +40,6 @@ export async function getRelatedMemberIdsForRunEvent(
   runEvent: GithubWorkflowRunEvent
 ): Promise<GithubUserId[]> {
   return getUserIdsForAccount(appState, runEvent.accountId)
-}
-
-// Returns *all* the run events for each run (including in_progress) even if the run is complete
-// If you just want the most recent run event per run then use githubWorkflowRun.ts instead
-export async function getRunEventsForWorkflow(appState: AppState, key: GithubWorkflowKey) {
-  return appState.entityStore
-    .for(GithubWorkflowRunEventEntity)
-    .queryAllByPkAndSk(key, rangeWhereSkBeginsWith(githubWorkflowRunEventSkPrefix(key)), {
-      scanIndexForward: false
-    })
-}
-
-export async function getRunEventsForWorkflowPage(
-  appState: AppState,
-  accountId: GithubAccountId,
-  repoId: GithubRepoId,
-  workflowId: GithubWorkflowId,
-  limit?: number
-) {
-  return await appState.entityStore
-    .for(GithubWorkflowRunEventEntity)
-    .queryOnePageByPkAndSk(
-      { accountId },
-      rangeWhereSkBeginsWith(githubWorkflowRunEventSkPrefix({ repoId, workflowId })),
-      { scanIndexForward: false, ...(limit ? { limit } : {}) }
-    )
 }
 
 export function runCompleted(event: GithubWorkflowRunEvent) {

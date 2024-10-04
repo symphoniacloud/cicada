@@ -2,12 +2,7 @@ import { mergeOrderedLists } from '../../util/collections'
 import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
 import { GithubPush } from '../types/GithubPush'
 import { AppState } from '../../environment/AppState'
-import { githubWorkflowRunEventGsiSkPrefix } from '../entityStore/entities/GithubWorkflowRunEventEntity'
-import { GithubPushEntity } from '../entityStore/entities/GithubPushEntity'
-import { rangeWhereSkBeginsWith } from '@symphoniacloud/dynamodb-entity-store'
-import { pushesFromMultipleEntityResponse } from './githubPush'
-import { GithubWorkflowRunEntity } from '../entityStore/entities/GithubWorkflowRunEntity'
-import { workflowRunsFromMultipleEventEntityResponse } from './githubWorkflowRun'
+import { queryRunsAndPushesForRepo } from '../entityStore/entities/GithubWorkflowRunEntity'
 import { GithubRepoKey } from '../types/GithubKeys'
 
 // GithubActivity is a domain concept that is only read, not written, since it's
@@ -31,26 +26,11 @@ export function activityIsWorkflowRunActivity(
   return activity.activityType === 'workflowRunEvent'
 }
 
-// Workflow Runs and Pushes deliberately use the same GSI key format so that they can be queried
-// in one call. dynamdb-entity-store supports converting records for different entities during
-// a query by using the `forMultiple` function
 export async function getRecentActivityForRepo(appState: AppState, repoKey: GithubRepoKey) {
-  const activityResponse = await appState.entityStore
-    .forMultiple([GithubWorkflowRunEntity, GithubPushEntity])
-    .queryOnePageWithGsiByPkAndSk(
-      GithubWorkflowRunEntity,
-      repoKey,
-      // Workflow Run *events* will also be returned by the DynamoDB query, but the entity-store
-      // filters them out because the entity isn't specified in the 'forMultiple()' array
-      rangeWhereSkBeginsWith(githubWorkflowRunEventGsiSkPrefix(repoKey)),
-      {
-        scanIndexForward: false
-      }
-    )
-
+  const activityQueryResult = await queryRunsAndPushesForRepo(appState.entityStore, repoKey)
   return mergeOrderedLists(
-    workflowRunEventsToActivities(workflowRunsFromMultipleEventEntityResponse(activityResponse)),
-    pushesToActivities(pushesFromMultipleEntityResponse(activityResponse)),
+    workflowRunEventsToActivities(activityQueryResult.runs),
+    pushesToActivities(activityQueryResult.pushes),
     (x, y) => activityDateTime(x) > activityDateTime(y)
   )
 }

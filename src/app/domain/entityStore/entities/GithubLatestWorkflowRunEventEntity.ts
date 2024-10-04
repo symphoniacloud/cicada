@@ -11,7 +11,7 @@ import { sortBy } from '../../../util/collections'
 import { getEventUpdatedTimestamp } from '../../github/githubCommon'
 import { CicadaEntity } from '../entityStoreEntitySupport'
 
-export const GithubLatestWorkflowRunEventEntity: CicadaEntity<
+const GithubLatestWorkflowRunEventEntity: CicadaEntity<
   GithubWorkflowRunEvent,
   Pick<GithubWorkflowRunEvent, 'accountId'>,
   Pick<GithubWorkflowRunEvent, 'repoId' | 'workflowId'>
@@ -49,6 +49,16 @@ export async function putRunEventIfNoKeyExistsOrNewerThanExisting(
     expressionAttributeNames: { '#updatedAt': 'updatedAt' },
     expressionAttributeValues: { ':newUpdatedAt': event.updatedAt }
   })
+}
+
+// Used in integration tests
+export async function batchDeleteLatestWorkflowRunEvents(
+  entityStore: AllEntitiesStore,
+  events: GithubWorkflowRunEvent[]
+) {
+  if (events.length > 0) {
+    await store(entityStore).advancedOperations.batchDelete(events)
+  }
 }
 
 export async function latestWorkflowRunEventsPerWorkflowForAccount(

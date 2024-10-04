@@ -1,19 +1,14 @@
 import { AppState } from '../../environment/AppState'
 import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
-import {
-  domainObjectsFromMultipleEventEntityResponse,
-  executeAndCatchConditionalCheckFailed
-} from '../entityStore/entityStoreOperationSupport'
-import { GithubWorkflowRunEntity } from '../entityStore/entities/GithubWorkflowRunEntity'
+import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport'
+import { putGithubWorkflowRunfNoKeyExistsOrNewerThanExisting } from '../entityStore/entities/GithubWorkflowRunEntity'
 import { saveLatestEvents } from './githubLatestWorkflowRunEvents'
 import { sortBy } from '../../util/collections'
 import { getEventUpdatedTimestamp } from './githubCommon'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
-import { MultipleEntityCollectionResponse } from '@symphoniacloud/dynamodb-entity-store'
 
 // A workflow run is the same as the most recent workflow run event for a given run ID
-
 export async function saveRuns(
   appState: AppState,
   events: GithubWorkflowRunEvent[],
@@ -26,9 +21,12 @@ export async function saveRuns(
   // Do this sequentially since if we have multiple events for same
   // run we only want to save the most recent
   for (const event of newEventsMostRecentFirst) {
-    const eventForUpdatedRun = await saveRun(appState, event)
-    if (eventForUpdatedRun) {
-      eventsForNewOrUpdatedRuns.push(eventForUpdatedRun)
+    if (
+      await executeAndCatchConditionalCheckFailed(async () => {
+        return await putGithubWorkflowRunfNoKeyExistsOrNewerThanExisting(appState.entityStore, event)
+      })
+    ) {
+      eventsForNewOrUpdatedRuns.push(event)
     }
   }
 
@@ -41,22 +39,4 @@ export async function saveRuns(
     if (newEvent.status !== 'queued')
       await sendToEventBridge(appState, EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_WORKFLOW_RUN_EVENT, newEvent)
   }
-}
-
-async function saveRun(appState: AppState, event: GithubWorkflowRunEvent) {
-  return await executeAndCatchConditionalCheckFailed(async () => {
-    await appState.entityStore.for(GithubWorkflowRunEntity).put(event, {
-      conditionExpression: 'attribute_not_exists(PK) OR #updatedAt < :newUpdatedAt',
-      expressionAttributeNames: { '#updatedAt': 'updatedAt' },
-      expressionAttributeValues: { ':newUpdatedAt': event.updatedAt }
-    })
-
-    return event
-  })
-}
-
-export function workflowRunsFromMultipleEventEntityResponse(
-  allActivity: MultipleEntityCollectionResponse
-): GithubWorkflowRunEvent[] {
-  return domainObjectsFromMultipleEventEntityResponse(allActivity, GithubWorkflowRunEntity.type)
 }

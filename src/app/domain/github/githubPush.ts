@@ -3,14 +3,9 @@ import { logger } from '../../util/logging'
 import { putPushIfNoKeyExists } from '../entityStore/entities/GithubPushEntity'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
 import { GithubPush } from '../types/GithubPush'
-import {
-  domainObjectsFromMultipleEventEntityResponse,
-  executeAndCatchConditionalCheckFailed
-} from '../entityStore/entityStoreOperationSupport'
+import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
-import { MultipleEntityCollectionResponse } from '@symphoniacloud/dynamodb-entity-store'
 import { saveLatestPushes } from './githubLatestPushesPerRef'
-import { GITHUB_PUSH } from '../entityStore/entityTypes'
 
 export async function processPushes(appState: AppState, pushes: GithubPush[], publishNotifications: boolean) {
   const newPushes = await savePushes(appState, pushes)
@@ -33,12 +28,6 @@ async function savePushes(appState: AppState, pushes: GithubPush[]) {
   logger.debug(`Found ${newPushes.length} new pushes`)
 
   return newPushes
-}
-
-export function pushesFromMultipleEntityResponse(
-  allActivity: MultipleEntityCollectionResponse
-): GithubPush[] {
-  return domainObjectsFromMultipleEventEntityResponse(allActivity, GITHUB_PUSH)
 }
 
 export function latestCommitInPush(push: Pick<GithubPush, 'commits'>) {
