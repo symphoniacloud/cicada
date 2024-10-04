@@ -26,13 +26,11 @@ import {
 import { UserSetting } from '../../domain/types/UserSettings'
 import { fragmentPath } from '../routingCommon'
 import { GithubAccountId } from '../../domain/types/GithubAccountId'
-import { GithubUserId } from '../../domain/types/GithubUserId'
 import { calculateAccountSettings, calculateUserSettings } from '../../domain/user/calculatedUserSettings'
 import {
   getAccountStructure,
   getRepoStructure,
-  getWorkflowStructure,
-  loadUserScopeReferenceData
+  getWorkflowStructure
 } from '../../domain/github/userScopeReferenceData'
 
 import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData'
@@ -49,7 +47,6 @@ export async function updateUserSetting(appState: AppState, event: CicadaAuthori
   if (isFailure(parseResult)) return parseResult.failureResult
 
   const { accountId, repoId, workflowId, setting, enabled } = parseResult.result
-  const refData = await loadUserScopeReferenceData(appState, event.userId)
 
   if (workflowId) {
     if (!repoId) {
@@ -58,8 +55,7 @@ export async function updateUserSetting(appState: AppState, event: CicadaAuthori
     }
     return processUpdateWorkflowSetting(
       appState,
-      refData,
-      event.userId,
+      event.refData,
       { accountId: accountId, repoId, workflowId },
       setting,
       enabled
@@ -68,27 +64,31 @@ export async function updateUserSetting(appState: AppState, event: CicadaAuthori
   if (repoId) {
     return processUpdateRepoSetting(
       appState,
-      refData,
-      event.userId,
+      event.refData,
       { accountId: accountId, repoId },
       setting,
       enabled
     )
   }
 
-  return processUpdateAccountSetting(appState, refData, event.userId, accountId, setting, enabled)
+  return processUpdateAccountSetting(appState, event.refData, accountId, setting, enabled)
 }
 
 async function processUpdateAccountSetting(
   appState: AppState,
   refData: UserScopeReferenceData,
-  userId: GithubUserId,
   accountId: GithubAccountId,
   setting: UserSetting,
   enabled: boolean
 ) {
   logger.debug('processUpdateAccountSetting')
-  const updatedSettings = await updateAndSaveAccountSetting(appState, userId, accountId, setting, enabled)
+  const updatedSettings = await updateAndSaveAccountSetting(
+    appState,
+    refData.userId,
+    accountId,
+    setting,
+    enabled
+  )
   const updatedAccountSettings =
     updatedSettings.github.accounts[accountId] ??
     throwFunction('Internal error in processUpdateAccountSetting - no account settings')()
@@ -108,15 +108,14 @@ async function processUpdateAccountSetting(
 async function processUpdateRepoSetting(
   appState: AppState,
   refData: UserScopeReferenceData,
-  userId: GithubUserId,
   repoKey: GithubRepoKey,
   setting: UserSetting,
   enabled: boolean
 ) {
   logger.debug('processUpdateRepoSetting')
-  await updateAndSaveRepoSetting(appState, userId, repoKey, setting, enabled)
+  await updateAndSaveRepoSetting(appState, refData.userId, repoKey, setting, enabled)
 
-  const newPersistedUserSettings = await getPersistedUserSettingsOrDefaults(appState, userId)
+  const newPersistedUserSettings = await getPersistedUserSettingsOrDefaults(appState, refData.userId)
   const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, refData)
   const newCalculatedRepoSettings =
     newCalculatedUserSettings.github.accounts[repoKey.accountId]?.repos[repoKey.repoId] ??
@@ -134,15 +133,14 @@ async function processUpdateRepoSetting(
 async function processUpdateWorkflowSetting(
   appState: AppState,
   refData: UserScopeReferenceData,
-  userId: GithubUserId,
   workflowKey: GithubWorkflowKey,
   setting: UserSetting,
   enabled: boolean
 ) {
   logger.debug('processUpdateWorkflowSetting')
-  await updateAndSaveWorkflowSetting(appState, userId, workflowKey, setting, enabled)
+  await updateAndSaveWorkflowSetting(appState, refData.userId, workflowKey, setting, enabled)
 
-  const newPersistedUserSettings = await getPersistedUserSettingsOrDefaults(appState, userId)
+  const newPersistedUserSettings = await getPersistedUserSettingsOrDefaults(appState, refData.userId)
 
   const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, refData)
   const newCalculatedWorkflowSettings =

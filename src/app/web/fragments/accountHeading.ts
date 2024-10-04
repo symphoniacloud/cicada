@@ -6,21 +6,18 @@ import { notFoundHTMLResponse } from '../htmlResponses'
 import { fragmentPath } from '../routingCommon'
 import { createAccountHeadingResponse } from './views/accountHeadingView'
 import { getAccountCoordinates } from './requestParsing/getAccountCoordinates'
-import { getAccountStructure, loadUserScopeReferenceData } from '../../domain/github/userScopeReferenceData'
+import { getAccountStructure } from '../../domain/github/userScopeReferenceData'
 
 export const accountHeadingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('account/heading'),
   target: accountHeading
 }
 
-export async function accountHeading(appState: AppState, event: CicadaAuthorizedAPIEvent) {
+export async function accountHeading(_: AppState, event: CicadaAuthorizedAPIEvent) {
   const accountCoordinatesResult = getAccountCoordinates(event)
   if (isFailure(accountCoordinatesResult)) return accountCoordinatesResult.failureResult
 
-  // TODO - consider putting this on event / appState
-  const refData = await loadUserScopeReferenceData(appState, event.userId)
-
-  const account = getAccountStructure(refData, accountCoordinatesResult.result.accountId)
+  const account = getAccountStructure(event.refData, accountCoordinatesResult.result.accountId)
   if (!account) return notFoundHTMLResponse
 
   return createAccountHeadingResponse(account)

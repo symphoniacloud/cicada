@@ -11,14 +11,13 @@ import {
 import { getOptionalWorkflowCoordinates } from './requestParsing/getOptionalWorkflowCoordinates'
 import { GithubRepoKey, GithubWorkflowKey } from '../../domain/types/GithubKeys'
 import {
+  getAllRunEventsForWorkflowForUser,
   getRecentActiveBranchesForUserAndAccount,
   getRecentActiveBranchesForUserWithUserSettings,
-  getRecentActivityForRepoForUser,
-  getAllRunEventsForWorkflowForUser
+  getRecentActivityForRepoForUser
 } from '../../domain/user/userVisible'
 import { fragmentPath } from '../routingCommon'
 import { GithubAccountId } from '../../domain/types/GithubAccountId'
-import { loadUserScopeReferenceData } from '../../domain/github/userScopeReferenceData'
 import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData'
 
 export const gitHubActivityFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
@@ -31,23 +30,19 @@ export async function gitHubActivity(appState: AppState, event: CicadaAuthorized
 
   if (isFailure(coordinatesResult)) return coordinatesResult.failureResult
   const { accountId, repoId, workflowId } = coordinatesResult.result
-  const { userId } = event
-
-  // TODO - consider putting this on event / appState
-  const refData = await loadUserScopeReferenceData(appState, userId)
 
   if (accountId) {
     if (repoId) {
       if (workflowId) {
-        return await githubActivityForWorkflow(appState, refData, { accountId, repoId, workflowId })
+        return await githubActivityForWorkflow(appState, event.refData, { accountId, repoId, workflowId })
       } else {
-        return await githubActivityForRepo(appState, refData, { accountId, repoId })
+        return await githubActivityForRepo(appState, event.refData, { accountId, repoId })
       }
     } else {
-      return await githubActivityForAccount(appState, refData, accountId)
+      return await githubActivityForAccount(appState, event.refData, accountId)
     }
   }
-  if (!accountId && !repoId && !workflowId) return await githubActivityForDashboard(appState, refData)
+  if (!accountId && !repoId && !workflowId) return await githubActivityForDashboard(appState, event.refData)
   return invalidRequestResponse
 }
 

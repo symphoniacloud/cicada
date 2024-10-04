@@ -7,7 +7,6 @@ import { createWorkflowHeadingResponse } from './views/workflowHeadingView'
 import { fragmentPath } from '../routingCommon'
 import { getAvailableRunEventsForWorkflowForUser } from '../../domain/user/userVisible'
 import { notFoundHTMLResponse } from '../htmlResponses'
-import { loadUserScopeReferenceData } from '../../domain/github/userScopeReferenceData'
 
 export const workflowHeadingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('workflow/heading'),
@@ -18,10 +17,7 @@ export async function workflowHeading(appState: AppState, event: CicadaAuthorize
   const parsed = getWorkflowCoordinates(event)
   if (isFailure(parsed)) return parsed.failureResult
 
-  // TODO - consider putting this on event / appState
-  const refData = await loadUserScopeReferenceData(appState, event.userId)
-
-  const result = await getAvailableRunEventsForWorkflowForUser(appState, refData, parsed.result, 1)
+  const result = await getAvailableRunEventsForWorkflowForUser(appState, event.refData, parsed.result, 1)
   if (!isSuccess(result)) return notFoundHTMLResponse
   return createWorkflowHeadingResponse(result.result.items[0])
 }

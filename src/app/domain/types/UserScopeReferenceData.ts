@@ -13,7 +13,6 @@ export interface GithubRepoStructure extends GithubRepoSummary {
 }
 
 export interface UserScopeReferenceData {
-  // TOMaybe - username here?
   userId: GithubUserId
   // This will become a map when user can be a member of multiple Cicada accounts
   memberAccount: GithubAccountStructure
