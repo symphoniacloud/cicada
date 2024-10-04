@@ -4,20 +4,27 @@ import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
 import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings'
 import { CalculatedUserSettings } from '../types/UserSettings'
 import { GithubAccountId } from '../types/GithubAccountId'
-import { GithubUserId } from '../types/GithubUserId'
 import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys'
 import { recentActiveBranchesForAccounts } from '../github/githubLatestPushesPerRef'
 import { GithubPush } from '../types/GithubPush'
 import { getRecentActivityForRepo, GithubActivity } from '../github/githubActivity'
 import {
-  allAccountIDsFromStructure,
-  loadInstallationAccountStructureForUser
-} from '../github/githubAccountStructure'
+  allAccountIDsFromRefData,
+  getAccountStructure,
+  getRepoStructure,
+  getWorkflowStructure
+} from '../github/userScopeReferenceData'
 import {
   latestWorkflowRunEventsPerWorkflowForAccount,
   latestWorkflowRunEventsPerWorkflowForRepo
 } from '../entityStore/entities/GithubLatestWorkflowRunEventEntity'
-import { getRunEventsForWorkflow } from '../entityStore/entities/GithubWorkflowRunEventEntity'
+import {
+  getRunEventsForWorkflow,
+  getRunEventsForWorkflowPage
+} from '../entityStore/entities/GithubWorkflowRunEventEntity'
+import { failedWithResult, Result, successWith } from '../../util/structuredResult'
+import { OnePageResponse } from '@symphoniacloud/dynamodb-entity-store'
+import { UserScopeReferenceData } from '../types/UserScopeReferenceData'
 
 interface UserVisibleObjects<T> {
   allEvents: T[]
@@ -29,72 +36,99 @@ export type VisibleWorkflowRunEvents = UserVisibleObjects<GithubWorkflowRunEvent
 export type VisiblePushes = UserVisibleObjects<GithubPush>
 export type VisibleActivity = UserVisibleObjects<GithubActivity>
 
-// TODO - perform authorization for user visibility in this file
+const UNAUTHORIZED_FAILURE = 'unauthorized'
+const failureNotAuthorized = failedWithResult('Not authorized', UNAUTHORIZED_FAILURE)
 
 export async function getLatestWorkflowRunEventsForUserWithUserSettings(
   appState: AppState,
-  userId: GithubUserId
+  refData: UserScopeReferenceData
 ): Promise<VisibleWorkflowRunEvents> {
-  const installationStructure = await loadInstallationAccountStructureForUser(appState, userId)
   const allEvents = await latestWorkflowRunEventsPerWorkflowForAccounts(
     appState,
-    allAccountIDsFromStructure(installationStructure)
+    allAccountIDsFromRefData(refData)
   )
-  const userSettings = await loadCalculatedUserSettingsOrUseDefaults(appState, userId, installationStructure)
+  const userSettings = await loadCalculatedUserSettingsOrUseDefaults(appState, refData)
   return toVisibleEvents(allEvents, userSettings)
 }
 
 export async function getLatestWorkflowRunEventsForAccountForUser(
   appState: AppState,
+  refData: UserScopeReferenceData,
   accountId: GithubAccountId
-): Promise<VisibleWorkflowRunEvents> {
-  return toVisibleEvents(await latestWorkflowRunEventsPerWorkflowForAccount(appState.entityStore, accountId))
+): Promise<Result<VisibleWorkflowRunEvents>> {
+  if (!getAccountStructure(refData, accountId)) return failureNotAuthorized
+
+  return successWith(
+    toVisibleEvents(await latestWorkflowRunEventsPerWorkflowForAccount(appState.entityStore, accountId))
+  )
 }
 
 export async function getLatestWorkflowRunEventsForRepoForUser(
   appState: AppState,
+  refData: UserScopeReferenceData,
   repo: GithubRepoKey
-): Promise<VisibleWorkflowRunEvents> {
-  return toVisibleEvents(await latestWorkflowRunEventsPerWorkflowForRepo(appState.entityStore, repo))
+): Promise<Result<VisibleWorkflowRunEvents>> {
+  if (!getRepoStructure(refData, repo)) return failureNotAuthorized
+
+  return successWith(
+    toVisibleEvents(await latestWorkflowRunEventsPerWorkflowForRepo(appState.entityStore, repo))
+  )
 }
 
-export async function getRunEventsForWorkflowForUser(
+// TODO - switch to using paged version everywhere
+export async function getAllRunEventsForWorkflowForUser(
   appState: AppState,
+  refData: UserScopeReferenceData,
   workflow: GithubWorkflowKey
-): Promise<VisibleWorkflowRunEvents> {
-  return toVisibleEvents(await getRunEventsForWorkflow(appState.entityStore, workflow))
+): Promise<Result<VisibleWorkflowRunEvents>> {
+  if (!getWorkflowStructure(refData, workflow)) return failureNotAuthorized
+
+  return successWith(toVisibleEvents(await getRunEventsForWorkflow(appState.entityStore, workflow)))
+}
+
+// Need to think what to do here when we end up wanting paged AND visible results
+export async function getAvailableRunEventsForWorkflowForUser(
+  appState: AppState,
+  refData: UserScopeReferenceData,
+  workflow: GithubWorkflowKey,
+  limit?: number
+): Promise<Result<OnePageResponse<GithubWorkflowRunEvent>>> {
+  if (!getWorkflowStructure(refData, workflow)) return failureNotAuthorized
+
+  return successWith(await getRunEventsForWorkflowPage(appState.entityStore, workflow, limit))
 }
 
 export async function getRecentActivityForRepoForUser(
   appState: AppState,
+  refData: UserScopeReferenceData,
   repo: GithubRepoKey
-): Promise<VisibleActivity> {
+): Promise<Result<VisibleActivity>> {
+  if (!getRepoStructure(refData, repo)) return failureNotAuthorized
   const allEvents = await getRecentActivityForRepo(appState, repo)
-  return {
+  return successWith({
     allEvents,
     visibleEvents: allEvents,
     someEventsHidden: false
-  }
+  })
 }
 
 export async function getRecentActiveBranchesForUserWithUserSettings(
   appState: AppState,
-  userId: GithubUserId
+  refData: UserScopeReferenceData
 ) {
-  const installationStructure = await loadInstallationAccountStructureForUser(appState, userId)
-  const allActivity = await recentActiveBranchesForAccounts(
-    appState,
-    allAccountIDsFromStructure(installationStructure)
+  return toVisiblePushes(
+    await recentActiveBranchesForAccounts(appState, allAccountIDsFromRefData(refData)),
+    await loadCalculatedUserSettingsOrUseDefaults(appState, refData)
   )
-  const userSettings = await loadCalculatedUserSettingsOrUseDefaults(appState, userId, installationStructure)
-  return toVisiblePushes(allActivity, userSettings)
 }
 
 export async function getRecentActiveBranchesForUserAndAccount(
   appState: AppState,
+  refData: UserScopeReferenceData,
   accountId: GithubAccountId
-) {
-  return toVisiblePushes(await recentActiveBranchesForAccounts(appState, [accountId]))
+): Promise<Result<VisiblePushes>> {
+  if (!getAccountStructure(refData, accountId)) return failureNotAuthorized
+  return successWith(toVisiblePushes(await recentActiveBranchesForAccounts(appState, [accountId])))
 }
 
 function toVisibleEvents(allEvents: GithubWorkflowRunEvent[], userSettings?: CalculatedUserSettings) {

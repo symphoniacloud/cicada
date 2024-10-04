@@ -10,36 +10,31 @@ import {
 } from '../types/UserSettings'
 import {
   GithubAccountStructure,
-  GithubInstallationAccountStructure,
-  GithubRepoStructure
-} from '../types/GithubAccountStructure'
+  GithubRepoStructure,
+  UserScopeReferenceData
+} from '../types/UserScopeReferenceData'
 import { objectMap } from '../../util/collections'
 import { AppState } from '../../environment/AppState'
-import { GithubUserId } from '../types/GithubUserId'
 import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings'
 
 const DEFAULT_ACCOUNT_NOTIFY = true
 
 export async function loadCalculatedUserSettingsOrUseDefaults(
   appState: AppState,
-  userId: GithubUserId,
-  installationAccount: GithubInstallationAccountStructure
+  refData: UserScopeReferenceData
 ) {
-  return calculateUserSettings(
-    await getPersistedUserSettingsOrDefaults(appState, userId),
-    installationAccount
-  )
+  return calculateUserSettings(await getPersistedUserSettingsOrDefaults(appState, refData.userId), refData)
 }
 
 export function calculateUserSettings(
   settings: PersistedUserSettings,
-  installationAccount: GithubInstallationAccountStructure
+  refData: UserScopeReferenceData
 ): CalculatedUserSettings {
   return {
     userId: settings.userId,
     github: {
       accounts: Object.fromEntries(
-        [installationAccount, ...Object.values(installationAccount.publicAccounts)].map((account) => [
+        [refData.memberAccount, ...Object.values(refData.publicAccounts)].map((account) => [
           account.accountId,
           calculateAccountSettings(settings.github.accounts[account.accountId], account)
         ])

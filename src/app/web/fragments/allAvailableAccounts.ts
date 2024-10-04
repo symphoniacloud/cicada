@@ -3,7 +3,8 @@ import { Route } from '../../internalHttpRouter/internalHttpRoute'
 import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { fragmentPath } from '../routingCommon'
 import { createAllAvailableAccountsResponse } from './views/allAvailableAccountsView'
-import { loadInstallationAccountStructureForUser } from '../../domain/github/githubAccountStructure'
+
+import { loadUserScopeReferenceData } from '../../domain/github/userScopeReferenceData'
 
 export const allAvailableAccountsRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('allAvailableAccounts'),
@@ -11,7 +12,7 @@ export const allAvailableAccountsRoute: Route<CicadaAuthorizedAPIEvent> = {
 }
 
 export async function allAvailableAccounts(appState: AppState, event: CicadaAuthorizedAPIEvent) {
-  return createAllAvailableAccountsResponse(
-    await loadInstallationAccountStructureForUser(appState, event.userId)
-  )
+  // TODO - consider putting this on event / appState
+  const refData = await loadUserScopeReferenceData(appState, event.userId)
+  return createAllAvailableAccountsResponse(refData)
 }

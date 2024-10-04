@@ -30,11 +30,12 @@ import { GithubUserId } from '../../domain/types/GithubUserId'
 import { calculateAccountSettings, calculateUserSettings } from '../../domain/user/calculatedUserSettings'
 import {
   getAccountStructure,
-  loadInstallationAccountStructureForUser,
   getRepoStructure,
-  getWorkflowStructure
-} from '../../domain/github/githubAccountStructure'
-import { GithubInstallationAccountStructure } from '../../domain/types/GithubAccountStructure'
+  getWorkflowStructure,
+  loadUserScopeReferenceData
+} from '../../domain/github/userScopeReferenceData'
+
+import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData'
 
 export const postUserSettingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('userSetting'),
@@ -48,7 +49,7 @@ export async function updateUserSetting(appState: AppState, event: CicadaAuthori
   if (isFailure(parseResult)) return parseResult.failureResult
 
   const { accountId, repoId, workflowId, setting, enabled } = parseResult.result
-  const installationAccount = await loadInstallationAccountStructureForUser(appState, event.userId)
+  const refData = await loadUserScopeReferenceData(appState, event.userId)
 
   if (workflowId) {
     if (!repoId) {
@@ -57,7 +58,7 @@ export async function updateUserSetting(appState: AppState, event: CicadaAuthori
     }
     return processUpdateWorkflowSetting(
       appState,
-      installationAccount,
+      refData,
       event.userId,
       { accountId: accountId, repoId, workflowId },
       setting,
@@ -67,7 +68,7 @@ export async function updateUserSetting(appState: AppState, event: CicadaAuthori
   if (repoId) {
     return processUpdateRepoSetting(
       appState,
-      installationAccount,
+      refData,
       event.userId,
       { accountId: accountId, repoId },
       setting,
@@ -75,12 +76,12 @@ export async function updateUserSetting(appState: AppState, event: CicadaAuthori
     )
   }
 
-  return processUpdateAccountSetting(appState, installationAccount, event.userId, accountId, setting, enabled)
+  return processUpdateAccountSetting(appState, refData, event.userId, accountId, setting, enabled)
 }
 
 async function processUpdateAccountSetting(
   appState: AppState,
-  installationAccount: GithubInstallationAccountStructure,
+  refData: UserScopeReferenceData,
   userId: GithubUserId,
   accountId: GithubAccountId,
   setting: UserSetting,
@@ -92,7 +93,7 @@ async function processUpdateAccountSetting(
     updatedSettings.github.accounts[accountId] ??
     throwFunction('Internal error in processUpdateAccountSetting - no account settings')()
 
-  const accountStructure = getAccountStructure(installationAccount, accountId)
+  const accountStructure = getAccountStructure(refData, accountId)
   if (!accountStructure) throw new Error(`No account for account ID ${accountId}`)
 
   return createUpdateUserAccountSettingResponse(
@@ -106,7 +107,7 @@ async function processUpdateAccountSetting(
 
 async function processUpdateRepoSetting(
   appState: AppState,
-  installationAccount: GithubInstallationAccountStructure,
+  refData: UserScopeReferenceData,
   userId: GithubUserId,
   repoKey: GithubRepoKey,
   setting: UserSetting,
@@ -116,7 +117,7 @@ async function processUpdateRepoSetting(
   await updateAndSaveRepoSetting(appState, userId, repoKey, setting, enabled)
 
   const newPersistedUserSettings = await getPersistedUserSettingsOrDefaults(appState, userId)
-  const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, installationAccount)
+  const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, refData)
   const newCalculatedRepoSettings =
     newCalculatedUserSettings.github.accounts[repoKey.accountId]?.repos[repoKey.repoId] ??
     throwFunction('Internal error in processUpdateRepoSetting - no repo settings')()
@@ -125,15 +126,14 @@ async function processUpdateRepoSetting(
     repoKey,
     toDisplayableRepoSettings(
       newCalculatedRepoSettings,
-      getRepoStructure(installationAccount, repoKey) ??
-        throwFunction(`No repo for key ${JSON.stringify(repoKey)}`)()
+      getRepoStructure(refData, repoKey) ?? throwFunction(`No repo for key ${JSON.stringify(repoKey)}`)()
     )
   )
 }
 
 async function processUpdateWorkflowSetting(
   appState: AppState,
-  installationAccount: GithubInstallationAccountStructure,
+  refData: UserScopeReferenceData,
   userId: GithubUserId,
   workflowKey: GithubWorkflowKey,
   setting: UserSetting,
@@ -144,7 +144,7 @@ async function processUpdateWorkflowSetting(
 
   const newPersistedUserSettings = await getPersistedUserSettingsOrDefaults(appState, userId)
 
-  const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, installationAccount)
+  const newCalculatedUserSettings = calculateUserSettings(newPersistedUserSettings, refData)
   const newCalculatedWorkflowSettings =
     newCalculatedUserSettings.github.accounts[workflowKey.accountId]?.repos[workflowKey.repoId]?.workflows[
       workflowKey.workflowId
@@ -156,7 +156,7 @@ async function processUpdateWorkflowSetting(
     workflowKey,
     toDisplayableWorkflowSettings(
       newCalculatedWorkflowSettings,
-      getWorkflowStructure(installationAccount, workflowKey) ??
+      getWorkflowStructure(refData, workflowKey) ??
         throwFunction(`No workflow for key ${JSON.stringify(workflowKey)}`)()
     )
   )

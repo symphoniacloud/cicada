@@ -1,7 +1,7 @@
 import { AppState } from '../../environment/AppState'
 import { Route } from '../../internalHttpRouter/internalHttpRoute'
 import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { isFailure } from '../../util/structuredResult'
+import { isFailure, isSuccess } from '../../util/structuredResult'
 import { invalidRequestResponse, notFoundHTMLResponse } from '../htmlResponses'
 import { createWorkflowRunEventTableResponse } from './views/activityAndStatusView'
 import { getOptionalRepoCoordinates } from './requestParsing/getOptionalRepoCoordinates'
@@ -12,13 +12,9 @@ import {
 } from '../../domain/user/userVisible'
 import { GithubRepoKey } from '../../domain/types/GithubKeys'
 import { fragmentPath } from '../routingCommon'
-import { getRepository } from '../../domain/entityStore/entities/GithubRepositoryEntity'
 import { GithubAccountId } from '../../domain/types/GithubAccountId'
-import { GithubUserId } from '../../domain/types/GithubUserId'
-import {
-  getAccountStructure,
-  loadInstallationAccountStructureForUser
-} from '../../domain/github/githubAccountStructure'
+import { loadUserScopeReferenceData } from '../../domain/github/userScopeReferenceData'
+import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData'
 
 export const actionsStatusFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('actionsStatus'),
@@ -30,30 +26,36 @@ export async function actionsStatus(appState: AppState, event: CicadaAuthorizedA
 
   if (isFailure(coordinatesResult)) return coordinatesResult.failureResult
   const { accountId, repoId } = coordinatesResult.result
+  // TODO - consider putting this on event / appState
+  const refData = await loadUserScopeReferenceData(appState, event.userId)
 
-  if (accountId && repoId) return await actionsStatusForRepo(appState, { accountId, repoId })
-  if (accountId) return await actionsStatusForAccount(appState, event.userId, accountId)
-  if (!accountId && !repoId) return await actionsStatusForDashboard(appState, event.userId)
+  if (accountId && repoId) return await actionsStatusForRepo(appState, refData, { accountId, repoId })
+  if (accountId) return await actionsStatusForAccount(appState, refData, accountId)
+  if (!accountId && !repoId) return await actionsStatusForDashboard(appState, refData)
   return invalidRequestResponse
 }
 
-async function actionsStatusForDashboard(appState: AppState, userId: GithubUserId) {
-  const latestEvents = await getLatestWorkflowRunEventsForUserWithUserSettings(appState, userId)
+async function actionsStatusForDashboard(appState: AppState, refData: UserScopeReferenceData) {
+  const latestEvents = await getLatestWorkflowRunEventsForUserWithUserSettings(appState, refData)
   return createWorkflowRunEventTableResponse('homeStatus', appState.clock, latestEvents)
 }
 
-async function actionsStatusForAccount(appState: AppState, userId: GithubUserId, accountId: GithubAccountId) {
-  const githubInstallationAccountStructure = await loadInstallationAccountStructureForUser(appState, userId)
-  if (!getAccountStructure(githubInstallationAccountStructure, accountId)) return notFoundHTMLResponse
-
-  const latestEvents = await getLatestWorkflowRunEventsForAccountForUser(appState, accountId)
-  return createWorkflowRunEventTableResponse('accountStatus', appState.clock, latestEvents)
+async function actionsStatusForAccount(
+  appState: AppState,
+  refData: UserScopeReferenceData,
+  accountId: GithubAccountId
+) {
+  const latestEventsResult = await getLatestWorkflowRunEventsForAccountForUser(appState, refData, accountId)
+  if (!isSuccess(latestEventsResult)) return notFoundHTMLResponse
+  return createWorkflowRunEventTableResponse('accountStatus', appState.clock, latestEventsResult.result)
 }
 
-async function actionsStatusForRepo(appState: AppState, repoKey: GithubRepoKey) {
-  // TODO - check has access - here or in userVisible.ts
-  if (!(await getRepository(appState.entityStore, repoKey))) return notFoundHTMLResponse
-
-  const latestEvents = await getLatestWorkflowRunEventsForRepoForUser(appState, repoKey)
-  return createWorkflowRunEventTableResponse('repoStatus', appState.clock, latestEvents)
+async function actionsStatusForRepo(
+  appState: AppState,
+  refData: UserScopeReferenceData,
+  repoKey: GithubRepoKey
+) {
+  const latestEventsResult = await getLatestWorkflowRunEventsForRepoForUser(appState, refData, repoKey)
+  if (!isSuccess(latestEventsResult)) return notFoundHTMLResponse
+  return createWorkflowRunEventTableResponse('repoStatus', appState.clock, latestEventsResult.result)
 }

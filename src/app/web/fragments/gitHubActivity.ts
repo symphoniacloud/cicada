@@ -1,7 +1,7 @@
 import { AppState } from '../../environment/AppState'
 import { Route } from '../../internalHttpRouter/internalHttpRoute'
 import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { isFailure } from '../../util/structuredResult'
+import { isFailure, isSuccess } from '../../util/structuredResult'
 import { invalidRequestResponse, notFoundHTMLResponse } from '../htmlResponses'
 import {
   createGithubActivityResponse,
@@ -9,22 +9,17 @@ import {
   createWorkflowRunEventTableResponse
 } from './views/activityAndStatusView'
 import { getOptionalWorkflowCoordinates } from './requestParsing/getOptionalWorkflowCoordinates'
-import { logger } from '../../util/logging'
 import { GithubRepoKey, GithubWorkflowKey } from '../../domain/types/GithubKeys'
 import {
   getRecentActiveBranchesForUserAndAccount,
   getRecentActiveBranchesForUserWithUserSettings,
   getRecentActivityForRepoForUser,
-  getRunEventsForWorkflowForUser
+  getAllRunEventsForWorkflowForUser
 } from '../../domain/user/userVisible'
 import { fragmentPath } from '../routingCommon'
-import { getRepository } from '../../domain/entityStore/entities/GithubRepositoryEntity'
 import { GithubAccountId } from '../../domain/types/GithubAccountId'
-import { GithubUserId } from '../../domain/types/GithubUserId'
-import {
-  getAccountStructure,
-  loadInstallationAccountStructureForUser
-} from '../../domain/github/githubAccountStructure'
+import { loadUserScopeReferenceData } from '../../domain/github/userScopeReferenceData'
+import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData'
 
 export const gitHubActivityFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('gitHubActivity'),
@@ -38,65 +33,55 @@ export async function gitHubActivity(appState: AppState, event: CicadaAuthorized
   const { accountId, repoId, workflowId } = coordinatesResult.result
   const { userId } = event
 
+  // TODO - consider putting this on event / appState
+  const refData = await loadUserScopeReferenceData(appState, userId)
+
   if (accountId) {
     if (repoId) {
       if (workflowId) {
-        return await githubActivityForWorkflow(appState, { accountId, repoId, workflowId })
+        return await githubActivityForWorkflow(appState, refData, { accountId, repoId, workflowId })
       } else {
-        return await githubActivityForRepo(appState, { accountId, repoId })
+        return await githubActivityForRepo(appState, refData, { accountId, repoId })
       }
     } else {
-      return await githubActivityForAccount(appState, userId, accountId)
+      return await githubActivityForAccount(appState, refData, accountId)
     }
   }
-  if (!accountId && !repoId && !workflowId) return await githubActivityForDashboard(appState, userId)
+  if (!accountId && !repoId && !workflowId) return await githubActivityForDashboard(appState, refData)
   return invalidRequestResponse
 }
 
-async function githubActivityForDashboard(appState: AppState, userId: GithubUserId) {
-  logger.debug('githubActivityForDashboard')
-  return createGithubPushTableResponse(
-    'homeActivity',
-    appState.clock,
-    await getRecentActiveBranchesForUserWithUserSettings(appState, userId)
-  )
+async function githubActivityForDashboard(appState: AppState, refData: UserScopeReferenceData) {
+  const pushes = await getRecentActiveBranchesForUserWithUserSettings(appState, refData)
+  return createGithubPushTableResponse('homeActivity', appState.clock, pushes)
 }
 
 async function githubActivityForAccount(
   appState: AppState,
-  userId: GithubUserId,
+  refData: UserScopeReferenceData,
   accountId: GithubAccountId
 ) {
-  logger.debug('githubActivityForAccount')
-  const githubInstallationAccountStructure = await loadInstallationAccountStructureForUser(appState, userId)
-
-  if (!getAccountStructure(githubInstallationAccountStructure, accountId)) return notFoundHTMLResponse
-
-  return createGithubPushTableResponse(
-    'accountActivity',
-    appState.clock,
-    await getRecentActiveBranchesForUserAndAccount(appState, accountId)
-  )
+  const pushesResult = await getRecentActiveBranchesForUserAndAccount(appState, refData, accountId)
+  if (!isSuccess(pushesResult)) return notFoundHTMLResponse
+  return createGithubPushTableResponse('accountActivity', appState.clock, pushesResult.result)
 }
 
-async function githubActivityForRepo(appState: AppState, repoKey: GithubRepoKey) {
-  logger.debug('githubActivityForRepo')
-  if (!(await getRepository(appState.entityStore, repoKey))) return notFoundHTMLResponse
-
-  return createGithubActivityResponse(
-    'repoActivity',
-    appState.clock,
-    await getRecentActivityForRepoForUser(appState, repoKey)
-  )
+async function githubActivityForRepo(
+  appState: AppState,
+  refData: UserScopeReferenceData,
+  repoKey: GithubRepoKey
+) {
+  const activityResult = await getRecentActivityForRepoForUser(appState, refData, repoKey)
+  if (!isSuccess(activityResult)) return notFoundHTMLResponse
+  return createGithubActivityResponse('repoActivity', appState.clock, activityResult.result)
 }
 
-async function githubActivityForWorkflow(appState: AppState, workflow: GithubWorkflowKey) {
-  logger.debug('githubActivityForWorkflow', { workflow })
-  // TODO - check workflow exists
-
-  return createWorkflowRunEventTableResponse(
-    'workflowActivity',
-    appState.clock,
-    await getRunEventsForWorkflowForUser(appState, workflow)
-  )
+async function githubActivityForWorkflow(
+  appState: AppState,
+  refData: UserScopeReferenceData,
+  workflow: GithubWorkflowKey
+) {
+  const runEventsResult = await getAllRunEventsForWorkflowForUser(appState, refData, workflow)
+  if (!isSuccess(runEventsResult)) return notFoundHTMLResponse
+  return createWorkflowRunEventTableResponse('workflowActivity', appState.clock, runEventsResult.result)
 }

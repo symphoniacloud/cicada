@@ -3,18 +3,20 @@ import { FakeAppState } from '../../../testSupport/fakes/fakeAppState'
 import { handleWebRequest } from '../../../../src/app/lambdaFunctions/authenticatedWeb/lambda'
 import { createStubApiGatewayProxyEventWithToken } from '../../../testSupport/fakes/awsStubs'
 import {
-  stubGetRepo,
+  stubGetGithubInstallation,
   stubQueryActivityForRepo,
   stubQueryLatestWorkflowRuns,
   stubQueryLatestWorkflowRunsForRepo,
+  stubQueryRepositories,
   stubSetupUserRecords
 } from '../../../testSupport/fakes/tableRecordReadStubs'
 
 function setupState() {
   const appState = new FakeAppState()
 
+  stubGetGithubInstallation(appState)
   stubSetupUserRecords(appState)
-  stubGetRepo(appState)
+  stubQueryRepositories(appState)
   stubQueryActivityForRepo(appState)
   stubQueryLatestWorkflowRunsForRepo(appState)
   // Used when loading "all workflows" for user settings lookup. Eventually consider adding a workflows entity

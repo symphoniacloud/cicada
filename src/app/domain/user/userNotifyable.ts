@@ -3,17 +3,26 @@ import { GithubUserId } from '../types/GithubUserId'
 import { logger } from '../../util/logging'
 import { GithubWorkflow } from '../types/GithubWorkflow'
 import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings'
-import { GithubInstallationAccountStructure } from '../types/GithubAccountStructure'
+
+import { UserScopeReferenceData } from '../types/UserScopeReferenceData'
 
 export async function filterWorkflowNotifyEnabled(
   appState: AppState,
-  installationStructure: GithubInstallationAccountStructure,
+  refData: UserScopeReferenceData,
   userIds: GithubUserId[],
   workflow: GithubWorkflow
 ): Promise<GithubUserId[]> {
   const enabledUserIds: GithubUserId[] = []
   for (const userId of userIds) {
-    if (await getWorkflowNotifyEnabledForUser(appState, userId, workflow, installationStructure)) {
+    if (
+      // TODO - don't do this! This is a hack while all users have same visibility to
+      //   avoid a huge amount of queries for large accounts
+      //   What we want instead is some caching for underlying ref data objects
+      await getWorkflowNotifyEnabledForUser(appState, workflow, {
+        ...refData,
+        userId
+      })
+    ) {
       enabledUserIds.push(userId)
     }
   }
@@ -22,11 +31,10 @@ export async function filterWorkflowNotifyEnabled(
 
 async function getWorkflowNotifyEnabledForUser(
   appState: AppState,
-  userId: GithubUserId,
   workflow: GithubWorkflow,
-  installationStructure: GithubInstallationAccountStructure
+  refData: UserScopeReferenceData
 ) {
-  const userSettings = await loadCalculatedUserSettingsOrUseDefaults(appState, userId, installationStructure)
+  const userSettings = await loadCalculatedUserSettingsOrUseDefaults(appState, refData)
   const yesNotify =
     userSettings.github.accounts[workflow.accountId]?.repos[workflow.repoId]?.workflows[workflow.workflowId]
       .notify

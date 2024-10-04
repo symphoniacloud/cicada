@@ -152,15 +152,6 @@ export function stubQueryLatestPushesPerRef(appState: FakeAppState) {
   )
 }
 
-export function stubGetRepo(appState: FakeAppState) {
-  stubber(appState).stubGet.byPkAndSk(
-    fakeTableNames['github-repositories'],
-    'ACCOUNT#GHAccount162483619',
-    'REPO#GHRepo768206479',
-    testOrgTestRepoOne
-  )
-}
-
 export function stubQueryWebPushSubscription(
   appState: FakeAppState,
   options?: {

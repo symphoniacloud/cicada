@@ -13,7 +13,7 @@ import {
 import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId'
 import {
   buildAccountStructure,
-  buildInstallationAccountStructure,
+  buildUserScopedRefData,
   buildRepoStructure,
   buildWorkflowSummary
 } from '../../../../testSupport/builders/accountStructureBuilders'
@@ -216,7 +216,7 @@ test('account settings ', () => {
 })
 
 test('user settings when empty persisted', () => {
-  const accountStructure = buildInstallationAccountStructure({
+  const accountStructure = buildUserScopedRefData({
     repos: [
       buildRepoStructure(),
       buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflowSummary({ simpleWorkflowId: 799 })] })
@@ -269,7 +269,7 @@ test('user settings when empty persisted', () => {
 })
 
 test('user settings when some persisted', () => {
-  const accountStructure = buildInstallationAccountStructure({
+  const accountStructure = buildUserScopedRefData({
     repos: [
       buildRepoStructure(),
       buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflowSummary({ simpleWorkflowId: 799 })] })

@@ -12,45 +12,41 @@ import { usableWorkflowName } from '../github/githubWorkflow'
 import { calculateUserSettings } from './calculatedUserSettings'
 import {
   GithubAccountStructure,
-  GithubInstallationAccountStructure,
-  GithubRepoStructure
-} from '../types/GithubAccountStructure'
+  GithubRepoStructure,
+  UserScopeReferenceData
+} from '../types/UserScopeReferenceData'
 import { objectMap } from '../../util/collections'
 import { GithubWorkflowSummary } from '../types/GithubSummaries'
 import { AppState } from '../../environment/AppState'
-import { GithubUserId } from '../types/GithubUserId'
 import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings'
+import { allAccountsFromRefData } from '../github/userScopeReferenceData'
 
 export async function loadCalculatedAndDisplayableUserSettingsOrUseDefaults(
   appState: AppState,
-  userId: GithubUserId,
-  installationAccount: GithubInstallationAccountStructure
+  refData: UserScopeReferenceData
 ) {
   return toCalculatedAndDisplayableUserSettings(
-    await getPersistedUserSettingsOrDefaults(appState, userId),
-    installationAccount
+    await getPersistedUserSettingsOrDefaults(appState, refData.userId),
+    refData
   )
 }
 
 export function toCalculatedAndDisplayableUserSettings(
   userSettings: PersistedUserSettings,
-  installationAccount: GithubInstallationAccountStructure
+  refData: UserScopeReferenceData
 ): DisplayableUserSettings {
-  return toDisplayableUserSettings(
-    calculateUserSettings(userSettings, installationAccount),
-    installationAccount
-  )
+  return toDisplayableUserSettings(calculateUserSettings(userSettings, refData), refData)
 }
 
 function toDisplayableUserSettings(
   userSettings: CalculatedUserSettings,
-  installationAccount: GithubInstallationAccountStructure
+  refData: UserScopeReferenceData
 ): DisplayableUserSettings {
   return {
     userId: userSettings.userId,
     github: {
       accounts: Object.fromEntries(
-        [installationAccount, ...Object.values(installationAccount.publicAccounts)].map((account) => [
+        allAccountsFromRefData(refData).map((account) => [
           account.accountId,
           toDisplayableAccountSettings(userSettings.github.accounts[account.accountId], account)
         ])
