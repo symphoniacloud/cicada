@@ -7,7 +7,7 @@ import { fragmentPath } from '../routingCommon'
 import { createAccountHeadingResponse } from './views/accountHeadingView'
 import { getAccountCoordinates } from './requestParsing/getAccountCoordinates'
 import {
-  accountStructureFromInstallationAccountStructure,
+  getAccountStructure,
   loadInstallationAccountStructureForUser
 } from '../../domain/github/githubAccountStructure'
 
@@ -22,10 +22,7 @@ export async function accountHeading(appState: AppState, event: CicadaAuthorized
   if (isFailure(accountCoordinatesResult)) return accountCoordinatesResult.failureResult
 
   const accountStructure = await loadInstallationAccountStructureForUser(appState, event.userId)
-  const account = accountStructureFromInstallationAccountStructure(
-    accountStructure,
-    accountCoordinatesResult.result.accountId
-  )
+  const account = getAccountStructure(accountStructure, accountCoordinatesResult.result.accountId)
   if (!account) return notFoundHTMLResponse
 
   return createAccountHeadingResponse(account)

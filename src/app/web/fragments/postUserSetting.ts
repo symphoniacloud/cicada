@@ -29,10 +29,10 @@ import { GithubAccountId } from '../../domain/types/GithubAccountId'
 import { GithubUserId } from '../../domain/types/GithubUserId'
 import { calculateAccountSettings, calculateUserSettings } from '../../domain/user/calculatedUserSettings'
 import {
-  accountStructureFromInstallationAccountStructure,
+  getAccountStructure,
   loadInstallationAccountStructureForUser,
-  repoStructureFromInstallationAccountStructure,
-  workflowSummaryFromInstallationAccountStructure
+  getRepoStructure,
+  getWorkflowStructure
 } from '../../domain/github/githubAccountStructure'
 import { GithubInstallationAccountStructure } from '../../domain/types/GithubAccountStructure'
 
@@ -92,7 +92,7 @@ async function processUpdateAccountSetting(
     updatedSettings.github.accounts[accountId] ??
     throwFunction('Internal error in processUpdateAccountSetting - no account settings')()
 
-  const accountStructure = accountStructureFromInstallationAccountStructure(installationAccount, accountId)
+  const accountStructure = getAccountStructure(installationAccount, accountId)
   if (!accountStructure) throw new Error(`No account for account ID ${accountId}`)
 
   return createUpdateUserAccountSettingResponse(
@@ -125,7 +125,7 @@ async function processUpdateRepoSetting(
     repoKey,
     toDisplayableRepoSettings(
       newCalculatedRepoSettings,
-      repoStructureFromInstallationAccountStructure(installationAccount, repoKey) ??
+      getRepoStructure(installationAccount, repoKey) ??
         throwFunction(`No repo for key ${JSON.stringify(repoKey)}`)()
     )
   )
@@ -156,7 +156,7 @@ async function processUpdateWorkflowSetting(
     workflowKey,
     toDisplayableWorkflowSettings(
       newCalculatedWorkflowSettings,
-      workflowSummaryFromInstallationAccountStructure(installationAccount, workflowKey) ??
+      getWorkflowStructure(installationAccount, workflowKey) ??
         throwFunction(`No workflow for key ${JSON.stringify(workflowKey)}`)()
     )
   )

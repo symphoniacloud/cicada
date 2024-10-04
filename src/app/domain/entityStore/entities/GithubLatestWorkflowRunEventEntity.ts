@@ -40,7 +40,7 @@ export function githubLatestWorkflowRunEventSkPrefix({ repoId }: Pick<GithubWork
   return `REPO#${repoId}`
 }
 
-export async function putIfNoKeyExistsOrNewerThanExisting(
+export async function putRunEventIfNoKeyExistsOrNewerThanExisting(
   entityStore: AllEntitiesStore,
   event: GithubWorkflowRunEvent
 ) {

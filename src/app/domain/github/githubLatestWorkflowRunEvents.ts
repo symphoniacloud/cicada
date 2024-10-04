@@ -3,7 +3,7 @@ import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
 import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport'
 import {
   latestWorkflowRunEventsPerWorkflowForAccount,
-  putIfNoKeyExistsOrNewerThanExisting
+  putRunEventIfNoKeyExistsOrNewerThanExisting
 } from '../entityStore/entities/GithubLatestWorkflowRunEventEntity'
 import { GithubAccountId } from '../types/GithubAccountId'
 
@@ -12,7 +12,7 @@ export async function saveLatestEvents(appState: AppState, newEvents: GithubWork
   // TODO - need to think about concurrent runs. E.g. if two runs are in progress, one completes, the status is still "in progress"
   for (const newEvent of newEvents) {
     await executeAndCatchConditionalCheckFailed(async () => {
-      await putIfNoKeyExistsOrNewerThanExisting(appState.entityStore, newEvent)
+      await putRunEventIfNoKeyExistsOrNewerThanExisting(appState.entityStore, newEvent)
     })
   }
 }

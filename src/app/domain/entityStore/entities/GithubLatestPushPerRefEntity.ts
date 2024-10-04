@@ -1,8 +1,10 @@
 import { GITHUB_LATEST_PUSH_PER_REF } from '../entityTypes'
-import { Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { AllEntitiesStore, Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubPush, isGithubPush } from '../../types/GithubPush'
+import { rangeWhereSkGreaterThan } from '@symphoniacloud/dynamodb-entity-store/dist/cjs/support/querySupport'
+import { GithubAccountId } from '../../types/GithubAccountId'
 
-export const GithubLatestPushPerRefEntity: Entity<
+const GithubLatestPushPerRefEntity: Entity<
   GithubPush,
   Pick<GithubPush, 'accountId'>,
   Pick<GithubPush, 'repoId' | 'ref'>
@@ -21,12 +23,41 @@ export const GithubLatestPushPerRefEntity: Entity<
         return `ACCOUNT#${source.accountId}`
       },
       sk(source: Pick<GithubPush, 'dateTime'>) {
-        return githubLatestPushPerRefGsiSk(source)
+        return generateGsiSK(source)
       }
     }
   }
 }
 
-export function githubLatestPushPerRefGsiSk({ dateTime }: Pick<GithubPush, 'dateTime'>) {
+export function generateGsiSK({ dateTime }: Pick<GithubPush, 'dateTime'>) {
   return `DATETIME#${dateTime}`
+}
+
+export async function putPushIfNoKeyExistsOrNewerThanExisting(
+  entityStore: AllEntitiesStore,
+  push: GithubPush
+) {
+  await store(entityStore).put(push, {
+    conditionExpression: 'attribute_not_exists(PK) OR #dateTime < :newDateTime',
+    expressionAttributeNames: { '#dateTime': 'dateTime' },
+    expressionAttributeValues: { ':newDateTime': push.dateTime }
+  })
+}
+
+export async function queryRecentLatestPushesByAccount(
+  entityStore: AllEntitiesStore,
+  accountId: GithubAccountId,
+  startOfTimeRange: string
+) {
+  return store(entityStore).queryAllWithGsiByPkAndSk(
+    { accountId },
+    rangeWhereSkGreaterThan(generateGsiSK({ dateTime: startOfTimeRange })),
+    {
+      scanIndexForward: false
+    }
+  )
+}
+
+function store(entityStore: AllEntitiesStore) {
+  return entityStore.for(GithubLatestPushPerRefEntity)
 }

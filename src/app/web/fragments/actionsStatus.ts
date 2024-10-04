@@ -16,7 +16,7 @@ import { getRepository } from '../../domain/entityStore/entities/GithubRepositor
 import { GithubAccountId } from '../../domain/types/GithubAccountId'
 import { GithubUserId } from '../../domain/types/GithubUserId'
 import {
-  accountStructureFromInstallationAccountStructure,
+  getAccountStructure,
   loadInstallationAccountStructureForUser
 } from '../../domain/github/githubAccountStructure'
 
@@ -44,8 +44,7 @@ async function actionsStatusForDashboard(appState: AppState, userId: GithubUserI
 
 async function actionsStatusForAccount(appState: AppState, userId: GithubUserId, accountId: GithubAccountId) {
   const githubInstallationAccountStructure = await loadInstallationAccountStructureForUser(appState, userId)
-  if (!accountStructureFromInstallationAccountStructure(githubInstallationAccountStructure, accountId))
-    return notFoundHTMLResponse
+  if (!getAccountStructure(githubInstallationAccountStructure, accountId)) return notFoundHTMLResponse
 
   const latestEvents = await getLatestWorkflowRunEventsForAccountForUser(appState, accountId)
   return createWorkflowRunEventTableResponse('accountStatus', appState.clock, latestEvents)
