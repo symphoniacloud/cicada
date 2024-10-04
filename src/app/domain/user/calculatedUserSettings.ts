@@ -14,8 +14,22 @@ import {
   GithubRepoStructure
 } from '../types/GithubAccountStructure'
 import { objectMap } from '../../util/collections'
+import { AppState } from '../../environment/AppState'
+import { GithubUserId } from '../types/GithubUserId'
+import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings'
 
 const DEFAULT_ACCOUNT_NOTIFY = true
+
+export async function loadCalculatedUserSettingsOrUseDefaults(
+  appState: AppState,
+  userId: GithubUserId,
+  installationAccount: GithubInstallationAccountStructure
+) {
+  return calculateUserSettings(
+    await getPersistedUserSettingsOrDefaults(appState, userId),
+    installationAccount
+  )
+}
 
 export function calculateUserSettings(
   settings: PersistedUserSettings,

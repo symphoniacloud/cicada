@@ -1,9 +1,8 @@
 import { AppState } from '../../environment/AppState'
 import { GithubUserId } from '../types/GithubUserId'
-import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings'
 import { logger } from '../../util/logging'
 import { GithubWorkflow } from '../types/GithubWorkflow'
-import { calculateUserSettings } from './calculatedUserSettings'
+import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings'
 import { GithubInstallationAccountStructure } from '../types/GithubAccountStructure'
 
 export async function filterWorkflowNotifyEnabled(
@@ -27,10 +26,7 @@ async function getWorkflowNotifyEnabledForUser(
   workflow: GithubWorkflow,
   installationStructure: GithubInstallationAccountStructure
 ) {
-  const userSettings = calculateUserSettings(
-    await getPersistedUserSettingsOrDefaults(appState, userId),
-    installationStructure
-  )
+  const userSettings = await loadCalculatedUserSettingsOrUseDefaults(appState, userId, installationStructure)
   const yesNotify =
     userSettings.github.accounts[workflow.accountId]?.repos[workflow.repoId]?.workflows[workflow.workflowId]
       .notify

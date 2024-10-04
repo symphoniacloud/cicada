@@ -1,8 +1,7 @@
 import { AppState } from '../../environment/AppState'
 import { latestWorkflowRunEventsPerWorkflowForAccounts } from '../github/githubLatestWorkflowRunEvents'
 import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
-import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings'
-import { calculateUserSettings } from './calculatedUserSettings'
+import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings'
 import { CalculatedUserSettings } from '../types/UserSettings'
 import { GithubAccountId } from '../types/GithubAccountId'
 import { GithubUserId } from '../types/GithubUserId'
@@ -41,10 +40,7 @@ export async function getLatestWorkflowRunEventsForUserWithUserSettings(
     appState,
     allAccountIDsFromStructure(installationStructure)
   )
-  const userSettings = calculateUserSettings(
-    await getPersistedUserSettingsOrDefaults(appState, userId),
-    installationStructure
-  )
+  const userSettings = await loadCalculatedUserSettingsOrUseDefaults(appState, userId, installationStructure)
   return toVisibleEvents(allEvents, userSettings)
 }
 
@@ -90,10 +86,7 @@ export async function getRecentActiveBranchesForUserWithUserSettings(
     appState,
     allAccountIDsFromStructure(installationStructure)
   )
-  const userSettings = calculateUserSettings(
-    await getPersistedUserSettingsOrDefaults(appState, userId),
-    installationStructure
-  )
+  const userSettings = await loadCalculatedUserSettingsOrUseDefaults(appState, userId, installationStructure)
   return toVisiblePushes(allActivity, userSettings)
 }
 

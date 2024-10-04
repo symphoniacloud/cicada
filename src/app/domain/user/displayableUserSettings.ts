@@ -17,6 +17,20 @@ import {
 } from '../types/GithubAccountStructure'
 import { objectMap } from '../../util/collections'
 import { GithubWorkflowSummary } from '../types/GithubSummaries'
+import { AppState } from '../../environment/AppState'
+import { GithubUserId } from '../types/GithubUserId'
+import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings'
+
+export async function loadCalculatedAndDisplayableUserSettingsOrUseDefaults(
+  appState: AppState,
+  userId: GithubUserId,
+  installationAccount: GithubInstallationAccountStructure
+) {
+  return toCalculatedAndDisplayableUserSettings(
+    await getPersistedUserSettingsOrDefaults(appState, userId),
+    installationAccount
+  )
+}
 
 export function toCalculatedAndDisplayableUserSettings(
   userSettings: PersistedUserSettings,
