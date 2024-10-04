@@ -25,6 +25,7 @@ import { adminPageRoute } from '../../web/pages/adminPage'
 import { adminAddPublicAccountPageRoute } from '../../web/pages/adminAddPublicAccountPage'
 import { allAvailableAccountsRoute } from '../../web/fragments/allAvailableAccounts'
 import { accountHeadingFragmentRoute } from '../../web/fragments/accountHeading'
+import { isFragmentPath } from '../../web/routingCommon'
 
 const router = createRouter([
   accountHeadingFragmentRoute,
@@ -46,26 +47,27 @@ let appState: AppState
 export const baseHandler: CicadaAPIAuthorizedAPIHandler = async (event: APIGatewayProxyEvent) => {
   if (!appState) {
     const startup = await lambdaStartup()
-    if (isFailure(startup)) {
-      logger.info('Github App not ready, returning boilerplate page')
-      return setupRequiredResponse
-    }
-
+    if (isFailure(startup)) return appNotReadyResponse()
     appState = startup.result
   }
 
   return await handleWebRequest(appState, event)
 }
 
-export const setupRequiredResponse = pageViewResponse([
-  p('Cicada GitHub app not ready yet.', a(startSetupRoute.path, 'Go here to start the setup process'))
-])
+function appNotReadyResponse() {
+  logger.info('Github App not ready, returning boilerplate page')
+  return pageViewResponse([
+    p('Cicada GitHub app not ready yet.', a(startSetupRoute.path, 'Go here to start the setup process'))
+  ])
+}
 
 // TOEventually - top level error handler
 export async function handleWebRequest(appState: AppState, event: APIGatewayProxyEvent) {
+  // This Lambda function isn't preceded by the API Gateway authorizer since we want to return HTML on failure
+  // Instead we do authorization here, but using the same authorization logic as the API Gateway authorizer
   const authResult = await authorizeUserRequest(appState, event)
   if (!authResult) {
-    return event.path.startsWith('/app/fragment') ? notAuthorizedHTMLResponse : logoutResponse(appState)
+    return isFragmentPath(event.path) ? notAuthorizedHTMLResponse : logoutResponse(appState)
   }
   const authorizedEvent = { ...event, ...authResult }
   return await router(authorizedEvent)(appState, authorizedEvent)
