@@ -2,7 +2,6 @@ import { GITHUB_LATEST_WORKFLOW_RUN_EVENT } from '../entityTypes'
 import { GithubWorkflowRunEvent, isGithubWorkflowRunEvent } from '../../types/GithubWorkflowRunEvent'
 import {
   AllEntitiesStore,
-  Entity,
   rangeWhereSkBeginsWith,
   typePredicateParser
 } from '@symphoniacloud/dynamodb-entity-store'
@@ -10,8 +9,9 @@ import { GithubAccountId } from '../../types/GithubAccountId'
 import { GithubRepoKey, GithubWorkflowKey } from '../../types/GithubKeys'
 import { sortBy } from '../../../util/collections'
 import { getEventUpdatedTimestamp } from '../../github/githubCommon'
+import { CicadaEntity } from '../entityStoreEntitySupport'
 
-export const GithubLatestWorkflowRunEventEntity: Entity<
+export const GithubLatestWorkflowRunEventEntity: CicadaEntity<
   GithubWorkflowRunEvent,
   Pick<GithubWorkflowRunEvent, 'accountId'>,
   Pick<GithubWorkflowRunEvent, 'repoId' | 'workflowId'>

@@ -1,5 +1,6 @@
 import type { NativeAttributeValue } from '@aws-sdk/util-dynamodb'
 import { FakeDynamoDBInterfaceStubber } from './fakeDynamoDBInterfaceStubber'
+import { EntityType } from '../../../../src/app/domain/entityStore/entityTypes'
 
 export class FakeDynamoDBInterfaceQueryOnePageStubber {
   private stubber: FakeDynamoDBInterfaceStubber
@@ -13,7 +14,7 @@ export class FakeDynamoDBInterfaceQueryOnePageStubber {
     keyConditionExpression: string,
     expressionAttributeValues: Record<string, NativeAttributeValue>,
     items: Record<string, NativeAttributeValue>[],
-    entityType: string,
+    entityType: EntityType,
     options: {
       ScanIndexForward?: boolean
       IndexName?: string
@@ -38,7 +39,7 @@ export class FakeDynamoDBInterfaceQueryOnePageStubber {
     tableName: string,
     key: NativeAttributeValue,
     items: Record<string, NativeAttributeValue>[],
-    entityType: string,
+    entityType: EntityType,
     scanIndexForward?: boolean
   ) {
     this.stub(tableName, `${this.stubber.pk(tableName)} = :pk`, { ':pk': key }, items, entityType, {
@@ -52,7 +53,7 @@ export class FakeDynamoDBInterfaceQueryOnePageStubber {
     pk: NativeAttributeValue,
     skExpressionAttributeValues: Record<string, NativeAttributeValue>,
     items: Record<string, NativeAttributeValue>[],
-    entityType: string,
+    entityType: EntityType,
     scanIndexForward?: boolean
   ) {
     this.stub(
@@ -72,7 +73,7 @@ export class FakeDynamoDBInterfaceQueryOnePageStubber {
     tableName: string,
     key: NativeAttributeValue,
     items: Record<string, NativeAttributeValue>[],
-    entityType: string,
+    entityType: EntityType,
     scanIndexForward?: boolean
   ) {
     this.stub(tableName, `${this.stubber.indexPk(tableName)} = :pk`, { ':pk': key }, items, entityType, {
@@ -87,7 +88,7 @@ export class FakeDynamoDBInterfaceQueryOnePageStubber {
     pk: NativeAttributeValue,
     skExpressionAttributeValues: Record<string, NativeAttributeValue>,
     items: Record<string, NativeAttributeValue>[],
-    entityType: string,
+    entityType: EntityType,
     scanIndexForward?: boolean
   ) {
     this.stub(

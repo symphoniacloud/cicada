@@ -1,8 +1,9 @@
 import { WEB_PUSH_SUBSCRIPTION } from '../entityTypes'
 import { isWebPushSubscription, WebPushSubscription } from '../../types/WebPushSubscription'
-import { Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { CicadaEntity } from '../entityStoreEntitySupport'
 
-export const WebPushSubscriptionEntity: Entity<
+export const WebPushSubscriptionEntity: CicadaEntity<
   WebPushSubscription,
   Pick<WebPushSubscription, 'userId'>,
   Pick<WebPushSubscription, 'endpoint'>

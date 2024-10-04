@@ -1,10 +1,11 @@
 import { GITHUB_LATEST_PUSH_PER_REF } from '../entityTypes'
-import { AllEntitiesStore, Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubPush, isGithubPush } from '../../types/GithubPush'
 import { rangeWhereSkGreaterThan } from '@symphoniacloud/dynamodb-entity-store/dist/cjs/support/querySupport'
 import { GithubAccountId } from '../../types/GithubAccountId'
+import { CicadaEntity } from '../entityStoreEntitySupport'
 
-const GithubLatestPushPerRefEntity: Entity<
+const GithubLatestPushPerRefEntity: CicadaEntity<
   GithubPush,
   Pick<GithubPush, 'accountId'>,
   Pick<GithubPush, 'repoId' | 'ref'>

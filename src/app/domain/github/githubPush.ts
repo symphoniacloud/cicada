@@ -1,6 +1,6 @@
 import { AppState } from '../../environment/AppState'
 import { logger } from '../../util/logging'
-import { GithubPushEntity } from '../entityStore/entities/GithubPushEntity'
+import { putPushIfNoKeyExists } from '../entityStore/entities/GithubPushEntity'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
 import { GithubPush } from '../types/GithubPush'
 import {
@@ -10,6 +10,7 @@ import {
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
 import { MultipleEntityCollectionResponse } from '@symphoniacloud/dynamodb-entity-store'
 import { saveLatestPushes } from './githubLatestPushesPerRef'
+import { GITHUB_PUSH } from '../entityStore/entityTypes'
 
 export async function processPushes(appState: AppState, pushes: GithubPush[], publishNotifications: boolean) {
   const newPushes = await savePushes(appState, pushes)
@@ -24,10 +25,7 @@ async function savePushes(appState: AppState, pushes: GithubPush[]) {
     await Promise.all(
       pushes.map(async (push) => {
         return executeAndCatchConditionalCheckFailed(async () => {
-          await appState.entityStore.for(GithubPushEntity).put(push, {
-            conditionExpression: 'attribute_not_exists(PK)'
-          })
-          return push
+          return putPushIfNoKeyExists(appState.entityStore, push)
         })
       })
     )
@@ -40,7 +38,7 @@ async function savePushes(appState: AppState, pushes: GithubPush[]) {
 export function pushesFromMultipleEntityResponse(
   allActivity: MultipleEntityCollectionResponse
 ): GithubPush[] {
-  return domainObjectsFromMultipleEventEntityResponse(allActivity, GithubPushEntity.type)
+  return domainObjectsFromMultipleEventEntityResponse(allActivity, GITHUB_PUSH)
 }
 
 export function latestCommitInPush(push: Pick<GithubPush, 'commits'>) {

@@ -1,10 +1,11 @@
-import { AllEntitiesStore, Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubRepo, isGithubRepo } from '../../types/GithubRepo'
 import { GITHUB_REPOSITORY } from '../entityTypes'
 import { GithubRepoKey } from '../../types/GithubKeys'
 import { GithubAccountId } from '../../types/GithubAccountId'
+import { CicadaEntity } from '../entityStoreEntitySupport'
 
-export const GithubRepositoryEntity: Entity<
+export const GithubRepositoryEntity: CicadaEntity<
   GithubRepo,
   Pick<GithubRepo, 'accountId'>,
   Pick<GithubRepo, 'repoId'>

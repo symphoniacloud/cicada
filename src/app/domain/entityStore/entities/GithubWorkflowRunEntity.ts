@@ -1,10 +1,11 @@
 import { GITHUB_WORKFLOW_RUN } from '../entityTypes'
 import { GithubWorkflowRunEvent, isGithubWorkflowRunEvent } from '../../types/GithubWorkflowRunEvent'
-import { Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { githubWorkflowRunEventGsiSkPrefix } from './GithubWorkflowRunEventEntity'
+import { CicadaEntity } from '../entityStoreEntitySupport'
 
 // Stores the latest run event per workflow run
-export const GithubWorkflowRunEntity: Entity<
+export const GithubWorkflowRunEntity: CicadaEntity<
   GithubWorkflowRunEvent,
   Pick<GithubWorkflowRunEvent, 'accountId'>,
   Pick<GithubWorkflowRunEvent, 'repoId' | 'workflowId' | 'workflowRunId'>
