@@ -8,7 +8,6 @@ import { GithubUserId } from '../types/GithubUserId'
 import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys'
 import { recentActiveBranchesForAccounts } from '../github/githubLatestPushesPerRef'
 import { GithubPush } from '../types/GithubPush'
-import { getRunEventsForWorkflow } from '../github/githubWorkflowRunEvent'
 import { getRecentActivityForRepo, GithubActivity } from '../github/githubActivity'
 import {
   allAccountIDsFromStructure,
@@ -18,6 +17,7 @@ import {
   latestWorkflowRunEventsPerWorkflowForAccount,
   latestWorkflowRunEventsPerWorkflowForRepo
 } from '../entityStore/entities/GithubLatestWorkflowRunEventEntity'
+import { getRunEventsForWorkflow } from '../entityStore/entities/GithubWorkflowRunEventEntity'
 
 interface UserVisibleObjects<T> {
   allEvents: T[]
@@ -62,7 +62,7 @@ export async function getRunEventsForWorkflowForUser(
   appState: AppState,
   workflow: GithubWorkflowKey
 ): Promise<VisibleWorkflowRunEvents> {
-  return toVisibleEvents(await getRunEventsForWorkflow(appState, workflow))
+  return toVisibleEvents(await getRunEventsForWorkflow(appState.entityStore, workflow))
 }
 
 export async function getRecentActivityForRepoForUser(
