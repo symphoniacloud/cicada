@@ -4,7 +4,7 @@ import { GithubPublicAccount, isGithubPublicAccount } from '../../types/GithubPu
 import { GithubAccountId } from '../../types/GithubAccountId'
 import { CicadaEntity } from '../entityStoreEntitySupport'
 
-export const GithubPublicAccountEntity: CicadaEntity<
+const GithubPublicAccountEntity: CicadaEntity<
   GithubPublicAccount,
   Pick<GithubPublicAccount, 'installationAccountId'>,
   Pick<GithubPublicAccount, 'accountId'>
@@ -19,11 +19,7 @@ export const GithubPublicAccountEntity: CicadaEntity<
   }
 }
 
-function store(entityStore: AllEntitiesStore) {
-  return entityStore.for(GithubPublicAccountEntity)
-}
-
-export async function savePublicAccount(entityStore: AllEntitiesStore, account: GithubPublicAccount) {
+export async function putPublicAccount(entityStore: AllEntitiesStore, account: GithubPublicAccount) {
   return await store(entityStore).put(account)
 }
 
@@ -43,4 +39,8 @@ export async function getPublicAccount(
     installationAccountId,
     accountId
   })
+}
+
+function store(entityStore: AllEntitiesStore) {
+  return entityStore.for(GithubPublicAccountEntity)
 }

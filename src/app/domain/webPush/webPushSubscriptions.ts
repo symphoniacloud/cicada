@@ -1,9 +1,12 @@
 import { AppState } from '../../environment/AppState'
 import { logger } from '../../util/logging'
 import { isWebPushSubscription, WebPushSubscription } from '../types/WebPushSubscription'
-import { WebPushSubscriptionEntity } from '../entityStore/entities/WebPushSubscriptionEntity'
 import { emptySuccess, failedWith } from '../../util/structuredResult'
 import { GithubUserId } from '../types/GithubUserId'
+import {
+  deleteWebPushSubscription,
+  putWebPushSubscription
+} from '../entityStore/entities/WebPushSubscriptionEntity'
 
 export async function registerSubscription(
   appState: AppState,
@@ -22,7 +25,7 @@ export async function registerSubscription(
     return failedWith('invalid event format')
   }
 
-  await webPushStore(appState).put(webPushSubscription)
+  await putWebPushSubscription(appState.entityStore, webPushSubscription)
   return emptySuccess
 }
 
@@ -37,17 +40,6 @@ export async function deregisterSubscription(
     logger.warn('Received invalid web push unsubscription', { rawSubscription })
     return failedWith('invalid event format')
   }
-  await webPushStore(appState).delete({
-    userId,
-    endpoint
-  })
+  await deleteWebPushSubscription(appState.entityStore, userId, endpoint)
   return emptySuccess
-}
-
-export async function getAllSubscriptionsForUser(appState: AppState, userId: GithubUserId) {
-  return await webPushStore(appState).queryAllByPk({ userId })
-}
-
-function webPushStore(appState: AppState) {
-  return appState.entityStore.for(WebPushSubscriptionEntity)
 }

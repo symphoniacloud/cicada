@@ -6,7 +6,7 @@ import {
   typePredicateParser
 } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubAccountId } from '../../types/GithubAccountId'
-import { GithubRepoKey, GithubWorkflowKey } from '../../types/GithubKeys'
+import { GithubRepoKey } from '../../types/GithubKeys'
 import { sortBy } from '../../../util/collections'
 import { getEventUpdatedTimestamp } from '../../github/githubCommon'
 import { CicadaEntity } from '../entityStoreEntitySupport'
@@ -22,7 +22,7 @@ export const GithubLatestWorkflowRunEventEntity: CicadaEntity<
     return `ACCOUNT#${source.accountId}`
   },
   sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'workflowId'>) {
-    return `${githubLatestWorkflowRunEventSkPrefix(source)}#WORKFLOW#${source.workflowId}`
+    return `${skPrefix(source)}#WORKFLOW#${source.workflowId}`
   },
   gsis: {
     gsi1: {
@@ -36,7 +36,7 @@ export const GithubLatestWorkflowRunEventEntity: CicadaEntity<
   }
 }
 
-export function githubLatestWorkflowRunEventSkPrefix({ repoId }: Pick<GithubWorkflowRunEvent, 'repoId'>) {
+function skPrefix({ repoId }: Pick<GithubWorkflowRunEvent, 'repoId'>) {
   return `REPO#${repoId}`
 }
 
@@ -49,13 +49,6 @@ export async function putRunEventIfNoKeyExistsOrNewerThanExisting(
     expressionAttributeNames: { '#updatedAt': 'updatedAt' },
     expressionAttributeValues: { ':newUpdatedAt': event.updatedAt }
   })
-}
-
-export async function latestWorkflowRunEventForWorkflow(
-  entityStore: AllEntitiesStore,
-  workflowKey: GithubWorkflowKey
-) {
-  return store(entityStore).getOrUndefined(workflowKey)
 }
 
 export async function latestWorkflowRunEventsPerWorkflowForAccount(
@@ -76,7 +69,7 @@ export async function latestWorkflowRunEventsPerWorkflowForRepo(
 ) {
   const latestEvents = await store(entityStore).queryAllByPkAndSk(
     repoKey,
-    rangeWhereSkBeginsWith(githubLatestWorkflowRunEventSkPrefix(repoKey))
+    rangeWhereSkBeginsWith(skPrefix(repoKey))
   )
   return sortBy(latestEvents, getEventUpdatedTimestamp, false)
 }

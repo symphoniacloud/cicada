@@ -5,7 +5,7 @@ import { GithubAccountId } from '../../types/GithubAccountId'
 import { GithubUserId } from '../../types/GithubUserId'
 import { CicadaEntity } from '../entityStoreEntitySupport'
 
-export const GithubAccountMembershipEntity: CicadaEntity<
+const GithubAccountMembershipEntity: CicadaEntity<
   GithubAccountMembership,
   Pick<GithubAccountMembership, 'accountId'>,
   Pick<GithubAccountMembership, 'userId'>

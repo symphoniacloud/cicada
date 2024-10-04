@@ -30,7 +30,7 @@ const GithubLatestPushPerRefEntity: CicadaEntity<
   }
 }
 
-export function generateGsiSK({ dateTime }: Pick<GithubPush, 'dateTime'>) {
+function generateGsiSK({ dateTime }: Pick<GithubPush, 'dateTime'>) {
   return `DATETIME#${dateTime}`
 }
 

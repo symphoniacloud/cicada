@@ -5,7 +5,7 @@ import { GithubRepoKey } from '../../types/GithubKeys'
 import { GithubAccountId } from '../../types/GithubAccountId'
 import { CicadaEntity } from '../entityStoreEntitySupport'
 
-export const GithubRepositoryEntity: CicadaEntity<
+const GithubRepositoryEntity: CicadaEntity<
   GithubRepo,
   Pick<GithubRepo, 'accountId'>,
   Pick<GithubRepo, 'repoId'>
