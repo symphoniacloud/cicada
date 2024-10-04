@@ -8,7 +8,7 @@ import {
 import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId'
 import {
   buildAccountStructure,
-  buildInstallationAccountStructure,
+  buildUserScopedRefData,
   buildRepoStructure,
   buildWorkflowSummary
 } from '../../../../testSupport/builders/accountStructureBuilders'
@@ -118,7 +118,7 @@ test('toDisplayableAccountSettings', () => {
 })
 
 test('toCalculatedAndDisplayableUserSettings', () => {
-  const accountStructure = buildInstallationAccountStructure({
+  const accountStructure = buildUserScopedRefData({
     accountName: 'account1',
     repos: [
       buildRepoStructure({

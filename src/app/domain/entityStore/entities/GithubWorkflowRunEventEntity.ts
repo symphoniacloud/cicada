@@ -77,14 +77,6 @@ export async function getRunEventsForWorkflow(entityStore: AllEntitiesStore, key
   })
 }
 
-// CAREFUL - Don't use this for production code! Only just used for integration tests
-export async function onlyUseInTestsGetAllGithubWorkflowRunEventsForAccount(
-  entityStore: AllEntitiesStore,
-  accountId: GithubAccountId
-) {
-  return store(entityStore).queryAllByPk({ accountId })
-}
-
 export async function getRunEventsForWorkflowPage(
   entityStore: AllEntitiesStore,
   { accountId, repoId, workflowId }: GithubWorkflowKey,
@@ -95,6 +87,14 @@ export async function getRunEventsForWorkflowPage(
     rangeWhereSkBeginsWith(skPrefix({ repoId, workflowId })),
     { scanIndexForward: false, ...(limit ? { limit } : {}) }
   )
+}
+
+// CAREFUL - Don't use this for production code! Only just used for integration tests
+export async function onlyUseInTestsGetAllGithubWorkflowRunEventsForAccount(
+  entityStore: AllEntitiesStore,
+  accountId: GithubAccountId
+) {
+  return store(entityStore).queryAllByPk({ accountId })
 }
 
 function store(entityStore: AllEntitiesStore) {

@@ -1,12 +1,9 @@
 import { AppState } from '../../environment/AppState'
-import { GithubUserId } from '../types/GithubUserId'
-import { getInstalledAccountIdForUser } from './githubMembership'
 import {
   GithubAccountStructure,
-  GithubInstallationAccountStructure,
-  GithubRepoStructure
-} from '../types/GithubAccountStructure'
-import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity'
+  GithubRepoStructure,
+  UserScopeReferenceData
+} from '../types/UserScopeReferenceData'
 import { getUnarchivedRepositoriesForAccount, repoKeysEqual, toRepoSummary } from './githubRepo'
 import { GithubAccountId } from '../types/GithubAccountId'
 import { GithubRepoId } from '../types/GithubRepoId'
@@ -17,26 +14,25 @@ import { toAccountSummary } from './githubAccount'
 import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys'
 import { GithubRepo } from '../types/GithubRepo'
 import { GithubWorkflow } from '../types/GithubWorkflow'
+import { GithubUserId } from '../types/GithubUserId'
+import { getInstalledAccountIdForUser } from './githubMembership'
+import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity'
 
-export async function loadInstallationAccountStructureForUser(
+export async function loadUserScopeReferenceData(
   appState: AppState,
   userId: GithubUserId
-): Promise<GithubInstallationAccountStructure> {
-  // TOEventually - support user being a member of more than one account
-  return loadInstallationAccountStructure(appState, await getInstalledAccountIdForUser(appState, userId))
-}
+): Promise<UserScopeReferenceData> {
+  const memberAccountId = await getInstalledAccountIdForUser(appState, userId)
+  const memberAccount = await getInstallationOrThrow(appState.entityStore, memberAccountId)
 
-export async function loadInstallationAccountStructure(
-  appState: AppState,
-  accountId: GithubAccountId
-): Promise<GithubInstallationAccountStructure> {
   return {
-    ...(await loadAccountStructure(appState, await getInstallationOrThrow(appState.entityStore, accountId))),
-    publicAccounts: await loadPublicAccountsStructure(appState, accountId)
+    userId,
+    memberAccount: await loadAccountStructure(appState, memberAccount),
+    publicAccounts: await loadPublicAccountsStructure(appState, memberAccountId)
   }
 }
 
-async function loadAccountStructure<TAccount extends GithubAccountSummary>(
+export async function loadAccountStructure<TAccount extends GithubAccountSummary>(
   appState: AppState,
   account: TAccount
 ): Promise<GithubAccountStructure> {
@@ -46,7 +42,7 @@ async function loadAccountStructure<TAccount extends GithubAccountSummary>(
   }
 }
 
-async function loadPublicAccountsStructure(
+export async function loadPublicAccountsStructure(
   appState: AppState,
   accountId: GithubAccountId
 ): Promise<Record<GithubAccountId, GithubAccountStructure>> {
@@ -79,28 +75,32 @@ function buildRepoStructure(repo: GithubRepo, allWorkflows: GithubWorkflow[]): G
 }
 
 export function getAccountStructure(
-  installation: GithubInstallationAccountStructure,
+  refData: UserScopeReferenceData,
   accountId: GithubAccountId
 ): GithubAccountStructure | undefined {
-  return installation.accountId === accountId ? installation : installation.publicAccounts[accountId]
+  return refData.memberAccount.accountId === accountId
+    ? refData.memberAccount
+    : refData.publicAccounts[accountId]
 }
 
 export function getRepoStructure(
-  installation: GithubInstallationAccountStructure,
+  refData: UserScopeReferenceData,
   repoKey: GithubRepoKey
 ): GithubRepoStructure | undefined {
-  return getAccountStructure(installation, repoKey.accountId)?.repos[repoKey.repoId]
+  return getAccountStructure(refData, repoKey.accountId)?.repos[repoKey.repoId]
 }
 
 export function getWorkflowStructure(
-  installation: GithubInstallationAccountStructure,
+  refData: UserScopeReferenceData,
   workflowKey: GithubWorkflowKey
 ): GithubWorkflowSummary | undefined {
-  return getRepoStructure(installation, workflowKey)?.workflows[workflowKey.workflowId]
+  return getRepoStructure(refData, workflowKey)?.workflows[workflowKey.workflowId]
 }
 
-export function allAccountIDsFromStructure(
-  installation: GithubInstallationAccountStructure
-): GithubAccountId[] {
-  return [installation.accountId, ...(Object.keys(installation.publicAccounts) as GithubAccountId[])]
+export function allAccountIDsFromRefData(refData: UserScopeReferenceData) {
+  return [refData.memberAccount.accountId, ...(Object.keys(refData.publicAccounts) as GithubAccountId[])]
+}
+
+export function allAccountsFromRefData(refData: UserScopeReferenceData) {
+  return [refData.memberAccount, ...Object.values(refData.publicAccounts)]
 }

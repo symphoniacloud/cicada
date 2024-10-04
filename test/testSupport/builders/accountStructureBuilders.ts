@@ -6,12 +6,13 @@ import {
 import { fromRawGithubWorkflowId } from '../../../src/app/domain/types/GithubWorkflowId'
 import {
   GithubAccountStructure,
-  GithubInstallationAccountStructure,
-  GithubRepoStructure
-} from '../../../src/app/domain/types/GithubAccountStructure'
+  GithubRepoStructure,
+  UserScopeReferenceData
+} from '../../../src/app/domain/types/UserScopeReferenceData'
 import { fromRawGithubRepoId } from '../../../src/app/domain/types/GithubRepoId'
 import { fromRawGithubAccountId } from '../../../src/app/domain/types/GithubAccountId'
 import { GithubAccountType, ORGANIZATION_ACCOUNT_TYPE } from '../../../src/app/domain/types/GithubAccountType'
+import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId'
 
 export interface BuildAccountSummaryOptions {
   simpleAccountId?: number
@@ -79,15 +80,15 @@ export function buildRepoStructure(options?: BuildRepoStructureOptions): GithubR
   }
 }
 
-export interface BuildInstallationAccountStructureOptions extends BuildAccountStructureOptions {
+export interface BuildUserScopedRefDataOptions extends BuildAccountStructureOptions {
+  simpleUserId?: number
   publicAccounts?: GithubAccountStructure[]
 }
 
-export function buildInstallationAccountStructure(
-  options?: BuildInstallationAccountStructureOptions
-): GithubInstallationAccountStructure {
+export function buildUserScopedRefData(options?: BuildUserScopedRefDataOptions): UserScopeReferenceData {
   return {
-    ...buildAccountStructure(options),
+    userId: fromRawGithubUserId(options?.simpleUserId ?? '111'),
+    memberAccount: buildAccountStructure(options),
     publicAccounts: Object.fromEntries((options?.publicAccounts ?? []).map((acc) => [acc.accountId, acc]))
   }
 }

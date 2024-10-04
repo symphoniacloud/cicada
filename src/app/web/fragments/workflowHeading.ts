@@ -1,11 +1,13 @@
 import { AppState } from '../../environment/AppState'
 import { Route } from '../../internalHttpRouter/internalHttpRoute'
 import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { isFailure } from '../../util/structuredResult'
+import { isFailure, isSuccess } from '../../util/structuredResult'
 import { getWorkflowCoordinates } from './requestParsing/getWorkflowCoordinates'
 import { createWorkflowHeadingResponse } from './views/workflowHeadingView'
 import { fragmentPath } from '../routingCommon'
-import { getRunEventsForWorkflowPage } from '../../domain/entityStore/entities/GithubWorkflowRunEventEntity'
+import { getAvailableRunEventsForWorkflowForUser } from '../../domain/user/userVisible'
+import { notFoundHTMLResponse } from '../htmlResponses'
+import { loadUserScopeReferenceData } from '../../domain/github/userScopeReferenceData'
 
 export const workflowHeadingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('workflow/heading'),
@@ -16,7 +18,10 @@ export async function workflowHeading(appState: AppState, event: CicadaAuthorize
   const parsed = getWorkflowCoordinates(event)
   if (isFailure(parsed)) return parsed.failureResult
 
-  // TODO eventually - make sure user has permission for this
-  const run = (await getRunEventsForWorkflowPage(appState.entityStore, parsed.result, 1)).items[0]
-  return createWorkflowHeadingResponse(run)
+  // TODO - consider putting this on event / appState
+  const refData = await loadUserScopeReferenceData(appState, event.userId)
+
+  const result = await getAvailableRunEventsForWorkflowForUser(appState, refData, parsed.result, 1)
+  if (!isSuccess(result)) return notFoundHTMLResponse
+  return createWorkflowHeadingResponse(result.result.items[0])
 }

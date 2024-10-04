@@ -5,7 +5,8 @@ import { resetPersistedUserSettings } from '../../domain/user/persistedUserSetti
 import { createGetUserSettingsResponse } from './views/getUserSettingsView'
 import { toCalculatedAndDisplayableUserSettings } from '../../domain/user/displayableUserSettings'
 import { fragmentPath } from '../routingCommon'
-import { loadInstallationAccountStructureForUser } from '../../domain/github/githubAccountStructure'
+
+import { loadUserScopeReferenceData } from '../../domain/github/userScopeReferenceData'
 
 export const postResetUserSettingsFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('resetUserSettings'),
@@ -14,10 +15,10 @@ export const postResetUserSettingsFragmentRoute: Route<CicadaAuthorizedAPIEvent>
 }
 
 export async function resetUserSettings(appState: AppState, { userId }: CicadaAuthorizedAPIEvent) {
+  // TODO - consider putting this on event / appState
+  const refData = await loadUserScopeReferenceData(appState, userId)
+
   return createGetUserSettingsResponse(
-    toCalculatedAndDisplayableUserSettings(
-      await resetPersistedUserSettings(appState, userId),
-      await loadInstallationAccountStructureForUser(appState, userId)
-    )
+    toCalculatedAndDisplayableUserSettings(await resetPersistedUserSettings(appState, userId), refData)
   )
 }

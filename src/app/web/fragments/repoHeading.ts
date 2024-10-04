@@ -6,7 +6,7 @@ import { createRepoHeadingResponse } from './views/repoHeadingView'
 import { notFoundHTMLResponse } from '../htmlResponses'
 import { getRepoCoordinates } from './requestParsing/getRepoCoordinates'
 import { fragmentPath } from '../routingCommon'
-import { getRepository } from '../../domain/entityStore/entities/GithubRepositoryEntity'
+import { getRepoStructure, loadUserScopeReferenceData } from '../../domain/github/userScopeReferenceData'
 
 export const repoHeadingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('repo/heading'),
@@ -15,12 +15,13 @@ export const repoHeadingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
 
 export async function repoHeading(appState: AppState, event: CicadaAuthorizedAPIEvent) {
   const repoCoordinatesResult = getRepoCoordinates(event)
-
   if (isFailure(repoCoordinatesResult)) return repoCoordinatesResult.failureResult
 
-  const repo = await getRepository(appState.entityStore, repoCoordinatesResult.result)
+  // TODO - consider putting this on event / appState
+  const refData = await loadUserScopeReferenceData(appState, event.userId)
+
+  const repo = getRepoStructure(refData, repoCoordinatesResult.result)
   if (!repo) return notFoundHTMLResponse
 
-  // TODO eventually - make sure user has permission for this
   return createRepoHeadingResponse(repo)
 }
