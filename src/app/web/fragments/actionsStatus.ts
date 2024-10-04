@@ -13,7 +13,6 @@ import {
 import { GithubRepoKey } from '../../domain/types/GithubKeys'
 import { fragmentPath } from '../routingCommon'
 import { GithubAccountId } from '../../domain/types/GithubAccountId'
-import { loadUserScopeReferenceData } from '../../domain/github/userScopeReferenceData'
 import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData'
 
 export const actionsStatusFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
@@ -26,12 +25,10 @@ export async function actionsStatus(appState: AppState, event: CicadaAuthorizedA
 
   if (isFailure(coordinatesResult)) return coordinatesResult.failureResult
   const { accountId, repoId } = coordinatesResult.result
-  // TODO - consider putting this on event / appState
-  const refData = await loadUserScopeReferenceData(appState, event.userId)
 
-  if (accountId && repoId) return await actionsStatusForRepo(appState, refData, { accountId, repoId })
-  if (accountId) return await actionsStatusForAccount(appState, refData, accountId)
-  if (!accountId && !repoId) return await actionsStatusForDashboard(appState, refData)
+  if (accountId && repoId) return await actionsStatusForRepo(appState, event.refData, { accountId, repoId })
+  if (accountId) return await actionsStatusForAccount(appState, event.refData, accountId)
+  if (!accountId && !repoId) return await actionsStatusForDashboard(appState, event.refData)
   return invalidRequestResponse
 }
 

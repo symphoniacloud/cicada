@@ -12,5 +12,5 @@ export const helloPageRoute: Route<CicadaAuthorizedAPIEvent> = {
 }
 
 export async function helloPage(_: AppState, event: CicadaAuthorizedAPIEvent) {
-  return pageViewResponse([p('Hello ', event.username, ' / ', `${event.userId}`)])
+  return pageViewResponse([p('Hello ', event.username, ' / ', `${event.refData.userId}`)])
 }

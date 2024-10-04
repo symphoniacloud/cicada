@@ -4,7 +4,7 @@ import middy from '@middy/core'
 import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
 import { createRouter } from '../../internalHttpRouter/internalHttpRouter'
 import { helloPageRoute } from '../../web/pages/helloPage'
-import { CicadaAPIAuthorizedAPIHandler } from '../../inboundInterfaces/lambdaTypes'
+import { CicadaAPIAuthorizedAPIHandler, CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import { logoutResponse } from '../../domain/github/githubUserAuth/githubWebAuthHandler'
 import { authorizeUserRequest } from '../../domain/webAuth/userAuthorizer'
@@ -26,6 +26,7 @@ import { adminAddPublicAccountPageRoute } from '../../web/pages/adminAddPublicAc
 import { allAvailableAccountsRoute } from '../../web/fragments/allAvailableAccounts'
 import { accountHeadingFragmentRoute } from '../../web/fragments/accountHeading'
 import { isFragmentPath } from '../../web/routingCommon'
+import { loadUserScopeReferenceData } from '../../domain/github/userScopeReferenceData'
 
 const router = createRouter([
   accountHeadingFragmentRoute,
@@ -69,7 +70,9 @@ export async function handleWebRequest(appState: AppState, event: APIGatewayProx
   if (!authResult) {
     return isFragmentPath(event.path) ? notAuthorizedHTMLResponse : logoutResponse(appState)
   }
-  const authorizedEvent = { ...event, ...authResult }
+  // Load reference data here so individual route handlers don't need to
+  const refData = await loadUserScopeReferenceData(appState, authResult.userId)
+  const authorizedEvent: CicadaAuthorizedAPIEvent = { ...event, refData, username: authResult.username }
   return await router(authorizedEvent)(appState, authorizedEvent)
 }
 

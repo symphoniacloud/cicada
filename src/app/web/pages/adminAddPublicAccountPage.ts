@@ -21,7 +21,11 @@ export async function adminAddPublicAccountPage(appState: AppState, event: Cicad
   if (isFailure(parseResult)) {
     return createBadRequestResponse('Invalid Request - did you enter an account name?')
   }
-  const saveResult = await savePublicAccountWithName(appState, event.userId, parseResult.result.accountName)
+  const saveResult = await savePublicAccountWithName(
+    appState,
+    event.refData.userId,
+    parseResult.result.accountName
+  )
   if (isFailure(saveResult)) {
     return internalErrorHTMLResponse
   }
