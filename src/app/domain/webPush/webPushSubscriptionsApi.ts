@@ -11,6 +11,26 @@ import { userIdFromEvent, usernameFromEvent } from '../webAuth/webAuth'
 import { usernameFieldMissingFromContextResponse } from '../../inboundInterfaces/standardHttpResponses'
 import { CicadaAPIAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
 import { isSuccess } from '../../util/structuredResult'
+import { Route } from '../../internalHttpRouter/internalHttpRoute'
+import { authenticateApiPath } from '../../web/routingCommon'
+
+export const webPushSubscribeRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
+  path: authenticateApiPath('webPushSubscribe'),
+  method: 'POST',
+  target: handleWebPushSubscribe
+}
+
+export const webPushUnsubscribeRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
+  path: authenticateApiPath('webPushUnsubscribe'),
+  method: 'POST',
+  target: handleWebPushUnsubscribe
+}
+
+export const webPushTestRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
+  path: authenticateApiPath('ping'),
+  method: 'POST',
+  target: handleWebPushTest
+}
 
 export async function handleWebPushSubscribe(appState: AppState, event: CicadaAPIAuthorizedAPIEvent) {
   const username = usernameFromEvent(event),
