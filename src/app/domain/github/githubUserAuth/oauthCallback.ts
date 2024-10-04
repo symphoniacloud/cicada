@@ -3,7 +3,7 @@ import { AppState } from '../../../environment/AppState'
 import { logger } from '../../../util/logging'
 import { redirectResponseWithCookies } from '../../../inboundInterfaces/httpResponses'
 import { APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
-import { getUserByAuthToken } from '../githubUser'
+import { getUserByTokenWithGithubCheck } from '../githubUser'
 import { cookies } from './cicadaAuthCookies'
 import { createBadRequestResponse } from '../../../web/pages/views/badRequestView'
 
@@ -40,16 +40,17 @@ async function tryOauthCallback(
     return failedToLoginResult(`Unable to login because there was invalid state on request`)
   }
 
-  // TOEventually - proper error handling here - e.g. what if code was invalid? Does this throw or return undefined
+  // TOEventually - proper error handling here - e.g. what if code was invalid? Does this throw or return undefined?
   const { token } = await appState.githubClient.createOAuthUserAuth(code)
 
-  const cicadaUser = await getUserByAuthToken(appState, token)
+  const cicadaUser = await getUserByTokenWithGithubCheck(appState, token)
+  // User will be undefined if they aren't a user in the database, or have no membership
+  // User will *also* be undefined if Github says this token is invalid ... which shouldn't happen
+  //   since we just got the token from GitHub.
   if (!cicadaUser) {
     return failedToLoginResult(`Not a valid user for this Cicada instance`)
   }
 
-  // For now we just validate that the user is / was ever a cicada user
-  // TOEventually - check memberships too, just like we do in userAuthorizer
   logger.debug(`Valid user: ${cicadaUser.userName}`)
 
   // For now the cookie token Cicada uses is precisely the GitHub user token. In theory Cicada

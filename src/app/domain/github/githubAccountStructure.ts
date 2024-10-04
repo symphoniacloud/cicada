@@ -1,13 +1,13 @@
 import { AppState } from '../../environment/AppState'
 import { GithubUserId } from '../types/GithubUserId'
-import { getAccountIdsForUser } from './githubMembership'
+import { getInstalledAccountIdForUser } from './githubMembership'
 import {
   GithubAccountStructure,
   GithubInstallationAccountStructure,
   GithubRepoStructure
 } from '../types/GithubAccountStructure'
 import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity'
-import { getRepositoriesForAccount, repoKeysEqual, toRepoSummary } from './githubRepo'
+import { getUnarchivedRepositoriesForAccount, repoKeysEqual, toRepoSummary } from './githubRepo'
 import { GithubAccountId } from '../types/GithubAccountId'
 import { GithubRepoId } from '../types/GithubRepoId'
 import { latestWorkflowRunEventsPerWorkflowForAccount } from '../entityStore/entities/GithubLatestWorkflowRunEventEntity'
@@ -23,7 +23,7 @@ export async function loadInstallationAccountStructureForUser(
   userId: GithubUserId
 ): Promise<GithubInstallationAccountStructure> {
   // TOEventually - support user being a member of more than one account
-  return loadInstallationAccountStructure(appState, (await getAccountIdsForUser(appState, userId))[0])
+  return loadInstallationAccountStructure(appState, await getInstalledAccountIdForUser(appState, userId))
 }
 
 export async function loadInstallationAccountStructure(
@@ -62,7 +62,7 @@ async function loadReposStructure(
   appState: AppState,
   accountId: GithubAccountId
 ): Promise<Record<GithubRepoId, GithubRepoStructure>> {
-  const allRepos = await getRepositoriesForAccount(appState, accountId)
+  const allRepos = await getUnarchivedRepositoriesForAccount(appState, accountId)
   const allWorkflows = await latestWorkflowRunEventsPerWorkflowForAccount(appState.entityStore, accountId)
   return Object.fromEntries(allRepos.map((repo) => [repo.repoId, buildRepoStructure(repo, allWorkflows)]))
 }

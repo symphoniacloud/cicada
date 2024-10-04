@@ -3,7 +3,7 @@ import { GithubPublicAccount, publicAccountFromRawGithubUser } from '../types/Gi
 import { isSuccess, Result, successWith } from '../../util/structuredResult'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
-import { getAccountIdsForUser } from './githubMembership'
+import { getInstalledAccountIdForUser } from './githubMembership'
 import { GithubUserId } from '../types/GithubUserId'
 import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity'
 
@@ -14,7 +14,7 @@ export async function savePublicAccountWithName(
 ): Promise<Result<GithubPublicAccount>> {
   // TOEventually - when a user can be a member of multiple installed accounts then need to
   // have them choose which one to add the public account for
-  const installationAccountId = (await getAccountIdsForUser(appState, adminUserId))[0]
+  const installationAccountId = await getInstalledAccountIdForUser(appState, adminUserId)
   const githubAppInstallation = await getInstallationOrThrow(appState.entityStore, installationAccountId)
   const githubUserResult = await appState.githubClient
     .clientForInstallation(githubAppInstallation.installationId)

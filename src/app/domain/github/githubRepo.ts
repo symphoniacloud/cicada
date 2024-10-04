@@ -1,6 +1,6 @@
 import { AppState } from '../../environment/AppState'
 import { RawGithubRepo } from '../types/rawGithub/RawGithubRepo'
-import { fromRawGithubRepo, GithubRepo } from '../types/GithubRepo'
+import { fromRawGithubRepo } from '../types/GithubRepo'
 import { getRepositories, putRepositories } from '../entityStore/entities/GithubRepositoryEntity'
 import { GithubRepoKey } from '../types/GithubKeys'
 import { GithubAccountId } from '../types/GithubAccountId'
@@ -20,15 +20,12 @@ export function toRepoSummary<T extends GithubRepoSummary>(x: T): GithubRepoSumm
 }
 
 export async function processRawRepositories(appState: AppState, rawRepos: RawGithubRepo[]) {
-  return await saveRepositories(appState, rawRepos.map(fromRawGithubRepo))
-}
-
-async function saveRepositories(appState: AppState, repos: GithubRepo[]) {
-  // Just put all repos since there may have been updates to details
+  const repos = rawRepos.map(fromRawGithubRepo)
+  // Just put *all* repos since there may have been updates to details
   await putRepositories(appState.entityStore, repos)
   return repos
 }
 
-export async function getRepositoriesForAccount(appState: AppState, accountId: GithubAccountId) {
+export async function getUnarchivedRepositoriesForAccount(appState: AppState, accountId: GithubAccountId) {
   return (await getRepositories(appState.entityStore, accountId)).filter(({ archived }) => !archived)
 }
