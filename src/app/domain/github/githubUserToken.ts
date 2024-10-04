@@ -1,7 +1,11 @@
 import { AppState } from '../../environment/AppState'
-import { GithubUserTokenEntity } from '../entityStore/entities/GithubUserTokenEntity'
-import { Clock, secondsTimestampInFutureHours, timestampSecondsIsInPast } from '../../util/dateAndTime'
+import {
+  getGithubUserTokenOrUndefined,
+  putGithubUserToken
+} from '../entityStore/entities/GithubUserTokenEntity'
+import { secondsTimestampInFutureHours, timestampSecondsIsInPast } from '../../util/dateAndTime'
 import { GithubUserToken } from '../types/GithubUserToken'
+import { failedWithResult, Result, successWith } from '../../util/structuredResult'
 
 const EXPIRE_CACHED_GITHUB_TOKENS_HOURS = 1
 
@@ -9,22 +13,28 @@ export async function saveOrRefreshGithubUserToken(
   appState: AppState,
   tokenRecord: Pick<GithubUserToken, 'token' | 'userId' | 'userName'>
 ) {
-  await appState.entityStore.for(GithubUserTokenEntity).put(
+  await putGithubUserToken(
+    appState.entityStore,
     {
       ...tokenRecord,
       nextCheckTime: secondsTimestampInFutureHours(appState.clock, EXPIRE_CACHED_GITHUB_TOKENS_HOURS)
     },
-    {
-      ttlInFutureDays: 7
-    }
+    7
   )
 }
 
-export async function getGithubUserTokenOrUndefined(appState: AppState, token: string) {
-  return await appState.entityStore.for(GithubUserTokenEntity).getOrUndefined({ token })
-}
+export const INVALID_TOKEN = ['NO_TOKEN', 'TOKEN_EXPIRED'] as const
+export type InvalidTokenStatus = (typeof INVALID_TOKEN)[number]
 
-// If token record was saved more than EXPIRE_CACHED_GITHUB_TOKENS_HOURS ago then check user token with GitHub agaion
-export function isGithubCheckRequired(clock: Clock, token: GithubUserToken) {
-  return timestampSecondsIsInPast(clock, token.nextCheckTime)
+export async function getTokenRecord(
+  appState: AppState,
+  token: string
+): Promise<Result<GithubUserToken, InvalidTokenStatus>> {
+  const tokenRecord = await getGithubUserTokenOrUndefined(appState.entityStore, token)
+  if (!tokenRecord) return failedWithResult('No token', 'NO_TOKEN')
+
+  // If token record was saved more than EXPIRE_CACHED_GITHUB_TOKENS_HOURS ago then check user token with GitHub again
+  return timestampSecondsIsInPast(appState.clock, tokenRecord.nextCheckTime)
+    ? failedWithResult('Expired', 'TOKEN_EXPIRED')
+    : successWith(tokenRecord)
 }

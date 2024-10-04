@@ -9,6 +9,7 @@ import {
 import { arrayDifferenceDeep } from '../../util/collections'
 import { GithubAccountId } from '../types/GithubAccountId'
 import { GithubUserId } from '../types/GithubUserId'
+import { throwFunction } from '../../../multipleContexts/errors'
 
 export async function setMemberships(
   appState: AppState,
@@ -25,11 +26,19 @@ export async function setMemberships(
   await deleteMemberships(appState.entityStore, arrayDifferenceDeep(previousMemberships, memberships))
 }
 
-export async function getAccountIdsForUser(
+// ToEventually - support multiple installed accounts / user
+export async function getInstalledAccountIdForUser(
   appState: AppState,
   userId: GithubUserId
-): Promise<GithubAccountId[]> {
-  return (await getAllMembershipsForUserId(appState.entityStore, userId)).map(({ accountId }) => accountId)
+): Promise<GithubAccountId> {
+  return (
+    (await getAllMembershipsForUserId(appState.entityStore, userId))[0]?.accountId ??
+    throwFunction(`User ${userId} has no memberships - request shouldn't have been authorized `)()
+  )
+}
+
+export async function isUserAMemberOfAnyInstalledAccount(appState: AppState, user: GithubUser) {
+  return (await getAllMembershipsForUserId(appState.entityStore, user.userId)).length > 0
 }
 
 export async function getUserIdsForAccount(appState: AppState, accountId: GithubAccountId) {

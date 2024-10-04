@@ -1,11 +1,8 @@
 import { AppState } from '../../environment/AppState'
 import { logger } from '../../util/logging'
 import { isTestUserToken, processTestToken } from './userAuthorizerForTests'
-import { getUserByTokenRecord } from '../github/githubUser'
-import { getToken } from './webAuthToken'
+import { getUserByTokenUsingTokenCache } from '../github/githubUser'
 import { WithHeadersEvent } from '../../inboundInterfaces/lambdaTypes'
-import { getGithubUserTokenOrUndefined } from '../github/githubUserToken'
-import { getAccountIdsForUser } from '../github/githubMembership'
 
 import { GithubUserId } from '../types/GithubUserId'
 
@@ -17,7 +14,6 @@ export type SuccessfulAuthorizationResult = {
 }
 
 // Common code used by both API Gateway Lambda Authorizer AND /appa/... Lambda function
-// TOEventually - get some Dynamodb caching here
 export async function authorizeUserRequest(
   appState: AppState,
   event: WithHeadersEvent
@@ -33,20 +29,30 @@ export async function authorizeUserRequest(
     return await processTestToken(appState, token)
   }
 
-  const tokenRecord = await getGithubUserTokenOrUndefined(appState, token)
-  if (!tokenRecord) return undefined
-
-  const cicadaUser = await getUserByTokenRecord(appState, tokenRecord)
-  // Github token has expired or user has been removed from Cicada
+  const cicadaUser = await getUserByTokenUsingTokenCache(appState, token)
   if (!cicadaUser) return undefined
-
-  // If the user exists in Cicada, but no longer has any memberships, then unauthorized
-  // This is the case if the user is removed from a GitHub organization
-  if ((await getAccountIdsForUser(appState, cicadaUser.userId)).length === 0) return undefined
 
   // Authorization successful
   return {
     userId: cicadaUser.userId,
     username: cicadaUser.userName
   }
+}
+
+function getToken(event: WithHeadersEvent) {
+  const tokenCookie = getTokenCookie(event)
+  return tokenCookie ? tokenCookie.split('=')[1] : undefined
+}
+
+// Using both single and multi value headers because there may only be one cookie
+// if user manually delete "isLoggedIn" cookie, otherwise more than one
+function getTokenCookie(event: WithHeadersEvent) {
+  const singleHeaderTokenCookie = (event.headers?.Cookie ?? '')
+    .split(';')
+    .map((x) => x.trim())
+    .find((x) => x.startsWith('token='))
+
+  if (singleHeaderTokenCookie) return singleHeaderTokenCookie
+
+  return (event.multiValueHeaders?.Cookie ?? []).find((x) => x.startsWith('token='))
 }
