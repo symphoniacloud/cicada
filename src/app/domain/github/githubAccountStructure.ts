@@ -39,9 +39,9 @@ export async function loadInstallationAccountStructure(
   }
 }
 
-async function loadAccountStructure(
+async function loadAccountStructure<TAccount extends GithubAccountSummary>(
   appState: AppState,
-  account: GithubAccountSummary
+  account: TAccount
 ): Promise<GithubAccountStructure> {
   return {
     ...toAccountSummary(account),
@@ -53,8 +53,8 @@ async function loadPublicAccountsStructure(
   appState: AppState,
   accountId: GithubAccountId
 ): Promise<Record<GithubAccountId, GithubAccountStructure>> {
-  const allPublicAccountStructure: Record<GithubAccountId, GithubAccountStructure> = {}
   const allPublicAccounts = await getPublicAccountsForInstallationAccount(appState.entityStore, accountId)
+  const allPublicAccountStructure: Record<GithubAccountId, GithubAccountStructure> = {}
   for (const publicAccount of allPublicAccounts) {
     allPublicAccountStructure[publicAccount.accountId] = await loadAccountStructure(appState, publicAccount)
   }
@@ -67,7 +67,6 @@ async function loadReposStructure(
 ): Promise<Record<GithubRepoId, GithubRepoStructure>> {
   const allRepos = await getRepositoriesForAccount(appState, accountId)
   const allWorkflows = await latestWorkflowRunEventsPerWorkflowForAccount(appState.entityStore, accountId)
-
   return Object.fromEntries(allRepos.map((repo) => [repo.repoId, buildRepoStructure(repo, allWorkflows)]))
 }
 
@@ -82,29 +81,25 @@ function buildRepoStructure(repo: GithubRepo, allWorkflows: GithubWorkflow[]): G
   }
 }
 
-export function accountStructureFromInstallationAccountStructure(
+export function getAccountStructure(
   installation: GithubInstallationAccountStructure,
   accountId: GithubAccountId
 ): GithubAccountStructure | undefined {
   return installation.accountId === accountId ? installation : installation.publicAccounts[accountId]
 }
 
-export function repoStructureFromInstallationAccountStructure(
+export function getRepoStructure(
   installation: GithubInstallationAccountStructure,
   repoKey: GithubRepoKey
 ): GithubRepoStructure | undefined {
-  return accountStructureFromInstallationAccountStructure(installation, repoKey.accountId)?.repos[
-    repoKey.repoId
-  ]
+  return getAccountStructure(installation, repoKey.accountId)?.repos[repoKey.repoId]
 }
 
-export function workflowSummaryFromInstallationAccountStructure(
+export function getWorkflowStructure(
   installation: GithubInstallationAccountStructure,
   workflowKey: GithubWorkflowKey
 ): GithubWorkflowSummary | undefined {
-  return repoStructureFromInstallationAccountStructure(installation, workflowKey)?.workflows[
-    workflowKey.workflowId
-  ]
+  return getRepoStructure(installation, workflowKey)?.workflows[workflowKey.workflowId]
 }
 
 export function allAccountIDsFromStructure(

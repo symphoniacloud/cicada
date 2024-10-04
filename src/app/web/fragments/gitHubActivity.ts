@@ -22,7 +22,7 @@ import { getRepository } from '../../domain/entityStore/entities/GithubRepositor
 import { GithubAccountId } from '../../domain/types/GithubAccountId'
 import { GithubUserId } from '../../domain/types/GithubUserId'
 import {
-  accountStructureFromInstallationAccountStructure,
+  getAccountStructure,
   loadInstallationAccountStructureForUser
 } from '../../domain/github/githubAccountStructure'
 
@@ -70,8 +70,7 @@ async function githubActivityForAccount(
   logger.debug('githubActivityForAccount')
   const githubInstallationAccountStructure = await loadInstallationAccountStructureForUser(appState, userId)
 
-  if (!accountStructureFromInstallationAccountStructure(githubInstallationAccountStructure, accountId))
-    return notFoundHTMLResponse
+  if (!getAccountStructure(githubInstallationAccountStructure, accountId)) return notFoundHTMLResponse
 
   return createGithubPushTableResponse(
     'accountActivity',
