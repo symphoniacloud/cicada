@@ -1,6 +1,6 @@
 import { AppState } from '../../environment/AppState'
 import { GithubUserId } from '../types/GithubUserId'
-import { getIdsOfAccountsWhichUserIsMemberOf } from './githubMembership'
+import { getAccountIdsForUser } from './githubMembership'
 import {
   GithubAccountStructure,
   GithubInstallationAccountStructure,
@@ -23,10 +23,7 @@ export async function loadInstallationAccountStructureForUser(
   userId: GithubUserId
 ): Promise<GithubInstallationAccountStructure> {
   // TOEventually - support user being a member of more than one account
-  return loadInstallationAccountStructure(
-    appState,
-    (await getIdsOfAccountsWhichUserIsMemberOf(appState, userId))[0]
-  )
+  return loadInstallationAccountStructure(appState, (await getAccountIdsForUser(appState, userId))[0])
 }
 
 export async function loadInstallationAccountStructure(

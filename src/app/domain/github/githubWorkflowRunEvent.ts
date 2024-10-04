@@ -7,7 +7,7 @@ import {
 } from '../entityStore/entities/GithubWorkflowRunEventEntity'
 import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport'
 import { RawGithubWorkflowRunEvent } from '../types/rawGithub/RawGithubWorkflowRunEvent'
-import { getMemberUserIdsForAccount } from './githubMembership'
+import { getUserIdsForAccount } from './githubMembership'
 import { saveRuns } from './githubWorkflowRun'
 import { rangeWhereSkBeginsWith } from '@symphoniacloud/dynamodb-entity-store'
 import { isoDifferenceMs } from '../../util/dateAndTime'
@@ -50,7 +50,7 @@ export async function getRelatedMemberIdsForRunEvent(
   appState: AppState,
   runEvent: GithubWorkflowRunEvent
 ): Promise<GithubUserId[]> {
-  return getMemberUserIdsForAccount(appState, runEvent.accountId)
+  return getUserIdsForAccount(appState, runEvent.accountId)
 }
 
 // Returns *all* the run events for each run (including in_progress) even if the run is complete

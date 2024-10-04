@@ -5,7 +5,7 @@ import { getUserByTokenRecord } from '../github/githubUser'
 import { getToken } from './webAuthToken'
 import { WithHeadersEvent } from '../../inboundInterfaces/lambdaTypes'
 import { getGithubUserTokenOrUndefined } from '../github/githubUserToken'
-import { getIdsOfAccountsWhichUserIsMemberOf } from '../github/githubMembership'
+import { getAccountIdsForUser } from '../github/githubMembership'
 
 import { GithubUserId } from '../types/GithubUserId'
 
@@ -42,8 +42,7 @@ export async function authorizeUserRequest(
 
   // If the user exists in Cicada, but no longer has any memberships, then unauthorized
   // This is the case if the user is removed from a GitHub organization
-  const memberOfAccountIds = await getIdsOfAccountsWhichUserIsMemberOf(appState, cicadaUser.userId)
-  if (memberOfAccountIds.length === 0) return undefined
+  if ((await getAccountIdsForUser(appState, cicadaUser.userId)).length === 0) return undefined
 
   // Authorization successful
   return {
