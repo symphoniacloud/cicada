@@ -1,5 +1,6 @@
 import { logger } from '../../util/logging'
 import { MultipleEntityCollectionResponse } from '@symphoniacloud/dynamodb-entity-store'
+import { EntityType } from './entityTypes'
 
 // I use a conditional check on certain operations knowing that they might fail during regular behavior
 // Unfortunately the underlying DynamoDB SDS will always throw an error, so this code catches that error to provide
@@ -23,7 +24,7 @@ export async function executeAndCatchConditionalCheckFailed<TReturn>(f: () => Pr
 // TOMaybe - nicer way of doing this without the type cast?
 export function domainObjectsFromMultipleEventEntityResponse<T>(
   multipleEntityReponse: MultipleEntityCollectionResponse,
-  entityType: string
+  entityType: EntityType
 ): T[] {
   return (multipleEntityReponse.itemsByEntityType[entityType] as T[]) ?? []
 }

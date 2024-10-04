@@ -1,9 +1,10 @@
-import { Entity, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubPush, isGithubPush } from '../../types/GithubPush'
 import { GITHUB_PUSH } from '../entityTypes'
 import { latestCommitInPush } from '../../github/githubPush'
+import { CicadaEntity } from '../entityStoreEntitySupport'
 
-export const GithubPushEntity: Entity<
+export const GithubPushEntity: CicadaEntity<
   GithubPush,
   Pick<GithubPush, 'accountId'>,
   Pick<GithubPush, 'repoId' | 'ref' | 'commits'>
@@ -28,4 +29,14 @@ export const GithubPushEntity: Entity<
       }
     }
   }
+}
+
+export async function putPushIfNoKeyExists(entityStore: AllEntitiesStore, push: GithubPush) {
+  return await store(entityStore).put(push, {
+    conditionExpression: 'attribute_not_exists(PK)'
+  })
+}
+
+function store(entityStore: AllEntitiesStore) {
+  return entityStore.for(GithubPushEntity)
 }

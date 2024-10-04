@@ -2,6 +2,7 @@ import { FakeAppState } from '../fakeAppState'
 import { expect } from 'vitest'
 import type { NativeAttributeValue } from '@aws-sdk/util-dynamodb'
 import { PutCommandInput } from '@aws-sdk/lib-dynamodb/dist-types/commands/PutCommand'
+import { EntityType } from '../../../../src/app/domain/entityStore/entityTypes'
 
 export function expectPutsLength(appState: FakeAppState) {
   return expect(appState.dynamoDB.puts.length)
@@ -22,7 +23,7 @@ export function expectDelete(appState: FakeAppState, index?: number) {
 // TODO - use similar metadata object from stubber?
 export function buildPut(
   tableName: string,
-  entityType: string,
+  entityType: EntityType,
   item: Record<string, NativeAttributeValue>,
   options?: Partial<PutCommandInput>
 ) {
@@ -54,7 +55,7 @@ export function expectBatchWrites(appState: FakeAppState, index?: number) {
 
 export function buildBatchWriteForEntity(
   tableName: string,
-  entityType: string,
+  entityType: EntityType,
   items: Record<string, NativeAttributeValue>[]
 ) {
   return {
