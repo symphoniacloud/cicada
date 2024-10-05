@@ -45,7 +45,7 @@ test('calculateVisibleAndNotifyConfigurable / calculateWorkflowSettings', () => 
   ]
 
   permutations.forEach(([settings, defaultNotify, expected]) => {
-    expect(calculateSettings(settings, defaultNotify)).toEqual(expected)
+    expect(calculateSettings(settings, true, defaultNotify)).toEqual(expected)
   })
 })
 

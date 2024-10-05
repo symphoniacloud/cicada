@@ -47,7 +47,7 @@ export function calculateAccountSettings(
   settings: PersistedGithubAccountSettings | undefined,
   account: GithubAccountStructure
 ): CalculatedGithubAccountSettings {
-  const calculatedSettings = calculateSettings(settings, DEFAULT_ACCOUNT_NOTIFY)
+  const calculatedSettings = calculateSettings(settings, account.isMemberAccount, DEFAULT_ACCOUNT_NOTIFY)
   return {
     ...calculatedSettings,
     repos: calculatedSettings.visible
@@ -64,13 +64,13 @@ export function calculateRepoSettings(
   repo: GithubRepoStructure,
   defaultNotify: boolean
 ): CalculatedGithubRepoSettings {
-  const calculatedSettings = calculateSettings(settings, defaultNotify)
+  const calculatedSettings = calculateSettings(settings, true, defaultNotify)
   return {
     ...calculatedSettings,
     workflows: calculatedSettings.visible
       ? objectMap(repo.workflows, (workflowId) => [
           workflowId,
-          calculateWorkflowSettings(settings?.workflows[workflowId], calculatedSettings.notify)
+          calculateWorkflowSettings(settings?.workflows[workflowId], true, calculatedSettings.notify)
         ])
       : {}
   }
@@ -80,9 +80,10 @@ const calculateWorkflowSettings = calculateSettings
 
 export function calculateSettings(
   settings: PersistedVisibleAndNotifyConfigurable | undefined,
+  defaultVisible: boolean,
   defaultNotify: boolean
 ): CalculatedVisibleAndNotifyConfigurable {
-  const visible = settings?.visible ?? true
+  const visible = settings?.visible ?? defaultVisible
   return {
     visible,
     notify: visible && (settings?.notify ?? defaultNotify)

@@ -27,17 +27,19 @@ export async function loadUserScopeReferenceData(
 
   return {
     userId,
-    memberAccount: await loadAccountStructure(appState, memberAccount),
+    memberAccount: await loadAccountStructure(appState, memberAccount, true),
     publicAccounts: await loadPublicAccountsStructure(appState, memberAccountId)
   }
 }
 
 export async function loadAccountStructure<TAccount extends GithubAccountSummary>(
   appState: AppState,
-  account: TAccount
+  account: TAccount,
+  isMemberAccount: boolean
 ): Promise<GithubAccountStructure> {
   return {
     ...toAccountSummary(account),
+    isMemberAccount,
     repos: await loadReposStructure(appState, account.accountId)
   }
 }
@@ -49,7 +51,11 @@ export async function loadPublicAccountsStructure(
   const allPublicAccounts = await getPublicAccountsForInstallationAccount(appState.entityStore, accountId)
   const allPublicAccountStructure: Record<GithubAccountId, GithubAccountStructure> = {}
   for (const publicAccount of allPublicAccounts) {
-    allPublicAccountStructure[publicAccount.accountId] = await loadAccountStructure(appState, publicAccount)
+    allPublicAccountStructure[publicAccount.accountId] = await loadAccountStructure(
+      appState,
+      publicAccount,
+      false
+    )
   }
   return allPublicAccountStructure
 }

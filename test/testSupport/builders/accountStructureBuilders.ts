@@ -57,12 +57,14 @@ export function buildWorkflowSummary(options?: BuildWorkflowSummaryOptions): Git
 }
 
 export interface BuildAccountStructureOptions extends BuildAccountSummaryOptions {
+  isMemberAccount?: boolean
   repos?: GithubRepoStructure[]
 }
 
 export function buildAccountStructure(options?: BuildAccountStructureOptions): GithubAccountStructure {
   return {
     ...buildRepoSummmary(options),
+    isMemberAccount: options?.isMemberAccount === undefined ? true : options.isMemberAccount,
     repos: Object.fromEntries((options?.repos ?? []).map((repo) => [repo.repoId, repo]))
   }
 }
