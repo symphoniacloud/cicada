@@ -83,18 +83,32 @@ export function getAccountStructure(
     : refData.publicAccounts[accountId]
 }
 
+export function getRepoStructureFromAccount(
+  accountStructure: GithubAccountStructure | undefined,
+  repoKey: GithubRepoKey
+): GithubRepoStructure | undefined {
+  return accountStructure?.repos[repoKey.repoId]
+}
+
 export function getRepoStructure(
   refData: UserScopeReferenceData,
   repoKey: GithubRepoKey
 ): GithubRepoStructure | undefined {
-  return getAccountStructure(refData, repoKey.accountId)?.repos[repoKey.repoId]
+  return getRepoStructureFromAccount(getAccountStructure(refData, repoKey.accountId), repoKey)
+}
+
+export function getWorkflowStructureFromRepo(
+  repoStructure: GithubRepoStructure | undefined,
+  workflowKey: GithubWorkflowKey
+): GithubWorkflowSummary | undefined {
+  return repoStructure?.workflows[workflowKey.workflowId]
 }
 
 export function getWorkflowStructure(
   refData: UserScopeReferenceData,
   workflowKey: GithubWorkflowKey
 ): GithubWorkflowSummary | undefined {
-  return getRepoStructure(refData, workflowKey)?.workflows[workflowKey.workflowId]
+  return getWorkflowStructureFromRepo(getRepoStructure(refData, workflowKey), workflowKey)
 }
 
 export function allAccountIDsFromRefData(refData: UserScopeReferenceData) {
