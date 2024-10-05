@@ -5,6 +5,7 @@ import { GithubUserId } from './GithubUserId'
 import { GithubAccountId } from './GithubAccountId'
 
 export interface GithubAccountStructure extends GithubAccountSummary {
+  isMemberAccount: boolean
   repos: Record<GithubRepoId, GithubRepoStructure>
 }
 
