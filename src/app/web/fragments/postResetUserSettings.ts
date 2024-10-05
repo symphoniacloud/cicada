@@ -17,6 +17,7 @@ export async function resetUserSettings(appState: AppState, event: CicadaAuthori
     toCalculatedAndDisplayableUserSettings(
       await resetPersistedUserSettings(appState, event.refData.userId),
       event.refData
-    )
+    ),
+    event.refData.memberAccount.accountId
   )
 }

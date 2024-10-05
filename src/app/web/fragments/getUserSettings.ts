@@ -13,6 +13,7 @@ export const getUserSettingsFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
 
 export async function getUserSettingsFragment(appState: AppState, event: CicadaAuthorizedAPIEvent) {
   return createGetUserSettingsResponse(
-    await loadCalculatedAndDisplayableUserSettingsOrUseDefaults(appState, event.refData)
+    await loadCalculatedAndDisplayableUserSettingsOrUseDefaults(appState, event.refData),
+    event.refData.memberAccount.accountId
   )
 }

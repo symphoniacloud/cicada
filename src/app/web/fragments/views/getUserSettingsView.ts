@@ -14,14 +14,21 @@ import { GithubAccountId } from '../../../domain/types/GithubAccountId'
 import { GithubRepoId } from '../../../domain/types/GithubRepoId'
 import { GithubWorkflowId } from '../../../domain/types/GithubWorkflowId'
 
-export function createGetUserSettingsResponse(settings: DisplayableUserSettings) {
-  return fragmentViewResult(...userSettingsElement(settings))
+export function createGetUserSettingsResponse(
+  settings: DisplayableUserSettings,
+  memberAccountId: GithubAccountId
+) {
+  return fragmentViewResult(...userSettingsElement(settings, memberAccountId))
 }
 
-export function userSettingsElement(settings: DisplayableUserSettings) {
-  const elements = []
+export function userSettingsElement(settings: DisplayableUserSettings, memberAccountId: GithubAccountId) {
+  // Show member account first, then public accounts
+  // TOEventually - when a user can be a member of multiple accounts then change this
+  const elements = [accountControlsRow(memberAccountId, settings.github.accounts[memberAccountId])]
+
   for (const [accountId, accountSettings] of Object.entries(settings.github.accounts)) {
-    elements.push(accountControlsRow(accountId as GithubAccountId, accountSettings))
+    if (!(accountId === memberAccountId))
+      elements.push(accountControlsRow(accountId as GithubAccountId, accountSettings))
   }
   return elements
 }
