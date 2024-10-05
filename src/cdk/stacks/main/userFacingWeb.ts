@@ -41,13 +41,13 @@ function defineAuthenticatedWeb(scope: Construct, props: UserFacingWebEndpointsP
     scope,
     cicadaFunctionProps(props, 'authenticatedWeb', {
       tablesReadAccess: [
+        'github-installations',
         'github-users',
         'github-account-memberships',
         'github-repositories',
         'github-latest-workflow-runs',
         'github-latest-pushes-per-ref',
-        'github-repo-activity',
-        'github-installations'
+        'github-repo-activity'
       ],
       tablesReadWriteAccess: ['github-user-tokens', 'user-settings', 'github-public-accounts']
     })
@@ -83,10 +83,16 @@ function defineWebPushPublisher(scope: Construct, props: UserFacingWebEndpointsP
     scope,
     cicadaFunctionProps(props, 'webPushPublisher', {
       tablesReadAccess: [
-        'web-push-subscriptions',
+        'github-installations',
+        'github-public-accounts',
+        'github-users',
         'github-account-memberships',
+        'user-settings',
+        'web-push-subscriptions',
+        'github-repositories',
         'github-latest-workflow-runs',
-        'user-settings'
+        'github-latest-pushes-per-ref',
+        'github-repo-activity'
       ]
     })
   )
