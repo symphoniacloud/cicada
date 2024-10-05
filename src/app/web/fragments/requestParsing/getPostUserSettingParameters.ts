@@ -35,20 +35,36 @@ export function getPostUserSettingParameters(event: CicadaAuthorizedAPIEvent): R
     logger.warn('Invalid request in getPostUserSettingParameters', { reason: 'Invalid type of Account ID' })
     return failedWithResult('Invalid type of Account ID', invalidRequestResponse)
   }
-  if (!isGithubRepoId(repoId)) {
-    logger.warn('Invalid request in getPostUserSettingParameters', { reason: 'Invalid type of Repo ID' })
-    return failedWithResult('Invalid type of Repo ID', invalidRequestResponse)
-  }
-  if (!isGithubWorkflowId(workflowId)) {
-    logger.warn('Invalid request in getPostUserSettingParameters', { reason: 'Invalid type of Workflow ID' })
-    return failedWithResult('Invalid type of Workflow ID', invalidRequestResponse)
+  if (repoId) {
+    if (!isGithubRepoId(repoId)) {
+      logger.warn('Invalid request in getPostUserSettingParameters', { reason: 'Invalid type of Repo ID' })
+      return failedWithResult('Invalid type of Repo ID', invalidRequestResponse)
+    }
+    if (workflowId) {
+      if (!isGithubWorkflowId(workflowId)) {
+        logger.warn('Invalid request in getPostUserSettingParameters', {
+          reason: 'Invalid type of Workflow ID'
+        })
+        return failedWithResult('Invalid type of Workflow ID', invalidRequestResponse)
+      }
+      return successWith({
+        accountId,
+        repoId,
+        workflowId,
+        setting,
+        enabled: enabled.toLowerCase() === 'true'
+      })
+    }
+    return successWith({
+      accountId,
+      repoId,
+      setting,
+      enabled: enabled.toLowerCase() === 'true'
+    })
   }
 
-  // TODO - need to check valid types
   return successWith({
     accountId,
-    repoId,
-    workflowId,
     setting,
     enabled: enabled.toLowerCase() === 'true'
   })
