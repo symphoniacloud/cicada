@@ -4,13 +4,13 @@ import {
   GithubRepoStructure,
   UserScopeReferenceData
 } from '../types/UserScopeReferenceData'
-import { getUnarchivedRepositoriesForAccount, repoKeysEqual, toRepoSummary } from './githubRepo'
+import { getUnarchivedRepositoriesForAccount, narrowToRepoSummary, repoKeysEqual } from './githubRepo'
 import { GithubAccountId } from '../types/GithubAccountId'
 import { GithubRepoId } from '../types/GithubRepoId'
-import { latestWorkflowRunEventsPerWorkflowForAccount } from '../entityStore/entities/GithubLatestWorkflowRunEventEntity'
+import { getActiveWorkflowsForAccount } from './githubWorkflow'
 import { getPublicAccountsForInstallationAccount } from '../entityStore/entities/GithubPublicAccountEntity'
-import { GithubAccountSummary, GithubWorkflowSummary } from '../types/GithubSummaries'
-import { toAccountSummary } from './githubAccount'
+import { GithubAccountSummary } from '../types/GithubSummaries'
+import { narrowToAccountSummary } from './githubAccount'
 import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys'
 import { GithubRepo } from '../types/GithubRepo'
 import { GithubWorkflow } from '../types/GithubWorkflow'
@@ -38,7 +38,7 @@ export async function loadAccountStructure<TAccount extends GithubAccountSummary
   isMemberAccount: boolean
 ): Promise<GithubAccountStructure> {
   return {
-    ...toAccountSummary(account),
+    ...narrowToAccountSummary(account),
     isMemberAccount,
     repos: await loadReposStructure(appState, account.accountId)
   }
@@ -65,13 +65,13 @@ async function loadReposStructure(
   accountId: GithubAccountId
 ): Promise<Record<GithubRepoId, GithubRepoStructure>> {
   const allRepos = await getUnarchivedRepositoriesForAccount(appState, accountId)
-  const allWorkflows = await latestWorkflowRunEventsPerWorkflowForAccount(appState.entityStore, accountId)
+  const allWorkflows = await getActiveWorkflowsForAccount(appState, accountId)
   return Object.fromEntries(allRepos.map((repo) => [repo.repoId, buildRepoStructure(repo, allWorkflows)]))
 }
 
 function buildRepoStructure(repo: GithubRepo, allWorkflows: GithubWorkflow[]): GithubRepoStructure {
   return {
-    ...toRepoSummary(repo),
+    ...narrowToRepoSummary(repo),
     workflows: Object.fromEntries(
       allWorkflows
         .filter((workflow) => repoKeysEqual(repo, workflow))
@@ -103,18 +103,18 @@ export function getRepoStructure(
   return getRepoStructureFromAccount(getAccountStructure(refData, repoKey.accountId), repoKey)
 }
 
-export function getWorkflowStructureFromRepo(
+export function getWorkflowFromRepo(
   repoStructure: GithubRepoStructure | undefined,
   workflowKey: GithubWorkflowKey
-): GithubWorkflowSummary | undefined {
+): GithubWorkflow | undefined {
   return repoStructure?.workflows[workflowKey.workflowId]
 }
 
-export function getWorkflowStructure(
+export function getWorkflowFromRefData(
   refData: UserScopeReferenceData,
   workflowKey: GithubWorkflowKey
-): GithubWorkflowSummary | undefined {
-  return getWorkflowStructureFromRepo(getRepoStructure(refData, workflowKey), workflowKey)
+): GithubWorkflow | undefined {
+  return getWorkflowFromRepo(getRepoStructure(refData, workflowKey), workflowKey)
 }
 
 export function allAccountIDsFromRefData(refData: UserScopeReferenceData) {

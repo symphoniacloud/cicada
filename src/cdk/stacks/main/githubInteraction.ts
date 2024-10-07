@@ -146,6 +146,7 @@ function defineWebhookFunction(scope: Construct, props: GithubInteractionProps) 
         'github-users',
         'github-account-memberships',
         'github-repositories',
+        'github-workflows',
         'github-repo-activity',
         'github-latest-workflow-runs',
         'github-latest-pushes-per-ref'

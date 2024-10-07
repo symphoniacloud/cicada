@@ -9,7 +9,7 @@ import { ORGANIZATION_ACCOUNT_TYPE } from '../../types/GithubAccountType'
 import { GithubPublicAccount } from '../../types/GithubPublicAccount'
 import { RawGithubRepo } from '../../types/rawGithub/RawGithubRepo'
 import { crawlPushes } from './crawlPushes'
-import { crawlWorkflowRunEvents } from './crawlRunEvents'
+import { crawlWorkflows } from './crawlWorkflows'
 import { logger } from '../../../util/logging'
 
 export async function crawlRepositories(
@@ -51,9 +51,10 @@ async function processReposAndCrawlElements(
   // need to be careful since GitHub gets twitchy about concurrent requests to the API
   // Their "best practice" doc says don't do it, but their rate limit doc says it's supported
   // Only really need to care if things start getting slow
+  if (repos.length > 0) logger.info(`Processing ${repos.length} repos in account ${repos[0].accountName}`)
   for (const repo of repos) {
+    await crawlWorkflows(appState, repo, githubClient, lookbackHours)
     await crawlPushes(appState, repo, githubClient)
-    await crawlWorkflowRunEvents(appState, repo, lookbackHours, githubClient)
   }
 
   publishGithubInstallationClientMetrics(githubClient)

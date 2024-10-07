@@ -13,6 +13,7 @@ import { GithubAccountMembership } from '../../../src/app/domain/types/GithubAcc
 import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription'
 import { GithubAccountId } from '../../../src/app/domain/types/GithubAccountId'
 import { GithubUserId } from '../../../src/app/domain/types/GithubUserId'
+import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow'
 
 export function expectedPutGithubInstallation(installation: GithubInstallation) {
   return buildPut('fakeGithubInstallationsTable', 'githubInstallation', {
@@ -61,15 +62,23 @@ export function expectedPutLatestGithubPush(push: GithubPush) {
   )
 }
 
+export function expectedPutGithubWorkflow(workflow: GithubWorkflow) {
+  return buildPut('fakeGithubWorkflowTable', 'githubWorkflow', {
+    PK: `ACCOUNT#${workflow.accountId}`,
+    SK: `REPO#${workflow.repoId}#WORKFLOW#${workflow.workflowId}`,
+    ...workflow
+  })
+}
+
 export function expectedPutGithubWorkflowRunEvent(event: GithubWorkflowRunEvent) {
   return buildPut(
     'fakeGithubRepoActivityTable',
     'githubWorkflowRunEvent',
     {
       PK: `ACCOUNT#${event.accountId}`,
-      SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}#WORKFLOW_RUN_EVENT#UPDATED_AT#${event.updatedAt}#RUN#${event.workflowRunId}#STATUS#${event.status}`,
+      SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}#WORKFLOW_RUN_EVENT#UPDATED_AT#${event.runEventUpdatedAt}#RUN#${event.workflowRunId}#STATUS#${event.status}`,
       GSI1PK: `ACCOUNT#${event.accountId}`,
-      GSI1SK: `REPO#${event.repoId}#DATETIME#${event.updatedAt}`,
+      GSI1SK: `REPO#${event.repoId}#DATETIME#${event.runEventUpdatedAt}`,
       ...event
     },
     {
@@ -86,7 +95,7 @@ export function expectedPutGithubWorkflowRun(event: GithubWorkflowRunEvent) {
       PK: `ACCOUNT#${event.accountId}`,
       SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}#WORKFLOW_RUN#RUN#${event.workflowRunId}`,
       GSI1PK: `ACCOUNT#${event.accountId}`,
-      GSI1SK: `REPO#${event.repoId}#DATETIME#${event.updatedAt}`,
+      GSI1SK: `REPO#${event.repoId}#DATETIME#${event.runEventUpdatedAt}`,
       ...event
     },
     {
@@ -95,7 +104,7 @@ export function expectedPutGithubWorkflowRun(event: GithubWorkflowRunEvent) {
         '#updatedAt': 'updatedAt'
       },
       ExpressionAttributeValues: {
-        ':newUpdatedAt': event.updatedAt
+        ':newUpdatedAt': event.runEventUpdatedAt
       }
     }
   )
@@ -109,7 +118,7 @@ export function expectedPutLatestGithubWorkflowRunEvent(event: GithubWorkflowRun
       PK: `ACCOUNT#${event.accountId}`,
       SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}`,
       GSI1PK: `ACCOUNT#${event.accountId}`,
-      GSI1SK: `DATETIME#${event.updatedAt}`,
+      GSI1SK: `DATETIME#${event.runEventUpdatedAt}`,
       ...event
     },
     {
@@ -118,7 +127,7 @@ export function expectedPutLatestGithubWorkflowRunEvent(event: GithubWorkflowRun
         '#updatedAt': 'updatedAt'
       },
       ExpressionAttributeValues: {
-        ':newUpdatedAt': event.updatedAt
+        ':newUpdatedAt': event.runEventUpdatedAt
       }
     }
   )

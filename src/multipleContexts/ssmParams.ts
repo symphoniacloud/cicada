@@ -34,6 +34,7 @@ type SsmTableNameParamName =
   | 'resources/table/github-user-tokens'
   | 'resources/table/github-users'
   | 'resources/table/github-repositories'
+  | 'resources/table/github-workflows'
   | 'resources/table/github-account-memberships'
   | 'resources/table/github-repo-activity'
   | 'resources/table/github-latest-workflow-runs'

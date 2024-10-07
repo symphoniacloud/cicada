@@ -30,7 +30,7 @@ import { calculateAccountSettings, calculateUserSettings } from '../../domain/us
 import {
   getAccountStructure,
   getRepoStructure,
-  getWorkflowStructure
+  getWorkflowFromRefData
 } from '../../domain/github/userScopeReferenceData'
 
 import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData'
@@ -154,7 +154,7 @@ async function processUpdateWorkflowSetting(
     workflowKey,
     toDisplayableWorkflowSettings(
       newCalculatedWorkflowSettings,
-      getWorkflowStructure(refData, workflowKey) ??
+      getWorkflowFromRefData(refData, workflowKey) ??
         throwFunction(`No workflow for key ${JSON.stringify(workflowKey)}`)()
     )
   )

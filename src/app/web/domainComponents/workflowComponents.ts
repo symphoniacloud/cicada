@@ -1,13 +1,11 @@
-import { GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
-import { GithubRepoSummary } from '../../domain/types/GithubSummaries'
+import { FullGithubWorkflowRunEvent, GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
 import { a, td, tr } from '../hiccough/hiccoughElements'
 import { Clock, displayDateTime, durationAsStringFromMs } from '../../util/dateAndTime'
 import { githubAnchor } from './genericComponents'
-import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents'
+import { commitCell, repoCell } from './repoElementComponents'
 import { elapsedTimeMs, runBasicStatus, WorkflowRunStatus } from '../../domain/github/githubWorkflowRunEvent'
 import { userCell } from './userComponents'
 import { removeNullAndUndefined } from '../../util/collections'
-import { usableWorkflowName } from '../../domain/github/githubWorkflow'
 
 export type WorkflowRowOptions = {
   showDescription?: boolean
@@ -22,7 +20,7 @@ const runStatusRowClass: Record<WorkflowRunStatus, string> = {
   '⏳': 'table-warning'
 }
 
-export function workflowRow(clock: Clock, event: GithubWorkflowRunEvent, options: WorkflowRowOptions) {
+export function workflowRow(clock: Clock, event: FullGithubWorkflowRunEvent, options: WorkflowRowOptions) {
   const { showDescription, showRepo, showWorkflow, showElapsed } = {
     showDescription: false,
     showRepo: false,
@@ -39,7 +37,7 @@ export function workflowRow(clock: Clock, event: GithubWorkflowRunEvent, options
     showRepo ? repoCell(event) : undefined,
     showWorkflow ? workflowCell(event) : undefined,
     showDescription ? undefined : td(statusMessage(runStatus, event)),
-    td(displayDateTime(clock, event.updatedAt), '&nbsp;', githubAnchor(event.htmlUrl)),
+    td(displayDateTime(clock, event.runEventUpdatedAt), '&nbsp;', githubAnchor(event.runHtmlUrl)),
     showElapsed ? td(durationAsStringFromMs(elapsedTimeMs(event))) : undefined,
     userCell(event.actor),
     commitCell({
@@ -70,17 +68,13 @@ function descriptionOrMessageSuffix(status: WorkflowRunStatus, event: GithubWork
   return event.status === 'in_progress' ? '' : ` (${event.status})`
 }
 
-function workflowCell(
-  event: GithubRepoSummary &
-    Pick<GithubWorkflowRunEvent, 'workflowHtmlUrl' | 'workflowId' | 'workflowName' | 'path'>
-) {
-  const workflowPath = `${event.path.substring(event.path.indexOf('/') + 1)}`
+function workflowCell(event: FullGithubWorkflowRunEvent) {
   return td(
     a(
       `/workflow?accountId=${event.accountId}&repoId=${event.repoId}&workflowId=${event.workflowId}`,
-      usableWorkflowName(event)
+      event.workflowName
     ),
     '&nbsp;',
-    githubAnchor(event.workflowHtmlUrl ?? `${githubRepoUrl(event)}/actions/${workflowPath}`)
+    githubAnchor(event.workflowHtmlUrl)
   )
 }

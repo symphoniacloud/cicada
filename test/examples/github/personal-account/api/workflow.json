@@ -1,0 +1,12 @@
+{
+  "id": 92298714,
+  "node_id": "W_kwDOLpcwX84FgF3Z",
+  "name": "Test Workflow",
+  "path": ".github/workflows/ci.yml",
+  "state": "active",
+  "created_at": "2024-04-03T20:06:32.000Z",
+  "updated_at": "2024-04-03T20:06:32.000Z",
+  "url": "https://api.github.com/repos/cicada-test-user/personal-test-repo/actions/workflows/92298713",
+  "html_url": "https://github.com/cicada-test-user/personal-test-repo/blob/main/.github/workflows/ci.yml",
+  "badge_url": "https://github.com/cicada-test-user/personal-test-repo/workflows/Continuous%20Integration/badge.svg"
+}

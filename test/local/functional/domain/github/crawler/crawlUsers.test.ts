@@ -4,8 +4,8 @@ import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/f
 import {
   testMikeRobertsUser,
   testMikeRobertsUserMembershipOfOrg,
-  testOrgInstallation,
-  testPersonalInstallation,
+  cicadaTestOrgInstallation,
+  cicadaTestUserInstallation,
   testTestUser,
   testTestUserMembershipOfOrg,
   testTestUserMembershipOfPersonalInstallation
@@ -38,7 +38,7 @@ test('user-crawler-for-personal-account-installation', async () => {
   )
 
   // A
-  await crawlUsers(appState, testPersonalInstallation, githubInstallationClient)
+  await crawlUsers(appState, cicadaTestUserInstallation, githubInstallationClient)
 
   // A
   expectBatchWritesLength(appState).toEqual(2)
@@ -61,7 +61,7 @@ test('user-crawler-for-org-installation', async () => {
   ])
 
   // A
-  await crawlUsers(appState, testOrgInstallation, githubInstallationClient)
+  await crawlUsers(appState, cicadaTestOrgInstallation, githubInstallationClient)
 
   // A
   expectBatchWritesLength(appState).toEqual(3)

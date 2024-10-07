@@ -33,8 +33,8 @@ const GithubWorkflowRunEntity: CicadaEntity<
       pk(source: Pick<GithubWorkflowRunEvent, 'accountId'>) {
         return githubActivityEntityPk(source)
       },
-      sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'updatedAt'>) {
-        return githubActivityEntityGSISk(source.repoId, source.updatedAt)
+      sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'runEventUpdatedAt'>) {
+        return githubActivityEntityGSISk(source.repoId, source.runEventUpdatedAt)
       }
     }
   }
@@ -62,7 +62,7 @@ export async function putGithubWorkflowRunfNoKeyExistsOrNewerThanExisting(
   return await store(entityStore).put(event, {
     conditionExpression: 'attribute_not_exists(PK) OR #updatedAt < :newUpdatedAt',
     expressionAttributeNames: { '#updatedAt': 'updatedAt' },
-    expressionAttributeValues: { ':newUpdatedAt': event.updatedAt }
+    expressionAttributeValues: { ':newUpdatedAt': event.runEventUpdatedAt }
   })
 }
 

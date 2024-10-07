@@ -8,6 +8,7 @@ import {
 } from '../../../src/app/outboundInterfaces/githubInstallationClient'
 import { arrayStubResponse } from './fakeSupport'
 import { Result } from '../../../src/app/util/structuredResult'
+import { RawGithubWorkflow } from '../../../src/app/domain/types/rawGithub/RawGithubWorkflow'
 
 export class FakeGithubInstallationClient implements GithubInstallationClient {
   public stubOrganizationRepositories = arrayStubResponse<string, RawGithubRepo[]>()
@@ -16,6 +17,13 @@ export class FakeGithubInstallationClient implements GithubInstallationClient {
   public stubOrganizationMembers = arrayStubResponse<string, RawGithubUser[]>()
   public stubUsers = arrayStubResponse<string, Result<RawGithubUser>>()
 
+  public stubWorkflowsForRepo = arrayStubResponse<
+    {
+      owner: string
+      repo: string
+    },
+    RawGithubWorkflow[]
+  >()
   public stubWorkflowRunsForRepo = arrayStubResponse<
     {
       owner: string
@@ -46,6 +54,10 @@ export class FakeGithubInstallationClient implements GithubInstallationClient {
 
   async listOrganizationMembers(org: string): Promise<RawGithubUser[]> {
     return this.stubOrganizationMembers.getResponseOrThrow(org)
+  }
+
+  async listWorkflowsForRepo(owner: string, repo: string): Promise<RawGithubWorkflow[]> {
+    return this.stubWorkflowsForRepo.getResponseOrThrow({ owner, repo })
   }
 
   async listWorkflowRunsForRepo(

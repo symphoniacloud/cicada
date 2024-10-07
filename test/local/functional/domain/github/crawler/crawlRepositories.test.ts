@@ -2,10 +2,10 @@ import { test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
 import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient'
 import {
-  testOrgInstallation,
+  cicadaTestOrgInstallation,
   testOrgTestRepoOne,
   testOrgTestRepoTwo,
-  testPersonalInstallation,
+  cicadaTestUserInstallation,
   testPersonalTestRepo
 } from '../../../../../examples/cicada/githubDomainObjects'
 import example_personal_account_repo from '../../../../../examples/github/personal-account/api/repo.json'
@@ -22,6 +22,13 @@ test('repository-crawler-for-personal-account-installation', async () => {
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
   githubInstallationClient.stubInstallationRepositories = [example_personal_account_repo]
+  githubInstallationClient.stubWorkflowsForRepo.addResponse(
+    {
+      owner: 'cicada-test-user',
+      repo: 'personal-test-repo'
+    },
+    []
+  )
   githubInstallationClient.stubMostRecentEventsForRepo.addResponse(
     {
       owner: 'cicada-test-user',
@@ -39,7 +46,7 @@ test('repository-crawler-for-personal-account-installation', async () => {
   )
 
   // A
-  await crawlRepositories(appState, testPersonalInstallation, githubInstallationClient, 3)
+  await crawlRepositories(appState, cicadaTestUserInstallation, githubInstallationClient, 3)
 
   // A
   expectBatchWritesLength(appState).toEqual(1)
@@ -51,6 +58,21 @@ test('repository-crawler-for-org-installation', async () => {
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
   githubInstallationClient.stubOrganizationRepositories.addResponse('cicada-test-org', example_org_repos)
+  githubInstallationClient.stubWorkflowsForRepo.addResponse(
+    {
+      owner: 'cicada-test-org',
+      repo: 'org-test-repo-one'
+    },
+    []
+  )
+  githubInstallationClient.stubWorkflowsForRepo.addResponse(
+    {
+      owner: 'cicada-test-org',
+      repo: 'org-test-repo-two'
+    },
+    []
+  )
+
   githubInstallationClient.stubMostRecentEventsForRepo.addResponse(
     {
       owner: 'cicada-test-org',
@@ -83,7 +105,7 @@ test('repository-crawler-for-org-installation', async () => {
   )
 
   // A
-  await crawlRepositories(appState, testOrgInstallation, githubInstallationClient, 3)
+  await crawlRepositories(appState, cicadaTestOrgInstallation, githubInstallationClient, 3)
 
   // A
   expectBatchWritesLength(appState).toEqual(1)

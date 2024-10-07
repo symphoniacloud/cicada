@@ -2,16 +2,12 @@ import { assert, expect, test } from 'vitest'
 import { appStateForTests, lookupSSMParam } from './integrationTestSupport/cloudEnvironment'
 import { SSM_PARAM_NAMES } from '../../src/multipleContexts/ssmParams'
 import { randomUUID } from 'node:crypto'
-import example_workflow_run from '../examples/github/org/webhook/workflowRunCompleted.json'
+import push from '../examples/github/org/webhook/push.json'
 import { realS3 } from '../../src/app/outboundInterfaces/s3Wrapper'
-import {
-  deleteWorkflowRunActivityForAccount,
-  getRunEventsForAccount
-} from './integrationTestSupport/githubActivity'
+import { deletePushesForAccount, getPushesForAccount } from './integrationTestSupport/githubActivity'
 import { sleep } from './integrationTestSupport/utils'
 import { createSignatureHeader } from '../../src/app/domain/github/webhookProcessor/githubWebhookProcessor'
 import { fromRawGithubAccountId } from '../../src/app/domain/types/GithubAccountId'
-import { fromRawGithubUserId } from '../../src/app/domain/types/GithubUserId'
 
 // GitHub Webhook - these are directly stored in S3, and then async processing occurs
 test('webhook test', async () => {
@@ -19,11 +15,11 @@ test('webhook test', async () => {
   const apiHostName = await appState.config.webHostname()
   // Needs to be unique per test run since otherwise we'll be testing a previously saved version
   const deliveryId = `fake-integration-${randomUUID()}`
-  const rawBody = JSON.stringify(example_workflow_run)
+  const rawBody = JSON.stringify(push)
   const sigHeader = createSignatureHeader(rawBody, (await appState.config.github()).webhookSecret)
-  const testAccountId = fromRawGithubAccountId(`${example_workflow_run.organization.id}`)
+  const testAccountId = fromRawGithubAccountId(`${push.organization.id}`)
   // Delete previous activity
-  await deleteWorkflowRunActivityForAccount(appState, testAccountId)
+  await deletePushesForAccount(appState, testAccountId)
 
   // 1 - Make actual webhook call to Cicada API
   const webhookResponse = await fetch(
@@ -38,7 +34,7 @@ test('webhook test', async () => {
         'X-GitHub-Delivery': deliveryId,
         // These two fields are parsed during API Gateway processing and included in target object
         // So that Lambda function which processes webhooks will ignore this event
-        'X-GitHub-Event': 'workflow_run',
+        'X-GitHub-Event': 'push',
         // We use a real signature header here - this will be processed by triggered Lambda function
         'X-Hub-Signature-256': sigHeader
       },
@@ -59,7 +55,7 @@ test('webhook test', async () => {
   // 4 - Validate content of object - should match original API request
   const parsedContent = JSON.parse(s3Content)
   expect(parsedContent).toEqual({
-    'X-GitHub-Event': 'workflow_run',
+    'X-GitHub-Event': 'push',
     'X-Hub-Signature-256': sigHeader,
     body: rawBody
   })
@@ -71,37 +67,34 @@ test('webhook test', async () => {
     }
     await sleep(1000)
 
-    const runEvents = await getRunEventsForAccount(appState, testAccountId)
-    if (runEvents.length > 0) {
-      expect(runEvents[0]).toEqual({
-        actor: {
-          userId: fromRawGithubUserId(49635),
-          userName: 'mikebroberts',
-          avatarUrl: 'https://avatars.githubusercontent.com/u/49635?v=4',
-          htmlUrl: 'https://github.com/mikebroberts'
-        },
-        conclusion: 'success',
-        createdAt: '2024-03-06T19:25:32Z',
-        displayTitle: 'Test Repo One Workflow',
-        event: 'workflow_dispatch',
-        headBranch: 'main',
-        headSha: '8c3aa1cb0316ea23abeb2612457edb80868f53c8',
-        htmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236',
-        id: 8177622236,
-        accountId: 162483619,
+    const pushes = await getPushesForAccount(appState, testAccountId)
+    if (pushes.length > 0) {
+      expect(pushes[0]).toEqual({
+        accountId: 'GHAccount162483619',
         accountName: 'cicada-test-org',
         accountType: 'organization',
-        path: '.github/workflows/test.yml',
-        repoHtmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one',
-        repoId: 768206479,
+        actor: {
+          avatarUrl: 'https://avatars.githubusercontent.com/u/49635?v=4',
+          userId: 'GHUser49635',
+          userName: 'mikebroberts'
+        },
+        before: '8c3aa1cb0316ea23abeb2612457edb80868f53c8',
+        commits: [
+          {
+            author: {
+              email: 'mike@symphonia.io',
+              name: 'Mike Roberts'
+            },
+            distinct: true,
+            message: 'Update README.md',
+            sha: 'fc94eb2b6feab026673ee6e740f3dd7fafd7c130'
+          }
+        ],
+        dateTime: '2024-03-06T21:26:18.000Z',
+        ref: 'refs/heads/main',
+        repoId: 'GHRepo768206479',
         repoName: 'org-test-repo-one',
-        runAttempt: 1,
-        runNumber: 3,
-        runStartedAt: '2024-03-06T19:25:32Z',
-        status: 'completed',
-        updatedAt: '2024-03-06T19:25:42Z',
-        workflowId: 88647110,
-        workflowName: 'Test Repo One Workflow'
+        repoUrl: 'https://github.com/cicada-test-org/org-test-repo-one'
       })
       break
     }

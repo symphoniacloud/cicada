@@ -7,6 +7,7 @@ import {
   stubQueryLatestPushesPerRef,
   stubQueryLatestWorkflowRuns,
   stubQueryRepositories,
+  stubQueryWorkflows,
   stubSetupUserRecords
 } from '../../../../testSupport/fakes/tableRecordReadStubs'
 
@@ -16,6 +17,7 @@ test('home-recent-activity', async () => {
   stubSetupUserRecords(appState)
   stubQueryLatestPushesPerRef(appState)
   stubQueryRepositories(appState)
+  stubQueryWorkflows(appState)
   // Used when loading "all workflows" for user settings lookup. Eventually consider adding a workflows entity
   stubQueryLatestWorkflowRuns(appState)
 

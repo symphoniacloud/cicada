@@ -1,14 +1,18 @@
 import { Clock } from '../../../util/dateAndTime'
-import { GithubWorkflowRunEvent } from '../../../domain/types/GithubWorkflowRunEvent'
+import { FullGithubWorkflowRunEvent } from '../../../domain/types/GithubWorkflowRunEvent'
 import { fragmentViewResult } from '../../viewResultWrappers'
 import { standardTable } from '../../domainComponents/genericComponents'
 import { GithubPush } from '../../../domain/types/GithubPush'
 import { pushRow, PushRowOptions } from '../../domainComponents/pushComponents'
-import { activityIsWorkflowRunActivity } from '../../../domain/github/githubActivity'
+import { activityIsFullWorkflowRunActivity } from '../../../domain/github/githubActivity'
 import { HiccoughElement } from '../../hiccough/hiccoughElement'
 import { a, i, p } from '../../hiccough/hiccoughElements'
 import { workflowRow, WorkflowRowOptions } from '../../domainComponents/workflowComponents'
-import { VisibleActivity, VisiblePushes, VisibleWorkflowRunEvents } from '../../../domain/user/userVisible'
+import {
+  VisibleActivity,
+  VisiblePushes,
+  VisibleFullWorkflowRunEvents
+} from '../../../domain/user/userVisible'
 
 export type WorkflowRunEventTableType = 'homeStatus' | 'accountStatus' | 'repoStatus' | 'workflowActivity'
 export type GithubPushTableType = 'homeActivity' | 'accountActivity'
@@ -17,7 +21,7 @@ export type GithubActivityTableType = 'repoActivity'
 export function createWorkflowRunEventTableResponse(
   mode: WorkflowRunEventTableType,
   clock: Clock,
-  events: VisibleWorkflowRunEvents
+  events: VisibleFullWorkflowRunEvents
 ) {
   return createResponse(
     mode,
@@ -46,7 +50,7 @@ export function createGithubActivityResponse(
   return createResponse(
     mode,
     activity.visibleEvents.map((event) =>
-      activityIsWorkflowRunActivity(event)
+      activityIsFullWorkflowRunActivity(event)
         ? workflowRowForMode(mode, clock, event.event)
         : pushRowForMode(mode, clock, event.event)
     ),
@@ -92,7 +96,7 @@ const workflowRowConfig: Record<WorkflowRowMode, WorkflowRowOptions> = {
   workflowActivity: { showElapsed: true }
 }
 
-export function workflowRowForMode(mode: WorkflowRowMode, clock: Clock, event: GithubWorkflowRunEvent) {
+export function workflowRowForMode(mode: WorkflowRowMode, clock: Clock, event: FullGithubWorkflowRunEvent) {
   return workflowRow(clock, event, workflowRowConfig[mode])
 }
 

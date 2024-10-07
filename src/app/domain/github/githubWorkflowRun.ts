@@ -4,7 +4,7 @@ import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStor
 import { putGithubWorkflowRunfNoKeyExistsOrNewerThanExisting } from '../entityStore/entities/GithubWorkflowRunEntity'
 import { saveLatestEvents } from './githubLatestWorkflowRunEvents'
 import { sortBy } from '../../util/collections'
-import { getEventUpdatedTimestamp } from './githubCommon'
+import { workflowRunEventUpdatedTimestamp } from './githubWorkflowRunEvent'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
 
@@ -15,7 +15,7 @@ export async function saveRuns(
   publishNotifications: boolean
 ) {
   // We only want to notify for the most recent event per run, so sort events by most recent first
-  const newEventsMostRecentFirst = sortBy(events, getEventUpdatedTimestamp, false)
+  const newEventsMostRecentFirst = sortBy(events, workflowRunEventUpdatedTimestamp, false)
   const eventsForNewOrUpdatedRuns: GithubWorkflowRunEvent[] = []
 
   // Do this sequentially since if we have multiple events for same

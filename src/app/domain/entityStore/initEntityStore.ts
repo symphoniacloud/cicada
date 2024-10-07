@@ -17,6 +17,7 @@ import {
   GITHUB_REPOSITORY,
   GITHUB_USER,
   GITHUB_USER_TOKEN,
+  GITHUB_WORKFLOW,
   GITHUB_WORKFLOW_RUN,
   GITHUB_WORKFLOW_RUN_EVENT,
   USER_SETTINGS,
@@ -72,6 +73,10 @@ export function setupEntityStore(
         {
           entityTypes: [GITHUB_REPOSITORY],
           ...entityStoreConfigFor(tableNames, 'github-repositories')
+        },
+        {
+          entityTypes: [GITHUB_WORKFLOW],
+          ...entityStoreConfigFor(tableNames, 'github-workflows')
         },
         {
           entityTypes: [GITHUB_WORKFLOW_RUN_EVENT, GITHUB_WORKFLOW_RUN, GITHUB_PUSH],

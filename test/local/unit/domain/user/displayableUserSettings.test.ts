@@ -10,11 +10,11 @@ import {
   buildAccountStructure,
   buildUserScopedRefData,
   buildRepoStructure,
-  buildWorkflowSummary
+  buildWorkflow
 } from '../../../../testSupport/builders/accountStructureBuilders'
 
 test('toDisplayableWorkflowSettings', () => {
-  const workflow = buildWorkflowSummary({ workflowName: 'workflow1' })
+  const workflow = buildWorkflow({ workflowName: 'workflow1' })
 
   const displayable = toDisplayableWorkflowSettings(
     {
@@ -34,7 +34,7 @@ test('toDisplayableWorkflowSettings', () => {
 test('toDisplayableRepoSettings', () => {
   const repo = buildRepoStructure({
     repoName: 'repo1',
-    workflows: [buildWorkflowSummary({ workflowName: 'workflow1' })]
+    workflows: [buildWorkflow({ workflowName: 'workflow1' })]
   })
 
   const displayable = toDisplayableRepoSettings(
@@ -71,7 +71,7 @@ test('toDisplayableAccountSettings', () => {
     repos: [
       buildRepoStructure({
         repoName: 'repo1',
-        workflows: [buildWorkflowSummary({ workflowName: 'workflow1' })]
+        workflows: [buildWorkflow({ workflowName: 'workflow1' })]
       })
     ]
   })
@@ -123,7 +123,7 @@ test('toCalculatedAndDisplayableUserSettings', () => {
     repos: [
       buildRepoStructure({
         repoName: 'repo1',
-        workflows: [buildWorkflowSummary({ workflowName: 'workflow1' })]
+        workflows: [buildWorkflow({ workflowName: 'workflow1' })]
       })
     ]
   })
