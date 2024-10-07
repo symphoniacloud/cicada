@@ -13,7 +13,8 @@ import {
   stubQueryAccountMembershipsByUser,
   stubQueryLatestWorkflowRuns,
   stubQueryRepositories,
-  stubQueryWebPushSubscription
+  stubQueryWebPushSubscription,
+  stubQueryWorkflows
 } from '../../../../../testSupport/fakes/tableRecordReadStubs'
 import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/GithubUserId'
 
@@ -24,6 +25,7 @@ test('newWorkflowRunEvent', async () => {
   stubQueryAccountMembershipsByUser(appState)
   stubQueryAccountMembershipsByUser(appState, fromRawGithubUserId(49635))
   stubQueryRepositories(appState)
+  stubQueryWorkflows(appState)
   stubQueryLatestWorkflowRuns(appState)
   stubQueryWebPushSubscription(appState)
   stubQueryWebPushSubscription(appState, {
@@ -55,8 +57,8 @@ test('newWorkflowRunEvent', async () => {
     })
   ).toEqual([
     {
-      title: '✅ Test Repo One Workflow',
-      body: 'Workflow Test Repo One Workflow in Repo org-test-repo-one succeeded',
+      title: '✅ Test Workflow',
+      body: 'Workflow Test Workflow in Repo org-test-repo-one succeeded',
       data: {
         url: 'https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236'
       }
@@ -72,8 +74,8 @@ test('newWorkflowRunEvent', async () => {
     })
   ).toEqual([
     {
-      title: '✅ Test Repo One Workflow',
-      body: 'Workflow Test Repo One Workflow in Repo org-test-repo-one succeeded',
+      title: '✅ Test Workflow',
+      body: 'Workflow Test Workflow in Repo org-test-repo-one succeeded',
       data: {
         url: 'https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236'
       }
@@ -89,8 +91,8 @@ test('newWorkflowRunEvent', async () => {
     })
   ).toEqual([
     {
-      title: '✅ Test Repo One Workflow',
-      body: 'Workflow Test Repo One Workflow in Repo org-test-repo-one succeeded',
+      title: '✅ Test Workflow',
+      body: 'Workflow Test Workflow in Repo org-test-repo-one succeeded',
       data: {
         url: 'https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8177622236'
       }

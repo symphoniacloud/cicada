@@ -3,7 +3,7 @@ import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
 import { githubWebhookInstallationProcessor } from '../../../../../../src/app/domain/github/webhookProcessor/processors/githubWebhookInstallationProcessor'
 
 import example_installation_created from '../../../../../examples/github/org/webhook/installationCreated.json'
-import { testOrgInstallation } from '../../../../../examples/cicada/githubDomainObjects'
+import { cicadaTestOrgInstallation } from '../../../../../examples/cicada/githubDomainObjects'
 import {
   expectPut,
   expectPutsLength
@@ -25,7 +25,7 @@ test('installation-webhook-for-org-account-installation', async () => {
 
   // A
   expectPutsLength(appState).toEqual(1)
-  expectPut(appState).toEqual(expectedPutGithubInstallation(testOrgInstallation))
+  expectPut(appState).toEqual(expectedPutGithubInstallation(cicadaTestOrgInstallation))
   expect(appState.eventBridgeBus.sentEvents.length).toEqual(1)
   expect(appState.eventBridgeBus.sentEvents[0]).toEqual({
     detailType: 'InstallationUpdated',

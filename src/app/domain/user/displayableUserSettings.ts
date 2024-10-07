@@ -9,7 +9,6 @@ import {
   DisplayableUserSettings,
   PersistedUserSettings
 } from '../types/UserSettings'
-import { usableWorkflowName } from '../github/githubWorkflow'
 import { calculateUserSettings } from './calculatedUserSettings'
 import {
   GithubAccountStructure,
@@ -22,7 +21,7 @@ import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings'
 import {
   getAccountStructure,
   getRepoStructureFromAccount,
-  getWorkflowStructureFromRepo
+  getWorkflowFromRepo
 } from '../github/userScopeReferenceData'
 import { logger } from '../../util/logging'
 import { GithubAccountId } from '../types/GithubAccountId'
@@ -94,7 +93,7 @@ export function toDisplayableRepoSettings(
   logger.debug('toDisplayableRepoSettings', { repo, repoSettings })
   const workflowsSettings: Record<GithubWorkflowId, DisplayableGithubWorkflowSettings> = {}
   for (const [workflowId, workflowSettings] of Object.entries(repoSettings.workflows)) {
-    const workflow = getWorkflowStructureFromRepo(repo, {
+    const workflow = getWorkflowFromRepo(repo, {
       ...repo,
       workflowId: workflowId as GithubWorkflowId
     })
@@ -118,7 +117,7 @@ export function toDisplayableWorkflowSettings(
   workflow: GithubWorkflowSummary
 ) {
   return {
-    name: usableWorkflowName(workflow),
+    name: workflow.workflowName,
     ...workflowSettings
   }
 }

@@ -7,6 +7,7 @@ import {
   stubQueryLatestPushesPerRef,
   stubQueryLatestWorkflowRuns,
   stubQueryRepositories,
+  stubQueryWorkflows,
   stubSetupUserRecords
 } from '../../../../testSupport/fakes/tableRecordReadStubs'
 
@@ -16,6 +17,7 @@ test('get-user-settings-html', async () => {
   stubSetupUserRecords(appState)
   stubQueryLatestPushesPerRef(appState)
   stubQueryRepositories(appState)
+  stubQueryWorkflows(appState)
   // Used when loading "all workflows" for user settings lookup. Eventually consider adding a workflows entity
   stubQueryLatestWorkflowRuns(appState)
 
@@ -83,18 +85,18 @@ test('get-user-settings-html', async () => {
           <b>Workflow</b>
         </div>
       </div>
-      <div class="row" id="settings-GHAccount162483619-GHRepo768206479-GHWorkflow88647110">
+      <div class="row" id="settings-GHAccount162483619-GHRepo768206479-GHWorkflow88508779">
         <div class="col-sm-2"></div>
-        <div class="col-sm-4">Test Repo One Workflow</div>
+        <div class="col-sm-4">Test Workflow</div>
         <div class="col-sm-3">
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&repoId=GHRepo768206479&workflowId=GHWorkflow88647110&setting=visible&enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619-GHRepo768206479-GHWorkflow88647110"></input>
+            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&repoId=GHRepo768206479&workflowId=GHWorkflow88508779&setting=visible&enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619-GHRepo768206479-GHWorkflow88508779"></input>
             <label class="form-check-label" for="flexSwitchCheckChecked">Show</label>
           </div>
         </div>
         <div class="col-sm-3">
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&repoId=GHRepo768206479&workflowId=GHWorkflow88647110&setting=notify&enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619-GHRepo768206479-GHWorkflow88647110"></input>
+            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&repoId=GHRepo768206479&workflowId=GHWorkflow88508779&setting=notify&enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619-GHRepo768206479-GHWorkflow88508779"></input>
             <label class="form-check-label" for="flexSwitchCheckChecked">Notify</label>
           </div>
         </div>

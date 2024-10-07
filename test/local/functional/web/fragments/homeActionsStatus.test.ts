@@ -6,6 +6,7 @@ import {
   stubGetGithubInstallation,
   stubQueryLatestWorkflowRuns,
   stubQueryRepositories,
+  stubQueryWorkflows,
   stubSetupUserRecords
 } from '../../../../testSupport/fakes/tableRecordReadStubs'
 
@@ -14,6 +15,7 @@ test('home-actions-status', async () => {
   stubGetGithubInstallation(appState)
   stubSetupUserRecords(appState)
   stubQueryRepositories(appState)
+  stubQueryWorkflows(appState)
   stubQueryLatestWorkflowRuns(appState)
 
   const latestActivity = await handleWebRequest(
@@ -48,7 +50,7 @@ test('home-actions-status', async () => {
         <a href="https://github.com/cicada-test-org/org-test-repo-one"><i class='bi bi-github' style='color: #6e5494'></i></a>
       </td>
       <td>
-        <a href="/workflow?accountId=GHAccount162483619&repoId=GHRepo768206479&workflowId=GHWorkflow88647110">Test Repo One Workflow</a>
+        <a href="/workflow?accountId=GHAccount162483619&repoId=GHRepo768206479&workflowId=GHWorkflow88508779">Test Workflow</a>
 &nbsp;
         <a href="https://github.com/cicada-test-org/org-test-repo-one/actions/workflows/test.yml"><i class='bi bi-github' style='color: #6e5494'></i></a>
       </td>

@@ -11,7 +11,6 @@ import {
 import { isCicadaEventBridgeDetail } from '../../outboundInterfaces/eventBridgeBus'
 import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper'
 import { filterWorkflowNotifyEnabled } from '../user/userNotifyable'
-import { usableWorkflowName } from '../github/githubWorkflow'
 
 import { loadUserScopeReferenceData } from '../github/userScopeReferenceData'
 
@@ -46,12 +45,12 @@ export function generateRunEventNotification(
 ): CicadaWebNotification {
   const titleIcon = runBasicStatus(workflowRunEvent)
   const bodyStatus = friendlyStatus(workflowRunEvent)
-  const workflowName = usableWorkflowName(workflowRunEvent)
+  const workflowName = workflowRunEvent.workflowName
 
   return {
     title: `${titleIcon} ${workflowName}`,
     body: `Workflow ${workflowName} in Repo ${workflowRunEvent.repoName} ${bodyStatus}`,
-    data: { url: workflowRunEvent.htmlUrl }
+    data: { url: workflowRunEvent.runHtmlUrl }
   }
 }
 

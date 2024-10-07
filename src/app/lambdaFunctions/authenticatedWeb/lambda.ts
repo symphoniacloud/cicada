@@ -70,6 +70,18 @@ export async function handleWebRequest(appState: AppState, event: APIGatewayProx
   if (!authResult) {
     return isFragmentPath(event.path) ? notAuthorizedHTMLResponse : logoutResponse(appState)
   }
+
+  // TOEventually - something nicer here. We use this route for remote tests, but in remote tests
+  // don't want to load ref data. So for now use this hack
+  if (event.path === helloPageRoute.path) {
+    return await router(event as CicadaAuthorizedAPIEvent)(appState, {
+      refData: {
+        userId: authResult.userId
+      },
+      username: authResult.username
+    } as CicadaAuthorizedAPIEvent)
+  }
+
   // Load reference data here so individual route handlers don't need to
   const refData = await loadUserScopeReferenceData(appState, authResult.userId)
   const authorizedEvent: CicadaAuthorizedAPIEvent = { ...event, refData, username: authResult.username }

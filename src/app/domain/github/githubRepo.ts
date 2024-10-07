@@ -5,15 +5,15 @@ import { getRepositories, putRepositories } from '../entityStore/entities/Github
 import { GithubRepoKey } from '../types/GithubKeys'
 import { GithubAccountId } from '../types/GithubAccountId'
 import { GithubRepoSummary } from '../types/GithubSummaries'
-import { accountKeysEqual, toAccountSummary } from './githubAccount'
+import { accountKeysEqual, narrowToAccountSummary } from './githubAccount'
 
 export function repoKeysEqual(r1: GithubRepoKey, r2: GithubRepoKey) {
   return accountKeysEqual(r1, r2) && r1.repoId === r2.repoId
 }
 
-export function toRepoSummary<T extends GithubRepoSummary>(x: T): GithubRepoSummary {
+export function narrowToRepoSummary<T extends GithubRepoSummary>(x: T): GithubRepoSummary {
   return {
-    ...toAccountSummary(x),
+    ...narrowToAccountSummary(x),
     repoId: x.repoId,
     repoName: x.repoName
   }

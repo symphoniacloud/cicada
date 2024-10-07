@@ -7,6 +7,7 @@ export const GITHUB_PUSH = 'githubPush'
 export const GITHUB_ACCOUNT_MEMBERSHIP = 'githubAccountMembership'
 export const GITHUB_PUBLIC_ACCOUNT = 'githubPublicAccount'
 export const GITHUB_REPOSITORY = 'githubRepository'
+export const GITHUB_WORKFLOW = 'githubWorkflow'
 export const GITHUB_USER = 'githubUser'
 export const GITHUB_USER_TOKEN = 'githubUserToken'
 export const USER_SETTINGS = 'userSettings'
@@ -22,6 +23,7 @@ export const ALL_ENTITY_TYPES = [
   GITHUB_ACCOUNT_MEMBERSHIP,
   GITHUB_PUBLIC_ACCOUNT,
   GITHUB_REPOSITORY,
+  GITHUB_WORKFLOW,
   GITHUB_USER,
   GITHUB_USER_TOKEN,
   USER_SETTINGS,

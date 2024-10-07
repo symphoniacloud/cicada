@@ -5,6 +5,7 @@ import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState'
 import {
   stubGetGithubInstallation,
   stubQueryRepositories,
+  stubQueryWorkflows,
   stubSetupUserRecords
 } from '../../../../testSupport/fakes/tableRecordReadStubs'
 
@@ -14,6 +15,7 @@ test('view-repo-heading', async () => {
   stubGetGithubInstallation(appState)
   stubSetupUserRecords(appState)
   stubQueryRepositories(appState)
+  stubQueryWorkflows(appState)
 
   const viewRepoResponse = await handleWebRequest(
     appState,

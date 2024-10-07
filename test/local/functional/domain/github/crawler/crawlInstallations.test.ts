@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
 import {
-  testOrgInstallation,
-  testPersonalInstallation
+  cicadaTestOrgInstallation,
+  cicadaTestUserInstallation
 } from '../../../../../examples/cicada/githubDomainObjects'
 import example_personal_account_installation from '../../../../../examples/github/personal-account/api/installation.json'
 import example_org_installation from '../../../../../examples/github/org/api/installation.json'
@@ -29,8 +29,8 @@ test('app-crawler-for-personal-account-installation', async () => {
 
   // A
   expectPutsLength(appState).toEqual(1)
-  expectPut(appState).toEqual(expectedPutGithubInstallation(testPersonalInstallation))
-  expect(result).toEqual([testPersonalInstallation])
+  expectPut(appState).toEqual(expectedPutGithubInstallation(cicadaTestUserInstallation))
+  expect(result).toEqual([cicadaTestUserInstallation])
 })
 
 test('app-crawler-for-org-installation', async () => {
@@ -47,6 +47,6 @@ test('app-crawler-for-org-installation', async () => {
 
   // A
   expectPutsLength(appState).toEqual(1)
-  expectPut(appState).toEqual(expectedPutGithubInstallation(testOrgInstallation))
-  expect(result).toEqual([testOrgInstallation])
+  expectPut(appState).toEqual(expectedPutGithubInstallation(cicadaTestOrgInstallation))
+  expect(result).toEqual([cicadaTestOrgInstallation])
 })

@@ -1,18 +1,20 @@
 import { mergeOrderedLists } from '../../util/collections'
-import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
+import { FullGithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
 import { GithubPush } from '../types/GithubPush'
 import { AppState } from '../../environment/AppState'
 import { queryRunsAndPushesForRepo } from '../entityStore/entities/GithubWorkflowRunEntity'
 import { GithubRepoKey } from '../types/GithubKeys'
+import { toFullWorkflowRunEvent } from './githubWorkflowRunEvent'
+import { UserScopeReferenceData } from '../types/UserScopeReferenceData'
 
 // GithubActivity is a domain concept that is only read, not written, since it's
 // only used when runs and pushes are read from the database at the same time.
 
-export type GithubActivity = GithubWorkflowRunEventActivity | GithubPushActivity
+export type GithubActivity = FullGithubWorkflowRunEventActivity | GithubPushActivity
 
-export interface GithubWorkflowRunEventActivity {
-  activityType: 'workflowRunEvent'
-  event: GithubWorkflowRunEvent
+export interface FullGithubWorkflowRunEventActivity {
+  activityType: 'fullWorkflowRunEvent'
+  event: FullGithubWorkflowRunEvent
 }
 
 export interface GithubPushActivity {
@@ -20,23 +22,29 @@ export interface GithubPushActivity {
   event: GithubPush
 }
 
-export function activityIsWorkflowRunActivity(
+export function activityIsFullWorkflowRunActivity(
   activity: GithubActivity
-): activity is GithubWorkflowRunEventActivity {
-  return activity.activityType === 'workflowRunEvent'
+): activity is FullGithubWorkflowRunEventActivity {
+  return activity.activityType === 'fullWorkflowRunEvent'
 }
 
-export async function getRecentActivityForRepo(appState: AppState, repoKey: GithubRepoKey) {
+export async function getRecentActivityForRepo(
+  appState: AppState,
+  refData: UserScopeReferenceData,
+  repoKey: GithubRepoKey
+) {
   const activityQueryResult = await queryRunsAndPushesForRepo(appState.entityStore, repoKey)
   return mergeOrderedLists(
-    workflowRunEventsToActivities(activityQueryResult.runs),
+    fullWorkflowRunEventsToActivities(
+      activityQueryResult.runs.map((run) => toFullWorkflowRunEvent(refData, run))
+    ),
     pushesToActivities(activityQueryResult.pushes),
     (x, y) => activityDateTime(x) > activityDateTime(y)
   )
 }
 
-function workflowRunEventsToActivities(events: GithubWorkflowRunEvent[]): GithubActivity[] {
-  return events.map((event): GithubActivity => ({ activityType: 'workflowRunEvent', event }))
+function fullWorkflowRunEventsToActivities(events: FullGithubWorkflowRunEvent[]): GithubActivity[] {
+  return events.map((event): GithubActivity => ({ activityType: 'fullWorkflowRunEvent', event }))
 }
 
 function pushesToActivities(events: GithubPush[]): GithubActivity[] {
@@ -44,5 +52,7 @@ function pushesToActivities(events: GithubPush[]): GithubActivity[] {
 }
 
 export function activityDateTime(activity: GithubActivity) {
-  return activityIsWorkflowRunActivity(activity) ? activity.event.updatedAt : activity.event.dateTime
+  return activityIsFullWorkflowRunActivity(activity)
+    ? activity.event.runEventUpdatedAt
+    : activity.event.dateTime
 }

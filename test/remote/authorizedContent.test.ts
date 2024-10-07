@@ -10,7 +10,7 @@ import { deleteFromSSMInTests, writeToSSMInTests } from './integrationTestSuppor
 test('authenticated app tests', async () => {
   const webHostName = await (await appStateForTests()).config.webHostname()
   const secret = randomBytes(32).toString('base64url')
-  const token = JSON.stringify({ username: 'testuser', userId: 1234, secret: secret })
+  const token = JSON.stringify({ username: 'testuser', userId: 'GHUser1234', secret: secret })
   await writeToSSMInTests({ appName: getAppName() }, SSM_PARAM_NAMES.TEST_COOKIE_SECRET, secret)
   // Wait for SSM to propagate
   await sleep(3000)
@@ -39,24 +39,27 @@ test('authenticated app tests', async () => {
     <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
     <title>Cicada</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous"></link>
+    <script src="/js/htmx.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"></link>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"></link>
   </head>
   <body>
     <div class="container" id="toplevel">
-      <h2>Cicada</h2>
       <p>
 Hello 
 testuser
  / 
-1234
+GHUser1234
       </p>
       <hr></hr>
+      <p>
+        <a href="/">Back to home</a>
+      </p>
       <p>
         <a href="/userSettings">User Settings</a>
       </p>
       <p>
-        <a href="/">Back to home</a>
+        <a href="/app/admin">Global admin</a>
       </p>
       <p>
         <a href="/github/auth/logout">Logout</a>
@@ -74,7 +77,7 @@ testuser
     }
   })
   expect(apiTestPageResponse.status).toEqual(200)
-  expect(await apiTestPageResponse.text()).toEqual('{"username":"testuser","userId":1234}')
+  expect(await apiTestPageResponse.text()).toEqual('{"username":"testuser","userId":"GHUser1234"}')
 })
 
 afterAll(async () => {

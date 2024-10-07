@@ -2,7 +2,9 @@ import { WebhookProcessor } from '../WebhookProcessor'
 import { AppState } from '../../../../environment/AppState'
 import { logger } from '../../../../util/logging'
 import { isRawGithubWorkflowRunEvent } from '../../../types/rawGithub/RawGithubWorkflowRunEvent'
-import { processRawRunEvents } from '../../githubWorkflowRunEvent'
+import { processRawRunEvent } from '../../githubWorkflowRunEvent'
+import { getInstallationOrUndefined } from '../../../entityStore/entities/GithubInstallationEntity'
+import { fromRawGithubAccountId } from '../../../types/GithubAccountId'
 
 export const githubWebhookWorkflowRunProcessor: WebhookProcessor = async (
   appState: AppState,
@@ -13,7 +15,18 @@ export const githubWebhookWorkflowRunProcessor: WebhookProcessor = async (
   if (!parsed) {
     return
   }
-  await processRawRunEvents(appState, [parsed], true)
+
+  const installation = await getInstallationOrUndefined(
+    appState.entityStore,
+    fromRawGithubAccountId(parsed.repository.owner.id)
+  )
+  if (!installation) {
+    logger.warn('Received Run event but no known installation for run event owner', { parsed })
+    return
+  }
+  const githubClient = appState.githubClient.clientForInstallation(installation.installationId)
+
+  await processRawRunEvent(appState, parsed, githubClient, true)
 }
 
 function parse(body: string) {

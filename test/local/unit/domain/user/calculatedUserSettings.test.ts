@@ -15,7 +15,7 @@ import {
   buildAccountStructure,
   buildUserScopedRefData,
   buildRepoStructure,
-  buildWorkflowSummary
+  buildWorkflow
 } from '../../../../testSupport/builders/accountStructureBuilders'
 
 test('calculateVisibleAndNotifyConfigurable / calculateWorkflowSettings', () => {
@@ -105,7 +105,7 @@ test('repo settings when visible false', () => {
 
 test('repo settings when visible true notify false', () => {
   const repoStructure = buildRepoStructure({
-    workflows: [buildWorkflowSummary(), buildWorkflowSummary({ simpleWorkflowId: 790 })]
+    workflows: [buildWorkflow(), buildWorkflow({ simpleWorkflowId: 790 })]
   })
 
   const calculated = calculateRepoSettings(
@@ -135,7 +135,7 @@ test('account settings when none persisted', () => {
   const accountStructure = buildAccountStructure({
     repos: [
       buildRepoStructure(),
-      buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflowSummary({ simpleWorkflowId: 799 })] })
+      buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflow({ simpleWorkflowId: 799 })] })
     ]
   })
 
@@ -186,7 +186,7 @@ test('account settings ', () => {
   const accountStructure = buildAccountStructure({
     repos: [
       buildRepoStructure(),
-      buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflowSummary({ simpleWorkflowId: 799 })] })
+      buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflow({ simpleWorkflowId: 799 })] })
     ]
   })
 
@@ -219,7 +219,7 @@ test('user settings when empty persisted', () => {
   const accountStructure = buildUserScopedRefData({
     repos: [
       buildRepoStructure(),
-      buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflowSummary({ simpleWorkflowId: 799 })] })
+      buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflow({ simpleWorkflowId: 799 })] })
     ]
   })
 
@@ -272,7 +272,7 @@ test('user settings when some persisted', () => {
   const accountStructure = buildUserScopedRefData({
     repos: [
       buildRepoStructure(),
-      buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflowSummary({ simpleWorkflowId: 799 })] })
+      buildRepoStructure({ simpleRepoId: 499, workflows: [buildWorkflow({ simpleWorkflowId: 799 })] })
     ]
   })
 

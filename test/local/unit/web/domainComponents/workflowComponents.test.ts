@@ -1,12 +1,12 @@
 import { expect, test } from 'vitest'
-import { testPersonalTestRepoWorkflowRun } from '../../../../examples/cicada/githubDomainObjects'
+import { fullTestPersonalTestRepoWorkflowRun } from '../../../../examples/cicada/githubDomainObjects'
 import { defaultFakeClock } from '../../../../testSupport/fakes/fakeClock'
 import { a, td, tr } from '../../../../../src/app/web/hiccough/hiccoughElements'
 import { githubAnchor } from '../../../../../src/app/web/domainComponents/genericComponents'
 import { workflowRowForMode } from '../../../../../src/app/web/fragments/views/activityAndStatusView'
 
 test('successful row, all Repos', () => {
-  expect(workflowRowForMode('homeStatus', defaultFakeClock, testPersonalTestRepoWorkflowRun)).toEqual(
+  expect(workflowRowForMode('homeStatus', defaultFakeClock, fullTestPersonalTestRepoWorkflowRun)).toEqual(
     tr(
       { class: 'table-success' },
       td(
@@ -42,7 +42,7 @@ test('successful row, all Repos', () => {
 })
 
 test('successful run, repo activity', () => {
-  expect(workflowRowForMode('repoActivity', defaultFakeClock, testPersonalTestRepoWorkflowRun)).toEqual(
+  expect(workflowRowForMode('repoActivity', defaultFakeClock, fullTestPersonalTestRepoWorkflowRun)).toEqual(
     tr(
       { class: 'table-success' },
       td('Successful Run'),
@@ -74,7 +74,7 @@ test('successful run, repo activity', () => {
 test('unsuccessful run, all Repos', () => {
   expect(
     workflowRowForMode('homeStatus', defaultFakeClock, {
-      ...testPersonalTestRepoWorkflowRun,
+      ...fullTestPersonalTestRepoWorkflowRun,
       conclusion: 'failure'
     })
   ).toEqual(
@@ -115,7 +115,7 @@ test('unsuccessful run, all Repos', () => {
 test('failed run, repo Activity', () => {
   expect(
     workflowRowForMode('repoActivity', defaultFakeClock, {
-      ...testPersonalTestRepoWorkflowRun,
+      ...fullTestPersonalTestRepoWorkflowRun,
       conclusion: 'failure'
     })
   ).toEqual(
@@ -150,7 +150,7 @@ test('failed run, repo Activity', () => {
 test('in progress run, all repos', () => {
   expect(
     workflowRowForMode('homeStatus', defaultFakeClock, {
-      ...testPersonalTestRepoWorkflowRun,
+      ...fullTestPersonalTestRepoWorkflowRun,
       conclusion: undefined,
       status: 'in_progress'
     })
@@ -192,7 +192,7 @@ test('in progress run, all repos', () => {
 test('queued run, workflow activity', () => {
   expect(
     workflowRowForMode('workflowActivity', defaultFakeClock, {
-      ...testPersonalTestRepoWorkflowRun,
+      ...fullTestPersonalTestRepoWorkflowRun,
       conclusion: undefined,
       status: 'queued'
     })
@@ -221,7 +221,7 @@ test('queued run, workflow activity', () => {
 test('in progress run, workflow activity', () => {
   expect(
     workflowRowForMode('workflowActivity', defaultFakeClock, {
-      ...testPersonalTestRepoWorkflowRun,
+      ...fullTestPersonalTestRepoWorkflowRun,
       conclusion: undefined,
       status: 'in_progress'
     })

@@ -28,6 +28,7 @@ function defineGithubCrawlerFunction(scope: Construct, props: MainStackProps) {
         'github-users',
         'github-account-memberships',
         'github-repositories',
+        'github-workflows',
         'github-repo-activity',
         'github-latest-workflow-runs',
         'github-latest-pushes-per-ref',

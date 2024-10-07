@@ -7,7 +7,6 @@ import {
 } from '@symphoniacloud/dynamodb-entity-store'
 import { CicadaEntity } from '../entityStoreEntitySupport'
 import { GithubWorkflowKey } from '../../types/GithubKeys'
-import { GithubAccountId } from '../../types/GithubAccountId'
 import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkflowRunEntity'
 
 // We will eventually get several of these per actual run - e.g. started, completed, etc
@@ -16,7 +15,7 @@ import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkf
 const GithubWorkflowRunEventEntity: CicadaEntity<
   GithubWorkflowRunEvent,
   Pick<GithubWorkflowRunEvent, 'accountId'>,
-  Pick<GithubWorkflowRunEvent, 'repoId' | 'updatedAt' | 'workflowId' | 'workflowRunId' | 'status'>
+  Pick<GithubWorkflowRunEvent, 'repoId' | 'runEventUpdatedAt' | 'workflowId' | 'workflowRunId' | 'status'>
 > = {
   type: GITHUB_WORKFLOW_RUN_EVENT,
   parse: typePredicateParser(isGithubWorkflowRunEvent, GITHUB_WORKFLOW_RUN_EVENT),
@@ -25,9 +24,12 @@ const GithubWorkflowRunEventEntity: CicadaEntity<
   },
   // UPDATED_AT goes before RUN_ID for when querying activity per workflow, by date
   sk(
-    source: Pick<GithubWorkflowRunEvent, 'repoId' | 'updatedAt' | 'workflowId' | 'workflowRunId' | 'status'>
+    source: Pick<
+      GithubWorkflowRunEvent,
+      'repoId' | 'runEventUpdatedAt' | 'workflowId' | 'workflowRunId' | 'status'
+    >
   ) {
-    return `${skPrefix(source)}#UPDATED_AT#${source.updatedAt}#RUN#${source.workflowRunId}#STATUS#${
+    return `${skPrefix(source)}#UPDATED_AT#${source.runEventUpdatedAt}#RUN#${source.workflowRunId}#STATUS#${
       source.status
     }`
   },
@@ -37,8 +39,8 @@ const GithubWorkflowRunEventEntity: CicadaEntity<
       pk(source: Pick<GithubWorkflowRunEvent, 'accountId'>) {
         return githubActivityEntityPk(source)
       },
-      sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'updatedAt'>) {
-        return githubActivityEntityGSISk(source.repoId, source.updatedAt)
+      sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'runEventUpdatedAt'>) {
+        return githubActivityEntityGSISk(source.repoId, source.runEventUpdatedAt)
       }
     }
   }
@@ -56,16 +58,6 @@ export function putWorkflowRunEventIfKeyDoesntExist(
   return store(entityStore).put(runEvent, {
     conditionExpression: 'attribute_not_exists(PK)'
   })
-}
-
-// Used in integration tests
-export async function batchDeleteGithubWorkflowRunEvents(
-  entityStore: AllEntitiesStore,
-  events: GithubWorkflowRunEvent[]
-) {
-  if (events.length > 0) {
-    await store(entityStore).advancedOperations.batchDelete(events)
-  }
 }
 
 // Returns *all* the run events for each run (including in_progress) even if the run is complete
@@ -87,14 +79,6 @@ export async function getRunEventsForWorkflowPage(
     rangeWhereSkBeginsWith(skPrefix({ repoId, workflowId })),
     { scanIndexForward: false, ...(limit ? { limit } : {}) }
   )
-}
-
-// CAREFUL - Don't use this for production code! Only just used for integration tests
-export async function onlyUseInTestsGetAllGithubWorkflowRunEventsForAccount(
-  entityStore: AllEntitiesStore,
-  accountId: GithubAccountId
-) {
-  return store(entityStore).queryAllByPk({ accountId })
 }
 
 function store(entityStore: AllEntitiesStore) {

@@ -1,4 +1,4 @@
-import { isString, isStringOrUndefined } from '../../util/types'
+import { isString } from '../../util/types'
 import {
   GithubAccountKey,
   GithubRepoKey,
@@ -35,19 +35,11 @@ export function isGithubRepoSummary(x: unknown): x is GithubRepoSummary {
 }
 
 export interface GithubWorkflowSummary extends GithubWorkflowKey, GithubRepoSummary {
-  path: string
-  // Workflow name is not available on all source data from github - sometimes path is used
-  workflowName?: string
+  workflowName: string
 }
 
 export function isGithubWorkflowSummary(x: unknown): x is GithubWorkflowSummary {
-  return (
-    isGithubWorkflowKey(x) &&
-    isGithubRepoSummary(x) &&
-    'path' in x &&
-    isString(x.path) &&
-    (!('workflowName' in x) || isStringOrUndefined(x.workflowName))
-  )
+  return isGithubWorkflowKey(x) && isGithubRepoSummary(x) && 'workflowName' in x && isString(x.workflowName)
 }
 
 export interface GithubUserSummary extends GithubUserKey {

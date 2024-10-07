@@ -9,6 +9,7 @@ import { MetricUnit } from '@aws-lambda-powertools/metrics'
 import { failedWith, Result, successWith } from '../util/structuredResult'
 import { GithubAppId, toRawGithubAppId } from '../domain/types/GithubAppId'
 import { GithubInstallationId, toRawGithubInstallationId } from '../domain/types/GithubInstallationId'
+import { RawGithubWorkflow } from '../domain/types/rawGithub/RawGithubWorkflow'
 
 export interface GithubInstallationClient {
   listWorkflowRunsForRepo(
@@ -25,6 +26,8 @@ export interface GithubInstallationClient {
   listPublicRepositoriesForUser(accountName: string): Promise<RawGithubRepo[]>
 
   listOrganizationMembers(org: string): Promise<RawGithubUser[]>
+
+  listWorkflowsForRepo(account: string, repo: string): Promise<RawGithubWorkflow[]>
 
   listMostRecentEventsForRepo(account: string, repo: string): Promise<RawGithubEvent[]>
 
@@ -101,6 +104,14 @@ export function createRealGithubInstallationClient(
           owner: account,
           repo,
           created
+        })
+      )
+    },
+    async listWorkflowsForRepo(account: string, repo: string) {
+      return processOctokitIterator(
+        octokit.paginate.iterator(octokit.actions.listRepoWorkflows, {
+          owner: account,
+          repo
         })
       )
     },

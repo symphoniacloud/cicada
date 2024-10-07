@@ -1,8 +1,9 @@
-import { GithubAccountSummary, GithubRepoSummary, GithubWorkflowSummary } from './GithubSummaries'
+import { GithubAccountSummary, GithubRepoSummary } from './GithubSummaries'
 import { GithubRepoId } from './GithubRepoId'
 import { GithubWorkflowId } from './GithubWorkflowId'
 import { GithubUserId } from './GithubUserId'
 import { GithubAccountId } from './GithubAccountId'
+import { GithubWorkflow } from './GithubWorkflow'
 
 export interface GithubAccountStructure extends GithubAccountSummary {
   isMemberAccount: boolean
@@ -10,7 +11,7 @@ export interface GithubAccountStructure extends GithubAccountSummary {
 }
 
 export interface GithubRepoStructure extends GithubRepoSummary {
-  workflows: Record<GithubWorkflowId, GithubWorkflowSummary>
+  workflows: Record<GithubWorkflowId, GithubWorkflow>
 }
 
 export interface UserScopeReferenceData {

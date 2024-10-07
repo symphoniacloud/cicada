@@ -4,6 +4,7 @@ import { GITHUB_PUSH } from '../entityTypes'
 import { latestCommitInPush } from '../../github/githubPush'
 import { CicadaEntity } from '../entityStoreEntitySupport'
 import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkflowRunEntity'
+import { GithubAccountId } from '../../types/GithubAccountId'
 
 // Exported since also used by GithubWorkflowRunEntity
 export const GithubPushEntity: CicadaEntity<
@@ -38,6 +39,21 @@ export async function putPushIfNoKeyExists(entityStore: AllEntitiesStore, push: 
   return await store(entityStore).put(push, {
     conditionExpression: 'attribute_not_exists(PK)'
   })
+}
+
+// CAREFUL - Don't use this for production code! Only just used for integration tests
+export async function onlyUseInTestsGetAllGithubPushesForAccount(
+  entityStore: AllEntitiesStore,
+  accountId: GithubAccountId
+) {
+  return store(entityStore).queryAllByPk({ accountId })
+}
+
+// Used in integration tests
+export async function batchDeleteGithubPushes(entityStore: AllEntitiesStore, pushes: GithubPush[]) {
+  if (pushes.length > 0) {
+    await store(entityStore).advancedOperations.batchDelete(pushes)
+  }
 }
 
 function store(entityStore: AllEntitiesStore) {

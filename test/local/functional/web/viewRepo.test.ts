@@ -8,6 +8,7 @@ import {
   stubQueryLatestWorkflowRuns,
   stubQueryLatestWorkflowRunsForRepo,
   stubQueryRepositories,
+  stubQueryWorkflows,
   stubSetupUserRecords
 } from '../../../testSupport/fakes/tableRecordReadStubs'
 
@@ -17,6 +18,7 @@ function setupState() {
   stubGetGithubInstallation(appState)
   stubSetupUserRecords(appState)
   stubQueryRepositories(appState)
+  stubQueryWorkflows(appState)
   stubQueryActivityForRepo(appState)
   stubQueryLatestWorkflowRunsForRepo(appState)
   // Used when loading "all workflows" for user settings lookup. Eventually consider adding a workflows entity
@@ -54,7 +56,7 @@ test('view-repo-actions-status', async () => {
   <tbody>
     <tr class="table-success">
       <td>
-        <a href="/workflow?accountId=GHAccount162483619&repoId=GHRepo768206479&workflowId=GHWorkflow88647110">Test Repo One Workflow</a>
+        <a href="/workflow?accountId=GHAccount162483619&repoId=GHRepo768206479&workflowId=GHWorkflow88508779">Test Workflow</a>
 &nbsp;
         <a href="https://github.com/cicada-test-org/org-test-repo-one/actions/workflows/test.yml"><i class='bi bi-github' style='color: #6e5494'></i></a>
       </td>
@@ -109,7 +111,7 @@ test('view-repo-recent-activity', async () => {
     <tr class="table-success">
       <td>Successful Run</td>
       <td>
-        <a href="/workflow?accountId=GHAccount162483619&repoId=GHRepo768206479&workflowId=GHWorkflow88647110">Test Repo One Workflow</a>
+        <a href="/workflow?accountId=GHAccount162483619&repoId=GHRepo768206479&workflowId=GHWorkflow88508779">Test Workflow</a>
 &nbsp;
         <a href="https://github.com/cicada-test-org/org-test-repo-one/actions/workflows/test.yml"><i class='bi bi-github' style='color: #6e5494'></i></a>
       </td>

@@ -1,11 +1,12 @@
 import { FakeAppState } from './fakeAppState'
 import {
   accountMemberships,
+  cicadaTestOrgInstallation,
   testMikeRobertsUserMembershipOfOrg,
-  testOrgInstallation,
   testOrgTestRepoOne,
   testOrgTestRepoOnePush,
   testOrgTestRepoOneWorkflowRunThree,
+  testOrgTestWorkflowOne,
   testTestUser,
   testTestUserMembershipOfOrg,
   testTestUserTokenRecord
@@ -15,6 +16,7 @@ import {
   GITHUB_LATEST_PUSH_PER_REF,
   GITHUB_LATEST_WORKFLOW_RUN_EVENT,
   GITHUB_REPOSITORY,
+  GITHUB_WORKFLOW,
   GITHUB_WORKFLOW_RUN,
   WEB_PUSH_SUBSCRIPTION
 } from '../../../src/app/domain/entityStore/entityTypes'
@@ -48,7 +50,7 @@ export function stubGetGithubInstallation(appState: FakeAppState) {
   stubber(appState).stubGet.byPk(
     fakeTableNames['github-installations'],
     'ACCOUNT#GHAccount162483619',
-    testOrgInstallation
+    cicadaTestOrgInstallation
   )
 }
 
@@ -104,6 +106,24 @@ export function stubQueryRepositories(appState: FakeAppState) {
     'ACCOUNT#GHAccount162483619',
     [testOrgTestRepoOne],
     GITHUB_REPOSITORY
+  )
+}
+
+export function stubQueryWorkflows(appState: FakeAppState, workflows = [testOrgTestWorkflowOne]) {
+  stubber(appState).queryAllPages.ofTableByPk(
+    fakeTableNames['github-workflows'],
+    'ACCOUNT#GHAccount162483619',
+    workflows,
+    GITHUB_WORKFLOW
+  )
+}
+
+export function stubGetWorkflow(appState: FakeAppState, workflow = testOrgTestWorkflowOne) {
+  stubber(appState).stubGet.byPkAndSk(
+    fakeTableNames['github-workflows'],
+    `ACCOUNT#${workflow.accountId}`,
+    `REPO#${workflow.repoId}#WORKFLOW#${workflow.workflowId}`,
+    workflow
   )
 }
 

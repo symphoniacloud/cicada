@@ -45,6 +45,7 @@ function defineAuthenticatedWeb(scope: Construct, props: UserFacingWebEndpointsP
         'github-users',
         'github-account-memberships',
         'github-repositories',
+        'github-workflows',
         'github-latest-workflow-runs',
         'github-latest-pushes-per-ref',
         'github-repo-activity'
@@ -90,6 +91,7 @@ function defineWebPushPublisher(scope: Construct, props: UserFacingWebEndpointsP
         'user-settings',
         'web-push-subscriptions',
         'github-repositories',
+        'github-workflows',
         'github-latest-workflow-runs',
         'github-latest-pushes-per-ref',
         'github-repo-activity'
