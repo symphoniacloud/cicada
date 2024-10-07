@@ -15,14 +15,20 @@ export async function processRawRunEvents(
   publishNotifications: boolean
 ) {
   const events = rawRunEvents.map(fromRawGithubWorkflowRunEvent)
-  logger.debug(`Processing ${events.length} run events`)
+  if (events.length > 0) {
+    logger.debug(`Processing ${events.length} run events for ${events[0].accountName}/${events[0].repoName}`)
+  }
 
-  await saveEvents(appState, events)
-  await saveRuns(appState, events, publishNotifications)
+  const newEvents = await saveEvents(appState, events)
+  if (newEvents.length > 0)
+    logger.info(
+      `Found ${newEvents.length} new run events for ${newEvents[0].accountName}/${newEvents[0].repoName}`
+    )
+  await saveRuns(appState, newEvents, publishNotifications)
 }
 
 async function saveEvents(appState: AppState, eventsToKeep: GithubWorkflowRunEvent[]) {
-  const newEvents = (
+  return (
     await Promise.all(
       eventsToKeep.map(async (runEvent) => {
         return executeAndCatchConditionalCheckFailed(async () => {
@@ -31,8 +37,6 @@ async function saveEvents(appState: AppState, eventsToKeep: GithubWorkflowRunEve
       })
     )
   ).filter((x): x is GithubWorkflowRunEvent => x !== undefined)
-  logger.debug(`Found ${newEvents.length} new run events`)
-  return newEvents
 }
 
 export async function getRelatedMemberIdsForRunEvent(

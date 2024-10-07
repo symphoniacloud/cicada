@@ -1,4 +1,3 @@
-import { logger } from '../../util/logging'
 import { MultipleEntityCollectionResponse } from '@symphoniacloud/dynamodb-entity-store'
 import { EntityType } from './entityTypes'
 
@@ -13,7 +12,6 @@ export async function executeAndCatchConditionalCheckFailed<TReturn>(f: () => Pr
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     if (e?.name === 'ConditionalCheckFailedException') {
-      logger.debug('ConditionalCheck failed - ignoring')
       return undefined
     } else {
       throw e
