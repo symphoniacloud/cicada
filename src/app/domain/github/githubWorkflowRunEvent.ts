@@ -69,13 +69,15 @@ export async function processRawRunEventsForWorkflow(
 ) {
   const events = rawRunEvents.map((e) => fromRawGithubWorkflowRunEvent(workflow, e))
   if (events.length > 0) {
-    logger.debug(`Processing ${events.length} run events for ${events[0].accountName}/${events[0].repoName}`)
+    logger.debug(
+      `Processing ${events.length} run events for ${events[0].accountName}/${events[0].repoName}/${workflow.workflowName}`
+    )
   }
 
   const newEvents = await saveEvents(appState, events)
   if (newEvents.length > 0)
     logger.info(
-      `Found ${newEvents.length} new run events for ${newEvents[0].accountName}/${newEvents[0].repoName}`
+      `Found ${newEvents.length} new run events for ${newEvents[0].accountName}/${newEvents[0].repoName}/${workflow.workflowName}`
     )
   await saveRuns(appState, newEvents, publishNotifications)
 }

@@ -11,6 +11,7 @@ import { RawGithubRepo } from '../../types/rawGithub/RawGithubRepo'
 import { crawlPushes } from './crawlPushes'
 import { crawlWorkflows } from './crawlWorkflows'
 import { logger } from '../../../util/logging'
+import { dateTimeAddHours } from '../../../util/dateAndTime'
 
 export async function crawlRepositories(
   appState: AppState,
@@ -52,8 +53,14 @@ async function processReposAndCrawlElements(
   // Their "best practice" doc says don't do it, but their rate limit doc says it's supported
   // Only really need to care if things start getting slow
   if (repos.length > 0) logger.info(`Processing ${repos.length} repos in account ${repos[0].accountName}`)
+  const startTime = `${dateTimeAddHours(appState.clock.now(), -1 * lookbackHours).toISOString()}`
   for (const repo of repos) {
-    await crawlWorkflows(appState, repo, githubClient, lookbackHours)
+    const rawRunEvents = await githubClient.listWorkflowRunsForRepo(
+      repo.accountName,
+      repo.repoName,
+      `>${startTime}`
+    )
+    await crawlWorkflows(appState, repo, githubClient, rawRunEvents)
     await crawlPushes(appState, repo, githubClient)
   }
 
