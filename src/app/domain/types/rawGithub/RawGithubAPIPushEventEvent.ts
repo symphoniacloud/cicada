@@ -1,5 +1,6 @@
 import { RawGithubEvent } from './RawGithubEvent'
 import { logger } from '../../../util/logging'
+import { isNotNullObject } from '../../../util/types'
 
 // Commented fields not currently captured
 export interface RawGithubAPIPushEventEvent extends RawGithubEvent {
@@ -40,6 +41,11 @@ export interface RawGithubAPIPushEventEventCommit {
     email: string
     name: string
   }
+}
+
+// TOEventually - better type checking across these two functions
+export function hasTypeForPushEvent(x: unknown): x is { type: 'PushEvent' } {
+  return isNotNullObject(x) && 'type' in x && x.type === 'PushEvent'
 }
 
 export function isRawGithubPushEventEvent(x: unknown): x is RawGithubAPIPushEventEvent {
