@@ -10,7 +10,7 @@ import {
 } from '../../../../../examples/cicada/githubDomainObjects'
 import example_personal_account_repo from '../../../../../examples/github/personal-account/api/repo.json'
 import example_org_repos from '../../../../../examples/github/org/api/repos.json'
-import { crawlRepositories } from '../../../../../../src/app/domain/github/crawler/crawlRepositories'
+import { crawlAccountContents } from '../../../../../../src/app/domain/github/crawler/crawlAccountContents'
 import {
   expectBatchWrites,
   expectBatchWritesLength
@@ -46,7 +46,7 @@ test('repository-crawler-for-personal-account-installation', async () => {
   )
 
   // A
-  await crawlRepositories(appState, cicadaTestUserInstallation, githubInstallationClient, 3)
+  await crawlAccountContents(appState, githubInstallationClient, cicadaTestUserInstallation, 3)
 
   // A
   expectBatchWritesLength(appState).toEqual(1)
@@ -105,7 +105,7 @@ test('repository-crawler-for-org-installation', async () => {
   )
 
   // A
-  await crawlRepositories(appState, cicadaTestOrgInstallation, githubInstallationClient, 3)
+  await crawlAccountContents(appState, githubInstallationClient, cicadaTestOrgInstallation, 3)
 
   // A
   expectBatchWritesLength(appState).toEqual(1)

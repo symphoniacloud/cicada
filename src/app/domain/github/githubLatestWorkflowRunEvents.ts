@@ -7,14 +7,10 @@ import {
 } from '../entityStore/entities/GithubLatestWorkflowRunEventEntity'
 import { GithubAccountId } from '../types/GithubAccountId'
 
-export async function saveLatestEvents(appState: AppState, newEvents: GithubWorkflowRunEvent[]) {
-  // Update latest events if they are newer
-  // TODO - need to think about concurrent runs. E.g. if two runs are in progress, one completes, the status is still "in progress"
-  for (const newEvent of newEvents) {
-    await executeAndCatchConditionalCheckFailed(async () => {
-      await putRunEventIfNoKeyExistsOrNewerThanExisting(appState.entityStore, newEvent)
-    })
-  }
+export async function saveLatestRunPerWorkflow(appState: AppState, latestRun: GithubWorkflowRunEvent) {
+  return await executeAndCatchConditionalCheckFailed(async () => {
+    return await putRunEventIfNoKeyExistsOrNewerThanExisting(appState.entityStore, latestRun)
+  })
 }
 
 export async function latestWorkflowRunEventsPerWorkflowForAccounts(

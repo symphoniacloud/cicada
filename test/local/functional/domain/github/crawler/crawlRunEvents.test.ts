@@ -2,8 +2,8 @@ import { test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
 import {
   personalTestRepoWorkflow,
-  testOrgTestRepoOneWorkflowRunOne,
-  testOrgTestWorkflowOne,
+  testOrgTestRepoOneWorkflowFromJsonRunOne,
+  testOrgTestWorkflowOneFromJsonSummary,
   testPersonalTestRepoWorkflowRun
 } from '../../../../../examples/cicada/githubDomainObjects'
 
@@ -18,19 +18,14 @@ import {
   expectedPutGithubWorkflowRunEvent,
   expectedPutLatestGithubWorkflowRunEvent
 } from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
-import { processRawRunEventsForWorkflow } from '../../../../../../src/app/domain/github/githubWorkflowRunEvent'
+import { processRawRunEvents } from '../../../../../../src/app/domain/github/githubWorkflowRunEvent'
 
 test('repo-crawler-for-personal-account-installation', async () => {
   // A
   const appState = new FakeAppState()
 
   // A
-  await processRawRunEventsForWorkflow(
-    appState,
-    personalTestRepoWorkflow,
-    [example_personal_workflow_run],
-    false
-  )
+  await processRawRunEvents(appState, [personalTestRepoWorkflow], [example_personal_workflow_run], false)
 
   // A
   expectPutsLength(appState).toEqual(3)
@@ -44,11 +39,18 @@ test('repo-crawler-for-org-installation', async () => {
   const appState = new FakeAppState()
 
   // A
-  await processRawRunEventsForWorkflow(appState, testOrgTestWorkflowOne, [example_org_workflow_run], false)
+  await processRawRunEvents(
+    appState,
+    [testOrgTestWorkflowOneFromJsonSummary],
+    [example_org_workflow_run],
+    false
+  )
 
   // A
   expectPutsLength(appState).toEqual(3)
-  expectPut(appState, 0).toEqual(expectedPutGithubWorkflowRunEvent(testOrgTestRepoOneWorkflowRunOne))
-  expectPut(appState, 1).toEqual(expectedPutGithubWorkflowRun(testOrgTestRepoOneWorkflowRunOne))
-  expectPut(appState, 2).toEqual(expectedPutLatestGithubWorkflowRunEvent(testOrgTestRepoOneWorkflowRunOne))
+  expectPut(appState, 0).toEqual(expectedPutGithubWorkflowRunEvent(testOrgTestRepoOneWorkflowFromJsonRunOne))
+  expectPut(appState, 1).toEqual(expectedPutGithubWorkflowRun(testOrgTestRepoOneWorkflowFromJsonRunOne))
+  expectPut(appState, 2).toEqual(
+    expectedPutLatestGithubWorkflowRunEvent(testOrgTestRepoOneWorkflowFromJsonRunOne)
+  )
 })
