@@ -11,9 +11,10 @@ export async function processRawWorkflows(
   repo: GithubRepoSummary,
   rawWorkflows: RawGithubWorkflow[]
 ) {
-  const workflows = rawWorkflows.map((raw) => fromRawGithubWorkflow(repo, raw))
-  await putWorkflows(appState.entityStore, workflows)
-  return workflows
+  return putWorkflows(
+    appState.entityStore,
+    rawWorkflows.map((raw) => fromRawGithubWorkflow(repo, raw))
+  )
 }
 
 export function narrowToWorkflowSummary<T extends GithubWorkflowSummary>(x: T): GithubWorkflowSummary {

@@ -299,6 +299,32 @@ export const testOrgTestRepoOneWorkflowRunOne: GithubWorkflowRunEvent = {
   runEventUpdatedAt: '2024-03-06T17:02:54Z'
 }
 
+export const testOrgTestRepoOneWorkflowFromJsonRunOne: GithubWorkflowRunEvent = {
+  ...orgTestRepoOneSummary,
+  workflowId: fromRawGithubWorkflowId(88647110),
+  workflowName: 'Test Repo One Workflow',
+  actor: {
+    avatarUrl: 'https://avatars.githubusercontent.com/u/49635?v=4',
+    htmlUrl: 'https://github.com/mikebroberts',
+    userId: fromRawGithubUserId(49635),
+    userName: 'mikebroberts'
+  },
+  conclusion: 'success',
+  runEventCreatedAt: '2024-03-06T17:02:42Z',
+  displayTitle: 'Test Repo One Workflow',
+  event: 'workflow_dispatch',
+  headBranch: 'main',
+  headSha: '8c3aa1cb0316ea23abeb2612457edb80868f53c8',
+  runHtmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one/actions/runs/8175883775',
+  workflowRunId: fromRawGithubWorkflowRunId(8175883775),
+  repoHtmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one',
+  runAttempt: 1,
+  runNumber: 1,
+  runStartedAt: '2024-03-06T17:02:42Z',
+  status: 'completed',
+  runEventUpdatedAt: '2024-03-06T17:02:54Z'
+}
+
 export const fullTestOrgTestRepoOneWorkflowRunOne: FullGithubWorkflowRunEvent = {
   ...testOrgTestWorkflowOne,
   ...testOrgTestRepoOneWorkflowRunOne

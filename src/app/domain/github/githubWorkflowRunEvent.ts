@@ -23,6 +23,7 @@ import { crawlOneWorkflow } from './crawler/crawlWorkflows'
 import { GithubInstallationClient } from '../../outboundInterfaces/githubInstallationClient'
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData'
 import { getWorkflowFromRefData } from './userScopeReferenceData'
+import { throwFunction } from '../../../multipleContexts/errors'
 
 export async function processRawRunEvent(
   appState: AppState,
@@ -36,7 +37,7 @@ export async function processRawRunEvent(
     return
   }
 
-  await processRawRunEventsForWorkflow(appState, workflow, [rawRunEvent], publishNotifications)
+  await processRawRunEvents(appState, [workflow], [rawRunEvent], publishNotifications)
 }
 
 async function readOrLookupWorkflow(
@@ -58,31 +59,40 @@ async function readOrLookupWorkflow(
     accountType: fromRawAccountType(rawRunEvent.repository.owner.type),
     repoName: rawRunEvent.repository.name
   }
-  return await crawlOneWorkflow(appState, repoSummary, workflowKey.workflowId, installationClient)
+  return await crawlOneWorkflow(appState, installationClient, repoSummary, workflowKey.workflowId)
 }
 
-export async function processRawRunEventsForWorkflow(
+export async function processRawRunEvents(
   appState: AppState,
-  workflow: GithubWorkflowSummary,
+  workflows: GithubWorkflowSummary[],
   rawRunEvents: RawGithubWorkflowRunEvent[],
   publishNotifications: boolean
 ) {
-  const events = rawRunEvents.map((e) => fromRawGithubWorkflowRunEvent(workflow, e))
-  if (events.length > 0) {
-    logger.debug(
-      `Processing ${events.length} run events for ${events[0].accountName}/${events[0].repoName}/${workflow.workflowName}`
+  if (rawRunEvents.length === 0) return
+  logger.info(`Found ${rawRunEvents.length} total run events`)
+  const newEvents = await saveEvents(appState, fromRawRunEvents(workflows, rawRunEvents))
+  if (newEvents.length > 0) {
+    logger.info(`Found ${newEvents.length} new run events`)
+    await saveRuns(appState, newEvents, publishNotifications)
+  }
+}
+
+export function fromRawRunEvents(
+  workflows: GithubWorkflowSummary[],
+  rawRunEvents: RawGithubWorkflowRunEvent[]
+) {
+  function workflowForRawRunEvent(run: RawGithubWorkflowRunEvent) {
+    return (
+      workflows.find(({ workflowId }) => workflowId === fromRawGithubWorkflowId(run.workflow_id)) ??
+      throwFunction(`No workflow found for workflow ID on raw run ${run.id}`)()
     )
   }
 
-  const newEvents = await saveEvents(appState, events)
-  if (newEvents.length > 0)
-    logger.info(
-      `Found ${newEvents.length} new run events for ${newEvents[0].accountName}/${newEvents[0].repoName}/${workflow.workflowName}`
-    )
-  await saveRuns(appState, newEvents, publishNotifications)
+  return rawRunEvents.map((run) => fromRawGithubWorkflowRunEvent(workflowForRawRunEvent(run), run))
 }
 
 async function saveEvents(appState: AppState, eventsToKeep: GithubWorkflowRunEvent[]) {
+  // TODO - option here for optimization - load existing runEvents for repo (e.g. in time period) and pre-filter unchanged
   return (
     await Promise.all(
       eventsToKeep.map(async (runEvent) => {

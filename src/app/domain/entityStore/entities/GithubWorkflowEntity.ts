@@ -26,7 +26,8 @@ function skPrefix({ repoId }: Pick<GithubWorkflow, 'repoId'>) {
 }
 
 export async function putWorkflows(entityStore: AllEntitiesStore, workflows: GithubWorkflow[]) {
-  await store(entityStore).advancedOperations.batchPut(workflows)
+  if (workflows.length > 0) await store(entityStore).advancedOperations.batchPut(workflows)
+  return workflows
 }
 
 export async function getWorkflow(entityStore: AllEntitiesStore, workflowKey: GithubWorkflowKey) {
