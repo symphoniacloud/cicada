@@ -78,9 +78,7 @@ export function buildBatchDelete(tableName: string, keys: Record<string, NativeA
     RequestItems: {
       [tableName]: keys.map((key) => ({
         DeleteRequest: {
-          Key: {
-            ...key
-          }
+          Key: key
         }
       }))
     }
