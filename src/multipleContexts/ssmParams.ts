@@ -16,12 +16,7 @@ export const SSM_PARAM_NAMES = {
   GITHUB_WEBHOOK_URL_CODE: 'cicada/github-webhook-url-code',
   // Resource locations
   EVENTS_BUCKET_NAME: 'resources/bucket/events',
-  REPORTING_INGESTION_BUCKET_NAME: 'resources/bucket/reporting-ingestion',
-  REPORTING_BUCKET_NAME: 'resources/bucket/reporting',
-  ATHENA_OUTPUT_BUCKET_NAME: 'resources/bucket/athena-output',
   WEB_HOSTNAME: 'resources/hostname/web',
-  GLUE_DATABASE_NAME: 'resources/glue/database',
-  ATHENA_WORKGROUP_NAME: 'resources/athena/workgroup',
   // Table names are also stored in SSM, but they aren't defined explicitly here, instead
   // they are defined via using ssmTableNamePath() and the CicadaTableId type
   // Used, and set, only during remote tests
