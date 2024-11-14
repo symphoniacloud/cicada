@@ -33,12 +33,6 @@ export class MainStack extends Stack {
     savePreGeneratedConfiguration(this, props)
 
     defineMonitoring(this, mainStackProps)
-
-    // TODO - turn this back on when ready
-    // new ReportingStack(this, 'ReportingStack', {
-    //   ...props,
-    //   stackName: `${props.appName}-reporting`
-    // })
   }
 
   // Workaround for horrible CDK nested stack naming

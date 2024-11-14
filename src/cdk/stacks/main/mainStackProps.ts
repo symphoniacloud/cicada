@@ -57,13 +57,8 @@ function lookupTables(scope: Construct, props: AllStacksProps): Record<CicadaTab
   >
 }
 
-// also used by reporting stack props
 export function lookupBucket(scope: Construct, props: AllStacksProps, id: string, key: string) {
   return Bucket.fromBucketName(scope, id, readFromSSMViaCloudFormation(scope, props, key))
-}
-
-export function lookupBucketFromName(scope: Construct, id: string, name: string) {
-  return Bucket.fromBucketName(scope, id, name)
 }
 
 // also used by reporting stack props
