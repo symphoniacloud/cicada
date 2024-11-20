@@ -38,21 +38,10 @@ type SsmTableNameParamName =
   | 'resources/table/user-settings'
   | 'resources/table/web-push-subscriptions'
 
-type SsmTableStreamParamName = 'resources/tableStreamArn/github-repo-activity'
-
-export type SsmParamName =
-  | (typeof SSM_PARAM_NAMES)[keyof typeof SSM_PARAM_NAMES]
-  | SsmTableNameParamName
-  | SsmTableStreamParamName
+export type SsmParamName = (typeof SSM_PARAM_NAMES)[keyof typeof SSM_PARAM_NAMES] | SsmTableNameParamName
 
 export function ssmTableNamePath(id: CicadaTableId): SsmParamName {
   return `resources/table/${id}`
-}
-
-// For now, only table with a stream
-export function ssmTableStreamPath(id: CicadaTableId): SsmParamName {
-  if (id !== 'github-repo-activity') throw new Error('Only currently implemented for github-repo-activity')
-  return `resources/tableStreamArn/${id}`
 }
 
 export function createFullParameterName({ appName }: { appName: string }, key: string) {

@@ -2,7 +2,7 @@ import { MultipleEntityCollectionResponse } from '@symphoniacloud/dynamodb-entit
 import { EntityType } from './entityTypes'
 
 // I use a conditional check on certain operations knowing that they might fail during regular behavior
-// Unfortunately the underlying DynamoDB SDS will always throw an error, so this code catches that error to provide
+// Unfortunately the underlying DynamoDB SDK will always throw an error, so this code catches that error to provide
 // a cleaner experience in code making such operations.
 export async function executeAndCatchConditionalCheckFailed<TReturn>(f: () => Promise<TReturn>) {
   try {
