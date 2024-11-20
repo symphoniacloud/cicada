@@ -45,9 +45,9 @@ export async function putRunEventIfNoKeyExistsOrNewerThanExisting(
   event: GithubWorkflowRunEvent
 ) {
   return await store(entityStore).put(event, {
-    conditionExpression: 'attribute_not_exists(PK) OR #updatedAt < :newUpdatedAt',
-    expressionAttributeNames: { '#updatedAt': 'updatedAt' },
-    expressionAttributeValues: { ':newUpdatedAt': event.runEventUpdatedAt }
+    conditionExpression: 'attribute_not_exists(PK) OR #runEventUpdatedAt < :newRunEventUpdatedAt',
+    expressionAttributeNames: { '#runEventUpdatedAt': 'runEventUpdatedAt' },
+    expressionAttributeValues: { ':newRunEventUpdatedAt': event.runEventUpdatedAt }
   })
 }
 
