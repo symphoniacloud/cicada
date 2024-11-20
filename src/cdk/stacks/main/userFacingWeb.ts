@@ -4,7 +4,7 @@ import { Duration } from 'aws-cdk-lib'
 import { grantLambdaFunctionPermissionToPutEvents } from '../../support/eventbridge'
 import { Rule } from 'aws-cdk-lib/aws-events'
 import * as targets from 'aws-cdk-lib/aws-events-targets'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
+import { WEBPUSH_EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
 import { IdentitySource, LambdaIntegration, RequestAuthorizer, RestApi } from 'aws-cdk-lib/aws-apigateway'
 import { HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2'
 import { MainStackProps } from './mainStackProps'
@@ -102,11 +102,8 @@ function defineWebPushPublisher(scope: Construct, props: UserFacingWebEndpointsP
     description: `Send Web Push notifications`,
     eventPattern: {
       source: [props.appName],
-      detailType: [
-        EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_WORKFLOW_RUN_EVENT,
-        EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_PUSH,
-        EVENTBRIDGE_DETAIL_TYPES.WEB_PUSH_TEST
-      ]
+      // Need Array.from here otherwise a type error
+      detailType: Array.from(WEBPUSH_EVENTBRIDGE_DETAIL_TYPES)
     },
     targets: [new targets.LambdaFunction(lambdaFunction)]
   })

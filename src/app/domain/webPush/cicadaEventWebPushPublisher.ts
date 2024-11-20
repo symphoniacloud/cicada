@@ -10,9 +10,11 @@ import {
 } from '../github/githubWorkflowRunEvent'
 import { isCicadaEventBridgeDetail } from '../../outboundInterfaces/eventBridgeBus'
 import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper'
-import { filterWorkflowNotifyEnabled } from '../user/userNotifyable'
+import { filterRepoNotifyEnabled, filterWorkflowNotifyEnabled } from '../user/userNotifyable'
 
 import { loadUserScopeReferenceData } from '../github/userScopeReferenceData'
+import { isGithubPush } from '../types/GithubPush'
+import { getRelatedMemberIdsForPush } from '../github/githubPush'
 
 // TOEventually - these are going to create a lot of queries for subscription lookup for large organizations
 // May be better to have one table / index for this.
@@ -54,20 +56,25 @@ export function generateRunEventNotification(
   }
 }
 
-// TOEventually - add this back now that notification preferences added, maybe
-// export async function handleNewPush(appState: AppState, eventDetail: unknown) {
-//   if (!isCicadaEventBridgeDetail(eventDetail) || !isGithubPush(eventDetail.data)) {
-//     logger.error(
-//       `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_PUSH} was not of expected format`,
-//       { commit: eventDetail }
-//     )
-//     return
-//   }
-//
-//   const push = eventDetail.data
-//
-//   await publishToSubscriptionsForUsers(appState, await getRelatedMemberIdsForPush(appState, push), {
-//     title: 'New Push',
-//     body: `New push to ${push.repoName}:${push.ref} by ${push.actor.login}`
-//   })
-// }
+export async function handleNewPush(appState: AppState, eventDetail: unknown) {
+  if (!isCicadaEventBridgeDetail(eventDetail) || !isGithubPush(eventDetail.data)) {
+    logger.error(
+      `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_PUSH} was not of expected format`,
+      { commit: eventDetail }
+    )
+    return
+  }
+
+  const push = eventDetail.data
+  const userIds = await getRelatedMemberIdsForPush(appState, push)
+  if (userIds.length === 0) return
+  // TODO - this is a hack to avoid terrible performance - see todo in filterWorkflowNotifyEnabled
+  const refData = await loadUserScopeReferenceData(appState, userIds[0])
+  const notifyEnabledUserIds = await filterRepoNotifyEnabled(appState, refData, userIds, push)
+
+  await publishToSubscriptionsForUsers(appState, notifyEnabledUserIds, {
+    title: 'New Push',
+    body: `New push to ${push.repoName}:${push.ref} by ${push.actor.userName}`,
+    data: { url: push.repoUrl ?? '' }
+  })
+}
