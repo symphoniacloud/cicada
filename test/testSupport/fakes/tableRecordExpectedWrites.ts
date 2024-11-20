@@ -99,12 +99,12 @@ export function expectedPutGithubWorkflowRun(event: GithubWorkflowRunEvent) {
       ...event
     },
     {
-      ConditionExpression: 'attribute_not_exists(PK) OR #updatedAt < :newUpdatedAt',
+      ConditionExpression: 'attribute_not_exists(PK) OR #runEventUpdatedAt < :newRunEventUpdatedAt',
       ExpressionAttributeNames: {
-        '#updatedAt': 'updatedAt'
+        '#runEventUpdatedAt': 'runEventUpdatedAt'
       },
       ExpressionAttributeValues: {
-        ':newUpdatedAt': event.runEventUpdatedAt
+        ':newRunEventUpdatedAt': event.runEventUpdatedAt
       }
     }
   )
@@ -122,12 +122,12 @@ export function expectedPutLatestGithubWorkflowRunEvent(event: GithubWorkflowRun
       ...event
     },
     {
-      ConditionExpression: 'attribute_not_exists(PK) OR #updatedAt < :newUpdatedAt',
+      ConditionExpression: 'attribute_not_exists(PK) OR #runEventUpdatedAt < :newRunEventUpdatedAt',
       ExpressionAttributeNames: {
-        '#updatedAt': 'updatedAt'
+        '#runEventUpdatedAt': 'runEventUpdatedAt'
       },
       ExpressionAttributeValues: {
-        ':newUpdatedAt': event.runEventUpdatedAt
+        ':newRunEventUpdatedAt': event.runEventUpdatedAt
       }
     }
   )
