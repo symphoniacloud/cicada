@@ -31,7 +31,6 @@ const GithubAccountMembershipEntity: CicadaEntity<
 }
 
 export async function putMemberships(entityStore: AllEntitiesStore, memberships: GithubAccountMembership[]) {
-  if (memberships.length === 0) return
   await store(entityStore).advancedOperations.batchPut(memberships)
 }
 
@@ -39,7 +38,6 @@ export async function deleteMemberships(
   entityStore: AllEntitiesStore,
   memberships: GithubAccountMembership[]
 ) {
-  if (memberships.length === 0) return
   await store(entityStore).advancedOperations.batchDelete(memberships)
 }
 
