@@ -2,7 +2,7 @@ import { Construct } from 'constructs'
 import { AllStacksProps } from '../../config/allStacksProps'
 import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3'
 import { readFromSSMViaCloudFormation } from '../../support/ssm'
-import { SSM_PARAM_NAMES, ssmTableNamePath, ssmTableStreamPath } from '../../../multipleContexts/ssmParams'
+import { SSM_PARAM_NAMES, ssmTableNamePath } from '../../../multipleContexts/ssmParams'
 import { Certificate, ICertificate } from 'aws-cdk-lib/aws-certificatemanager'
 import { Fn } from 'aws-cdk-lib'
 import { HostedZone, IHostedZone } from 'aws-cdk-lib/aws-route53'
@@ -66,11 +66,6 @@ export function lookupTable(scope: Construct, props: AllStacksProps, tableId: Ci
   const config = tableConfigurations[tableId]
   return TableV2.fromTableAttributes(scope, `${tableId}-table`, {
     tableName: readFromSSMViaCloudFormation(scope, props, ssmTableNamePath(tableId)),
-    grantIndexPermissions: config.hasGSI1,
-    ...(config.stream
-      ? {
-          tableStreamArn: readFromSSMViaCloudFormation(scope, props, ssmTableStreamPath(tableId))
-        }
-      : {})
+    grantIndexPermissions: config.hasGSI1
   })
 }
