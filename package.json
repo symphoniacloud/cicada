@@ -19,7 +19,7 @@
     "deploy": "npm run pre-deploy-check && npm run deploy-cdk -- \"$@\""
   },
   "devDependencies": {
-    "@tsconfig/node18": "1.x",
+    "@tsconfig/node22": "22.x",
     "@types/aws-lambda": "8.x",
     "@types/deep-equal": "1.x",
     "@types/node": "18.x",
@@ -33,8 +33,9 @@
     "eslint": "8.x",
     "eslint-config-prettier": "8.x",
     "prettier": "2.x",
-    "ts-node": "10.x",
-    "typescript": "4.x",
+    "tsx": "4.x",
+    "typescript": "5.x",
+    "typescript-eslint": "8.x",
     "vitest": "0.x",
     "wscat": "5.x"
   },
