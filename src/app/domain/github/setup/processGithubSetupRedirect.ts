@@ -75,7 +75,15 @@ export async function callGithubToFinishAppCreation(code: string): Promise<{
     clientSecret: result.data.client_secret,
     privateKey: result.data.pem,
     webhookSecret: result.data.webhook_secret,
+    // TODO - Octokit API changed, to say this no longer available, but it is according to
+    //   https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-github-app-from-a-manifest
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     accountName: result.data.owner.login,
+    // TODO - Octokit API changed, to say this no longer available, but it is according to
+    //   https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-github-app-from-a-manifest
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     accountType: fromRawAccountType(result.data.owner.type)
   }
 }
