@@ -1,6 +1,6 @@
 import { Effect, PolicyStatement, Role } from 'aws-cdk-lib/aws-iam'
-import { FunctionBase } from 'aws-cdk-lib/aws-lambda/lib/function-base'
 import { WithEnvironment } from '../config/allStacksProps'
+import { FunctionBase } from 'aws-cdk-lib/aws-lambda'
 
 export function grantLambdaFunctionPermissionToPutEvents(
   lambdaFunction: FunctionBase,
