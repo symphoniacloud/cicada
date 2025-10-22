@@ -30,14 +30,14 @@
     "aws-cdk-lib": "2.x",
     "constructs": "10.x",
     "deep-equal": "2.x",
-    "dotenv": "16.x",
+    "dotenv": "17.x",
     "eslint": "9.x",
     "eslint-config-prettier": "10.x",
     "prettier": "3.x",
     "tsx": "4.x",
     "typescript": "5.x",
     "typescript-eslint": "8.x",
-    "vitest": "3.x"
+    "vitest": "4.x"
   },
   "dependencies": {
     "@aws-lambda-powertools/logger": "2.x",
