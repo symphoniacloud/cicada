@@ -6,7 +6,7 @@ import { StorageStack } from './stacks/StorageStack'
 import * as dotenv from 'dotenv'
 import { buildWebConfig } from './preSynth/buildWeb'
 import { createAllStacksProps } from './preSynth/allStacksPropsLoader'
-import path = require('path')
+import * as path from 'path'
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 

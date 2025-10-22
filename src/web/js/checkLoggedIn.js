@@ -6,4 +6,4 @@ if (
       ?.split('=')[1] === 'true'
   )
 )
-  location.assign('/')
+  window.location.assign('/')

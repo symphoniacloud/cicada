@@ -31,8 +31,8 @@ function accountRow(account: GithubAccountSummary, isInstalledAccount: boolean) 
       ? 'You are a member'
       : 'Your personal account'
     : isOrganizationAccount
-    ? 'Organization Account (only delayed public data)'
-    : 'Your personal account (only delayed public data)'
+      ? 'Organization Account (only delayed public data)'
+      : 'Your personal account (only delayed public data)'
 
   return tr(
     { class: isInstalledAccount ? 'table-primary' : 'table-light' },
