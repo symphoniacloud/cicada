@@ -35,12 +35,12 @@ export class CicadaFunction extends NodejsFunction {
       functionName: `${props.appName}-${props.functionName}`,
       memorySize: props.memorySize,
       timeout: Duration.seconds(props.timeoutSeconds),
-      runtime: Runtime.NODEJS_20_X,
+      runtime: Runtime.NODEJS_22_X,
       architecture: Architecture.ARM_64,
       entry: `../app/lambdaFunctions/${props.functionName}/lambda.ts`,
       tracing: lambda.Tracing.ACTIVE,
       bundling: {
-        target: 'node20',
+        target: 'es2022',
         sourceMap: true,
         sourceMapMode: SourceMapMode.INLINE,
         sourcesContent: false
