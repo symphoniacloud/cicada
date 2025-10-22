@@ -7,7 +7,7 @@ import {
   WORKFLOW_RUN_WEBHOOK_TYPE
 } from './webhookTypes.js'
 import { logger } from '../../../util/logging.js'
-import crypto from 'crypto'
+import crypto from 'node:crypto'
 import { githubWebhookInstallationProcessor } from './processors/githubWebhookInstallationProcessor.js'
 import { WebhookProcessor } from './WebhookProcessor.js'
 import { githubWebhookRepoPushProcessor } from './processors/githubWebhookRepoPushProcessor.js'
