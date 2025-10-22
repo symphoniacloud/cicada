@@ -1,4 +1,4 @@
-import { element, HiccoughAttributes, HiccoughElementDefinition, withAttributes } from './hiccoughElement'
+import { element, HiccoughAttributes, HiccoughElementDefinition, withAttributes } from './hiccoughElement.js'
 
 export function elementf(name: string) {
   return (...def: HiccoughElementDefinition) => element(name, ...def)

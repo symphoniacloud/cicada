@@ -1,6 +1,6 @@
-import { isNotNullObject } from '../../util/types'
-import { GithubAccountId, isGithubAccountId } from './GithubAccountId'
-import { GithubUserId, isGithubUserId } from './GithubUserId'
+import { isNotNullObject } from '../../util/types.js'
+import { GithubAccountId, isGithubAccountId } from './GithubAccountId.js'
+import { GithubUserId, isGithubUserId } from './GithubUserId.js'
 
 export interface GithubAccountMembership {
   userId: GithubUserId

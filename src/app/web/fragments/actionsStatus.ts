@@ -1,19 +1,19 @@
-import { AppState } from '../../environment/AppState'
-import { Route } from '../../internalHttpRouter/internalHttpRoute'
-import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { isFailure, isSuccess } from '../../util/structuredResult'
-import { invalidRequestResponse, notFoundHTMLResponse } from '../htmlResponses'
-import { createWorkflowRunEventTableResponse } from './views/activityAndStatusView'
-import { getOptionalRepoCoordinates } from './requestParsing/getOptionalRepoCoordinates'
+import { AppState } from '../../environment/AppState.js'
+import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
+import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
+import { isFailure, isSuccess } from '../../util/structuredResult.js'
+import { invalidRequestResponse, notFoundHTMLResponse } from '../htmlResponses.js'
+import { createWorkflowRunEventTableResponse } from './views/activityAndStatusView.js'
+import { getOptionalRepoCoordinates } from './requestParsing/getOptionalRepoCoordinates.js'
 import {
   getLatestWorkflowRunEventsForAccountForUser,
   getLatestWorkflowRunEventsForRepoForUser,
   getLatestWorkflowRunEventsForUserWithUserSettings
-} from '../../domain/user/userVisible'
-import { GithubRepoKey } from '../../domain/types/GithubKeys'
-import { fragmentPath } from '../routingCommon'
-import { GithubAccountId } from '../../domain/types/GithubAccountId'
-import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData'
+} from '../../domain/user/userVisible.js'
+import { GithubRepoKey } from '../../domain/types/GithubKeys.js'
+import { fragmentPath } from '../routingCommon.js'
+import { GithubAccountId } from '../../domain/types/GithubAccountId.js'
+import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData.js'
 
 export const actionsStatusFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('actionsStatus'),

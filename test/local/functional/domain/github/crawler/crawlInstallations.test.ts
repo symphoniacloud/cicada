@@ -1,19 +1,19 @@
 import { expect, test } from 'vitest'
-import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
+import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
 import {
   cicadaTestOrgInstallation,
   cicadaTestUserInstallation
-} from '../../../../../examples/cicada/githubDomainObjects'
-import example_personal_account_installation from '../../../../../examples/github/personal-account/api/installation.json'
-import example_org_installation from '../../../../../examples/github/org/api/installation.json'
-import { crawlInstallations } from '../../../../../../src/app/domain/github/crawler/crawlInstallations'
+} from '../../../../../examples/cicada/githubDomainObjects.js'
+import example_personal_account_installation from '../../../../../examples/github/personal-account/api/installation.json' with { type: 'json' }
+import example_org_installation from '../../../../../examples/github/org/api/installation.json' with { type: 'json' }
+import { crawlInstallations } from '../../../../../../src/app/domain/github/crawler/crawlInstallations.js'
 import {
   expectPut,
   expectPutsLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
-import { expectedPutGithubInstallation } from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
+import { expectedPutGithubInstallation } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 
-import { fromRawGithubAppId } from '../../../../../../src/app/domain/types/GithubAppId'
+import { fromRawGithubAppId } from '../../../../../../src/app/domain/types/GithubAppId.js'
 
 test('app-crawler-for-personal-account-installation', async () => {
   // A

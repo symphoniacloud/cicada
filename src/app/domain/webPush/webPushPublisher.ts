@@ -1,9 +1,9 @@
-import { AppState } from '../../environment/AppState'
-import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper'
-import { WebPushSubscription } from '../types/WebPushSubscription'
+import { AppState } from '../../environment/AppState.js'
+import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper.js'
+import { WebPushSubscription } from '../types/WebPushSubscription.js'
 
-import { GithubUserId } from '../types/GithubUserId'
-import { getAllWebPushSubscriptionsForUser } from '../entityStore/entities/WebPushSubscriptionEntity'
+import { GithubUserId } from '../types/GithubUserId.js'
+import { getAllWebPushSubscriptionsForUser } from '../entityStore/entities/WebPushSubscriptionEntity.js'
 
 // TOEventually - consider parallel processing
 export async function publishToSubscriptionsForUsers(

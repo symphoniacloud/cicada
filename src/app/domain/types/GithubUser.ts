@@ -1,7 +1,7 @@
-import { RawGithubUser } from './rawGithub/RawGithubUser'
-import { fromRawGithubUserId } from './GithubUserId'
-import { isString } from '../../util/types'
-import { GithubUserSummary, isGithubUserSummary } from './GithubSummaries'
+import { RawGithubUser } from './rawGithub/RawGithubUser.js'
+import { fromRawGithubUserId } from './GithubUserId.js'
+import { isString } from '../../util/types.js'
+import { GithubUserSummary, isGithubUserSummary } from './GithubSummaries.js'
 
 export interface GithubUser extends GithubUserSummary {
   avatarUrl: string

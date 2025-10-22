@@ -1,11 +1,11 @@
 import { APIGatewayProxyHandler } from 'aws-lambda'
 import middy from '@middy/core'
-import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
-import { handleGithubSetupRequest } from '../../domain/github/setup/appSetupHandler'
-import { GithubSetupAppState, githubSetupStartup } from '../../domain/github/setup/githubSetupAppState'
-import { githubAppIsReady } from '../../domain/github/setup/githubAppReadyCheck'
-import { pageViewResponse } from '../../web/viewResultWrappers'
-import { p } from '../../web/hiccough/hiccoughElements'
+import { powertoolsMiddlewares } from '../../middleware/standardMiddleware.js'
+import { handleGithubSetupRequest } from '../../domain/github/setup/appSetupHandler.js'
+import { GithubSetupAppState, githubSetupStartup } from '../../domain/github/setup/githubSetupAppState.js'
+import { githubAppIsReady } from '../../domain/github/setup/githubAppReadyCheck.js'
+import { pageViewResponse } from '../../web/viewResultWrappers.js'
+import { p } from '../../web/hiccough/hiccoughElements.js'
 
 let appState: GithubSetupAppState
 

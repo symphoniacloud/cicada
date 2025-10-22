@@ -1,12 +1,12 @@
-import { AppState } from '../../environment/AppState'
-import { batchPutUsers, getUserById } from '../entityStore/entities/GithubUserEntity'
-import { fromRawGithubUser } from '../types/GithubUser'
-import { GithubInstallation } from '../types/GithubInstallation'
-import { RawGithubUser } from '../types/rawGithub/RawGithubUser'
-import { isUserAMemberOfAnyInstalledAccount, setMemberships } from './githubMembership'
-import { getTokenRecord, saveOrRefreshGithubUserToken } from './githubUserToken'
-import { fromRawGithubUserId } from '../types/GithubUserId'
-import { isFailure } from '../../util/structuredResult'
+import { AppState } from '../../environment/AppState.js'
+import { batchPutUsers, getUserById } from '../entityStore/entities/GithubUserEntity.js'
+import { fromRawGithubUser } from '../types/GithubUser.js'
+import { GithubInstallation } from '../types/GithubInstallation.js'
+import { RawGithubUser } from '../types/rawGithub/RawGithubUser.js'
+import { isUserAMemberOfAnyInstalledAccount, setMemberships } from './githubMembership.js'
+import { getTokenRecord, saveOrRefreshGithubUserToken } from './githubUserToken.js'
+import { fromRawGithubUserId } from '../types/GithubUserId.js'
+import { isFailure } from '../../util/structuredResult.js'
 
 export async function processRawUsers(
   appState: AppState,

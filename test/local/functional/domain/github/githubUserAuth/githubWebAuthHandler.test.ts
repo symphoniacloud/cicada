@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
-import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes/awsStubs'
-import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
-import { handleGitHubWebAuthRequest } from '../../../../../../src/app/domain/github/githubUserAuth/githubWebAuthHandler'
-import { stubGetUser } from '../../../../../testSupport/fakes/tableRecordReadStubs'
+import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes/awsStubs.js'
+import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
+import { handleGitHubWebAuthRequest } from '../../../../../../src/app/domain/github/githubUserAuth/githubWebAuthHandler.js'
+import { stubGetUser } from '../../../../../testSupport/fakes/tableRecordReadStubs.js'
 
 test('login', async () => {
   const response = await handleGitHubWebAuthRequest(

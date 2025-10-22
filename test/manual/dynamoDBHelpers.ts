@@ -1,6 +1,6 @@
 import { BatchWriteCommand, DynamoDBDocumentClient, paginateScan } from '@aws-sdk/lib-dynamodb'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
-import { appStateForTests } from '../remote/integrationTestSupport/cloudEnvironment'
+import { appStateForTests } from '../remote/integrationTestSupport/cloudEnvironment.js'
 import { selectKeys } from '@symphoniacloud/dynamodb-entity-store'
 
 export async function deleteAllItemsInTable(tableName: string, keyFields: string[]) {

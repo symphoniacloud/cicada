@@ -1,14 +1,14 @@
 import { CfnElement, Stack } from 'aws-cdk-lib'
 import { Construct } from 'constructs'
-import { defineUserFacingWebEndpoints } from './userFacingWeb'
-import { AllStacksProps } from '../../config/allStacksProps'
-import { createMainStackProps } from './mainStackProps'
-import { defineWebInfrastructure } from './webInfrastructure'
-import { defineGithubInteraction } from './githubInteraction'
-import { saveInSSMViaCloudFormation } from '../../support/ssm'
-import { SSM_PARAM_NAMES, SsmParamName } from '../../../multipleContexts/ssmParams'
-import { defineGithubCrawlers } from './githubCrawlers'
-import { defineMonitoring } from './monitoring'
+import { defineUserFacingWebEndpoints } from './userFacingWeb.js'
+import { AllStacksProps } from '../../config/allStacksProps.js'
+import { createMainStackProps } from './mainStackProps.js'
+import { defineWebInfrastructure } from './webInfrastructure.js'
+import { defineGithubInteraction } from './githubInteraction.js'
+import { saveInSSMViaCloudFormation } from '../../support/ssm.js'
+import { SSM_PARAM_NAMES, SsmParamName } from '../../../multipleContexts/ssmParams.js'
+import { defineGithubCrawlers } from './githubCrawlers.js'
+import { defineMonitoring } from './monitoring.js'
 
 export class MainStack extends Stack {
   constructor(scope: Construct, id: string, props: AllStacksProps) {

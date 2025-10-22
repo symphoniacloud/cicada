@@ -20,9 +20,9 @@ import {
   OriginRequestPolicy,
   ViewerProtocolPolicy
 } from 'aws-cdk-lib/aws-cloudfront'
-import { saveInSSMViaCloudFormation } from '../../support/ssm'
-import { SSM_PARAM_NAMES } from '../../../multipleContexts/ssmParams'
-import { MainStackProps } from './mainStackProps'
+import { saveInSSMViaCloudFormation } from '../../support/ssm.js'
+import { SSM_PARAM_NAMES } from '../../../multipleContexts/ssmParams.js'
+import { MainStackProps } from './mainStackProps.js'
 
 export function defineWebInfrastructure(scope: Construct, props: MainStackProps) {
   const { apiDomainName, apiPath, restApi } = defineRestApiGateway(scope, props)

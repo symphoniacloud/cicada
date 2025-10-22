@@ -1,12 +1,12 @@
-import { AppState } from '../../../environment/AppState'
+import { AppState } from '../../../environment/AppState.js'
 import {
   hasTypeForPushEvent,
   isRawGithubPushEventEvent
-} from '../../types/rawGithub/RawGithubAPIPushEventEvent'
-import { fromRawGithubPushEventEvent, GithubPush } from '../../types/GithubPush'
-import { processPushes } from '../githubPush'
-import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient'
-import { GithubRepoSummary } from '../../types/GithubSummaries'
+} from '../../types/rawGithub/RawGithubAPIPushEventEvent.js'
+import { fromRawGithubPushEventEvent, GithubPush } from '../../types/GithubPush.js'
+import { processPushes } from '../githubPush.js'
+import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
+import { GithubRepoSummary } from '../../types/GithubSummaries.js'
 
 // TOEventually - only get all pushes back to lookback in crawl configuration, however GitHub doesn't keep
 // them around for very long

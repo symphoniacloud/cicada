@@ -1,12 +1,12 @@
-import { CicadaAuthorizedAPIEvent } from '../../../inboundInterfaces/lambdaTypes'
-import { JTDSchemaType } from 'ajv/dist/jtd'
-import { validatingQueryStringParser } from '../../../schema/urlPathParser'
-import { failedWithResult, isFailure, Result, successWith } from '../../../util/structuredResult'
-import { logger } from '../../../util/logging'
-import { APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
-import { invalidRequestResponse } from '../../htmlResponses'
-import { GithubAccountId, isGithubAccountId } from '../../../domain/types/GithubAccountId'
-import { GithubRepoId, isGithubRepoId } from '../../../domain/types/GithubRepoId'
+import { CicadaAuthorizedAPIEvent } from '../../../inboundInterfaces/lambdaTypes.js'
+import { JTDSchemaType } from 'ajv/dist/jtd.js'
+import { validatingQueryStringParser } from '../../../schema/urlPathParser.js'
+import { failedWithResult, isFailure, Result, successWith } from '../../../util/structuredResult.js'
+import { logger } from '../../../util/logging.js'
+import { APIGatewayProxyResult } from 'aws-lambda'
+import { invalidRequestResponse } from '../../htmlResponses.js'
+import { GithubAccountId, isGithubAccountId } from '../../../domain/types/GithubAccountId.js'
+import { GithubRepoId, isGithubRepoId } from '../../../domain/types/GithubRepoId.js'
 
 export function getRepoCoordinates(
   event: CicadaAuthorizedAPIEvent

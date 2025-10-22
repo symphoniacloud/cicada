@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { element, withAttributes, withOptions } from '../../../../../src/app/web/hiccough/hiccoughElement'
-import { p } from '../../../../../src/app/web/hiccough/hiccoughElements'
+import { element, withAttributes, withOptions } from '../../../../../src/app/web/hiccough/hiccoughElement.js'
+import { p } from '../../../../../src/app/web/hiccough/hiccoughElements.js'
 
 test('element', () => {
   expect(element('p')).toEqual({

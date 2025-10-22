@@ -1,18 +1,18 @@
-import { Route } from '../../../internalHttpRouter/internalHttpRoute'
+import { Route } from '../../../internalHttpRouter/internalHttpRoute.js'
 import { APIGatewayProxyEvent } from 'aws-lambda'
-import { GithubSetupAppState } from './githubSetupAppState'
-import { pageViewResponse } from '../../../web/viewResultWrappers'
+import { GithubSetupAppState } from './githubSetupAppState.js'
+import { pageViewResponse } from '../../../web/viewResultWrappers.js'
 import { Octokit } from '@octokit/rest'
 import { ParameterType, PutParameterCommand, SSMClient } from '@aws-sdk/client-ssm'
 import {
   createFullParameterName,
   SSM_PARAM_NAMES,
   SsmParamName
-} from '../../../../multipleContexts/ssmParams'
-import { logger } from '../../../util/logging'
-import { fromRawAccountType, ORGANIZATION_ACCOUNT_TYPE } from '../../types/GithubAccountType'
-import { a, p } from '../../../web/hiccough/hiccoughElements'
-import { fromRawGithubAppId, GithubAppId } from '../../types/GithubAppId'
+} from '../../../../multipleContexts/ssmParams.js'
+import { logger } from '../../../util/logging.js'
+import { fromRawAccountType, ORGANIZATION_ACCOUNT_TYPE } from '../../types/GithubAccountType.js'
+import { a, p } from '../../../web/hiccough/hiccoughElements.js'
+import { fromRawGithubAppId, GithubAppId } from '../../types/GithubAppId.js'
 
 export const setupRedirectRoute: Route<APIGatewayProxyEvent, GithubSetupAppState> = {
   path: '/github/setup/redirect',

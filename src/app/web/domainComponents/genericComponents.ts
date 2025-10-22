@@ -1,5 +1,5 @@
-import { a, table, tbody, th, thead, tr } from '../hiccough/hiccoughElements'
-import { HiccoughElement } from '../hiccough/hiccoughElement'
+import { a, table, tbody, th, thead, tr } from '../hiccough/hiccoughElements.js'
+import { HiccoughElement } from '../hiccough/hiccoughElement.js'
 
 export function githubAnchor(target: string) {
   return a(target, `<i class='bi bi-github' style='color: #6e5494'></i>`)

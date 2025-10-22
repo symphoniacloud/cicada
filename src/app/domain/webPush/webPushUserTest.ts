@@ -1,9 +1,9 @@
-import { AppState } from '../../environment/AppState'
-import { logger } from '../../util/logging'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
-import { publishToSubscriptionsForUser } from './webPushPublisher'
-import { isWebPushTestEvent } from './WebPushTestEvent'
-import { isCicadaEventBridgeDetail } from '../../outboundInterfaces/eventBridgeBus'
+import { AppState } from '../../environment/AppState.js'
+import { logger } from '../../util/logging.js'
+import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
+import { publishToSubscriptionsForUser } from './webPushPublisher.js'
+import { isWebPushTestEvent } from './WebPushTestEvent.js'
+import { isCicadaEventBridgeDetail } from '../../outboundInterfaces/eventBridgeBus.js'
 
 export async function handleWebPushTest(appState: AppState, eventDetail: unknown) {
   if (!isCicadaEventBridgeDetail(eventDetail) || !isWebPushTestEvent(eventDetail.data)) {

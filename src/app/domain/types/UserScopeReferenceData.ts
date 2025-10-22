@@ -1,9 +1,9 @@
-import { GithubAccountSummary, GithubRepoSummary } from './GithubSummaries'
-import { GithubRepoId } from './GithubRepoId'
-import { GithubWorkflowId } from './GithubWorkflowId'
-import { GithubUserId } from './GithubUserId'
-import { GithubAccountId } from './GithubAccountId'
-import { GithubWorkflow } from './GithubWorkflow'
+import { GithubAccountSummary, GithubRepoSummary } from './GithubSummaries.js'
+import { GithubRepoId } from './GithubRepoId.js'
+import { GithubWorkflowId } from './GithubWorkflowId.js'
+import { GithubUserId } from './GithubUserId.js'
+import { GithubAccountId } from './GithubAccountId.js'
+import { GithubWorkflow } from './GithubWorkflow.js'
 
 export interface GithubAccountStructure extends GithubAccountSummary {
   isMemberAccount: boolean

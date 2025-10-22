@@ -1,16 +1,16 @@
-import { GITHUB_PUSH, GITHUB_WORKFLOW_RUN } from '../entityTypes'
-import { GithubWorkflowRunEvent, isGithubWorkflowRunEvent } from '../../types/GithubWorkflowRunEvent'
+import { GITHUB_PUSH, GITHUB_WORKFLOW_RUN } from '../entityTypes.js'
+import { GithubWorkflowRunEvent, isGithubWorkflowRunEvent } from '../../types/GithubWorkflowRunEvent.js'
 import {
   AllEntitiesStore,
   rangeWhereSkBeginsWith,
   typePredicateParser
 } from '@symphoniacloud/dynamodb-entity-store'
-import { CicadaEntity } from '../entityStoreEntitySupport'
-import { domainObjectsFromMultipleEventEntityResponse } from '../entityStoreOperationSupport'
-import { GithubPushEntity } from './GithubPushEntity'
-import { GithubAccountKey, GithubRepoKey } from '../../types/GithubKeys'
-import { GithubPush } from '../../types/GithubPush'
-import { GithubRepoId } from '../../types/GithubRepoId'
+import { CicadaEntity } from '../entityStoreEntitySupport.js'
+import { domainObjectsFromMultipleEventEntityResponse } from '../entityStoreOperationSupport.js'
+import { GithubPushEntity } from './GithubPushEntity.js'
+import { GithubAccountKey, GithubRepoKey } from '../../types/GithubKeys.js'
+import { GithubPush } from '../../types/GithubPush.js'
+import { GithubRepoId } from '../../types/GithubRepoId.js'
 
 // Stores the latest run event per workflow run
 const GithubWorkflowRunEntity: CicadaEntity<

@@ -1,4 +1,4 @@
-import { CicadaWebNotification, WebPushWrapper } from '../../../src/app/outboundInterfaces/webPushWrapper'
+import { CicadaWebNotification, WebPushWrapper } from '../../../src/app/outboundInterfaces/webPushWrapper.js'
 import deepEqual from 'deep-equal'
 import { PushSubscription } from 'web-push'
 

@@ -1,12 +1,12 @@
-import { AppState } from '../../environment/AppState'
-import { GithubPush } from '../types/GithubPush'
-import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport'
+import { AppState } from '../../environment/AppState.js'
+import { GithubPush } from '../types/GithubPush.js'
+import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport.js'
 import {
   putPushIfNoKeyExistsOrNewerThanExisting,
   queryRecentLatestPushesByAccount
-} from '../entityStore/entities/GithubLatestPushPerRefEntity'
-import { dateTimeAddDays } from '../../util/dateAndTime'
-import { GithubAccountId } from '../types/GithubAccountId'
+} from '../entityStore/entities/GithubLatestPushPerRefEntity.js'
+import { dateTimeAddDays } from '../../util/dateAndTime.js'
+import { GithubAccountId } from '../types/GithubAccountId.js'
 
 export async function saveLatestPushes(appState: AppState, newPushes: GithubPush[]) {
   for (const newPush of newPushes) {

@@ -3,17 +3,17 @@ import {
   buildBatchWriteForEntity,
   buildDelete,
   buildPut
-} from './dynamoDB/fakeDynamoDBInterfaceExpectations'
-import { GithubInstallation } from '../../../src/app/domain/types/GithubInstallation'
-import { GithubPush } from '../../../src/app/domain/types/GithubPush'
-import { GithubRepo } from '../../../src/app/domain/types/GithubRepo'
-import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWorkflowRunEvent'
-import { GithubUser } from '../../../src/app/domain/types/GithubUser'
-import { GithubAccountMembership } from '../../../src/app/domain/types/GithubAccountMembership'
-import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription'
-import { GithubAccountId } from '../../../src/app/domain/types/GithubAccountId'
-import { GithubUserId } from '../../../src/app/domain/types/GithubUserId'
-import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow'
+} from './dynamoDB/fakeDynamoDBInterfaceExpectations.js'
+import { GithubInstallation } from '../../../src/app/domain/types/GithubInstallation.js'
+import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
+import { GithubRepo } from '../../../src/app/domain/types/GithubRepo.js'
+import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
+import { GithubUser } from '../../../src/app/domain/types/GithubUser.js'
+import { GithubAccountMembership } from '../../../src/app/domain/types/GithubAccountMembership.js'
+import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription.js'
+import { GithubAccountId } from '../../../src/app/domain/types/GithubAccountId.js'
+import { GithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
+import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 
 export function expectedPutGithubInstallation(installation: GithubInstallation) {
   return buildPut('fakeGithubInstallationsTable', 'githubInstallation', {

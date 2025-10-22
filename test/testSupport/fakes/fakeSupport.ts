@@ -1,5 +1,5 @@
 import deepEqual from 'deep-equal'
-import { throwFunction } from '../../../src/multipleContexts/errors'
+import { throwFunction } from '../../../src/multipleContexts/errors.js'
 
 export interface StubResponse<TInput, TOutput> {
   addResponse(input: TInput, output: TOutput): void

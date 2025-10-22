@@ -1,9 +1,12 @@
-import { AppState } from '../../environment/AppState'
-import { fromRawGithubInstallation, GithubInstallation } from '../types/GithubInstallation'
-import { getInstallationOrUndefined, putInstallation } from '../entityStore/entities/GithubInstallationEntity'
-import { logger } from '../../util/logging'
+import { AppState } from '../../environment/AppState.js'
+import { fromRawGithubInstallation, GithubInstallation } from '../types/GithubInstallation.js'
+import {
+  getInstallationOrUndefined,
+  putInstallation
+} from '../entityStore/entities/GithubInstallationEntity.js'
+import { logger } from '../../util/logging.js'
 import deepEqual from 'deep-equal'
-import { RawGithubInstallation } from '../types/rawGithub/RawGithubInstallation'
+import { RawGithubInstallation } from '../types/rawGithub/RawGithubInstallation.js'
 
 export async function processRawInstallation(appState: AppState, rawInstallation: RawGithubInstallation) {
   return await processInstallation(appState, fromRawGithubInstallation(rawInstallation))

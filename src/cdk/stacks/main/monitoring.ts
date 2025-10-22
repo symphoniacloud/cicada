@@ -1,6 +1,6 @@
 import { Alarm, ComparisonOperator, Metric, TreatMissingData } from 'aws-cdk-lib/aws-cloudwatch'
 import { Construct } from 'constructs'
-import { MainStackProps } from './mainStackProps'
+import { MainStackProps } from './mainStackProps.js'
 import { Duration } from 'aws-cdk-lib'
 import { SnsAction } from 'aws-cdk-lib/aws-cloudwatch-actions'
 import { Topic } from 'aws-cdk-lib/aws-sns'

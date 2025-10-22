@@ -1,18 +1,18 @@
-import { AppState } from '../../environment/AppState'
-import { deregisterSubscription, registerSubscription } from './webPushSubscriptions'
+import { AppState } from '../../environment/AppState.js'
+import { deregisterSubscription, registerSubscription } from './webPushSubscriptions.js'
 import {
   jsonOkResult,
   responseWithStatusCode,
   withJSONContentType
-} from '../../inboundInterfaces/httpResponses'
-import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
-import { userIdFromEvent, usernameFromEvent } from '../webAuth/webAuth'
-import { usernameFieldMissingFromContextResponse } from '../../inboundInterfaces/standardHttpResponses'
-import { CicadaAPIAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { isSuccess } from '../../util/structuredResult'
-import { Route } from '../../internalHttpRouter/internalHttpRoute'
-import { authenticateApiPath } from '../../web/routingCommon'
+} from '../../inboundInterfaces/httpResponses.js'
+import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
+import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
+import { userIdFromEvent, usernameFromEvent } from '../webAuth/webAuth.js'
+import { usernameFieldMissingFromContextResponse } from '../../inboundInterfaces/standardHttpResponses.js'
+import { CicadaAPIAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
+import { isSuccess } from '../../util/structuredResult.js'
+import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
+import { authenticateApiPath } from '../../web/routingCommon.js'
 
 export const webPushSubscribeRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
   path: authenticateApiPath('webPushSubscribe'),

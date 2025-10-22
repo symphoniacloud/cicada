@@ -1,16 +1,16 @@
-import { AppState } from '../../environment/AppState'
+import { AppState } from '../../environment/AppState.js'
 import {
   PersistedGithubAccountSettings,
   PersistedGithubRepoSettings,
   PersistedGithubWorkflowSettings,
   PersistedUserSettings,
   UserSetting
-} from '../types/UserSettings'
-import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys'
-import { getUserSettings, saveUserSettings } from '../entityStore/entities/UserSettingsEntity'
-import { getOrSetNewAndReturn } from '../../util/collections'
-import { GithubAccountId } from '../types/GithubAccountId'
-import { GithubUserId } from '../types/GithubUserId'
+} from '../types/UserSettings.js'
+import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys.js'
+import { getUserSettings, saveUserSettings } from '../entityStore/entities/UserSettingsEntity.js'
+import { getOrSetNewAndReturn } from '../../util/collections.js'
+import { GithubAccountId } from '../types/GithubAccountId.js'
+import { GithubUserId } from '../types/GithubUserId.js'
 
 export async function getPersistedUserSettingsOrDefaults(
   appState: AppState,

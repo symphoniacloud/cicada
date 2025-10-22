@@ -1,8 +1,8 @@
 import UrlPattern from 'url-pattern'
-import { ajvInstance, structuredValidate } from './ajv'
-import { JTDSchemaType, ValidateFunction } from 'ajv/dist/jtd'
-import { logger } from '../util/logging'
-import { Result } from '../util/structuredResult'
+import { ajvInstance, structuredValidate } from './ajv.js'
+import { JTDSchemaType, ValidateFunction } from 'ajv/dist/jtd.js'
+import { logger } from '../util/logging.js'
+import { Result } from '../util/structuredResult.js'
 
 // TOEventually - there's overlap here with the internal router, e.g.
 // each request actually calls urlPattern.match twice. Eventually think about making this

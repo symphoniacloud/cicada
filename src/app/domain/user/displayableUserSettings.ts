@@ -8,25 +8,25 @@ import {
   DisplayableGithubWorkflowSettings,
   DisplayableUserSettings,
   PersistedUserSettings
-} from '../types/UserSettings'
-import { calculateUserSettings } from './calculatedUserSettings'
+} from '../types/UserSettings.js'
+import { calculateUserSettings } from './calculatedUserSettings.js'
 import {
   GithubAccountStructure,
   GithubRepoStructure,
   UserScopeReferenceData
-} from '../types/UserScopeReferenceData'
-import { GithubWorkflowSummary } from '../types/GithubSummaries'
-import { AppState } from '../../environment/AppState'
-import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings'
+} from '../types/UserScopeReferenceData.js'
+import { GithubWorkflowSummary } from '../types/GithubSummaries.js'
+import { AppState } from '../../environment/AppState.js'
+import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings.js'
 import {
   getAccountStructure,
   getRepoStructureFromAccount,
   getWorkflowFromRepo
-} from '../github/userScopeReferenceData'
-import { logger } from '../../util/logging'
-import { GithubAccountId } from '../types/GithubAccountId'
-import { GithubRepoId } from '../types/GithubRepoId'
-import { GithubWorkflowId } from '../types/GithubWorkflowId'
+} from '../github/userScopeReferenceData.js'
+import { logger } from '../../util/logging.js'
+import { GithubAccountId } from '../types/GithubAccountId.js'
+import { GithubRepoId } from '../types/GithubRepoId.js'
+import { GithubWorkflowId } from '../types/GithubWorkflowId.js'
 
 export async function loadCalculatedAndDisplayableUserSettingsOrUseDefaults(
   appState: AppState,

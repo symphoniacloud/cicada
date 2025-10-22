@@ -1,14 +1,14 @@
-import { AppState } from '../../environment/AppState'
-import { lambdaStartup } from '../../environment/lambdaStartup'
+import { AppState } from '../../environment/AppState.js'
+import { lambdaStartup } from '../../environment/lambdaStartup.js'
 import middy from '@middy/core'
-import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
+import { powertoolsMiddlewares } from '../../middleware/standardMiddleware.js'
 import { EventBridgeHandler } from 'aws-lambda'
 import {
   processWebhookFromS3Event,
   S3EventDetail
-} from '../../domain/github/webhookProcessor/githubWebhookProcessor'
-import { logger } from '../../util/logging'
-import { isFailure } from '../../util/structuredResult'
+} from '../../domain/github/webhookProcessor/githubWebhookProcessor.js'
+import { logger } from '../../util/logging.js'
+import { isFailure } from '../../util/structuredResult.js'
 
 let appState: AppState
 

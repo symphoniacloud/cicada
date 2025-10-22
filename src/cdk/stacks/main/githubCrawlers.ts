@@ -1,12 +1,12 @@
 import { Construct } from 'constructs'
-import { MainStackProps } from './mainStackProps'
-import { CicadaFunction, cicadaFunctionProps } from '../../constructs/CicadaFunction'
+import { MainStackProps } from './mainStackProps.js'
+import { CicadaFunction, cicadaFunctionProps } from '../../constructs/CicadaFunction.js'
 import { DefinitionBody, JsonPath, Map, StateMachine, TaskInput } from 'aws-cdk-lib/aws-stepfunctions'
 import { LambdaInvoke } from 'aws-cdk-lib/aws-stepfunctions-tasks'
-import { CRAWLABLE_RESOURCES } from '../../../multipleContexts/githubCrawler'
+import { CRAWLABLE_RESOURCES } from '../../../multipleContexts/githubCrawler.js'
 import { Rule, Schedule } from 'aws-cdk-lib/aws-events'
 import { SfnStateMachine } from 'aws-cdk-lib/aws-events-targets'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
+import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
 import { Duration } from 'aws-cdk-lib'
 
 export function defineGithubCrawlers(scope: Construct, props: MainStackProps) {

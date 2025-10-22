@@ -1,12 +1,12 @@
-import { AppState } from '../../environment/AppState'
-import { Route } from '../../internalHttpRouter/internalHttpRoute'
-import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { isFailure } from '../../util/structuredResult'
-import { createRepoHeadingResponse } from './views/repoHeadingView'
-import { notFoundHTMLResponse } from '../htmlResponses'
-import { getRepoCoordinates } from './requestParsing/getRepoCoordinates'
-import { fragmentPath } from '../routingCommon'
-import { getRepoStructure } from '../../domain/github/userScopeReferenceData'
+import { AppState } from '../../environment/AppState.js'
+import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
+import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
+import { isFailure } from '../../util/structuredResult.js'
+import { createRepoHeadingResponse } from './views/repoHeadingView.js'
+import { notFoundHTMLResponse } from '../htmlResponses.js'
+import { getRepoCoordinates } from './requestParsing/getRepoCoordinates.js'
+import { fragmentPath } from '../routingCommon.js'
+import { getRepoStructure } from '../../domain/github/userScopeReferenceData.js'
 
 export const repoHeadingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('repo/heading'),

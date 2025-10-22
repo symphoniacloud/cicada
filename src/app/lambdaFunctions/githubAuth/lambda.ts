@@ -1,13 +1,13 @@
 import { APIGatewayProxyHandler } from 'aws-lambda'
-import { AppState } from '../../environment/AppState'
-import { lambdaStartup } from '../../environment/lambdaStartup'
+import { AppState } from '../../environment/AppState.js'
+import { lambdaStartup } from '../../environment/lambdaStartup.js'
 import middy from '@middy/core'
-import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
-import { handleGitHubWebAuthRequest } from '../../domain/github/githubUserAuth/githubWebAuthHandler'
-import { logger } from '../../util/logging'
-import { isFailure } from '../../util/structuredResult'
-import { pageViewResponse } from '../../web/viewResultWrappers'
-import { startSetupRoute } from '../../domain/github/setup/startGithubSetup'
+import { powertoolsMiddlewares } from '../../middleware/standardMiddleware.js'
+import { handleGitHubWebAuthRequest } from '../../domain/github/githubUserAuth/githubWebAuthHandler.js'
+import { logger } from '../../util/logging.js'
+import { isFailure } from '../../util/structuredResult.js'
+import { pageViewResponse } from '../../web/viewResultWrappers.js'
+import { startSetupRoute } from '../../domain/github/setup/startGithubSetup.js'
 
 let appState: AppState
 

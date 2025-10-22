@@ -1,14 +1,14 @@
-import { RawGithubInstallation } from './rawGithub/RawGithubInstallation'
-import { fromRawAccountType } from './GithubAccountType'
-import { isString } from '../../util/types'
-import { fromRawGithubAccountId } from './GithubAccountId'
-import { fromRawGithubAppId, GithubAppId, isGithubAppId } from './GithubAppId'
+import { RawGithubInstallation } from './rawGithub/RawGithubInstallation.js'
+import { fromRawAccountType } from './GithubAccountType.js'
+import { isString } from '../../util/types.js'
+import { fromRawGithubAccountId } from './GithubAccountId.js'
+import { fromRawGithubAppId, GithubAppId, isGithubAppId } from './GithubAppId.js'
 import {
   fromRawGithubInstallationId,
   GithubInstallationId,
   isGithubInstallationId
-} from './GithubInstallationId'
-import { GithubAccountSummary, isGithubAccountSummary } from './GithubSummaries'
+} from './GithubInstallationId.js'
+import { GithubAccountSummary, isGithubAccountSummary } from './GithubSummaries.js'
 
 export interface GithubInstallation extends GithubAccountSummary {
   installationId: GithubInstallationId

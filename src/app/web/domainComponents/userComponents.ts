@@ -1,5 +1,5 @@
-import { td } from '../hiccough/hiccoughElements'
-import { githubAnchor } from './genericComponents'
+import { td } from '../hiccough/hiccoughElements.js'
+import { githubAnchor } from './genericComponents.js'
 
 export function userCell(actor?: { userName: string }) {
   return actor === undefined

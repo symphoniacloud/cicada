@@ -1,11 +1,11 @@
-import { pageViewResponse } from '../../viewResultWrappers'
-import { button, div, form, h1, h2, input, label, td, tr } from '../../hiccough/hiccoughElements'
-import { colAuto } from '../../hiccoughCicada/hiccoughBootstrapElements'
-import { standardTable } from '../../domainComponents/genericComponents'
-import { adminAddPublicAccountPageRoute } from '../adminAddPublicAccountPage'
-import { ORGANIZATION_ACCOUNT_TYPE } from '../../../domain/types/GithubAccountType'
-import { accountCell } from '../../domainComponents/accountComponents'
-import { GithubAccountSummary } from '../../../domain/types/GithubSummaries'
+import { pageViewResponse } from '../../viewResultWrappers.js'
+import { button, div, form, h1, h2, input, label, td, tr } from '../../hiccough/hiccoughElements.js'
+import { colAuto } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
+import { standardTable } from '../../domainComponents/genericComponents.js'
+import { adminAddPublicAccountPageRoute } from '../adminAddPublicAccountPage.js'
+import { ORGANIZATION_ACCOUNT_TYPE } from '../../../domain/types/GithubAccountType.js'
+import { accountCell } from '../../domainComponents/accountComponents.js'
+import { GithubAccountSummary } from '../../../domain/types/GithubSummaries.js'
 
 export function createAdminPageResponse(publicAccounts: GithubAccountSummary[]) {
   return pageViewResponse(

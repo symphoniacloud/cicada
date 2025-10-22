@@ -1,6 +1,6 @@
 import { test } from 'vitest'
-import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
-import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient'
+import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
+import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient.js'
 import {
   testMikeRobertsUser,
   testMikeRobertsUserMembershipOfOrg,
@@ -9,24 +9,24 @@ import {
   testTestUser,
   testTestUserMembershipOfOrg,
   testTestUserMembershipOfPersonalInstallation
-} from '../../../../../examples/cicada/githubDomainObjects'
+} from '../../../../../examples/cicada/githubDomainObjects.js'
 
-import example_personal_account_user from '../../../../../examples/github/personal-account/api/user.json'
-import example_org_users from '../../../../../examples/github/org/api/users.json'
-import { crawlUsers } from '../../../../../../src/app/domain/github/crawler/crawlUsers'
-import { stubQueryAccountMembershipsByAccount } from '../../../../../testSupport/fakes/tableRecordReadStubs'
+import example_personal_account_user from '../../../../../examples/github/personal-account/api/user.json' with { type: 'json' }
+import example_org_users from '../../../../../examples/github/org/api/users.json' with { type: 'json' }
+import { crawlUsers } from '../../../../../../src/app/domain/github/crawler/crawlUsers.js'
+import { stubQueryAccountMembershipsByAccount } from '../../../../../testSupport/fakes/tableRecordReadStubs.js'
 import {
   expectBatchWrites,
   expectBatchWritesLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
 import {
   expectedBatchDeleteGithubMemberships,
   expectedBatchWriteGithubMemberships,
   expectedBatchWriteGithubUsers
-} from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
-import { successWith } from '../../../../../../src/app/util/structuredResult'
-import { fromRawGithubAccountId } from '../../../../../../src/app/domain/types/GithubAccountId'
-import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/GithubUserId'
+} from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
+import { successWith } from '../../../../../../src/app/util/structuredResult.js'
+import { fromRawGithubAccountId } from '../../../../../../src/app/domain/types/GithubAccountId.js'
+import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/GithubUserId.js'
 
 test('user-crawler-for-personal-account-installation', async () => {
   // A

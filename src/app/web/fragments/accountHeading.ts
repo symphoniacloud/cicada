@@ -1,12 +1,12 @@
-import { AppState } from '../../environment/AppState'
-import { Route } from '../../internalHttpRouter/internalHttpRoute'
-import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { isFailure } from '../../util/structuredResult'
-import { notFoundHTMLResponse } from '../htmlResponses'
-import { fragmentPath } from '../routingCommon'
-import { createAccountHeadingResponse } from './views/accountHeadingView'
-import { getAccountCoordinates } from './requestParsing/getAccountCoordinates'
-import { getAccountStructure } from '../../domain/github/userScopeReferenceData'
+import { AppState } from '../../environment/AppState.js'
+import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
+import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
+import { isFailure } from '../../util/structuredResult.js'
+import { notFoundHTMLResponse } from '../htmlResponses.js'
+import { fragmentPath } from '../routingCommon.js'
+import { createAccountHeadingResponse } from './views/accountHeadingView.js'
+import { getAccountCoordinates } from './requestParsing/getAccountCoordinates.js'
+import { getAccountStructure } from '../../domain/github/userScopeReferenceData.js'
 
 export const accountHeadingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('account/heading'),

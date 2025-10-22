@@ -1,29 +1,29 @@
 import { expect, test } from 'vitest'
-import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
-import example_workflow_run from '../../../../../examples/github/org/webhook/workflowRunCompleted.json'
+import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
+import example_workflow_run from '../../../../../examples/github/org/webhook/workflowRunCompleted.json' with { type: 'json' }
 import {
   testOrgTestWorkflowOneFromJson,
   testOrgTestWorkflowOneFromJsonRun
-} from '../../../../../examples/cicada/githubDomainObjects'
+} from '../../../../../examples/cicada/githubDomainObjects.js'
 import {
   createSignatureHeader,
   processWebhookFromS3Event
-} from '../../../../../../src/app/domain/github/webhookProcessor/githubWebhookProcessor'
+} from '../../../../../../src/app/domain/github/webhookProcessor/githubWebhookProcessor.js'
 import {
   expectPut,
   expectPutsLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
 import {
   expectedPutGithubWorkflowRun,
   expectedPutGithubWorkflowRunEvent,
   expectedPutLatestGithubWorkflowRunEvent
-} from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
+} from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 import {
   stubGetGithubInstallation,
   stubGetWorkflow
-} from '../../../../../testSupport/fakes/tableRecordReadStubs'
-import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient'
-import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/types/GithubInstallationId'
+} from '../../../../../testSupport/fakes/tableRecordReadStubs.js'
+import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient.js'
+import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/types/GithubInstallationId.js'
 
 test('run-event', async () => {
   // Arrange

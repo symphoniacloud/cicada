@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { generateRunEventNotification } from '../../../../../src/app/domain/webPush/cicadaEventWebPushPublisher'
-import { testPersonalTestRepoWorkflowRun } from '../../../../examples/cicada/githubDomainObjects'
+import { generateRunEventNotification } from '../../../../../src/app/domain/webPush/cicadaEventWebPushPublisher.js'
+import { testPersonalTestRepoWorkflowRun } from '../../../../examples/cicada/githubDomainObjects.js'
 
 test('notification message', () => {
   expect(

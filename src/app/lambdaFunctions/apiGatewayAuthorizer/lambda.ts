@@ -2,18 +2,18 @@ import {
   APIGatewayAuthorizerWithContextResult,
   APIGatewayRequestAuthorizerEvent,
   APIGatewayRequestAuthorizerWithContextHandler
-} from 'aws-lambda/trigger/api-gateway-authorizer'
+} from 'aws-lambda'
 import middy from '@middy/core'
-import { lambdaStartup } from '../../environment/lambdaStartup'
-import { AppState } from '../../environment/AppState'
-import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
-import { logger } from '../../util/logging'
+import { lambdaStartup } from '../../environment/lambdaStartup.js'
+import { AppState } from '../../environment/AppState.js'
+import { powertoolsMiddlewares } from '../../middleware/standardMiddleware.js'
+import { logger } from '../../util/logging.js'
 import {
   attemptToAuthorize,
   generateApiGatewayDenyAuthorizerResult
-} from '../../domain/webAuth/apiGatewayAuthorizer'
-import { WebAuthorizerContext } from '../../inboundInterfaces/lambdaTypes'
-import { isFailure } from '../../util/structuredResult'
+} from '../../domain/webAuth/apiGatewayAuthorizer.js'
+import { WebAuthorizerContext } from '../../inboundInterfaces/lambdaTypes.js'
+import { isFailure } from '../../util/structuredResult.js'
 
 let appState: AppState
 

@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import {
   isIntegerStringWithPrefix,
   stringIsUnpaddedNotEmptyNonNegativeInteger
-} from '../../../../src/app/util/types'
+} from '../../../../src/app/util/types.js'
 
 test('stringIsUnpaddedNotEmptyPositiveNumeric', () => {
   expect(stringIsUnpaddedNotEmptyNonNegativeInteger('123')).toBeTruthy()

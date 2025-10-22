@@ -1,9 +1,9 @@
-import { AppState } from '../../environment/AppState'
-import { Route } from '../../internalHttpRouter/internalHttpRoute'
-import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { pageViewResponse } from '../viewResultWrappers'
-import { p } from '../hiccough/hiccoughElements'
-import { pagePath } from '../routingCommon'
+import { AppState } from '../../environment/AppState.js'
+import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
+import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
+import { pageViewResponse } from '../viewResultWrappers.js'
+import { p } from '../hiccough/hiccoughElements.js'
+import { pagePath } from '../routingCommon.js'
 
 // Used for testing / diagnostics
 export const helloPageRoute: Route<CicadaAuthorizedAPIEvent> = {

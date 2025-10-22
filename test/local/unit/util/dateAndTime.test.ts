@@ -9,7 +9,7 @@ import {
   isoDifferenceAsString,
   timestampSecondsIsInPast,
   timestampToIso
-} from '../../../../src/app/util/dateAndTime'
+} from '../../../../src/app/util/dateAndTime.js'
 import { Clock } from '@symphoniacloud/dynamodb-entity-store'
 
 function makeFakeClock(atTime = '2023-11-01T12:00:00'): Clock {

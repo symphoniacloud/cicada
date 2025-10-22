@@ -1,21 +1,21 @@
 import { test } from 'vitest'
-import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
-import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient'
+import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
+import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient.js'
 import {
   cicadaTestOrgInstallation,
   testOrgTestRepoOne,
   testOrgTestRepoTwo,
   cicadaTestUserInstallation,
   testPersonalTestRepo
-} from '../../../../../examples/cicada/githubDomainObjects'
-import example_personal_account_repo from '../../../../../examples/github/personal-account/api/repo.json'
-import example_org_repos from '../../../../../examples/github/org/api/repos.json'
-import { crawlAccountContents } from '../../../../../../src/app/domain/github/crawler/crawlAccountContents'
+} from '../../../../../examples/cicada/githubDomainObjects.js'
+import example_personal_account_repo from '../../../../../examples/github/personal-account/api/repo.json' with { type: 'json' }
+import example_org_repos from '../../../../../examples/github/org/api/repos.json' with { type: 'json' }
+import { crawlAccountContents } from '../../../../../../src/app/domain/github/crawler/crawlAccountContents.js'
 import {
   expectBatchWrites,
   expectBatchWritesLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
-import { expectedBatchWriteGithubRepositories } from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
+import { expectedBatchWriteGithubRepositories } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 
 test('repository-crawler-for-personal-account-installation', async () => {
   // A

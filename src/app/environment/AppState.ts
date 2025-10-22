@@ -1,10 +1,10 @@
-import { Clock } from '../util/dateAndTime'
+import { Clock } from '../util/dateAndTime.js'
 import { AllEntitiesStore } from '@symphoniacloud/dynamodb-entity-store'
-import { GithubClient } from '../outboundInterfaces/githubClient'
-import { WebPushWrapper } from '../outboundInterfaces/webPushWrapper'
-import { EventBridgeBus } from '../outboundInterfaces/eventBridgeBus'
-import { CicadaConfig } from './config'
-import { S3Wrapper } from '../outboundInterfaces/s3Wrapper'
+import { GithubClient } from '../outboundInterfaces/githubClient.js'
+import { WebPushWrapper } from '../outboundInterfaces/webPushWrapper.js'
+import { EventBridgeBus } from '../outboundInterfaces/eventBridgeBus.js'
+import { CicadaConfig } from './config.js'
+import { S3Wrapper } from '../outboundInterfaces/s3Wrapper.js'
 
 // AppState captures all side-effect related concepts, including integrations with databases, external services, etc.
 // AppState is tracked as its own object for local-testing purposes, and to cache certain data across multiple

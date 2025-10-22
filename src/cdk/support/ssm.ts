@@ -1,6 +1,6 @@
 import { Construct } from 'constructs'
 import { StringParameter } from 'aws-cdk-lib/aws-ssm'
-import { createFullParameterName, SsmParamName } from '../../multipleContexts/ssmParams'
+import { createFullParameterName, SsmParamName } from '../../multipleContexts/ssmParams.js'
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm'
 
 export function saveInSSMViaCloudFormation(

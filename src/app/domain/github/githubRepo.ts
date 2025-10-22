@@ -1,11 +1,11 @@
-import { AppState } from '../../environment/AppState'
-import { RawGithubRepo } from '../types/rawGithub/RawGithubRepo'
-import { fromRawGithubRepo } from '../types/GithubRepo'
-import { getRepositories, putRepositories } from '../entityStore/entities/GithubRepositoryEntity'
-import { GithubRepoKey } from '../types/GithubKeys'
-import { GithubAccountId } from '../types/GithubAccountId'
-import { GithubRepoSummary } from '../types/GithubSummaries'
-import { accountKeysEqual, narrowToAccountSummary } from './githubAccount'
+import { AppState } from '../../environment/AppState.js'
+import { RawGithubRepo } from '../types/rawGithub/RawGithubRepo.js'
+import { fromRawGithubRepo } from '../types/GithubRepo.js'
+import { getRepositories, putRepositories } from '../entityStore/entities/GithubRepositoryEntity.js'
+import { GithubRepoKey } from '../types/GithubKeys.js'
+import { GithubAccountId } from '../types/GithubAccountId.js'
+import { GithubRepoSummary } from '../types/GithubSummaries.js'
+import { accountKeysEqual, narrowToAccountSummary } from './githubAccount.js'
 
 export function repoKeysEqual(r1: GithubRepoKey, r2: GithubRepoKey) {
   return accountKeysEqual(r1, r2) && r1.repoId === r2.repoId

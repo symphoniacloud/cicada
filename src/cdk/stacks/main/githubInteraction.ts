@@ -1,5 +1,5 @@
 import { Construct } from 'constructs'
-import { CicadaFunction, cicadaFunctionProps } from '../../constructs/CicadaFunction'
+import { CicadaFunction, cicadaFunctionProps } from '../../constructs/CicadaFunction.js'
 import { HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2'
 import {
   AwsIntegration,
@@ -8,11 +8,11 @@ import {
   Resource,
   RestApi
 } from 'aws-cdk-lib/aws-apigateway'
-import { grantLambdaFunctionPermissionToPutEvents } from '../../support/eventbridge'
+import { grantLambdaFunctionPermissionToPutEvents } from '../../support/eventbridge.js'
 import { Effect, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam'
 import { Rule } from 'aws-cdk-lib/aws-events'
 import * as targets from 'aws-cdk-lib/aws-events-targets'
-import { MainStackProps } from './mainStackProps'
+import { MainStackProps } from './mainStackProps.js'
 
 export interface GithubInteractionProps extends MainStackProps {
   readonly restApi: RestApi

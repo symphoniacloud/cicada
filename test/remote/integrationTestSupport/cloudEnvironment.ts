@@ -1,9 +1,9 @@
 import { userInfo } from 'node:os'
-import { createAppStateWithAppName } from '../../../src/app/environment/lambdaStartup'
-import { AppState } from '../../../src/app/environment/AppState'
-import { SsmParamName } from '../../../src/multipleContexts/ssmParams'
+import { createAppStateWithAppName } from '../../../src/app/environment/lambdaStartup.js'
+import { AppState } from '../../../src/app/environment/AppState.js'
+import { SsmParamName } from '../../../src/multipleContexts/ssmParams.js'
 import { noopLogger } from '@symphoniacloud/dynamodb-entity-store'
-import { readFromSSMInTests } from './ssm'
+import { readFromSSMInTests } from './ssm.js'
 
 let appState: AppState
 

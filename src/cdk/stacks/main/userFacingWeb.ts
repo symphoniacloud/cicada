@@ -1,13 +1,13 @@
 import { Construct } from 'constructs'
-import { CicadaFunction, cicadaFunctionProps } from '../../constructs/CicadaFunction'
+import { CicadaFunction, cicadaFunctionProps } from '../../constructs/CicadaFunction.js'
 import { Duration } from 'aws-cdk-lib'
-import { grantLambdaFunctionPermissionToPutEvents } from '../../support/eventbridge'
+import { grantLambdaFunctionPermissionToPutEvents } from '../../support/eventbridge.js'
 import { Rule } from 'aws-cdk-lib/aws-events'
 import * as targets from 'aws-cdk-lib/aws-events-targets'
-import { WEBPUSH_EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
+import { WEBPUSH_EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
 import { IdentitySource, LambdaIntegration, RequestAuthorizer, RestApi } from 'aws-cdk-lib/aws-apigateway'
 import { HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2'
-import { MainStackProps } from './mainStackProps'
+import { MainStackProps } from './mainStackProps.js'
 
 export interface UserFacingWebEndpointsProps extends MainStackProps {
   readonly restApi: RestApi

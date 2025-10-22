@@ -1,9 +1,9 @@
-import { AppState } from '../../../environment/AppState'
-import { GithubInstallation } from '../../types/GithubInstallation'
-import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient'
-import { processRawUsers } from '../githubUser'
-import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../../types/GithubAccountType'
-import { isSuccess } from '../../../util/structuredResult'
+import { AppState } from '../../../environment/AppState.js'
+import { GithubInstallation } from '../../types/GithubInstallation.js'
+import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
+import { processRawUsers } from '../githubUser.js'
+import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../../types/GithubAccountType.js'
+import { isSuccess } from '../../../util/structuredResult.js'
 
 export async function crawlUsers(
   appState: AppState,

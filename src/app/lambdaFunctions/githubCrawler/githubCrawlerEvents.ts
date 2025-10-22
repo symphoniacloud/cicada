@@ -1,12 +1,12 @@
-import { GithubInstallation, isGithubInstallation } from '../../domain/types/GithubInstallation'
+import { GithubInstallation, isGithubInstallation } from '../../domain/types/GithubInstallation.js'
 import { throwError } from '@symphoniacloud/dynamodb-entity-store'
 import {
   CRAWLABLE_RESOURCES,
   CrawlableResource,
   isCrawlableResource
-} from '../../../multipleContexts/githubCrawler'
-import { isNotNullObject } from '../../util/types'
-import { GithubAccountId, isGithubAccountId } from '../../domain/types/GithubAccountId'
+} from '../../../multipleContexts/githubCrawler.js'
+import { isNotNullObject } from '../../util/types.js'
+import { GithubAccountId, isGithubAccountId } from '../../domain/types/GithubAccountId.js'
 
 export type CrawlEvent = { resourceType: CrawlableResource }
 

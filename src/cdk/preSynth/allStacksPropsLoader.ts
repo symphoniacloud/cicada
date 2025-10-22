@@ -1,9 +1,9 @@
-import { readFromSSMViaSDKInCDK } from '../support/ssm'
-import { SSM_PARAM_NAMES } from '../../multipleContexts/ssmParams'
+import { readFromSSMViaSDKInCDK } from '../support/ssm.js'
+import { SSM_PARAM_NAMES } from '../../multipleContexts/ssmParams.js'
 import { randomBytes } from 'node:crypto'
-import { throwFunction } from '../../multipleContexts/errors'
-import { AllStacksProps } from '../config/allStacksProps'
-import { calculateEnvironmentSettingsWithEnvironmentVariables } from './environmentSettingsLoader'
+import { throwFunction } from '../../multipleContexts/errors.js'
+import { AllStacksProps } from '../config/allStacksProps.js'
+import { calculateEnvironmentSettingsWithEnvironmentVariables } from './environmentSettingsLoader.js'
 import { generateVAPIDKeys } from 'web-push'
 
 export async function createAllStacksProps(): Promise<AllStacksProps> {

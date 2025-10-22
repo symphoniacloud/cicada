@@ -1,20 +1,20 @@
-import { AppState } from '../../environment/AppState'
-import { logger } from '../../util/logging'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
-import { publishToSubscriptionsForUsers } from './webPushPublisher'
-import { GithubWorkflowRunEvent, isGithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
+import { AppState } from '../../environment/AppState.js'
+import { logger } from '../../util/logging.js'
+import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
+import { publishToSubscriptionsForUsers } from './webPushPublisher.js'
+import { GithubWorkflowRunEvent, isGithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
 import {
   friendlyStatus,
   getRelatedMemberIdsForRunEvent,
   runBasicStatus
-} from '../github/githubWorkflowRunEvent'
-import { isCicadaEventBridgeDetail } from '../../outboundInterfaces/eventBridgeBus'
-import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper'
-import { filterRepoNotifyEnabled, filterWorkflowNotifyEnabled } from '../user/userNotifyable'
+} from '../github/githubWorkflowRunEvent.js'
+import { isCicadaEventBridgeDetail } from '../../outboundInterfaces/eventBridgeBus.js'
+import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper.js'
+import { filterRepoNotifyEnabled, filterWorkflowNotifyEnabled } from '../user/userNotifyable.js'
 
-import { loadUserScopeReferenceData } from '../github/userScopeReferenceData'
-import { isGithubPush } from '../types/GithubPush'
-import { getRelatedMemberIdsForPush } from '../github/githubPush'
+import { loadUserScopeReferenceData } from '../github/userScopeReferenceData.js'
+import { isGithubPush } from '../types/GithubPush.js'
+import { getRelatedMemberIdsForPush } from '../github/githubPush.js'
 
 // TOEventually - these are going to create a lot of queries for subscription lookup for large organizations
 // May be better to have one table / index for this.

@@ -1,8 +1,8 @@
 import { getParametersByName } from '@aws-lambda-powertools/parameters/ssm'
-import { SSM_PARAM_NAMES, SsmParamName, ssmTableNamePath } from '../../multipleContexts/ssmParams'
-import { throwFunction } from '../../multipleContexts/errors'
-import { CICADA_TABLE_IDS, CicadaTableId } from '../../multipleContexts/dynamoDBTables'
-import { GithubAppId, isGithubAppId } from '../domain/types/GithubAppId'
+import { SSM_PARAM_NAMES, SsmParamName, ssmTableNamePath } from '../../multipleContexts/ssmParams.js'
+import { throwFunction } from '../../multipleContexts/errors.js'
+import { CICADA_TABLE_IDS, CicadaTableId } from '../../multipleContexts/dynamoDBTables.js'
+import { GithubAppId, isGithubAppId } from '../domain/types/GithubAppId.js'
 import { SSMGetParametersByNameOptions } from '@aws-lambda-powertools/parameters/ssm/types'
 
 // Some of these are async because implementations may cache values retrieved from external services

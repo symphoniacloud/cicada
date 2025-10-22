@@ -4,19 +4,19 @@ import {
   calculateRepoSettings,
   calculateSettings,
   calculateUserSettings
-} from '../../../../../src/app/domain/user/calculatedUserSettings'
+} from '../../../../../src/app/domain/user/calculatedUserSettings.js'
 import {
   CalculatedVisibleAndNotifyConfigurable,
   PersistedGithubAccountSettings,
   PersistedVisibleAndNotifyConfigurable
-} from '../../../../../src/app/domain/types/UserSettings'
-import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId'
+} from '../../../../../src/app/domain/types/UserSettings.js'
+import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId.js'
 import {
   buildAccountStructure,
   buildUserScopedRefData,
   buildRepoStructure,
   buildWorkflow
-} from '../../../../testSupport/builders/accountStructureBuilders'
+} from '../../../../testSupport/builders/accountStructureBuilders.js'
 
 test('calculateVisibleAndNotifyConfigurable / calculateWorkflowSettings', () => {
   const permutations: [

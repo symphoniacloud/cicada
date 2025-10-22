@@ -1,4 +1,4 @@
-import { isIntegerStringWithPrefix } from '../../util/types'
+import { isIntegerStringWithPrefix } from '../../util/types.js'
 
 const GITHUB_WORKFLOW_RUN_ID_PREFIX = `GHWorkflowRun`
 export type GithubWorkflowRunId = `${typeof GITHUB_WORKFLOW_RUN_ID_PREFIX}${number}`

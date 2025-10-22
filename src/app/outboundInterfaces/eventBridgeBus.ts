@@ -1,13 +1,13 @@
 import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge'
-import { logger } from '../util/logging'
-import { EventBridgeDetailType } from '../../multipleContexts/eventBridge'
-import { tracer } from '../util/tracing'
-import { AppState } from '../environment/AppState'
-import { GithubPush } from '../domain/types/GithubPush'
-import { GithubWorkflowRunEvent } from '../domain/types/GithubWorkflowRunEvent'
-import { WebPushTestEvent } from '../domain/webPush/WebPushTestEvent'
-import { GithubInstallation } from '../domain/types/GithubInstallation'
-import { GithubAccountId } from '../domain/types/GithubAccountId'
+import { logger } from '../util/logging.js'
+import { EventBridgeDetailType } from '../../multipleContexts/eventBridge.js'
+import { tracer } from '../util/tracing.js'
+import { AppState } from '../environment/AppState.js'
+import { GithubPush } from '../domain/types/GithubPush.js'
+import { GithubWorkflowRunEvent } from '../domain/types/GithubWorkflowRunEvent.js'
+import { WebPushTestEvent } from '../domain/webPush/WebPushTestEvent.js'
+import { GithubInstallation } from '../domain/types/GithubInstallation.js'
+import { GithubAccountId } from '../domain/types/GithubAccountId.js'
 
 export type CicadaEventBridgeData =
   | GithubPush

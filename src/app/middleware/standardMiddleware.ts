@@ -1,9 +1,9 @@
 import { injectLambdaContext } from '@aws-lambda-powertools/logger/middleware'
-import { logger } from '../util/logging'
+import { logger } from '../util/logging.js'
 import { captureLambdaHandler } from '@aws-lambda-powertools/tracer/middleware'
-import { tracer } from '../util/tracing'
+import { tracer } from '../util/tracing.js'
 import { logMetrics } from '@aws-lambda-powertools/metrics/middleware'
-import { metrics } from '../util/metrics'
+import { metrics } from '../util/metrics.js'
 
 const loggingMiddleware = injectLambdaContext(logger)
 const metricsMiddleware = logMetrics(metrics, { captureColdStartMetric: false, throwOnEmptyMetrics: false })

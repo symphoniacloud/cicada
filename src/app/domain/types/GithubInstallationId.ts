@@ -1,4 +1,4 @@
-import { isIntegerStringWithPrefix } from '../../util/types'
+import { isIntegerStringWithPrefix } from '../../util/types.js'
 
 const GITHUB_INSTALLATION_ID_PREFIX = `GHInstallation`
 export type GithubInstallationId = `${typeof GITHUB_INSTALLATION_ID_PREFIX}${number}`

@@ -1,15 +1,15 @@
-import { GITHUB_LATEST_WORKFLOW_RUN_EVENT } from '../entityTypes'
-import { GithubWorkflowRunEvent, isGithubWorkflowRunEvent } from '../../types/GithubWorkflowRunEvent'
+import { GITHUB_LATEST_WORKFLOW_RUN_EVENT } from '../entityTypes.js'
+import { GithubWorkflowRunEvent, isGithubWorkflowRunEvent } from '../../types/GithubWorkflowRunEvent.js'
 import {
   AllEntitiesStore,
   rangeWhereSkBeginsWith,
   typePredicateParser
 } from '@symphoniacloud/dynamodb-entity-store'
-import { GithubAccountId } from '../../types/GithubAccountId'
-import { GithubRepoKey } from '../../types/GithubKeys'
-import { sortBy } from '../../../util/collections'
-import { workflowRunEventUpdatedTimestamp } from '../../github/githubWorkflowRunEvent'
-import { CicadaEntity } from '../entityStoreEntitySupport'
+import { GithubAccountId } from '../../types/GithubAccountId.js'
+import { GithubRepoKey } from '../../types/GithubKeys.js'
+import { sortBy } from '../../../util/collections.js'
+import { workflowRunEventUpdatedTimestamp } from '../../github/githubWorkflowRunEvent.js'
+import { CicadaEntity } from '../entityStoreEntitySupport.js'
 
 const GithubLatestWorkflowRunEventEntity: CicadaEntity<
   GithubWorkflowRunEvent,

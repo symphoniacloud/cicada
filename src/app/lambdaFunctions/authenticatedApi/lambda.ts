@@ -1,27 +1,27 @@
-import { AppState } from '../../environment/AppState'
-import { lambdaStartup } from '../../environment/lambdaStartup'
+import { AppState } from '../../environment/AppState.js'
+import { lambdaStartup } from '../../environment/lambdaStartup.js'
 import middy from '@middy/core'
-import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
-import { jsonOkResult } from '../../inboundInterfaces/httpResponses'
-import { userIdFromEvent, usernameFromEvent } from '../../domain/webAuth/webAuth'
+import { powertoolsMiddlewares } from '../../middleware/standardMiddleware.js'
+import { jsonOkResult } from '../../inboundInterfaces/httpResponses.js'
+import { userIdFromEvent, usernameFromEvent } from '../../domain/webAuth/webAuth.js'
 import {
   webPushSubscribeRoute,
   webPushTestRoute,
   webPushUnsubscribeRoute
-} from '../../domain/webPush/webPushSubscriptionsApi'
-import { createRouter } from '../../internalHttpRouter/internalHttpRouter'
+} from '../../domain/webPush/webPushSubscriptionsApi.js'
+import { createRouter } from '../../internalHttpRouter/internalHttpRouter.js'
 import {
   userIdFieldMissingFromContextResponse,
   usernameFieldMissingFromContextResponse
-} from '../../inboundInterfaces/standardHttpResponses'
+} from '../../inboundInterfaces/standardHttpResponses.js'
 import {
   CicadaAPIAuthorizedAPIEvent,
   CicadaAPIAuthorizedAPIHandler
-} from '../../inboundInterfaces/lambdaTypes'
-import { logger } from '../../util/logging'
-import { isFailure } from '../../util/structuredResult'
-import { Route } from '../../internalHttpRouter/internalHttpRoute'
-import { authenticateApiPath } from '../../web/routingCommon'
+} from '../../inboundInterfaces/lambdaTypes.js'
+import { logger } from '../../util/logging.js'
+import { isFailure } from '../../util/structuredResult.js'
+import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
+import { authenticateApiPath } from '../../web/routingCommon.js'
 
 export const apiHelloRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
   path: authenticateApiPath('hello'),

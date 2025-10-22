@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest'
-import { fullTestPersonalTestRepoWorkflowRun } from '../../../../examples/cicada/githubDomainObjects'
-import { defaultFakeClock } from '../../../../testSupport/fakes/fakeClock'
-import { a, td, tr } from '../../../../../src/app/web/hiccough/hiccoughElements'
-import { githubAnchor } from '../../../../../src/app/web/domainComponents/genericComponents'
-import { workflowRowForMode } from '../../../../../src/app/web/fragments/views/activityAndStatusView'
+import { fullTestPersonalTestRepoWorkflowRun } from '../../../../examples/cicada/githubDomainObjects.js'
+import { defaultFakeClock } from '../../../../testSupport/fakes/fakeClock.js'
+import { a, td, tr } from '../../../../../src/app/web/hiccough/hiccoughElements.js'
+import { githubAnchor } from '../../../../../src/app/web/domainComponents/genericComponents.js'
+import { workflowRowForMode } from '../../../../../src/app/web/fragments/views/activityAndStatusView.js'
 
 test('successful row, all Repos', () => {
   expect(workflowRowForMode('homeStatus', defaultFakeClock, fullTestPersonalTestRepoWorkflowRun)).toEqual(

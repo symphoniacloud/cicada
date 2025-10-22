@@ -1,39 +1,39 @@
-import { Route } from '../../internalHttpRouter/internalHttpRoute'
-import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { AppState } from '../../environment/AppState'
+import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
+import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
+import { AppState } from '../../environment/AppState.js'
 import {
   createUpdateUserAccountSettingResponse,
   createUpdateUserRepoSettingResponse,
   createUpdateUserWorkflowSettingResponse
-} from './views/postUserSettingView'
-import { logger } from '../../util/logging'
-import { getPostUserSettingParameters } from './requestParsing/getPostUserSettingParameters'
-import { isFailure } from '../../util/structuredResult'
-import { invalidRequestResponse } from '../htmlResponses'
-import { GithubRepoKey, GithubWorkflowKey } from '../../domain/types/GithubKeys'
+} from './views/postUserSettingView.js'
+import { logger } from '../../util/logging.js'
+import { getPostUserSettingParameters } from './requestParsing/getPostUserSettingParameters.js'
+import { isFailure } from '../../util/structuredResult.js'
+import { invalidRequestResponse } from '../htmlResponses.js'
+import { GithubRepoKey, GithubWorkflowKey } from '../../domain/types/GithubKeys.js'
 import {
   toDisplayableAccountSettings,
   toDisplayableRepoSettings,
   toDisplayableWorkflowSettings
-} from '../../domain/user/displayableUserSettings'
-import { throwFunction } from '../../../multipleContexts/errors'
+} from '../../domain/user/displayableUserSettings.js'
+import { throwFunction } from '../../../multipleContexts/errors.js'
 import {
   getPersistedUserSettingsOrDefaults,
   updateAndSaveAccountSetting,
   updateAndSaveRepoSetting,
   updateAndSaveWorkflowSetting
-} from '../../domain/user/persistedUserSettings'
-import { UserSetting } from '../../domain/types/UserSettings'
-import { fragmentPath } from '../routingCommon'
-import { GithubAccountId } from '../../domain/types/GithubAccountId'
-import { calculateAccountSettings, calculateUserSettings } from '../../domain/user/calculatedUserSettings'
+} from '../../domain/user/persistedUserSettings.js'
+import { UserSetting } from '../../domain/types/UserSettings.js'
+import { fragmentPath } from '../routingCommon.js'
+import { GithubAccountId } from '../../domain/types/GithubAccountId.js'
+import { calculateAccountSettings, calculateUserSettings } from '../../domain/user/calculatedUserSettings.js'
 import {
   getAccountStructure,
   getRepoStructure,
   getWorkflowFromRefData
-} from '../../domain/github/userScopeReferenceData'
+} from '../../domain/github/userScopeReferenceData.js'
 
-import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData'
+import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData.js'
 
 export const postUserSettingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('userSetting'),

@@ -3,12 +3,12 @@ import {
   accountUpdater,
   repoUpdater,
   workflowUpdater
-} from '../../../../../src/app/domain/user/persistedUserSettings'
-import { PersistedUserSettings } from '../../../../../src/app/domain/types/UserSettings'
-import { fromRawGithubAccountId } from '../../../../../src/app/domain/types/GithubAccountId'
-import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId'
-import { fromRawGithubRepoId } from '../../../../../src/app/domain/types/GithubRepoId'
-import { fromRawGithubWorkflowId } from '../../../../../src/app/domain/types/GithubWorkflowId'
+} from '../../../../../src/app/domain/user/persistedUserSettings.js'
+import { PersistedUserSettings } from '../../../../../src/app/domain/types/UserSettings.js'
+import { fromRawGithubAccountId } from '../../../../../src/app/domain/types/GithubAccountId.js'
+import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId.js'
+import { fromRawGithubRepoId } from '../../../../../src/app/domain/types/GithubRepoId.js'
+import { fromRawGithubWorkflowId } from '../../../../../src/app/domain/types/GithubWorkflowId.js'
 
 function emptySettings(rawUserId: number): PersistedUserSettings {
   return {

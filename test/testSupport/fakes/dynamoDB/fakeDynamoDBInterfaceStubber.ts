@@ -1,7 +1,7 @@
-import { FakeDynamoDBInterface } from './fakeDynamoDBInterface'
-import { FakeDynamoDBInterfaceGetStubber } from './fakeDynamoDBInterfaceGetStubber'
-import { FakeDynamoDBInterfaceQueryAllPagesStubber } from './fakeDynamoDBInterfaceQueryAllPagesStubber'
-import { FakeDynamoDBInterfaceQueryOnePageStubber } from './fakeDynamoDBInterfaceQueryOnePageStubber'
+import { FakeDynamoDBInterface } from './fakeDynamoDBInterface.js'
+import { FakeDynamoDBInterfaceGetStubber } from './fakeDynamoDBInterfaceGetStubber.js'
+import { FakeDynamoDBInterfaceQueryAllPagesStubber } from './fakeDynamoDBInterfaceQueryAllPagesStubber.js'
+import { FakeDynamoDBInterfaceQueryOnePageStubber } from './fakeDynamoDBInterfaceQueryOnePageStubber.js'
 
 export type MetaDataProvider = (tableName: string) => {
   pk: string

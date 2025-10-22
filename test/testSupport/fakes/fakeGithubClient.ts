@@ -1,12 +1,12 @@
-import { GithubClient } from '../../../src/app/outboundInterfaces/githubClient'
-import { GithubInstallationClient } from '../../../src/app/outboundInterfaces/githubInstallationClient'
-import { RawGithubInstallation } from '../../../src/app/domain/types/rawGithub/RawGithubInstallation'
-import { OAuthAppAuthentication } from '@octokit/auth-oauth-user/dist-types/types'
-import { arrayStubResponse } from './fakeSupport'
-import { RawGithubUser } from '../../../src/app/domain/types/rawGithub/RawGithubUser'
-import { FakeGithubInstallationClient } from './fakeGithubInstallationClient'
+import { GithubClient } from '../../../src/app/outboundInterfaces/githubClient.js'
+import { GithubInstallationClient } from '../../../src/app/outboundInterfaces/githubInstallationClient.js'
+import { RawGithubInstallation } from '../../../src/app/domain/types/rawGithub/RawGithubInstallation.js'
+import { OAuthAppAuthentication } from '@octokit/auth-oauth-user'
+import { arrayStubResponse } from './fakeSupport.js'
+import { RawGithubUser } from '../../../src/app/domain/types/rawGithub/RawGithubUser.js'
+import { FakeGithubInstallationClient } from './fakeGithubInstallationClient.js'
 
-import { GithubInstallationId } from '../../../src/app/domain/types/GithubInstallationId'
+import { GithubInstallationId } from '../../../src/app/domain/types/GithubInstallationId.js'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 

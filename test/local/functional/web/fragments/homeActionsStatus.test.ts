@@ -1,14 +1,14 @@
 import { expect, test } from 'vitest'
-import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState'
-import { handleWebRequest } from '../../../../../src/app/lambdaFunctions/authenticatedWeb/lambda'
-import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport/fakes/awsStubs'
+import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState.js'
+import { handleWebRequest } from '../../../../../src/app/lambdaFunctions/authenticatedWeb/lambda.js'
+import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport/fakes/awsStubs.js'
 import {
   stubGetGithubInstallation,
   stubQueryLatestWorkflowRuns,
   stubQueryRepositories,
   stubQueryWorkflows,
   stubSetupUserRecords
-} from '../../../../testSupport/fakes/tableRecordReadStubs'
+} from '../../../../testSupport/fakes/tableRecordReadStubs.js'
 
 test('home-actions-status', async () => {
   const appState = new FakeAppState()

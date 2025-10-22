@@ -1,13 +1,13 @@
-import { AppState } from '../../environment/AppState'
+import { AppState } from '../../environment/AppState.js'
 import { EventBridgeEvent } from 'aws-lambda'
 import {
   EVENTBRIDGE_DETAIL_TYPES,
   isWebPushEventBridgeDetailType,
   WebPushEventBridgeDetailType
-} from '../../../multipleContexts/eventBridge'
-import { logger } from '../../util/logging'
-import { handleNewPush, handleNewWorkflowRunEvent } from './cicadaEventWebPushPublisher'
-import { handleWebPushTest } from './webPushUserTest'
+} from '../../../multipleContexts/eventBridge.js'
+import { logger } from '../../util/logging.js'
+import { handleNewPush, handleNewWorkflowRunEvent } from './cicadaEventWebPushPublisher.js'
+import { handleWebPushTest } from './webPushUserTest.js'
 
 export async function processEventBridgeWebPushEvent(
   appState: AppState,

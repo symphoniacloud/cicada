@@ -1,15 +1,19 @@
-import { RawGithubWorkflowRunEvent } from './rawGithub/RawGithubWorkflowRunEvent'
-import { fromRawGithubUserId } from './GithubUserId'
+import { RawGithubWorkflowRunEvent } from './rawGithub/RawGithubWorkflowRunEvent.js'
+import { fromRawGithubUserId } from './GithubUserId.js'
 import {
   GithubUserSummary,
   GithubWorkflowSummary,
   isGithubUserSummary,
   isGithubWorkflowSummary
-} from './GithubSummaries'
-import { fromRawGithubWorkflowRunId, GithubWorkflowRunId, isGithubWorkflowRunId } from './GithubWorkflowRunId'
-import { isString } from '../../util/types'
-import { narrowToWorkflowSummary } from '../github/githubWorkflow'
-import { GithubWorkflow } from './GithubWorkflow'
+} from './GithubSummaries.js'
+import {
+  fromRawGithubWorkflowRunId,
+  GithubWorkflowRunId,
+  isGithubWorkflowRunId
+} from './GithubWorkflowRunId.js'
+import { isString } from '../../util/types.js'
+import { narrowToWorkflowSummary } from '../github/githubWorkflow.js'
+import { GithubWorkflow } from './GithubWorkflow.js'
 
 export interface GithubWorkflowRunEvent extends GithubWorkflowSummary {
   repoHtmlUrl: string

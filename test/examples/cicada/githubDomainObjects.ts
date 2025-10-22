@@ -1,26 +1,26 @@
-import { GithubInstallation } from '../../../src/app/domain/types/GithubInstallation'
-import { GithubUser } from '../../../src/app/domain/types/GithubUser'
-import { GithubAccountMembership } from '../../../src/app/domain/types/GithubAccountMembership'
-import { GithubRepo } from '../../../src/app/domain/types/GithubRepo'
+import { GithubInstallation } from '../../../src/app/domain/types/GithubInstallation.js'
+import { GithubUser } from '../../../src/app/domain/types/GithubUser.js'
+import { GithubAccountMembership } from '../../../src/app/domain/types/GithubAccountMembership.js'
+import { GithubRepo } from '../../../src/app/domain/types/GithubRepo.js'
 import {
   FullGithubWorkflowRunEvent,
   GithubWorkflowRunEvent
-} from '../../../src/app/domain/types/GithubWorkflowRunEvent'
-import { GithubPush } from '../../../src/app/domain/types/GithubPush'
-import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken'
-import { fromRawGithubAccountId } from '../../../src/app/domain/types/GithubAccountId'
-import { fromRawGithubUserId, GithubUserId } from '../../../src/app/domain/types/GithubUserId'
-import { fromRawGithubInstallationId } from '../../../src/app/domain/types/GithubInstallationId'
-import { fromRawGithubRepoId } from '../../../src/app/domain/types/GithubRepoId'
-import { fromRawGithubWorkflowId } from '../../../src/app/domain/types/GithubWorkflowId'
-import { fromRawGithubWorkflowRunId } from '../../../src/app/domain/types/GithubWorkflowRunId'
-import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow'
-import { GithubAccountKey } from '../../../src/app/domain/types/GithubKeys'
+} from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
+import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
+import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken.js'
+import { fromRawGithubAccountId } from '../../../src/app/domain/types/GithubAccountId.js'
+import { fromRawGithubUserId, GithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
+import { fromRawGithubInstallationId } from '../../../src/app/domain/types/GithubInstallationId.js'
+import { fromRawGithubRepoId } from '../../../src/app/domain/types/GithubRepoId.js'
+import { fromRawGithubWorkflowId } from '../../../src/app/domain/types/GithubWorkflowId.js'
+import { fromRawGithubWorkflowRunId } from '../../../src/app/domain/types/GithubWorkflowRunId.js'
+import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
+import { GithubAccountKey } from '../../../src/app/domain/types/GithubKeys.js'
 import {
   GithubAccountSummary,
   GithubRepoSummary,
   GithubWorkflowSummary
-} from '../../../src/app/domain/types/GithubSummaries'
+} from '../../../src/app/domain/types/GithubSummaries.js'
 
 export const cicadaTestUserAccountKey: GithubAccountKey = {
   accountId: fromRawGithubAccountId(162360409)

@@ -1,8 +1,8 @@
-import { AppState } from '../../../environment/AppState'
-import { GithubRepoSummary } from '../../types/GithubSummaries'
-import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient'
-import { processRawWorkflows } from '../githubWorkflow'
-import { fromRawGithubWorkflowId, GithubWorkflowId } from '../../types/GithubWorkflowId'
+import { AppState } from '../../../environment/AppState.js'
+import { GithubRepoSummary } from '../../types/GithubSummaries.js'
+import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
+import { processRawWorkflows } from '../githubWorkflow.js'
+import { fromRawGithubWorkflowId, GithubWorkflowId } from '../../types/GithubWorkflowId.js'
 
 export async function crawlOneWorkflow(
   appState: AppState,

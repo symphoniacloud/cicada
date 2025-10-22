@@ -1,7 +1,7 @@
-import { GithubSetupAppState } from './githubSetupAppState'
-import { pageViewResponse } from '../../../web/viewResultWrappers'
+import { GithubSetupAppState } from './githubSetupAppState.js'
+import { pageViewResponse } from '../../../web/viewResultWrappers.js'
 import { APIGatewayProxyEvent } from 'aws-lambda'
-import { Route } from '../../../internalHttpRouter/internalHttpRoute'
+import { Route } from '../../../internalHttpRouter/internalHttpRoute.js'
 
 export const startSetupRoute: Route<APIGatewayProxyEvent, GithubSetupAppState> = {
   path: '/github/setup/start',

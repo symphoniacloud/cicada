@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { AppState } from '../../../src/app/environment/AppState'
-import { FakeClock } from './fakeClock'
-import { FakeGithubClient } from './fakeGithubClient'
-import { FakeDynamoDBInterface } from './dynamoDB/fakeDynamoDBInterface'
-import { setupEntityStore } from '../../../src/app/domain/entityStore/initEntityStore'
+import { AppState } from '../../../src/app/environment/AppState.js'
+import { FakeClock } from './fakeClock.js'
+import { FakeGithubClient } from './fakeGithubClient.js'
+import { FakeDynamoDBInterface } from './dynamoDB/fakeDynamoDBInterface.js'
+import { setupEntityStore } from '../../../src/app/domain/entityStore/initEntityStore.js'
 import { AllEntitiesStore, consoleLogger, EntityStoreLogger } from '@symphoniacloud/dynamodb-entity-store'
-import { FakeCicadaConfig, fakeTableNames } from './fakeCicadaConfig'
-import { FakeS3Wrapper } from './fakeS3Wrapper'
-import { FakeEventBridgeBus } from './fakeEventBridgeBus'
-import { FakeWebPushWrapper } from './fakeWebPushWrapper'
+import { FakeCicadaConfig, fakeTableNames } from './fakeCicadaConfig.js'
+import { FakeS3Wrapper } from './fakeS3Wrapper.js'
+import { FakeEventBridgeBus } from './fakeEventBridgeBus.js'
+import { FakeWebPushWrapper } from './fakeWebPushWrapper.js'
 
 export class FakeAppState implements AppState {
   public config: FakeCicadaConfig

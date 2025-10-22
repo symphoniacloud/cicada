@@ -1,7 +1,7 @@
-import { fragmentViewResult } from '../../viewResultWrappers'
-import { h3 } from '../../hiccough/hiccoughElements'
-import { GithubAccountSummary } from '../../../domain/types/GithubSummaries'
-import { accountGithubAnchor } from '../../domainComponents/accountComponents'
+import { fragmentViewResult } from '../../viewResultWrappers.js'
+import { h3 } from '../../hiccough/hiccoughElements.js'
+import { GithubAccountSummary } from '../../../domain/types/GithubSummaries.js'
+import { accountGithubAnchor } from '../../domainComponents/accountComponents.js'
 
 export function createAccountHeadingResponse(account: GithubAccountSummary) {
   return fragmentViewResult(accountHeadingElement(account))

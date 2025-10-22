@@ -1,8 +1,8 @@
-import { APIGatewayEventDefaultAuthorizerContext } from 'aws-lambda/common/api-gateway'
+import { APIGatewayEventDefaultAuthorizerContext } from 'aws-lambda'
 import { APIGatewayEventRequestContextWithAuthorizer, APIGatewayProxyEvent } from 'aws-lambda'
-import { APIGatewayRequestAuthorizerEvent } from 'aws-lambda/trigger/api-gateway-authorizer'
-import { CicadaAPIAuthorizedAPIEvent } from '../../../src/app/inboundInterfaces/lambdaTypes'
-import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId'
+import { APIGatewayRequestAuthorizerEvent } from 'aws-lambda'
+import { CicadaAPIAuthorizedAPIEvent } from '../../../src/app/inboundInterfaces/lambdaTypes.js'
+import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
 
 export function createStubApiGatewayProxyEvent(
   overrides: Partial<APIGatewayProxyEvent> = {}

@@ -1,4 +1,4 @@
-import { isIntegerStringWithPrefix } from '../../util/types'
+import { isIntegerStringWithPrefix } from '../../util/types.js'
 
 const GITHUB_WORKFLOW_ID_PREFIX = `GHWorkflow`
 

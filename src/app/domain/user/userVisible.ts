@@ -1,31 +1,31 @@
-import { AppState } from '../../environment/AppState'
-import { latestWorkflowRunEventsPerWorkflowForAccounts } from '../github/githubLatestWorkflowRunEvents'
-import { FullGithubWorkflowRunEvent, GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
-import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings'
-import { CalculatedUserSettings } from '../types/UserSettings'
-import { GithubAccountId } from '../types/GithubAccountId'
-import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys'
-import { recentActiveBranchesForAccounts } from '../github/githubLatestPushesPerRef'
-import { GithubPush } from '../types/GithubPush'
-import { getRecentActivityForRepo, GithubActivity } from '../github/githubActivity'
+import { AppState } from '../../environment/AppState.js'
+import { latestWorkflowRunEventsPerWorkflowForAccounts } from '../github/githubLatestWorkflowRunEvents.js'
+import { FullGithubWorkflowRunEvent, GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
+import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings.js'
+import { CalculatedUserSettings } from '../types/UserSettings.js'
+import { GithubAccountId } from '../types/GithubAccountId.js'
+import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys.js'
+import { recentActiveBranchesForAccounts } from '../github/githubLatestPushesPerRef.js'
+import { GithubPush } from '../types/GithubPush.js'
+import { getRecentActivityForRepo, GithubActivity } from '../github/githubActivity.js'
 import {
   allAccountIDsFromRefData,
   getAccountStructure,
   getRepoStructure,
   getWorkflowFromRefData
-} from '../github/userScopeReferenceData'
+} from '../github/userScopeReferenceData.js'
 import {
   latestWorkflowRunEventsPerWorkflowForAccount,
   latestWorkflowRunEventsPerWorkflowForRepo
-} from '../entityStore/entities/GithubLatestWorkflowRunEventEntity'
+} from '../entityStore/entities/GithubLatestWorkflowRunEventEntity.js'
 import {
   getRunEventsForWorkflow,
   getRunEventsForWorkflowPage
-} from '../entityStore/entities/GithubWorkflowRunEventEntity'
-import { failedWithResult, Result, successWith } from '../../util/structuredResult'
+} from '../entityStore/entities/GithubWorkflowRunEventEntity.js'
+import { failedWithResult, Result, successWith } from '../../util/structuredResult.js'
 import { OnePageResponse } from '@symphoniacloud/dynamodb-entity-store'
-import { UserScopeReferenceData } from '../types/UserScopeReferenceData'
-import { toFullWorkflowRunEvents } from '../github/githubWorkflowRunEvent'
+import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
+import { toFullWorkflowRunEvents } from '../github/githubWorkflowRunEvent.js'
 
 interface UserVisibleObjects<T> {
   allEvents: T[]

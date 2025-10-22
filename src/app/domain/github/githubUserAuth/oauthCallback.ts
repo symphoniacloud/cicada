@@ -1,11 +1,11 @@
 import { APIGatewayProxyEvent } from 'aws-lambda'
-import { AppState } from '../../../environment/AppState'
-import { logger } from '../../../util/logging'
-import { redirectResponseWithCookies } from '../../../inboundInterfaces/httpResponses'
-import { APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
-import { getUserByTokenWithGithubCheck } from '../githubUser'
-import { cookies } from './cicadaAuthCookies'
-import { createBadRequestResponse } from '../../../web/pages/views/badRequestView'
+import { AppState } from '../../../environment/AppState.js'
+import { logger } from '../../../util/logging.js'
+import { redirectResponseWithCookies } from '../../../inboundInterfaces/httpResponses.js'
+import { APIGatewayProxyResult } from 'aws-lambda'
+import { getUserByTokenWithGithubCheck } from '../githubUser.js'
+import { cookies } from './cicadaAuthCookies.js'
+import { createBadRequestResponse } from '../../../web/pages/views/badRequestView.js'
 
 export async function oauthCallback(
   appState: AppState,

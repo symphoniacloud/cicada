@@ -1,12 +1,12 @@
 import { expect, test } from 'vitest'
-import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
-import { testOrgTestRepoOneWorkflowRunThree } from '../../../../../examples/cicada/githubDomainObjects'
-import { processEventBridgeWebPushEvent } from '../../../../../../src/app/domain/webPush/webPushEventBridgeEventProcessor'
+import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
+import { testOrgTestRepoOneWorkflowRunThree } from '../../../../../examples/cicada/githubDomainObjects.js'
+import { processEventBridgeWebPushEvent } from '../../../../../../src/app/domain/webPush/webPushEventBridgeEventProcessor.js'
 import {
   testMikeRobertsPushSubscriptionThree,
   testMikeRobertsPushSubscriptionTwo
-} from '../../../../../examples/cicada/webPushDomainObjects'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../../../../src/multipleContexts/eventBridge'
+} from '../../../../../examples/cicada/webPushDomainObjects.js'
+import { EVENTBRIDGE_DETAIL_TYPES } from '../../../../../../src/multipleContexts/eventBridge.js'
 import {
   stubGetGithubInstallation,
   stubQueryAccountMembershipsByAccount,
@@ -15,8 +15,8 @@ import {
   stubQueryRepositories,
   stubQueryWebPushSubscription,
   stubQueryWorkflows
-} from '../../../../../testSupport/fakes/tableRecordReadStubs'
-import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/GithubUserId'
+} from '../../../../../testSupport/fakes/tableRecordReadStubs.js'
+import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/GithubUserId.js'
 
 test('newWorkflowRunEvent', async () => {
   const appState = new FakeAppState()

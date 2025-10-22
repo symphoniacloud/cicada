@@ -1,11 +1,11 @@
-import { AppState } from '../../environment/AppState'
-import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
-import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport'
+import { AppState } from '../../environment/AppState.js'
+import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
+import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport.js'
 import {
   latestWorkflowRunEventsPerWorkflowForAccount,
   putRunEventIfNoKeyExistsOrNewerThanExisting
-} from '../entityStore/entities/GithubLatestWorkflowRunEventEntity'
-import { GithubAccountId } from '../types/GithubAccountId'
+} from '../entityStore/entities/GithubLatestWorkflowRunEventEntity.js'
+import { GithubAccountId } from '../types/GithubAccountId.js'
 
 export async function saveLatestRunPerWorkflow(appState: AppState, latestRun: GithubWorkflowRunEvent) {
   return await executeAndCatchConditionalCheckFailed(async () => {

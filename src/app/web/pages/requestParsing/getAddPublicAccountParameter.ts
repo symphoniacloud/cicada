@@ -1,5 +1,5 @@
-import { CicadaAuthorizedAPIEvent } from '../../../inboundInterfaces/lambdaTypes'
-import { failedWith, Result, successWith } from '../../../util/structuredResult'
+import { CicadaAuthorizedAPIEvent } from '../../../inboundInterfaces/lambdaTypes.js'
+import { failedWith, Result, successWith } from '../../../util/structuredResult.js'
 import { parse } from 'node:querystring'
 
 export function getAddPublicAccountParameter(

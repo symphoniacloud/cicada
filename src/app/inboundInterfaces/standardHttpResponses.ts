@@ -1,4 +1,4 @@
-import { applicationJSONErrorAndLog } from './httpResponses'
+import { applicationJSONErrorAndLog } from './httpResponses.js'
 
 // Function not constant because this logs
 export function usernameFieldMissingFromContextResponse() {

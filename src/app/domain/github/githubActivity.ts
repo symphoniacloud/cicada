@@ -1,11 +1,11 @@
-import { mergeOrderedLists } from '../../util/collections'
-import { FullGithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
-import { GithubPush } from '../types/GithubPush'
-import { AppState } from '../../environment/AppState'
-import { queryRunsAndPushesForRepo } from '../entityStore/entities/GithubWorkflowRunEntity'
-import { GithubRepoKey } from '../types/GithubKeys'
-import { toFullWorkflowRunEvent } from './githubWorkflowRunEvent'
-import { UserScopeReferenceData } from '../types/UserScopeReferenceData'
+import { mergeOrderedLists } from '../../util/collections.js'
+import { FullGithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
+import { GithubPush } from '../types/GithubPush.js'
+import { AppState } from '../../environment/AppState.js'
+import { queryRunsAndPushesForRepo } from '../entityStore/entities/GithubWorkflowRunEntity.js'
+import { GithubRepoKey } from '../types/GithubKeys.js'
+import { toFullWorkflowRunEvent } from './githubWorkflowRunEvent.js'
+import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 
 // GithubActivity is a domain concept that is only read, not written, since it's
 // only used when runs and pushes are read from the database at the same time.

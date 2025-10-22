@@ -1,5 +1,5 @@
-import { responseWithStatusCode, withContentType } from '../inboundInterfaces/httpResponses'
-import { APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
+import { responseWithStatusCode, withContentType } from '../inboundInterfaces/httpResponses.js'
+import { APIGatewayProxyResult } from 'aws-lambda'
 
 export function htmlOkResponse(body: string): APIGatewayProxyResult {
   return htmlResponse(200, body)

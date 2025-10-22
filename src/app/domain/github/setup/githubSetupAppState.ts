@@ -1,6 +1,6 @@
-import { getEnvVarOrThrow } from '../../../environment/lambdaStartup'
-import { SSM_PARAM_NAMES } from '../../../../multipleContexts/ssmParams'
-import { paramsForAppName } from '../../../environment/config'
+import { getEnvVarOrThrow } from '../../../environment/lambdaStartup.js'
+import { SSM_PARAM_NAMES } from '../../../../multipleContexts/ssmParams.js'
+import { paramsForAppName } from '../../../environment/config.js'
 
 export interface GithubSetupAppState {
   appName: string

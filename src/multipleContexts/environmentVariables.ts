@@ -1,4 +1,4 @@
-import { throwFunction } from './errors'
+import { throwFunction } from './errors.js'
 
 // Only used from development / deployment environment
 export const LOCAL_ENV_VARS = [
