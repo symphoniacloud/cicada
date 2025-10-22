@@ -50,7 +50,7 @@ export function pageView(
             { class: 'container', id: 'toplevel' },
             ...bodyContents,
             element('hr'),
-            ...(options.loggedIn ?? true
+            ...((options.loggedIn ?? true)
               ? [
                   p(a('/', 'Back to home')),
                   p(a('/userSettings', 'User Settings')),

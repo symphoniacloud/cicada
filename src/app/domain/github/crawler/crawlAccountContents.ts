@@ -22,8 +22,8 @@ export async function crawlAccountContents(
     account.accountType === ORGANIZATION_ACCOUNT_TYPE
       ? await githubClient.listOrganizationRepositories(account.accountName)
       : isGithubPublicAccount(account)
-      ? await githubClient.listPublicRepositoriesForUser(account.accountName)
-      : await githubClient.listInstallationRepositories()
+        ? await githubClient.listPublicRepositoriesForUser(account.accountName)
+        : await githubClient.listInstallationRepositories()
 
   // Eventually consider doing some parallelization here (or move back to step functions) but
   // need to be careful since GitHub gets twitchy about concurrent requests to the API

@@ -31,7 +31,8 @@ export async function processTestToken(appState: AppState, token: string) {
       username,
       userId
     }
-  } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
     logger.info('Error thrown while trying to process test token - return unauthorized')
     return undefined
   }

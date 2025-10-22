@@ -25,8 +25,8 @@ function locateCertificate(scope: Construct, props: AllStacksProps) {
   const arn = certificateArn
     ? certificateArn
     : certificateExport
-    ? Fn.importValue(certificateExport)
-    : undefined
+      ? Fn.importValue(certificateExport)
+      : undefined
   return arn ? Certificate.fromCertificateArn(scope, 'StandardCertificate', arn) : undefined
 }
 
