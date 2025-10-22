@@ -1,5 +1,5 @@
-import * as webPush from 'web-push'
-import { PushSubscription } from 'web-push'
+import webPush from 'web-push'
+import type { PushSubscription } from 'web-push'
 import { logger } from '../util/logging.js'
 import { WebPushVapidConfig } from '../environment/config.js'
 

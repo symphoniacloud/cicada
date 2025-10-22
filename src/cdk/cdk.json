@@ -1,5 +1,6 @@
 {
-  "app": "npx ts-node --prefer-ts-exts app.ts",
+  "app": "npx tsx app.ts",
+  "build": "cd ../.. && npx tsc",
   "output": "../../build/cdk.out",
   "requireApproval": "never"
 }

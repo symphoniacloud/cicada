@@ -1,4 +1,4 @@
-import { PushSubscription } from 'web-push'
+import type { PushSubscription } from 'web-push'
 import { GithubUserSummary, isGithubUserSummary } from './GithubSummaries.js'
 
 export interface WebPushSubscription extends PushSubscription, GithubUserSummary {}
