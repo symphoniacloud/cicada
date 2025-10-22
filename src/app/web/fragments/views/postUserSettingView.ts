@@ -1,12 +1,12 @@
-import { fragmentViewResult } from '../../viewResultWrappers'
-import { accountControlsRow, repoControlsRow, workflowControlsRow } from './getUserSettingsView'
-import { GithubRepoKey, GithubWorkflowKey } from '../../../domain/types/GithubKeys'
+import { fragmentViewResult } from '../../viewResultWrappers.js'
+import { accountControlsRow, repoControlsRow, workflowControlsRow } from './getUserSettingsView.js'
+import { GithubRepoKey, GithubWorkflowKey } from '../../../domain/types/GithubKeys.js'
 import {
   DisplayableGithubAccountSettings,
   DisplayableGithubRepoSettings,
   DisplayableGithubWorkflowSettings
-} from '../../../domain/types/UserSettings'
-import { GithubAccountId } from '../../../domain/types/GithubAccountId'
+} from '../../../domain/types/UserSettings.js'
+import { GithubAccountId } from '../../../domain/types/GithubAccountId.js'
 
 export function createUpdateUserAccountSettingResponse(
   accountId: GithubAccountId,

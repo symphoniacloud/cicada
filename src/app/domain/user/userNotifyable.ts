@@ -1,12 +1,12 @@
-import { AppState } from '../../environment/AppState'
-import { GithubUserId } from '../types/GithubUserId'
-import { logger } from '../../util/logging'
-import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings'
+import { AppState } from '../../environment/AppState.js'
+import { GithubUserId } from '../types/GithubUserId.js'
+import { logger } from '../../util/logging.js'
+import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings.js'
 
-import { UserScopeReferenceData } from '../types/UserScopeReferenceData'
-import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent'
-import { GithubWorkflowSummary } from '../types/GithubSummaries'
-import { GithubRepoKey } from '../types/GithubKeys'
+import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
+import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
+import { GithubWorkflowSummary } from '../types/GithubSummaries.js'
+import { GithubRepoKey } from '../types/GithubKeys.js'
 
 export async function filterWorkflowNotifyEnabled(
   appState: AppState,

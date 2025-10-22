@@ -1,5 +1,5 @@
-import { APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
-import { logger } from '../util/logging'
+import { APIGatewayProxyResult } from 'aws-lambda'
+import { logger } from '../util/logging.js'
 
 export function responseWithStatusCode(statusCode: number, body?: string | unknown): APIGatewayProxyResult {
   return {

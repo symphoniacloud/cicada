@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
-import { FakeAppState } from '../../../testSupport/fakes/fakeAppState'
-import { handleWebRequest } from '../../../../src/app/lambdaFunctions/authenticatedWeb/lambda'
-import { createStubApiGatewayProxyEventWithToken } from '../../../testSupport/fakes/awsStubs'
+import { FakeAppState } from '../../../testSupport/fakes/fakeAppState.js'
+import { handleWebRequest } from '../../../../src/app/lambdaFunctions/authenticatedWeb/lambda.js'
+import { createStubApiGatewayProxyEventWithToken } from '../../../testSupport/fakes/awsStubs.js'
 import {
   stubGetGithubInstallation,
   stubQueryActivityForRepo,
@@ -10,7 +10,7 @@ import {
   stubQueryRepositories,
   stubQueryWorkflows,
   stubSetupUserRecords
-} from '../../../testSupport/fakes/tableRecordReadStubs'
+} from '../../../testSupport/fakes/tableRecordReadStubs.js'
 
 function setupState() {
   const appState = new FakeAppState()

@@ -1,4 +1,4 @@
-import { FakeAppState } from './fakeAppState'
+import { FakeAppState } from './fakeAppState.js'
 import {
   accountMemberships,
   cicadaTestOrgInstallation,
@@ -10,7 +10,7 @@ import {
   testTestUser,
   testTestUserMembershipOfOrg,
   testTestUserTokenRecord
-} from '../../examples/cicada/githubDomainObjects'
+} from '../../examples/cicada/githubDomainObjects.js'
 import {
   GITHUB_ACCOUNT_MEMBERSHIP,
   GITHUB_LATEST_PUSH_PER_REF,
@@ -19,14 +19,14 @@ import {
   GITHUB_WORKFLOW,
   GITHUB_WORKFLOW_RUN,
   WEB_PUSH_SUBSCRIPTION
-} from '../../../src/app/domain/entityStore/entityTypes'
-import { throwFunction } from '../../../src/multipleContexts/errors'
-import { testTestUserPushSubscription } from '../../examples/cicada/webPushDomainObjects'
-import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription'
-import { FakeDynamoDBInterfaceStubber, MetaDataProvider } from './dynamoDB/fakeDynamoDBInterfaceStubber'
-import { fakeTableNames } from './fakeCicadaConfig'
+} from '../../../src/app/domain/entityStore/entityTypes.js'
+import { throwFunction } from '../../../src/multipleContexts/errors.js'
+import { testTestUserPushSubscription } from '../../examples/cicada/webPushDomainObjects.js'
+import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription.js'
+import { FakeDynamoDBInterfaceStubber, MetaDataProvider } from './dynamoDB/fakeDynamoDBInterfaceStubber.js'
+import { fakeTableNames } from './fakeCicadaConfig.js'
 
-import { fromRawGithubUserId, GithubUserId } from '../../../src/app/domain/types/GithubUserId'
+import { fromRawGithubUserId, GithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const metaDataProvider: MetaDataProvider = (_tableName: string) => {

@@ -1,11 +1,11 @@
-import { fragmentViewResult } from '../../viewResultWrappers'
-import { standardTable } from '../../domainComponents/genericComponents'
-import { td, tr } from '../../hiccough/hiccoughElements'
-import { ORGANIZATION_ACCOUNT_TYPE } from '../../../domain/types/GithubAccountType'
-import { accountCell } from '../../domainComponents/accountComponents'
-import { GithubAccountSummary } from '../../../domain/types/GithubSummaries'
+import { fragmentViewResult } from '../../viewResultWrappers.js'
+import { standardTable } from '../../domainComponents/genericComponents.js'
+import { td, tr } from '../../hiccough/hiccoughElements.js'
+import { ORGANIZATION_ACCOUNT_TYPE } from '../../../domain/types/GithubAccountType.js'
+import { accountCell } from '../../domainComponents/accountComponents.js'
+import { GithubAccountSummary } from '../../../domain/types/GithubSummaries.js'
 
-import { UserScopeReferenceData } from '../../../domain/types/UserScopeReferenceData'
+import { UserScopeReferenceData } from '../../../domain/types/UserScopeReferenceData.js'
 
 export function createAllAvailableAccountsResponse(refData: UserScopeReferenceData) {
   return fragmentViewResult(...allAvailableAccountsResponse(refData))

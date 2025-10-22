@@ -1,8 +1,8 @@
-import { processRawInstallation } from '../githubInstallation'
-import { AppState } from '../../../environment/AppState'
-import { removeNullAndUndefined } from '../../../util/collections'
-import { GithubInstallation } from '../../types/GithubInstallation'
-import { logger } from '../../../util/logging'
+import { processRawInstallation } from '../githubInstallation.js'
+import { AppState } from '../../../environment/AppState.js'
+import { removeNullAndUndefined } from '../../../util/collections.js'
+import { GithubInstallation } from '../../types/GithubInstallation.js'
+import { logger } from '../../../util/logging.js'
 
 export async function crawlInstallations(appState: AppState): Promise<GithubInstallation[]> {
   logger.info(`Crawling Installations`)

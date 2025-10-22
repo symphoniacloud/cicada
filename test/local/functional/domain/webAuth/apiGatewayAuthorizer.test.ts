@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
-import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState'
-import { createStubAPIGatewayRequestAuthorizerEvent } from '../../../../testSupport/fakes/awsStubs'
-import { attemptToAuthorize } from '../../../../../src/app/domain/webAuth/apiGatewayAuthorizer'
-import { stubSetupUserRecords } from '../../../../testSupport/fakes/tableRecordReadStubs'
+import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState.js'
+import { createStubAPIGatewayRequestAuthorizerEvent } from '../../../../testSupport/fakes/awsStubs.js'
+import { attemptToAuthorize } from '../../../../../src/app/domain/webAuth/apiGatewayAuthorizer.js'
+import { stubSetupUserRecords } from '../../../../testSupport/fakes/tableRecordReadStubs.js'
 
 test('failed-auth-no-token', async () => {
   const appState = new FakeAppState()

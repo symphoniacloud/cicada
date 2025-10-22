@@ -1,17 +1,17 @@
-import { AppState } from '../../../environment/AppState'
+import { AppState } from '../../../environment/AppState.js'
 import {
   INSTALLATION_WEBHOOK_TYPE,
   isWebhookType,
   PUSH_WEBHOOK_TYPE,
   WebhookType,
   WORKFLOW_RUN_WEBHOOK_TYPE
-} from './webhookTypes'
-import { logger } from '../../../util/logging'
+} from './webhookTypes.js'
+import { logger } from '../../../util/logging.js'
 import crypto from 'crypto'
-import { githubWebhookInstallationProcessor } from './processors/githubWebhookInstallationProcessor'
-import { WebhookProcessor } from './WebhookProcessor'
-import { githubWebhookRepoPushProcessor } from './processors/githubWebhookRepoPushProcessor'
-import { githubWebhookWorkflowRunProcessor } from './processors/githubWebhookWorkflowRunProcessor'
+import { githubWebhookInstallationProcessor } from './processors/githubWebhookInstallationProcessor.js'
+import { WebhookProcessor } from './WebhookProcessor.js'
+import { githubWebhookRepoPushProcessor } from './processors/githubWebhookRepoPushProcessor.js'
+import { githubWebhookWorkflowRunProcessor } from './processors/githubWebhookWorkflowRunProcessor.js'
 import { EventBridgeEvent } from 'aws-lambda'
 
 export interface S3EventDetail {

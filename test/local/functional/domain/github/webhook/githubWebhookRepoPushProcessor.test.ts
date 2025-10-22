@@ -1,17 +1,17 @@
 import { expect, test } from 'vitest'
-import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
+import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
 
-import example_push from '../../../../../examples/github/org/webhook/push.json'
-import { githubWebhookRepoPushProcessor } from '../../../../../../src/app/domain/github/webhookProcessor/processors/githubWebhookRepoPushProcessor'
-import { testOrgTestRepoOnePushFC94 } from '../../../../../examples/cicada/githubDomainObjects'
+import example_push from '../../../../../examples/github/org/webhook/push.json' with { type: 'json' }
+import { githubWebhookRepoPushProcessor } from '../../../../../../src/app/domain/github/webhookProcessor/processors/githubWebhookRepoPushProcessor.js'
+import { testOrgTestRepoOnePushFC94 } from '../../../../../examples/cicada/githubDomainObjects.js'
 import {
   expectPut,
   expectPutsLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
 import {
   expectedPutGithubPush,
   expectedPutLatestGithubPush
-} from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
+} from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 
 test('push-webhook', async () => {
   const appState = new FakeAppState()

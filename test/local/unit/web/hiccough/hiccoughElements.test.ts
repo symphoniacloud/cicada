@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { table, td, tr } from '../../../../../src/app/web/hiccough/hiccoughElements'
+import { table, td, tr } from '../../../../../src/app/web/hiccough/hiccoughElements.js'
 
 test('tables', () => {
   expect(table(tr(td('a'), td('b')))).toEqual({

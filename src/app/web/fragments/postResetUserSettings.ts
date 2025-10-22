@@ -1,10 +1,10 @@
-import { Route } from '../../internalHttpRouter/internalHttpRoute'
-import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { AppState } from '../../environment/AppState'
-import { resetPersistedUserSettings } from '../../domain/user/persistedUserSettings'
-import { createGetUserSettingsResponse } from './views/getUserSettingsView'
-import { toCalculatedAndDisplayableUserSettings } from '../../domain/user/displayableUserSettings'
-import { fragmentPath } from '../routingCommon'
+import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
+import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
+import { AppState } from '../../environment/AppState.js'
+import { resetPersistedUserSettings } from '../../domain/user/persistedUserSettings.js'
+import { createGetUserSettingsResponse } from './views/getUserSettingsView.js'
+import { toCalculatedAndDisplayableUserSettings } from '../../domain/user/displayableUserSettings.js'
+import { fragmentPath } from '../routingCommon.js'
 
 export const postResetUserSettingsFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('resetUserSettings'),

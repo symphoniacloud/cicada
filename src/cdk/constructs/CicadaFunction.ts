@@ -3,8 +3,8 @@ import { Construct } from 'constructs'
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda'
 import { aws_lambda as lambda, Duration } from 'aws-cdk-lib'
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam'
-import { CicadaTableId } from '../../multipleContexts/dynamoDBTables'
-import { MainStackProps } from '../stacks/main/mainStackProps'
+import { CicadaTableId } from '../../multipleContexts/dynamoDBTables.js'
+import { MainStackProps } from '../stacks/main/mainStackProps.js'
 
 export interface CicadaFunctionProps extends MainStackProps {
   readonly functionName: string

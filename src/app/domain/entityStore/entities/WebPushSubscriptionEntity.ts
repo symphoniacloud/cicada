@@ -1,8 +1,8 @@
-import { WEB_PUSH_SUBSCRIPTION } from '../entityTypes'
-import { isWebPushSubscription, WebPushSubscription } from '../../types/WebPushSubscription'
+import { WEB_PUSH_SUBSCRIPTION } from '../entityTypes.js'
+import { isWebPushSubscription, WebPushSubscription } from '../../types/WebPushSubscription.js'
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
-import { CicadaEntity } from '../entityStoreEntitySupport'
-import { GithubUserId } from '../../types/GithubUserId'
+import { CicadaEntity } from '../entityStoreEntitySupport.js'
+import { GithubUserId } from '../../types/GithubUserId.js'
 
 const WebPushSubscriptionEntity: CicadaEntity<
   WebPushSubscription,

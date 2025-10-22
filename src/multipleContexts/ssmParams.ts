@@ -1,4 +1,4 @@
-import { CicadaTableId } from './dynamoDBTables'
+import { CicadaTableId } from './dynamoDBTables.js'
 
 export const SSM_PARAM_NAMES = {
   GITHUB_APP_ID: 'github/app-id',

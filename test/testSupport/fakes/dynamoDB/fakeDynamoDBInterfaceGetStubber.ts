@@ -1,5 +1,5 @@
 import type { NativeAttributeValue } from '@aws-sdk/util-dynamodb'
-import { FakeDynamoDBInterfaceStubber } from './fakeDynamoDBInterfaceStubber'
+import { FakeDynamoDBInterfaceStubber } from './fakeDynamoDBInterfaceStubber.js'
 
 export class FakeDynamoDBInterfaceGetStubber {
   private stubber: FakeDynamoDBInterfaceStubber

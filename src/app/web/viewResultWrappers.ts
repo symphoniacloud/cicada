@@ -1,9 +1,9 @@
-import { a, body, div, head, htmlPage, link, meta, p, script, title } from './hiccough/hiccoughElements'
-import { html } from './hiccough/hiccoughCore'
-import { element, HiccoughContent } from './hiccough/hiccoughElement'
-import { DOCTYPE_HTML5 } from './hiccough/hiccoughPage'
-import { htmlOkResponse } from './htmlResponses'
-import { adminPageRoute } from './pages/adminPage'
+import { a, body, div, head, htmlPage, link, meta, p, script, title } from './hiccough/hiccoughElements.js'
+import { html } from './hiccough/hiccoughCore.js'
+import { element, HiccoughContent } from './hiccough/hiccoughElement.js'
+import { DOCTYPE_HTML5 } from './hiccough/hiccoughPage.js'
+import { htmlOkResponse } from './htmlResponses.js'
+import { adminPageRoute } from './pages/adminPage.js'
 
 const hiccoughOptions = {
   newLines: true,

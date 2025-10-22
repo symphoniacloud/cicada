@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { isGithubAppId } from '../../../../../src/app/domain/types/GithubAppId'
-import { isGithubInstallationId } from '../../../../../src/app/domain/types/GithubInstallationId'
+import { isGithubAppId } from '../../../../../src/app/domain/types/GithubAppId.js'
+import { isGithubInstallationId } from '../../../../../src/app/domain/types/GithubInstallationId.js'
 
 test('isGithubAppId', () => {
   expect(isGithubAppId('GHApp123')).toBeTruthy()

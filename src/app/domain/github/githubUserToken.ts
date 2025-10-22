@@ -1,8 +1,8 @@
-import { AppState } from '../../environment/AppState'
-import { getGithubUserToken, putGithubUserToken } from '../entityStore/entities/GithubUserTokenEntity'
-import { secondsTimestampInFutureHours, timestampSecondsIsInPast } from '../../util/dateAndTime'
-import { GithubUserToken } from '../types/GithubUserToken'
-import { failedWithResult, Result, successWith } from '../../util/structuredResult'
+import { AppState } from '../../environment/AppState.js'
+import { getGithubUserToken, putGithubUserToken } from '../entityStore/entities/GithubUserTokenEntity.js'
+import { secondsTimestampInFutureHours, timestampSecondsIsInPast } from '../../util/dateAndTime.js'
+import { GithubUserToken } from '../types/GithubUserToken.js'
+import { failedWithResult, Result, successWith } from '../../util/structuredResult.js'
 
 const EXPIRE_CACHED_GITHUB_TOKENS_HOURS = 1
 

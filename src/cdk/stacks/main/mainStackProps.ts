@@ -1,8 +1,8 @@
 import { Construct } from 'constructs'
-import { AllStacksProps } from '../../config/allStacksProps'
+import { AllStacksProps } from '../../config/allStacksProps.js'
 import { Bucket, IBucket } from 'aws-cdk-lib/aws-s3'
-import { readFromSSMViaCloudFormation } from '../../support/ssm'
-import { SSM_PARAM_NAMES, ssmTableNamePath } from '../../../multipleContexts/ssmParams'
+import { readFromSSMViaCloudFormation } from '../../support/ssm.js'
+import { SSM_PARAM_NAMES, ssmTableNamePath } from '../../../multipleContexts/ssmParams.js'
 import { Certificate, ICertificate } from 'aws-cdk-lib/aws-certificatemanager'
 import { Fn } from 'aws-cdk-lib'
 import { HostedZone, IHostedZone } from 'aws-cdk-lib/aws-route53'
@@ -10,7 +10,7 @@ import {
   CICADA_TABLE_IDS,
   CicadaTableId,
   tableConfigurations
-} from '../../../multipleContexts/dynamoDBTables'
+} from '../../../multipleContexts/dynamoDBTables.js'
 import { ITableV2, TableV2 } from 'aws-cdk-lib/aws-dynamodb'
 
 export interface MainStackProps extends AllStacksProps {

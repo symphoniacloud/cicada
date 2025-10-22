@@ -1,5 +1,6 @@
 {
   "name": "cicada",
+  "type": "module",
   "homepage": "https://github.com/symphoniacloud/cicada",
   "license": "MIT",
   "author": {

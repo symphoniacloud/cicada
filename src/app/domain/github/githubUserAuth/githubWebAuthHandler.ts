@@ -1,10 +1,13 @@
-import { AppState } from '../../../environment/AppState'
+import { AppState } from '../../../environment/AppState.js'
 import { APIGatewayProxyEvent } from 'aws-lambda'
-import { foundRedirectResponse, redirectResponseWithCookies } from '../../../inboundInterfaces/httpResponses'
-import { cookies } from './cicadaAuthCookies'
-import { APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
-import { createRouter } from '../../../internalHttpRouter/internalHttpRouter'
-import { oauthCallback } from './oauthCallback'
+import {
+  foundRedirectResponse,
+  redirectResponseWithCookies
+} from '../../../inboundInterfaces/httpResponses.js'
+import { cookies } from './cicadaAuthCookies.js'
+import { APIGatewayProxyResult } from 'aws-lambda'
+import { createRouter } from '../../../internalHttpRouter/internalHttpRouter.js'
+import { oauthCallback } from './oauthCallback.js'
 
 const router = createRouter([
   {

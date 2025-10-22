@@ -1,6 +1,7 @@
-import Ajv, { ValidateFunction } from 'ajv/dist/jtd'
-import { logger } from '../util/logging'
-import { failedWith, isSuccess, Result, successWith } from '../util/structuredResult'
+import * as AjvJTDModule from 'ajv/dist/jtd.js'
+import type { ValidateFunction } from 'ajv/dist/jtd.js'
+import { logger } from '../util/logging.js'
+import { failedWith, isSuccess, Result, successWith } from '../util/structuredResult.js'
 
 // Still a few things to consider with how I use Ajv, e.g.
 // * Use it in most of the places I have complex type guards
@@ -12,7 +13,8 @@ import { failedWith, isSuccess, Result, successWith } from '../util/structuredRe
 // * Is Ajv even the best solution, or would be better to use Zod, e.g.?
 
 // Global ajv instance
-export const ajvInstance = new Ajv()
+// @ts-expect-error - CJS/ESM interop issue with ajv
+export const ajvInstance = new AjvJTDModule.default()
 
 export function structuredValidate<T>(validate: ValidateFunction<T>, data: unknown): Result<T> {
   return validate(data)

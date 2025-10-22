@@ -1,9 +1,9 @@
-import { createRouter } from '../../../internalHttpRouter/internalHttpRouter'
+import { createRouter } from '../../../internalHttpRouter/internalHttpRouter.js'
 import { APIGatewayProxyEvent } from 'aws-lambda'
-import { APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
-import { GithubSetupAppState } from './githubSetupAppState'
-import { startSetupRoute } from './startGithubSetup'
-import { setupRedirectRoute } from './processGithubSetupRedirect'
+import { APIGatewayProxyResult } from 'aws-lambda'
+import { GithubSetupAppState } from './githubSetupAppState.js'
+import { startSetupRoute } from './startGithubSetup.js'
+import { setupRedirectRoute } from './processGithubSetupRedirect.js'
 
 const router = createRouter([startSetupRoute, setupRedirectRoute])
 

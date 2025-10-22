@@ -1,7 +1,7 @@
 import * as webPush from 'web-push'
 import { PushSubscription } from 'web-push'
-import { logger } from '../util/logging'
-import { WebPushVapidConfig } from '../environment/config'
+import { logger } from '../util/logging.js'
+import { WebPushVapidConfig } from '../environment/config.js'
 
 export interface CicadaWebNotification {
   title: string

@@ -4,7 +4,7 @@
 // via webhook - that means some fields are missing here that exist in the API events, but not in webhook events
 // This is a subset, but we can't infer full type using typescript
 
-import { logger } from '../../../util/logging'
+import { logger } from '../../../util/logging.js'
 
 export interface RawGithubWorkflowRunEvent {
   id: number

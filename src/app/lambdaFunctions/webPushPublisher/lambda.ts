@@ -1,12 +1,12 @@
-import { AppState } from '../../environment/AppState'
-import { lambdaStartup } from '../../environment/lambdaStartup'
+import { AppState } from '../../environment/AppState.js'
+import { lambdaStartup } from '../../environment/lambdaStartup.js'
 import middy from '@middy/core'
-import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
+import { powertoolsMiddlewares } from '../../middleware/standardMiddleware.js'
 import { EventBridgeHandler } from 'aws-lambda'
-import { EventBridgeDetailType } from '../../../multipleContexts/eventBridge'
-import { processEventBridgeWebPushEvent } from '../../domain/webPush/webPushEventBridgeEventProcessor'
-import { logger } from '../../util/logging'
-import { isFailure } from '../../util/structuredResult'
+import { EventBridgeDetailType } from '../../../multipleContexts/eventBridge.js'
+import { processEventBridgeWebPushEvent } from '../../domain/webPush/webPushEventBridgeEventProcessor.js'
+import { logger } from '../../util/logging.js'
+import { isFailure } from '../../util/structuredResult.js'
 
 let appState: AppState
 

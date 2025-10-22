@@ -1,23 +1,23 @@
-import { Handler } from 'aws-lambda/handler'
-import { AppState } from '../../environment/AppState'
-import { lambdaStartup } from '../../environment/lambdaStartup'
+import { Handler } from 'aws-lambda'
+import { AppState } from '../../environment/AppState.js'
+import { lambdaStartup } from '../../environment/lambdaStartup.js'
 import middy from '@middy/core'
-import { powertoolsMiddlewares } from '../../middleware/standardMiddleware'
-import { logger } from '../../util/logging'
-import { isFailure } from '../../util/structuredResult'
-import { crawlInstallations } from '../../domain/github/crawler/crawlInstallations'
+import { powertoolsMiddlewares } from '../../middleware/standardMiddleware.js'
+import { logger } from '../../util/logging.js'
+import { isFailure } from '../../util/structuredResult.js'
+import { crawlInstallations } from '../../domain/github/crawler/crawlInstallations.js'
 import {
   isCrawlEvent,
   isCrawlInstallationEvent,
   isCrawlInstallationsEvent,
   isCrawlPublicAccountEvent,
   isCrawlPublicAccountsEvent
-} from './githubCrawlerEvents'
+} from './githubCrawlerEvents.js'
 import {
   crawlInstallationAccount,
   crawlPublicAccount,
   crawlPublicAccounts
-} from '../../domain/github/crawler/crawlAccount'
+} from '../../domain/github/crawler/crawlAccount.js'
 
 let appState: AppState
 

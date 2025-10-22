@@ -1,19 +1,19 @@
-import { AppState } from '../../../environment/AppState'
-import { GithubInstallation } from '../../types/GithubInstallation'
-import { logger } from '../../../util/logging'
-import { crawlUsers } from './crawlUsers'
+import { AppState } from '../../../environment/AppState.js'
+import { GithubInstallation } from '../../types/GithubInstallation.js'
+import { logger } from '../../../util/logging.js'
+import { crawlUsers } from './crawlUsers.js'
 import {
   GithubInstallationClient,
   publishGithubInstallationClientMetrics
-} from '../../../outboundInterfaces/githubInstallationClient'
-import { crawlAccountContents } from './crawlAccountContents'
-import { GithubPublicAccount, isGithubPublicAccount } from '../../types/GithubPublicAccount'
-import { GithubAccountId } from '../../types/GithubAccountId'
+} from '../../../outboundInterfaces/githubInstallationClient.js'
+import { crawlAccountContents } from './crawlAccountContents.js'
+import { GithubPublicAccount, isGithubPublicAccount } from '../../types/GithubPublicAccount.js'
+import { GithubAccountId } from '../../types/GithubAccountId.js'
 import {
   getPublicAccount,
   getPublicAccountsForInstallationAccount
-} from '../../entityStore/entities/GithubPublicAccountEntity'
-import { getAllInstallations } from '../../entityStore/entities/GithubInstallationEntity'
+} from '../../entityStore/entities/GithubPublicAccountEntity.js'
+import { getAllInstallations } from '../../entityStore/entities/GithubInstallationEntity.js'
 
 export async function crawlInstallationAccount(
   appState: AppState,

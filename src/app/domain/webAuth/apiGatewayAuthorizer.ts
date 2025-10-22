@@ -1,12 +1,12 @@
-import { AppState } from '../../environment/AppState'
+import { AppState } from '../../environment/AppState.js'
 import {
   APIGatewayAuthorizerWithContextResult,
   APIGatewayRequestAuthorizerEvent,
   StatementEffect
-} from 'aws-lambda/trigger/api-gateway-authorizer'
-import { logger } from '../../util/logging'
-import { WebAuthorizerContext } from '../../inboundInterfaces/lambdaTypes'
-import { authorizeUserRequest } from './userAuthorizer'
+} from 'aws-lambda'
+import { logger } from '../../util/logging.js'
+import { WebAuthorizerContext } from '../../inboundInterfaces/lambdaTypes.js'
+import { authorizeUserRequest } from './userAuthorizer.js'
 
 export async function attemptToAuthorize(
   appState: AppState,

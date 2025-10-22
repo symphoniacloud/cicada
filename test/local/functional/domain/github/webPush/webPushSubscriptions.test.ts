@@ -1,19 +1,19 @@
 import { expect, test } from 'vitest'
-import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
-import { testTestUserPushSubscription } from '../../../../../examples/cicada/webPushDomainObjects'
-import { handleApiMessage } from '../../../../../../src/app/lambdaFunctions/authenticatedApi/lambda'
-import { createAPIGatewayProxyWithLambdaAuthorizerEvent } from '../../../../../testSupport/fakes/awsStubs'
+import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
+import { testTestUserPushSubscription } from '../../../../../examples/cicada/webPushDomainObjects.js'
+import { handleApiMessage } from '../../../../../../src/app/lambdaFunctions/authenticatedApi/lambda.js'
+import { createAPIGatewayProxyWithLambdaAuthorizerEvent } from '../../../../../testSupport/fakes/awsStubs.js'
 import { HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2'
 import {
   expectDelete,
   expectDeletesLength,
   expectPut,
   expectPutsLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
 import {
   expectedDeleteWebPushSubscription,
   expectedPutWebPushSubscription
-} from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
+} from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 
 test('web push test', async () => {
   const appState = new FakeAppState()

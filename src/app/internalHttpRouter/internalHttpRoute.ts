@@ -1,6 +1,6 @@
-import { AppState } from '../environment/AppState'
+import { AppState } from '../environment/AppState.js'
 import { APIGatewayProxyEvent } from 'aws-lambda'
-import { APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy'
+import { APIGatewayProxyResult } from 'aws-lambda'
 
 export type MinimalAPIGatewayProxyEvent = Pick<APIGatewayProxyEvent, 'path' | 'httpMethod'>
 

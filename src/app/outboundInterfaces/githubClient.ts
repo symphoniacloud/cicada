@@ -1,14 +1,14 @@
 import { Octokit } from '@octokit/rest'
 import { createAppAuth } from '@octokit/auth-app'
-import { createRealGithubInstallationClient, GithubInstallationClient } from './githubInstallationClient'
-import { RawGithubInstallation } from '../domain/types/rawGithub/RawGithubInstallation'
-import { GithubConfig } from '../environment/config'
-import { OAuthAppAuthentication } from '@octokit/auth-oauth-user/dist-types/types'
+import { createRealGithubInstallationClient, GithubInstallationClient } from './githubInstallationClient.js'
+import { RawGithubInstallation } from '../domain/types/rawGithub/RawGithubInstallation.js'
+import { GithubConfig } from '../environment/config.js'
+import { OAuthAppAuthentication } from '@octokit/auth-oauth-user'
 import { createOAuthUserAuth } from '@octokit/auth-oauth-user'
-import { logger } from '../util/logging'
-import { RawGithubUser } from '../domain/types/rawGithub/RawGithubUser'
-import { GithubInstallationId } from '../domain/types/GithubInstallationId'
-import { toRawGithubAppId } from '../domain/types/GithubAppId'
+import { logger } from '../util/logging.js'
+import { RawGithubUser } from '../domain/types/rawGithub/RawGithubUser.js'
+import { GithubInstallationId } from '../domain/types/GithubInstallationId.js'
+import { toRawGithubAppId } from '../domain/types/GithubAppId.js'
 
 export interface GithubClient {
   clientForInstallation(installationId: GithubInstallationId): GithubInstallationClient

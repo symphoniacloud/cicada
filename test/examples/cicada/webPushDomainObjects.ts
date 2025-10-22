@@ -1,5 +1,5 @@
-import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription'
-import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId'
+import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription.js'
+import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
 
 export const testTestUserPushSubscription: WebPushSubscription = {
   userId: fromRawGithubUserId(162360409),

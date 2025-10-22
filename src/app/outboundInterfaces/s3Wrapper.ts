@@ -1,7 +1,7 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
-import { tracer } from '../util/tracing'
-import { throwFunction } from '../../multipleContexts/errors'
-import { NodeJsRuntimeStreamingBlobPayloadOutputTypes } from '@smithy/types/dist-types/streaming-payload/streaming-blob-payload-output-types'
+import { tracer } from '../util/tracing.js'
+import { throwFunction } from '../../multipleContexts/errors.js'
+import { NodeJsRuntimeStreamingBlobPayloadOutputTypes } from '@smithy/types'
 
 export interface S3Wrapper {
   getObjectAsString(bucket: string, key: string): Promise<string>

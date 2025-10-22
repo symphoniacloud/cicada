@@ -1,5 +1,5 @@
-import { HiccoughContent } from '../hiccough/hiccoughElement'
-import { div } from '../hiccough/hiccoughElements'
+import { HiccoughContent } from '../hiccough/hiccoughElement.js'
+import { div } from '../hiccough/hiccoughElements.js'
 
 export function divRow(...content: HiccoughContent[]) {
   return div({ class: 'row' }, ...content)

@@ -1,9 +1,9 @@
 import { afterAll, expect, test } from 'vitest'
-import { appStateForTests, getAppName } from './integrationTestSupport/cloudEnvironment'
+import { appStateForTests, getAppName } from './integrationTestSupport/cloudEnvironment.js'
 import { randomBytes } from 'node:crypto'
-import { SSM_PARAM_NAMES } from '../../src/multipleContexts/ssmParams'
-import { sleep } from './integrationTestSupport/utils'
-import { deleteFromSSMInTests, writeToSSMInTests } from './integrationTestSupport/ssm'
+import { SSM_PARAM_NAMES } from '../../src/multipleContexts/ssmParams.js'
+import { sleep } from './integrationTestSupport/utils.js'
+import { deleteFromSSMInTests, writeToSSMInTests } from './integrationTestSupport/ssm.js'
 
 // Test API GW -> Authorized Lambdas, via API Gateway Authorizer
 // The Authorizer code allows us to set a token for testing in SSM

@@ -6,7 +6,7 @@ import {
   EntityStoreLogger,
   TableConfig
 } from '@symphoniacloud/dynamodb-entity-store'
-import { createDocumentClient } from '../../outboundInterfaces/dynamoDb'
+import { createDocumentClient } from '../../outboundInterfaces/dynamoDb.js'
 import {
   GITHUB_ACCOUNT_MEMBERSHIP,
   GITHUB_INSTALLATION,
@@ -22,10 +22,10 @@ import {
   GITHUB_WORKFLOW_RUN_EVENT,
   USER_SETTINGS,
   WEB_PUSH_SUBSCRIPTION
-} from './entityTypes'
-import { Clock } from '../../util/dateAndTime'
-import { TableNames } from '../../environment/config'
-import { CicadaTableId, tableConfigurations } from '../../../multipleContexts/dynamoDBTables'
+} from './entityTypes.js'
+import { Clock } from '../../util/dateAndTime.js'
+import { TableNames } from '../../environment/config.js'
+import { CicadaTableId, tableConfigurations } from '../../../multipleContexts/dynamoDBTables.js'
 
 // I separate out this function and setupEntityStore, so that in local-tests
 // I can fake out interface to DynamoDB while still using EntityStore logic

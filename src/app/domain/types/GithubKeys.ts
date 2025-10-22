@@ -1,8 +1,8 @@
-import { isNotNullObject } from '../../util/types'
-import { GithubAccountId, isGithubAccountId } from './GithubAccountId'
-import { GithubRepoId, isGithubRepoId } from './GithubRepoId'
-import { GithubWorkflowId, isGithubWorkflowId } from './GithubWorkflowId'
-import { GithubUserId, isGithubUserId } from './GithubUserId'
+import { isNotNullObject } from '../../util/types.js'
+import { GithubAccountId, isGithubAccountId } from './GithubAccountId.js'
+import { GithubRepoId, isGithubRepoId } from './GithubRepoId.js'
+import { GithubWorkflowId, isGithubWorkflowId } from './GithubWorkflowId.js'
+import { GithubUserId, isGithubUserId } from './GithubUserId.js'
 
 export interface GithubAccountKey {
   accountId: GithubAccountId

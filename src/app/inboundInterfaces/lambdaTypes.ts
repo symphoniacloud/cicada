@@ -2,11 +2,11 @@ import {
   APIGatewayProxyEventHeaders,
   APIGatewayProxyEventMultiValueHeaders,
   APIGatewayProxyWithLambdaAuthorizerEvent
-} from 'aws-lambda/trigger/api-gateway-proxy'
+} from 'aws-lambda'
 import { APIGatewayProxyEvent, APIGatewayProxyWithLambdaAuthorizerHandler } from 'aws-lambda'
 
-import { GithubUserId } from '../domain/types/GithubUserId'
-import { UserScopeReferenceData } from '../domain/types/UserScopeReferenceData'
+import { GithubUserId } from '../domain/types/GithubUserId.js'
+import { UserScopeReferenceData } from '../domain/types/UserScopeReferenceData.js'
 
 export type WebAuthorizerContext = { username?: string; userId?: GithubUserId }
 

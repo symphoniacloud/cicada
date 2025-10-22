@@ -1,7 +1,7 @@
 import { S3Client } from '@aws-sdk/client-s3'
 import { NodeJsRuntimeStreamingBlobPayloadOutputTypes } from '@smithy/types'
-import { S3Wrapper } from '../../../src/app/outboundInterfaces/s3Wrapper'
-import { arrayStubResponse } from './fakeSupport'
+import { S3Wrapper } from '../../../src/app/outboundInterfaces/s3Wrapper.js'
+import { arrayStubResponse } from './fakeSupport.js'
 
 export class FakeS3Wrapper implements S3Wrapper {
   public getObjectsAsString = arrayStubResponse<{ bucket: string; key: string }, string>()

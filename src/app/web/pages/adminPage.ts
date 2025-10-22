@@ -1,8 +1,8 @@
-import { AppState } from '../../environment/AppState'
-import { Route } from '../../internalHttpRouter/internalHttpRoute'
-import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { pagePath } from '../routingCommon'
-import { createAdminPageResponse } from './views/adminPageView'
+import { AppState } from '../../environment/AppState.js'
+import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
+import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
+import { pagePath } from '../routingCommon.js'
+import { createAdminPageResponse } from './views/adminPageView.js'
 
 export const adminPageRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: pagePath('admin'),

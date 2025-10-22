@@ -1,6 +1,6 @@
-import { getEnvVarOrThrow } from '../../../environment/lambdaStartup'
-import { paramsForAppName } from '../../../environment/config'
-import { SSM_PARAM_NAMES } from '../../../../multipleContexts/ssmParams'
+import { getEnvVarOrThrow } from '../../../environment/lambdaStartup.js'
+import { paramsForAppName } from '../../../environment/config.js'
+import { SSM_PARAM_NAMES } from '../../../../multipleContexts/ssmParams.js'
 
 export async function githubAppIsReady() {
   const appName = getEnvVarOrThrow('APP_NAME')

@@ -1,7 +1,7 @@
-import { logger } from '../../util/logging'
-import { AppState } from '../../environment/AppState'
-import { SSM_PARAM_NAMES } from '../../../multipleContexts/ssmParams'
-import { paramsForAppName } from '../../environment/config'
+import { logger } from '../../util/logging.js'
+import { AppState } from '../../environment/AppState.js'
+import { SSM_PARAM_NAMES } from '../../../multipleContexts/ssmParams.js'
+import { paramsForAppName } from '../../environment/config.js'
 
 export function isTestUserToken(token: string) {
   return token.indexOf('testuser') >= 0

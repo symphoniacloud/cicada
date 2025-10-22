@@ -1,8 +1,8 @@
-import { AppState } from '../../environment/AppState'
-import { Route } from '../../internalHttpRouter/internalHttpRoute'
-import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { fragmentPath } from '../routingCommon'
-import { createAllAvailableAccountsResponse } from './views/allAvailableAccountsView'
+import { AppState } from '../../environment/AppState.js'
+import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
+import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
+import { fragmentPath } from '../routingCommon.js'
+import { createAllAvailableAccountsResponse } from './views/allAvailableAccountsView.js'
 
 export const allAvailableAccountsRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('allAvailableAccounts'),

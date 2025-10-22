@@ -1,10 +1,10 @@
-import { fromRawGithubInstallation } from '../../../types/GithubInstallation'
-import { RawGithubInstallation } from '../../../types/rawGithub/RawGithubInstallation'
-import { AppState } from '../../../../environment/AppState'
-import { WebhookProcessor } from '../WebhookProcessor'
-import { processInstallation } from '../../githubInstallation'
-import { sendToEventBridge } from '../../../../outboundInterfaces/eventBridgeBus'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../../../multipleContexts/eventBridge'
+import { fromRawGithubInstallation } from '../../../types/GithubInstallation.js'
+import { RawGithubInstallation } from '../../../types/rawGithub/RawGithubInstallation.js'
+import { AppState } from '../../../../environment/AppState.js'
+import { WebhookProcessor } from '../WebhookProcessor.js'
+import { processInstallation } from '../../githubInstallation.js'
+import { sendToEventBridge } from '../../../../outboundInterfaces/eventBridgeBus.js'
+import { EVENTBRIDGE_DETAIL_TYPES } from '../../../../../multipleContexts/eventBridge.js'
 
 export const githubWebhookInstallationProcessor: WebhookProcessor = async (
   appState: AppState,

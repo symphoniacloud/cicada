@@ -1,25 +1,25 @@
 import { test } from 'vitest'
-import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
-import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient'
+import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
+import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient.js'
 import {
   testOrgTestRepoOne,
   testOrgTestRepoOnePush,
   testPersonalTestRepo,
   testPersonalTestRepoPush
-} from '../../../../../examples/cicada/githubDomainObjects'
-import example_personal_repo_push from '../../../../../examples/github/personal-account/api/repoPush.json'
-import example_org_repo_push from '../../../../../examples/github/org/api/repoPush.json'
-import { crawlPushes } from '../../../../../../src/app/domain/github/crawler/crawlPushes'
+} from '../../../../../examples/cicada/githubDomainObjects.js'
+import example_personal_repo_push from '../../../../../examples/github/personal-account/api/repoPush.json' with { type: 'json' }
+import example_org_repo_push from '../../../../../examples/github/org/api/repoPush.json' with { type: 'json' }
+import { crawlPushes } from '../../../../../../src/app/domain/github/crawler/crawlPushes.js'
 import {
   expectPut,
   expectPutsLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
 import {
   expectedPutGithubPush,
   expectedPutLatestGithubPush
-} from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
+} from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 
-import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/types/GithubInstallationId'
+import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/types/GithubInstallationId.js'
 
 test('repo-crawler-for-personal-account-installation', async () => {
   // A

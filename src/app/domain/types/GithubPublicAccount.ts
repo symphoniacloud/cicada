@@ -1,7 +1,7 @@
-import { fromRawGithubAccountId, GithubAccountId, isGithubAccountId } from './GithubAccountId'
-import { GithubAccountSummary, isGithubAccountSummary } from './GithubSummaries'
-import { RawGithubUser } from './rawGithub/RawGithubUser'
-import { fromRawAccountType } from './GithubAccountType'
+import { fromRawGithubAccountId, GithubAccountId, isGithubAccountId } from './GithubAccountId.js'
+import { GithubAccountSummary, isGithubAccountSummary } from './GithubSummaries.js'
+import { RawGithubUser } from './rawGithub/RawGithubUser.js'
+import { fromRawAccountType } from './GithubAccountType.js'
 
 export interface GithubPublicAccount extends GithubAccountSummary {
   installationAccountId: GithubAccountId

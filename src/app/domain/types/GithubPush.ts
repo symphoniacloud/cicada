@@ -1,16 +1,16 @@
-import { logger } from '../../util/logging'
-import { isRawGithubWebhookPush, RawGithubWebhookPushCommit } from './rawGithub/RawGithubWebhookPush'
+import { logger } from '../../util/logging.js'
+import { isRawGithubWebhookPush, RawGithubWebhookPushCommit } from './rawGithub/RawGithubWebhookPush.js'
 import {
   RawGithubAPIPushEventEvent,
   RawGithubAPIPushEventEventCommit
-} from './rawGithub/RawGithubAPIPushEventEvent'
-import { fromRawAccountType } from './GithubAccountType'
-import { NonEmptyArray } from '../../util/collections'
-import { timestampToIso } from '../../util/dateAndTime'
-import { fromRawGithubAccountId } from './GithubAccountId'
-import { fromRawGithubUserId } from './GithubUserId'
-import { fromRawGithubRepoId } from './GithubRepoId'
-import { GithubRepoSummary, GithubUserSummary, isGithubRepoSummary } from './GithubSummaries'
+} from './rawGithub/RawGithubAPIPushEventEvent.js'
+import { fromRawAccountType } from './GithubAccountType.js'
+import { NonEmptyArray } from '../../util/collections.js'
+import { timestampToIso } from '../../util/dateAndTime.js'
+import { fromRawGithubAccountId } from './GithubAccountId.js'
+import { fromRawGithubUserId } from './GithubUserId.js'
+import { fromRawGithubRepoId } from './GithubRepoId.js'
+import { GithubRepoSummary, GithubUserSummary, isGithubRepoSummary } from './GithubSummaries.js'
 
 // There's no consistent ID between pushes sourced from Webhooks vs Events, so use combination
 // of owner, repo, ref, and first commit SHA to create a key

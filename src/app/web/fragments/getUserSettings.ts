@@ -1,9 +1,9 @@
-import { Route } from '../../internalHttpRouter/internalHttpRoute'
-import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { AppState } from '../../environment/AppState'
-import { loadCalculatedAndDisplayableUserSettingsOrUseDefaults } from '../../domain/user/displayableUserSettings'
-import { createGetUserSettingsResponse } from './views/getUserSettingsView'
-import { fragmentPath } from '../routingCommon'
+import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
+import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
+import { AppState } from '../../environment/AppState.js'
+import { loadCalculatedAndDisplayableUserSettingsOrUseDefaults } from '../../domain/user/displayableUserSettings.js'
+import { createGetUserSettingsResponse } from './views/getUserSettingsView.js'
+import { fragmentPath } from '../routingCommon.js'
 
 export const getUserSettingsFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('userSettings'),

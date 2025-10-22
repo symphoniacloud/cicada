@@ -1,5 +1,5 @@
-import { isNumber, isString } from '../../util/types'
-import { GithubUserSummary, isGithubUserSummary } from './GithubSummaries'
+import { isNumber, isString } from '../../util/types.js'
+import { GithubUserSummary, isGithubUserSummary } from './GithubSummaries.js'
 
 export interface GithubUserToken extends GithubUserSummary {
   token: string

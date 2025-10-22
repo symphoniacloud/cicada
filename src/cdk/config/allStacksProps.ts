@@ -1,4 +1,4 @@
-import { EnvironmentSettings } from './environmentSettings'
+import { EnvironmentSettings } from './environmentSettings.js'
 import { StackProps } from 'aws-cdk-lib'
 
 export type WithEnvironment = Required<Pick<StackProps, 'env'>>

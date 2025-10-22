@@ -1,8 +1,8 @@
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
-import { USER_SETTINGS } from '../entityTypes'
-import { isUserSettings, PersistedUserSettings } from '../../types/UserSettings'
-import { cicadaEntityFromPkOnlyEntity } from '../entityStoreEntitySupport'
-import { GithubUserId } from '../../types/GithubUserId'
+import { USER_SETTINGS } from '../entityTypes.js'
+import { isUserSettings, PersistedUserSettings } from '../../types/UserSettings.js'
+import { cicadaEntityFromPkOnlyEntity } from '../entityStoreEntitySupport.js'
+import { GithubUserId } from '../../types/GithubUserId.js'
 
 const UserSettingsEntity = cicadaEntityFromPkOnlyEntity({
   type: USER_SETTINGS,

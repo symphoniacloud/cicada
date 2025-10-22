@@ -7,15 +7,15 @@ import {
   PersistedGithubRepoSettings,
   PersistedUserSettings,
   PersistedVisibleAndNotifyConfigurable
-} from '../types/UserSettings'
+} from '../types/UserSettings.js'
 import {
   GithubAccountStructure,
   GithubRepoStructure,
   UserScopeReferenceData
-} from '../types/UserScopeReferenceData'
-import { objectMap } from '../../util/collections'
-import { AppState } from '../../environment/AppState'
-import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings'
+} from '../types/UserScopeReferenceData.js'
+import { objectMap } from '../../util/collections.js'
+import { AppState } from '../../environment/AppState.js'
+import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings.js'
 
 const DEFAULT_ACCOUNT_NOTIFY = true
 

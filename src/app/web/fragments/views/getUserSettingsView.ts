@@ -1,18 +1,18 @@
-import { fragmentViewResult } from '../../viewResultWrappers'
-import { b, div, h4, input, label } from '../../hiccough/hiccoughElements'
+import { fragmentViewResult } from '../../viewResultWrappers.js'
+import { b, div, h4, input, label } from '../../hiccough/hiccoughElements.js'
 import {
   DisplayableGithubAccountSettings,
   DisplayableGithubRepoSettings,
   DisplayableGithubWorkflowSettings,
   DisplayableUserSettings,
   PersistedVisibleAndNotifyConfigurable
-} from '../../../domain/types/UserSettings'
-import { HiccoughElement } from '../../hiccough/hiccoughElement'
-import { GithubRepoKey, GithubWorkflowKey } from '../../../domain/types/GithubKeys'
-import { colSm, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements'
-import { GithubAccountId } from '../../../domain/types/GithubAccountId'
-import { GithubRepoId } from '../../../domain/types/GithubRepoId'
-import { GithubWorkflowId } from '../../../domain/types/GithubWorkflowId'
+} from '../../../domain/types/UserSettings.js'
+import { HiccoughElement } from '../../hiccough/hiccoughElement.js'
+import { GithubRepoKey, GithubWorkflowKey } from '../../../domain/types/GithubKeys.js'
+import { colSm, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
+import { GithubAccountId } from '../../../domain/types/GithubAccountId.js'
+import { GithubRepoId } from '../../../domain/types/GithubRepoId.js'
+import { GithubWorkflowId } from '../../../domain/types/GithubWorkflowId.js'
 
 export function createGetUserSettingsResponse(
   settings: DisplayableUserSettings,

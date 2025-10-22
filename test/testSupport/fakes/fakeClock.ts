@@ -1,4 +1,4 @@
-import { Clock } from '../../../src/app/util/dateAndTime'
+import { Clock } from '../../../src/app/util/dateAndTime.js'
 
 export const defaultFakeNowIso = '2024-02-02T19:00:00.000Z'
 

@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { identity } from '../../../../src/app/util/functional'
+import { identity } from '../../../../src/app/util/functional.js'
 
 test('identity', () => {
   expect(identity(undefined)).toBeUndefined()

@@ -7,7 +7,7 @@ import {
   removeNullAndUndefined,
   selectKeys,
   sortBy
-} from '../../../../src/app/util/collections'
+} from '../../../../src/app/util/collections.js'
 
 test('selectKeys', () => {
   expect(selectKeys({ a: 1, b: 2, c: 3 }, ['a', 'c'])).toEqual({ a: 1, c: 3 })

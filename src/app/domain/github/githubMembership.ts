@@ -1,15 +1,15 @@
-import { AppState } from '../../environment/AppState'
-import { GithubUser } from '../types/GithubUser'
+import { AppState } from '../../environment/AppState.js'
+import { GithubUser } from '../types/GithubUser.js'
 import {
   deleteMemberships,
   getAllMembershipsForAccount,
   getAllMembershipsForUserId,
   putMemberships
-} from '../entityStore/entities/GithubAccountMembershipEntity'
-import { arrayDifferenceDeep } from '../../util/collections'
-import { GithubAccountId } from '../types/GithubAccountId'
-import { GithubUserId } from '../types/GithubUserId'
-import { throwFunction } from '../../../multipleContexts/errors'
+} from '../entityStore/entities/GithubAccountMembershipEntity.js'
+import { arrayDifferenceDeep } from '../../util/collections.js'
+import { GithubAccountId } from '../types/GithubAccountId.js'
+import { GithubUserId } from '../types/GithubUserId.js'
+import { throwFunction } from '../../../multipleContexts/errors.js'
 
 export async function setMemberships(
   appState: AppState,

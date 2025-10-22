@@ -1,13 +1,13 @@
 import { assert, expect, test } from 'vitest'
-import { appStateForTests, lookupSSMParam } from './integrationTestSupport/cloudEnvironment'
-import { SSM_PARAM_NAMES } from '../../src/multipleContexts/ssmParams'
+import { appStateForTests, lookupSSMParam } from './integrationTestSupport/cloudEnvironment.js'
+import { SSM_PARAM_NAMES } from '../../src/multipleContexts/ssmParams.js'
 import { randomUUID } from 'node:crypto'
-import push from '../examples/github/org/webhook/push.json'
-import { realS3 } from '../../src/app/outboundInterfaces/s3Wrapper'
-import { deletePushesForAccount, getPushesForAccount } from './integrationTestSupport/githubActivity'
-import { sleep } from './integrationTestSupport/utils'
-import { createSignatureHeader } from '../../src/app/domain/github/webhookProcessor/githubWebhookProcessor'
-import { fromRawGithubAccountId } from '../../src/app/domain/types/GithubAccountId'
+import push from '../examples/github/org/webhook/push.json' with { type: 'json' }
+import { realS3 } from '../../src/app/outboundInterfaces/s3Wrapper.js'
+import { deletePushesForAccount, getPushesForAccount } from './integrationTestSupport/githubActivity.js'
+import { sleep } from './integrationTestSupport/utils.js'
+import { createSignatureHeader } from '../../src/app/domain/github/webhookProcessor/githubWebhookProcessor.js'
+import { fromRawGithubAccountId } from '../../src/app/domain/types/GithubAccountId.js'
 
 // GitHub Webhook - these are directly stored in S3, and then async processing occurs
 test('webhook test', async () => {

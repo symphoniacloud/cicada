@@ -1,8 +1,8 @@
-import { isNotNullObject } from '../../util/types'
-import { GithubAccountId } from './GithubAccountId'
-import { GithubRepoId } from './GithubRepoId'
-import { GithubWorkflowId } from './GithubWorkflowId'
-import { GithubUserKey, isGithubUserKey } from './GithubKeys'
+import { isNotNullObject } from '../../util/types.js'
+import { GithubAccountId } from './GithubAccountId.js'
+import { GithubRepoId } from './GithubRepoId.js'
+import { GithubWorkflowId } from './GithubWorkflowId.js'
+import { GithubUserKey, isGithubUserKey } from './GithubKeys.js'
 
 export type UserSetting = 'visible' | 'notify'
 

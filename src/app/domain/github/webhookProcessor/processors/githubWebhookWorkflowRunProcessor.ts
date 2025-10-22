@@ -1,10 +1,10 @@
-import { WebhookProcessor } from '../WebhookProcessor'
-import { AppState } from '../../../../environment/AppState'
-import { logger } from '../../../../util/logging'
-import { isRawGithubWorkflowRunEvent } from '../../../types/rawGithub/RawGithubWorkflowRunEvent'
-import { processRawRunEvent } from '../../githubWorkflowRunEvent'
-import { getInstallationOrUndefined } from '../../../entityStore/entities/GithubInstallationEntity'
-import { fromRawGithubAccountId } from '../../../types/GithubAccountId'
+import { WebhookProcessor } from '../WebhookProcessor.js'
+import { AppState } from '../../../../environment/AppState.js'
+import { logger } from '../../../../util/logging.js'
+import { isRawGithubWorkflowRunEvent } from '../../../types/rawGithub/RawGithubWorkflowRunEvent.js'
+import { processRawRunEvent } from '../../githubWorkflowRunEvent.js'
+import { getInstallationOrUndefined } from '../../../entityStore/entities/GithubInstallationEntity.js'
+import { fromRawGithubAccountId } from '../../../types/GithubAccountId.js'
 
 export const githubWebhookWorkflowRunProcessor: WebhookProcessor = async (
   appState: AppState,

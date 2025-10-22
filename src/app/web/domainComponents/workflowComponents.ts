@@ -1,11 +1,18 @@
-import { FullGithubWorkflowRunEvent, GithubWorkflowRunEvent } from '../../domain/types/GithubWorkflowRunEvent'
-import { a, td, tr } from '../hiccough/hiccoughElements'
-import { Clock, displayDateTime, durationAsStringFromMs } from '../../util/dateAndTime'
-import { githubAnchor } from './genericComponents'
-import { commitCell, repoCell } from './repoElementComponents'
-import { elapsedTimeMs, runBasicStatus, WorkflowRunStatus } from '../../domain/github/githubWorkflowRunEvent'
-import { userCell } from './userComponents'
-import { removeNullAndUndefined } from '../../util/collections'
+import {
+  FullGithubWorkflowRunEvent,
+  GithubWorkflowRunEvent
+} from '../../domain/types/GithubWorkflowRunEvent.js'
+import { a, td, tr } from '../hiccough/hiccoughElements.js'
+import { Clock, displayDateTime, durationAsStringFromMs } from '../../util/dateAndTime.js'
+import { githubAnchor } from './genericComponents.js'
+import { commitCell, repoCell } from './repoElementComponents.js'
+import {
+  elapsedTimeMs,
+  runBasicStatus,
+  WorkflowRunStatus
+} from '../../domain/github/githubWorkflowRunEvent.js'
+import { userCell } from './userComponents.js'
+import { removeNullAndUndefined } from '../../util/collections.js'
 
 export type WorkflowRowOptions = {
   showDescription?: boolean

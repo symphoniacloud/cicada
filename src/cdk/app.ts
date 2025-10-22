@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 import 'source-map-support/register'
 import { App } from 'aws-cdk-lib'
-import { MainStack } from './stacks/main/MainStack'
-import { StorageStack } from './stacks/StorageStack'
+import { MainStack } from './stacks/main/MainStack.js'
+import { StorageStack } from './stacks/StorageStack.js'
 import * as dotenv from 'dotenv'
-import { buildWebConfig } from './preSynth/buildWeb'
-import { createAllStacksProps } from './preSynth/allStacksPropsLoader'
+import { buildWebConfig } from './preSynth/buildWeb.js'
+import { createAllStacksProps } from './preSynth/allStacksPropsLoader.js'
 import * as path from 'path'
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') })

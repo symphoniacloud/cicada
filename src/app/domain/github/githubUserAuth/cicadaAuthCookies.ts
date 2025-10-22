@@ -1,5 +1,5 @@
 // Use two cookies because 'token' has HttpOnly set, and so isn't visible to client side javascript
-import { Clock, dateTimeAddDays } from '../../../util/dateAndTime'
+import { Clock, dateTimeAddDays } from '../../../util/dateAndTime.js'
 
 export function cookies(
   clock: Clock,

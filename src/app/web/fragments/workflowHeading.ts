@@ -1,12 +1,12 @@
-import { AppState } from '../../environment/AppState'
-import { Route } from '../../internalHttpRouter/internalHttpRoute'
-import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes'
-import { isFailure, isSuccess } from '../../util/structuredResult'
-import { getWorkflowCoordinates } from './requestParsing/getWorkflowCoordinates'
-import { createWorkflowHeadingResponse } from './views/workflowHeadingView'
-import { fragmentPath } from '../routingCommon'
-import { getAvailableRunEventsForWorkflowForUser } from '../../domain/user/userVisible'
-import { notFoundHTMLResponse } from '../htmlResponses'
+import { AppState } from '../../environment/AppState.js'
+import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
+import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
+import { isFailure, isSuccess } from '../../util/structuredResult.js'
+import { getWorkflowCoordinates } from './requestParsing/getWorkflowCoordinates.js'
+import { createWorkflowHeadingResponse } from './views/workflowHeadingView.js'
+import { fragmentPath } from '../routingCommon.js'
+import { getAvailableRunEventsForWorkflowForUser } from '../../domain/user/userVisible.js'
+import { notFoundHTMLResponse } from '../htmlResponses.js'
 
 export const workflowHeadingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('workflow/heading'),

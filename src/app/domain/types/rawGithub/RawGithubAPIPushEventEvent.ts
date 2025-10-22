@@ -1,6 +1,6 @@
-import { RawGithubEvent } from './RawGithubEvent'
-import { logger } from '../../../util/logging'
-import { isNotNullObject } from '../../../util/types'
+import { RawGithubEvent } from './RawGithubEvent.js'
+import { logger } from '../../../util/logging.js'
+import { isNotNullObject } from '../../../util/types.js'
 
 // Commented fields not currently captured
 export interface RawGithubAPIPushEventEvent extends RawGithubEvent {

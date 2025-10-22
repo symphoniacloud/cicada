@@ -1,5 +1,5 @@
 import { MultipleEntityCollectionResponse } from '@symphoniacloud/dynamodb-entity-store'
-import { EntityType } from './entityTypes'
+import { EntityType } from './entityTypes.js'
 
 // I use a conditional check on certain operations knowing that they might fail during regular behavior
 // Unfortunately the underlying DynamoDB SDK will always throw an error, so this code catches that error to provide

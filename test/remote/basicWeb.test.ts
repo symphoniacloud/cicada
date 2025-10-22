@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { appStateForTests } from './integrationTestSupport/cloudEnvironment'
+import { appStateForTests } from './integrationTestSupport/cloudEnvironment.js'
 
 test('basic web test', async () => {
   // const cicadaConfig = lookupCicadaConfig()

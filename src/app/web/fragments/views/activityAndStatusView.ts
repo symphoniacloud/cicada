@@ -1,18 +1,18 @@
-import { Clock } from '../../../util/dateAndTime'
-import { FullGithubWorkflowRunEvent } from '../../../domain/types/GithubWorkflowRunEvent'
-import { fragmentViewResult } from '../../viewResultWrappers'
-import { standardTable } from '../../domainComponents/genericComponents'
-import { GithubPush } from '../../../domain/types/GithubPush'
-import { pushRow, PushRowOptions } from '../../domainComponents/pushComponents'
-import { activityIsFullWorkflowRunActivity } from '../../../domain/github/githubActivity'
-import { HiccoughElement } from '../../hiccough/hiccoughElement'
-import { a, i, p } from '../../hiccough/hiccoughElements'
-import { workflowRow, WorkflowRowOptions } from '../../domainComponents/workflowComponents'
+import { Clock } from '../../../util/dateAndTime.js'
+import { FullGithubWorkflowRunEvent } from '../../../domain/types/GithubWorkflowRunEvent.js'
+import { fragmentViewResult } from '../../viewResultWrappers.js'
+import { standardTable } from '../../domainComponents/genericComponents.js'
+import { GithubPush } from '../../../domain/types/GithubPush.js'
+import { pushRow, PushRowOptions } from '../../domainComponents/pushComponents.js'
+import { activityIsFullWorkflowRunActivity } from '../../../domain/github/githubActivity.js'
+import { HiccoughElement } from '../../hiccough/hiccoughElement.js'
+import { a, i, p } from '../../hiccough/hiccoughElements.js'
+import { workflowRow, WorkflowRowOptions } from '../../domainComponents/workflowComponents.js'
 import {
   VisibleActivity,
   VisiblePushes,
   VisibleFullWorkflowRunEvents
-} from '../../../domain/user/userVisible'
+} from '../../../domain/user/userVisible.js'
 
 export type WorkflowRunEventTableType = 'homeStatus' | 'accountStatus' | 'repoStatus' | 'workflowActivity'
 export type GithubPushTableType = 'homeActivity' | 'accountActivity'

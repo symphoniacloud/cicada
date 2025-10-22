@@ -1,4 +1,4 @@
-import { EventBridgeBus } from '../../../src/app/outboundInterfaces/eventBridgeBus'
+import { EventBridgeBus } from '../../../src/app/outboundInterfaces/eventBridgeBus.js'
 
 export interface SentEvent {
   detailType: string

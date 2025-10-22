@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { html } from '../../../../../src/app/web/hiccough/hiccoughCore'
+import { html } from '../../../../../src/app/web/hiccough/hiccoughCore.js'
 import {
   a,
   body,
@@ -12,9 +12,9 @@ import {
   td,
   title,
   tr
-} from '../../../../../src/app/web/hiccough/hiccoughElements'
-import { element, withOptions } from '../../../../../src/app/web/hiccough/hiccoughElement'
-import { DOCTYPE_HTML5 } from '../../../../../src/app/web/hiccough/hiccoughPage'
+} from '../../../../../src/app/web/hiccough/hiccoughElements.js'
+import { element, withOptions } from '../../../../../src/app/web/hiccough/hiccoughElement.js'
+import { DOCTYPE_HTML5 } from '../../../../../src/app/web/hiccough/hiccoughPage.js'
 
 test('hiccough smoke test', () => {
   expect(

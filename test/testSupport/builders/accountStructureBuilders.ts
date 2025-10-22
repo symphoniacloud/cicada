@@ -1,15 +1,18 @@
-import { GithubAccountSummary, GithubRepoSummary } from '../../../src/app/domain/types/GithubSummaries'
-import { fromRawGithubWorkflowId } from '../../../src/app/domain/types/GithubWorkflowId'
+import { GithubAccountSummary, GithubRepoSummary } from '../../../src/app/domain/types/GithubSummaries.js'
+import { fromRawGithubWorkflowId } from '../../../src/app/domain/types/GithubWorkflowId.js'
 import {
   GithubAccountStructure,
   GithubRepoStructure,
   UserScopeReferenceData
-} from '../../../src/app/domain/types/UserScopeReferenceData'
-import { fromRawGithubRepoId } from '../../../src/app/domain/types/GithubRepoId'
-import { fromRawGithubAccountId } from '../../../src/app/domain/types/GithubAccountId'
-import { GithubAccountType, ORGANIZATION_ACCOUNT_TYPE } from '../../../src/app/domain/types/GithubAccountType'
-import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId'
-import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow'
+} from '../../../src/app/domain/types/UserScopeReferenceData.js'
+import { fromRawGithubRepoId } from '../../../src/app/domain/types/GithubRepoId.js'
+import { fromRawGithubAccountId } from '../../../src/app/domain/types/GithubAccountId.js'
+import {
+  GithubAccountType,
+  ORGANIZATION_ACCOUNT_TYPE
+} from '../../../src/app/domain/types/GithubAccountType.js'
+import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
+import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 
 export interface BuildAccountSummaryOptions {
   simpleAccountId?: number

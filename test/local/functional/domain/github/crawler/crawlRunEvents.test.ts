@@ -1,24 +1,24 @@
 import { test } from 'vitest'
-import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
+import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
 import {
   personalTestRepoWorkflow,
   testOrgTestRepoOneWorkflowFromJsonRunOne,
   testOrgTestWorkflowOneFromJsonSummary,
   testPersonalTestRepoWorkflowRun
-} from '../../../../../examples/cicada/githubDomainObjects'
+} from '../../../../../examples/cicada/githubDomainObjects.js'
 
-import example_personal_workflow_run from '../../../../../examples/github/personal-account/api/workflowRunEvent.json'
-import example_org_workflow_run from '../../../../../examples/github/org/api/workflowRunEvent.json'
+import example_personal_workflow_run from '../../../../../examples/github/personal-account/api/workflowRunEvent.json' with { type: 'json' }
+import example_org_workflow_run from '../../../../../examples/github/org/api/workflowRunEvent.json' with { type: 'json' }
 import {
   expectPut,
   expectPutsLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
 import {
   expectedPutGithubWorkflowRun,
   expectedPutGithubWorkflowRunEvent,
   expectedPutLatestGithubWorkflowRunEvent
-} from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
-import { processRawRunEvents } from '../../../../../../src/app/domain/github/githubWorkflowRunEvent'
+} from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
+import { processRawRunEvents } from '../../../../../../src/app/domain/github/githubWorkflowRunEvent.js'
 
 test('repo-crawler-for-personal-account-installation', async () => {
   // A

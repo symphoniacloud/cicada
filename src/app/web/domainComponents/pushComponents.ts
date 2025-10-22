@@ -1,11 +1,11 @@
-import { Clock, displayDateTime } from '../../util/dateAndTime'
-import { GithubPush } from '../../domain/types/GithubPush'
-import { td, tr } from '../hiccough/hiccoughElements'
-import { latestCommitInPush } from '../../domain/github/githubPush'
-import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents'
-import { userCell } from './userComponents'
-import { GithubRepoSummary } from '../../domain/types/GithubSummaries'
-import { githubAnchor } from './genericComponents'
+import { Clock, displayDateTime } from '../../util/dateAndTime.js'
+import { GithubPush } from '../../domain/types/GithubPush.js'
+import { td, tr } from '../hiccough/hiccoughElements.js'
+import { latestCommitInPush } from '../../domain/github/githubPush.js'
+import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents.js'
+import { userCell } from './userComponents.js'
+import { GithubRepoSummary } from '../../domain/types/GithubSummaries.js'
+import { githubAnchor } from './genericComponents.js'
 
 export type PushRowOptions = {
   showDescription: boolean

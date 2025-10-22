@@ -1,10 +1,10 @@
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
-import { GithubPush, isGithubPush } from '../../types/GithubPush'
-import { GITHUB_PUSH } from '../entityTypes'
-import { latestCommitInPush } from '../../github/githubPush'
-import { CicadaEntity } from '../entityStoreEntitySupport'
-import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkflowRunEntity'
-import { GithubAccountId } from '../../types/GithubAccountId'
+import { GithubPush, isGithubPush } from '../../types/GithubPush.js'
+import { GITHUB_PUSH } from '../entityTypes.js'
+import { latestCommitInPush } from '../../github/githubPush.js'
+import { CicadaEntity } from '../entityStoreEntitySupport.js'
+import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkflowRunEntity.js'
+import { GithubAccountId } from '../../types/GithubAccountId.js'
 
 // Exported since also used by GithubWorkflowRunEntity
 export const GithubPushEntity: CicadaEntity<

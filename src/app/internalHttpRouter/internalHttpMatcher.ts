@@ -1,4 +1,4 @@
-import { MinimalAPIGatewayProxyEvent, Route } from './internalHttpRoute'
+import { MinimalAPIGatewayProxyEvent, Route } from './internalHttpRoute.js'
 import UrlPattern from 'url-pattern'
 
 export type Matcher<TEvent> = (event: TEvent) => boolean

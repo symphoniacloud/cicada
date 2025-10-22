@@ -1,8 +1,8 @@
-import { FakeAppState } from '../fakeAppState'
+import { FakeAppState } from '../fakeAppState.js'
 import { expect } from 'vitest'
 import type { NativeAttributeValue } from '@aws-sdk/util-dynamodb'
-import { PutCommandInput } from '@aws-sdk/lib-dynamodb/dist-types/commands/PutCommand'
-import { EntityType } from '../../../../src/app/domain/entityStore/entityTypes'
+import { PutCommandInput } from '@aws-sdk/lib-dynamodb'
+import { EntityType } from '../../../../src/app/domain/entityStore/entityTypes.js'
 
 export function expectPutsLength(appState: FakeAppState) {
   return expect(appState.dynamoDB.puts.length)

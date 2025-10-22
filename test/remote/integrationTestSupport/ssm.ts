@@ -4,8 +4,8 @@ import {
   PutParameterCommand,
   SSMClient
 } from '@aws-sdk/client-ssm'
-import { createFullParameterName, SsmParamName } from '../../../src/multipleContexts/ssmParams'
-import { throwFunction } from '../../../src/multipleContexts/errors'
+import { createFullParameterName, SsmParamName } from '../../../src/multipleContexts/ssmParams.js'
+import { throwFunction } from '../../../src/multipleContexts/errors.js'
 
 // *** Only use these functions in tests
 // *** For Lambda function code, use Powertools Parameters

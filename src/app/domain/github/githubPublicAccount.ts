@@ -1,12 +1,12 @@
-import { AppState } from '../../environment/AppState'
-import { GithubPublicAccount, publicAccountFromRawGithubUser } from '../types/GithubPublicAccount'
-import { isSuccess, Result, successWith } from '../../util/structuredResult'
-import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge'
-import { getInstalledAccountIdForUser } from './githubMembership'
-import { GithubUserId } from '../types/GithubUserId'
-import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity'
-import { putPublicAccount } from '../entityStore/entities/GithubPublicAccountEntity'
+import { AppState } from '../../environment/AppState.js'
+import { GithubPublicAccount, publicAccountFromRawGithubUser } from '../types/GithubPublicAccount.js'
+import { isSuccess, Result, successWith } from '../../util/structuredResult.js'
+import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
+import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
+import { getInstalledAccountIdForUser } from './githubMembership.js'
+import { GithubUserId } from '../types/GithubUserId.js'
+import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity.js'
+import { putPublicAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
 
 export async function savePublicAccountWithName(
   appState: AppState,

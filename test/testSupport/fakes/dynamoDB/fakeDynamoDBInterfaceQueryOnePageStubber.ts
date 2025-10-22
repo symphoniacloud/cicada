@@ -1,6 +1,6 @@
 import type { NativeAttributeValue } from '@aws-sdk/util-dynamodb'
-import { FakeDynamoDBInterfaceStubber } from './fakeDynamoDBInterfaceStubber'
-import { EntityType } from '../../../../src/app/domain/entityStore/entityTypes'
+import { FakeDynamoDBInterfaceStubber } from './fakeDynamoDBInterfaceStubber.js'
+import { EntityType } from '../../../../src/app/domain/entityStore/entityTypes.js'
 
 export class FakeDynamoDBInterfaceQueryOnePageStubber {
   private stubber: FakeDynamoDBInterfaceStubber

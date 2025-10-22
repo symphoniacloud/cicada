@@ -1,7 +1,7 @@
-import { getFromLocalEnvOrUndefined } from '../../multipleContexts/environmentVariables'
+import { getFromLocalEnvOrUndefined } from '../../multipleContexts/environmentVariables.js'
 import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { RemovalPolicy } from 'aws-cdk-lib'
-import { EnvironmentSettings } from '../config/environmentSettings'
+import { EnvironmentSettings } from '../config/environmentSettings.js'
 
 type EnvironmentType = 'prod' | 'nonprod'
 

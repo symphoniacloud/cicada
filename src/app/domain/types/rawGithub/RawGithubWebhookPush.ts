@@ -1,6 +1,6 @@
-import { logger } from '../../../util/logging'
+import { logger } from '../../../util/logging.js'
 
-import { NonEmptyArray } from '../../../util/collections'
+import { NonEmptyArray } from '../../../util/collections.js'
 
 // Commented fields not currently captured
 export interface RawGithubWebhookPush {

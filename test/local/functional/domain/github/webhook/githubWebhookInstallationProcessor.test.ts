@@ -1,16 +1,16 @@
 import { expect, test } from 'vitest'
-import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState'
-import { githubWebhookInstallationProcessor } from '../../../../../../src/app/domain/github/webhookProcessor/processors/githubWebhookInstallationProcessor'
+import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
+import { githubWebhookInstallationProcessor } from '../../../../../../src/app/domain/github/webhookProcessor/processors/githubWebhookInstallationProcessor.js'
 
-import example_installation_created from '../../../../../examples/github/org/webhook/installationCreated.json'
-import { cicadaTestOrgInstallation } from '../../../../../examples/cicada/githubDomainObjects'
+import example_installation_created from '../../../../../examples/github/org/webhook/installationCreated.json' with { type: 'json' }
+import { cicadaTestOrgInstallation } from '../../../../../examples/cicada/githubDomainObjects.js'
 import {
   expectPut,
   expectPutsLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations'
-import { expectedPutGithubInstallation } from '../../../../../testSupport/fakes/tableRecordExpectedWrites'
+} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
+import { expectedPutGithubInstallation } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 
-import { fromRawGithubAppId } from '../../../../../../src/app/domain/types/GithubAppId'
+import { fromRawGithubAppId } from '../../../../../../src/app/domain/types/GithubAppId.js'
 
 test('installation-webhook-for-org-account-installation', async () => {
   // A

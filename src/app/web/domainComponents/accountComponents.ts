@@ -1,6 +1,6 @@
-import { a, td } from '../hiccough/hiccoughElements'
-import { githubAnchor } from './genericComponents'
-import { GithubAccountSummary } from '../../domain/types/GithubSummaries'
+import { a, td } from '../hiccough/hiccoughElements.js'
+import { githubAnchor } from './genericComponents.js'
+import { GithubAccountSummary } from '../../domain/types/GithubSummaries.js'
 
 export function accountCell(account: GithubAccountSummary) {
   return td(
