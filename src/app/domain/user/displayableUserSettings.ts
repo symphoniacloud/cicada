@@ -24,8 +24,7 @@ import {
   getWorkflowFromRepo
 } from '../github/userScopeReferenceData.js'
 import { logger } from '../../util/logging.js'
-import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
-import { GithubRepoId } from '../types/GithubRepoId.js'
+import { GitHubAccountId, GitHubRepoId } from '../../types/GitHubIdTypes.js'
 import { GithubWorkflowId } from '../types/GithubWorkflowId.js'
 
 export async function loadCalculatedAndDisplayableUserSettingsOrUseDefaults(
@@ -69,14 +68,14 @@ export function toDisplayableAccountSettings(
   accountSettings: CalculatedGithubAccountSettings,
   account: GithubAccountStructure
 ): DisplayableGithubAccountSettings {
-  const reposSettings: Record<GithubRepoId, DisplayableGithubRepoSettings> = {}
+  const reposSettings: Record<GitHubRepoId, DisplayableGithubRepoSettings> = {}
   for (const [repoId, repoSettings] of Object.entries(accountSettings.repos)) {
     const repo = getRepoStructureFromAccount(account, {
       accountId: account.accountId,
-      repoId: repoId as GithubRepoId
+      repoId: repoId as GitHubRepoId
     })
     if (repo) {
-      reposSettings[repoId as GithubRepoId] = toDisplayableRepoSettings(repoSettings, repo)
+      reposSettings[repoId as GitHubRepoId] = toDisplayableRepoSettings(repoSettings, repo)
     }
   }
   return {
