@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { isGitHubAccountCoordinates } from '../../../../../src/app/types/GitHubCoordinateTypes.js'
+import { isGitHubAccountKey } from '../../../../../src/app/types/GitHubKeyTypes.js'
 
 import { isGitHubAccountId } from '../../../../../src/app/types/GitHubIdTypes.js'
 
@@ -10,6 +10,6 @@ test('GitHub Account Id type', () => {
 })
 
 test('GitHub Account Coordinates type', () => {
-  expect(isGitHubAccountCoordinates({ accountId: 'GHAccount123' })).toBeTruthy()
-  expect(isGitHubAccountCoordinates({ accountId: '123' })).toBeFalsy()
+  expect(isGitHubAccountKey({ accountId: 'GHAccount123' })).toBeTruthy()
+  expect(isGitHubAccountKey({ accountId: '123' })).toBeFalsy()
 })

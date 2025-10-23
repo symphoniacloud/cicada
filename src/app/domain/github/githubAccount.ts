@@ -1,7 +1,8 @@
 import { GithubAccountSummary } from '../types/GithubSummaries.js'
-import { GithubAccountKey } from '../types/GithubKeys.js'
 
-export function accountKeysEqual(a1: GithubAccountKey, a2: GithubAccountKey) {
+import { GitHubAccountKey } from '../../types/GitHubKeyTypes.js'
+
+export function accountKeysEqual(a1: GitHubAccountKey, a2: GitHubAccountKey) {
   return a1.accountId === a2.accountId
 }
 

@@ -10,11 +10,11 @@ import { getActiveWorkflowsForAccount } from './githubWorkflow.js'
 import { getPublicAccountsForInstallationAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
 import { GithubAccountSummary } from '../types/GithubSummaries.js'
 import { narrowToAccountSummary } from './githubAccount.js'
-import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys.js'
 import { GithubRepo } from '../types/GithubRepo.js'
 import { GithubWorkflow } from '../types/GithubWorkflow.js'
 import { getInstalledAccountIdForUser } from './githubMembership.js'
 import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity.js'
+import { GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubKeyTypes.js'
 
 export async function loadUserScopeReferenceData(
   appState: AppState,
@@ -89,28 +89,28 @@ export function getAccountStructure(
 
 export function getRepoStructureFromAccount(
   accountStructure: GithubAccountStructure | undefined,
-  repoKey: GithubRepoKey
+  repoKey: GitHubRepoKey
 ): GithubRepoStructure | undefined {
   return accountStructure?.repos[repoKey.repoId]
 }
 
 export function getRepoStructure(
   refData: UserScopeReferenceData,
-  repoKey: GithubRepoKey
+  repoKey: GitHubRepoKey
 ): GithubRepoStructure | undefined {
   return getRepoStructureFromAccount(getAccountStructure(refData, repoKey.accountId), repoKey)
 }
 
 export function getWorkflowFromRepo(
   repoStructure: GithubRepoStructure | undefined,
-  workflowKey: GithubWorkflowKey
+  workflowKey: GitHubWorkflowKey
 ): GithubWorkflow | undefined {
   return repoStructure?.workflows[workflowKey.workflowId]
 }
 
 export function getWorkflowFromRefData(
   refData: UserScopeReferenceData,
-  workflowKey: GithubWorkflowKey
+  workflowKey: GitHubWorkflowKey
 ): GithubWorkflow | undefined {
   return getWorkflowFromRepo(getRepoStructure(refData, workflowKey), workflowKey)
 }

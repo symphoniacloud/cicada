@@ -6,10 +6,10 @@ import {
   PersistedUserSettings,
   UserSetting
 } from '../types/UserSettings.js'
-import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys.js'
 import { getUserSettings, saveUserSettings } from '../entityStore/entities/UserSettingsEntity.js'
 import { getOrSetNewAndReturn } from '../../util/collections.js'
 import { GitHubAccountId, GitHubUserId } from '../../types/GitHubIdTypes.js'
+import { GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubKeyTypes.js'
 
 export async function getPersistedUserSettingsOrDefaults(
   appState: AppState,
@@ -55,14 +55,14 @@ export function accountUpdater(accountId: GitHubAccountId, setting: UserSetting,
 export async function updateAndSaveRepoSetting(
   appState: AppState,
   userId: GitHubUserId,
-  repoKey: GithubRepoKey,
+  repoKey: GitHubRepoKey,
   setting: UserSetting,
   value: boolean
 ) {
   return updateAndSaveSettings(appState, userId, repoUpdater(repoKey, setting, value))
 }
 
-export function repoUpdater(repoKey: GithubRepoKey, setting: UserSetting, value: boolean) {
+export function repoUpdater(repoKey: GitHubRepoKey, setting: UserSetting, value: boolean) {
   return (settings: PersistedUserSettings) => {
     const repoSettings = getOrCreateAndReturnRepoSettings(settings, repoKey)
     repoSettings[setting] = value
@@ -73,14 +73,14 @@ export function repoUpdater(repoKey: GithubRepoKey, setting: UserSetting, value:
 export async function updateAndSaveWorkflowSetting(
   appState: AppState,
   userId: GitHubUserId,
-  workflowKey: GithubWorkflowKey,
+  workflowKey: GitHubWorkflowKey,
   setting: UserSetting,
   value: boolean
 ) {
   return updateAndSaveSettings(appState, userId, workflowUpdater(workflowKey, setting, value))
 }
 
-export function workflowUpdater(workflowKey: GithubWorkflowKey, setting: UserSetting, value: boolean) {
+export function workflowUpdater(workflowKey: GitHubWorkflowKey, setting: UserSetting, value: boolean) {
   return (settings: PersistedUserSettings) => {
     const workflowSettings = getOrCreateAndReturnWorkflowSettings(settings, workflowKey)
     workflowSettings[setting] = value
@@ -110,7 +110,7 @@ function getOrCreateAndReturnAccountSettings(
 
 function getOrCreateAndReturnRepoSettings(
   settings: PersistedUserSettings,
-  repoKey: GithubRepoKey
+  repoKey: GitHubRepoKey
 ): PersistedGithubRepoSettings {
   const accountSettings = getOrCreateAndReturnAccountSettings(settings, repoKey.accountId)
   return getOrSetNewAndReturn(accountSettings.repos, `${repoKey.repoId}`, () => ({
@@ -120,7 +120,7 @@ function getOrCreateAndReturnRepoSettings(
 
 function getOrCreateAndReturnWorkflowSettings(
   settings: PersistedUserSettings,
-  workflowKey: GithubWorkflowKey
+  workflowKey: GitHubWorkflowKey
 ): PersistedGithubWorkflowSettings {
   const repoSettings = getOrCreateAndReturnRepoSettings(settings, workflowKey)
   return getOrSetNewAndReturn(repoSettings.workflows, `${workflowKey.workflowId}`, () => ({}))

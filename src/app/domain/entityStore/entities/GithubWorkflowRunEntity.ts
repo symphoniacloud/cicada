@@ -8,10 +8,10 @@ import {
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { domainObjectsFromMultipleEventEntityResponse } from '../entityStoreOperationSupport.js'
 import { GithubPushEntity } from './GithubPushEntity.js'
-import { GithubAccountKey, GithubRepoKey } from '../../types/GithubKeys.js'
 import { GithubPush } from '../../types/GithubPush.js'
 
 import { GitHubRepoId } from '../../../types/GitHubIdTypes.js'
+import { GitHubAccountKey, GitHubRepoKey } from '../../../types/GitHubKeyTypes.js'
 
 // Stores the latest run event per workflow run
 const GithubWorkflowRunEntity: CicadaEntity<
@@ -42,7 +42,7 @@ const GithubWorkflowRunEntity: CicadaEntity<
 }
 
 // Also used by GithubWorkflowRunEventEntity and GithubPushEntity
-export function githubActivityEntityPk({ accountId }: GithubAccountKey) {
+export function githubActivityEntityPk({ accountId }: GitHubAccountKey) {
   return `ACCOUNT#${accountId}`
 }
 
@@ -74,7 +74,7 @@ export async function putGithubWorkflowRunfNoKeyExistsOrNewerThanExisting(
 // common key code in this module
 export async function queryRunsAndPushesForRepo(
   entityStore: AllEntitiesStore,
-  repoKey: GithubRepoKey
+  repoKey: GitHubRepoKey
 ): Promise<{
   runs: GithubWorkflowRunEvent[]
   pushes: GithubPush[]

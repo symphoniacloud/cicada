@@ -3,12 +3,12 @@ import { failedWithResult, Result, successWith } from '../../../util/structuredR
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { logger } from '../../../util/logging.js'
 import { invalidRequestResponse } from '../../htmlResponses.js'
-import { GitHubRepoCoordinates, GitHubRepoCoordinatesSchema } from '../../../types/GitHubCoordinateTypes.js'
+import { GitHubRepoKey, GitHubRepoKeySchema } from '../../../types/GitHubKeyTypes.js'
 
 export function parsePartialRepoCoordinates(
   event: CicadaAuthorizedAPIEvent
-): Result<Partial<GitHubRepoCoordinates>, APIGatewayProxyResult> {
-  const result = GitHubRepoCoordinatesSchema.partial().safeParse(event.queryStringParameters ?? {})
+): Result<Partial<GitHubRepoKey>, APIGatewayProxyResult> {
+  const result = GitHubRepoKeySchema.partial().safeParse(event.queryStringParameters ?? {})
   if (result.success) {
     return successWith(result.data)
   }

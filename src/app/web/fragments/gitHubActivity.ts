@@ -9,7 +9,6 @@ import {
   createWorkflowRunEventTableResponse
 } from './views/activityAndStatusView.js'
 import { parsePartialWorkflowCoordinates } from './requestParsing/parsePartialWorkflowCoordinates.js'
-import { GithubRepoKey, GithubWorkflowKey } from '../../domain/types/GithubKeys.js'
 import {
   getAllRunEventsForWorkflowForUser,
   getRecentActiveBranchesForUserAndAccount,
@@ -19,6 +18,7 @@ import {
 import { fragmentPath } from '../routingCommon.js'
 import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData.js'
+import { GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubKeyTypes.js'
 
 export const gitHubActivityFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('gitHubActivity'),
@@ -64,7 +64,7 @@ async function githubActivityForAccount(
 async function githubActivityForRepo(
   appState: AppState,
   refData: UserScopeReferenceData,
-  repoKey: GithubRepoKey
+  repoKey: GitHubRepoKey
 ) {
   const activityResult = await getRecentActivityForRepoForUser(appState, refData, repoKey)
   if (!isSuccess(activityResult)) return notFoundHTMLResponse
@@ -74,7 +74,7 @@ async function githubActivityForRepo(
 async function githubActivityForWorkflow(
   appState: AppState,
   refData: UserScopeReferenceData,
-  workflow: GithubWorkflowKey
+  workflow: GitHubWorkflowKey
 ) {
   const runEventsResult = await getAllRunEventsForWorkflowForUser(appState, refData, workflow)
   if (!isSuccess(runEventsResult)) return notFoundHTMLResponse
