@@ -5,8 +5,7 @@ import {
   UserScopeReferenceData
 } from '../types/UserScopeReferenceData.js'
 import { getUnarchivedRepositoriesForAccount, narrowToRepoSummary, repoKeysEqual } from './githubRepo.js'
-import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
-import { GithubRepoId } from '../types/GithubRepoId.js'
+import { GitHubAccountId, GitHubRepoId } from '../../types/GitHubIdTypes.js'
 import { getActiveWorkflowsForAccount } from './githubWorkflow.js'
 import { getPublicAccountsForInstallationAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
 import { GithubAccountSummary } from '../types/GithubSummaries.js'
@@ -63,7 +62,7 @@ export async function loadPublicAccountsStructure(
 async function loadReposStructure(
   appState: AppState,
   accountId: GitHubAccountId
-): Promise<Record<GithubRepoId, GithubRepoStructure>> {
+): Promise<Record<GitHubRepoId, GithubRepoStructure>> {
   const allRepos = await getUnarchivedRepositoriesForAccount(appState, accountId)
   const allWorkflows = await getActiveWorkflowsForAccount(appState, accountId)
   return Object.fromEntries(allRepos.map((repo) => [repo.repoId, buildRepoStructure(repo, allWorkflows)]))

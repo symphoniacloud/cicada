@@ -1,8 +1,7 @@
 import { isNotNullObject } from '../../util/types.js'
-import { GithubRepoId } from './GithubRepoId.js'
 import { GithubWorkflowId } from './GithubWorkflowId.js'
 import { GithubUserKey, isGithubUserKey } from './GithubKeys.js'
-import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
+import { GitHubAccountId, GitHubRepoId } from '../../types/GitHubIdTypes.js'
 
 export type UserSetting = 'visible' | 'notify'
 
@@ -27,7 +26,7 @@ export interface PersistedVisibleAndNotifyConfigurable {
 }
 
 export interface PersistedGithubAccountSettings extends PersistedVisibleAndNotifyConfigurable {
-  repos: Record<GithubRepoId, PersistedGithubRepoSettings>
+  repos: Record<GitHubRepoId, PersistedGithubRepoSettings>
 }
 
 export interface PersistedGithubRepoSettings extends PersistedVisibleAndNotifyConfigurable {
@@ -47,7 +46,7 @@ export interface CalculatedUserSettings extends GithubUserKey {
 export type CalculatedVisibleAndNotifyConfigurable = Required<PersistedVisibleAndNotifyConfigurable>
 
 export interface CalculatedGithubAccountSettings extends CalculatedVisibleAndNotifyConfigurable {
-  repos: Record<GithubRepoId, CalculatedGithubRepoSettings>
+  repos: Record<GitHubRepoId, CalculatedGithubRepoSettings>
 }
 
 export interface CalculatedGithubRepoSettings extends CalculatedVisibleAndNotifyConfigurable {
@@ -71,7 +70,7 @@ export interface Displayable {
 export interface DisplayableGithubAccountSettings
   extends CalculatedVisibleAndNotifyConfigurable,
     Displayable {
-  repos: Record<GithubRepoId, DisplayableGithubRepoSettings>
+  repos: Record<GitHubRepoId, DisplayableGithubRepoSettings>
 }
 
 export interface DisplayableGithubRepoSettings extends CalculatedVisibleAndNotifyConfigurable, Displayable {

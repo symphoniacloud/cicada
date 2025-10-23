@@ -6,9 +6,11 @@ import {
 } from '../../../../../src/app/domain/user/persistedUserSettings.js'
 import { PersistedUserSettings } from '../../../../../src/app/domain/types/UserSettings.js'
 import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId.js'
-import { fromRawGithubRepoId } from '../../../../../src/app/domain/types/GithubRepoId.js'
 import { fromRawGithubWorkflowId } from '../../../../../src/app/domain/types/GithubWorkflowId.js'
-import { fromRawGitHubAccountId } from '../../../../../src/app/domain/types/fromRawGitHubIds.js'
+import {
+  fromRawGitHubAccountId,
+  fromRawGitHubRepoId
+} from '../../../../../src/app/domain/types/fromRawGitHubIds.js'
 
 function emptySettings(rawUserId: number): PersistedUserSettings {
   return {
@@ -48,7 +50,7 @@ test('update settings existing account', () => {
 
 test('update settings new repo', () => {
   const newSettings = repoUpdater(
-    { accountId: fromRawGitHubAccountId(123), repoId: fromRawGithubRepoId(456) },
+    { accountId: fromRawGitHubAccountId(123), repoId: fromRawGitHubRepoId(456) },
     'visible',
     true
   )(emptySettings(11))
@@ -75,7 +77,7 @@ test('update settings existing repo', () => {
   }
 
   const newSettings = repoUpdater(
-    { accountId: fromRawGitHubAccountId(123), repoId: fromRawGithubRepoId(456) },
+    { accountId: fromRawGitHubAccountId(123), repoId: fromRawGitHubRepoId(456) },
     'visible',
     true
   )(settings)
@@ -89,7 +91,7 @@ test('update settings new workflow', () => {
   const newSettings = workflowUpdater(
     {
       accountId: fromRawGitHubAccountId(123),
-      repoId: fromRawGithubRepoId(456),
+      repoId: fromRawGitHubRepoId(456),
       workflowId: fromRawGithubWorkflowId(789)
     },
     'visible',
@@ -130,7 +132,7 @@ test('update settings existing repo', () => {
   const newSettings = workflowUpdater(
     {
       accountId: fromRawGitHubAccountId(123),
-      repoId: fromRawGithubRepoId(456),
+      repoId: fromRawGitHubRepoId(456),
       workflowId: fromRawGithubWorkflowId(789)
     },
     'visible',

@@ -10,7 +10,8 @@ import { domainObjectsFromMultipleEventEntityResponse } from '../entityStoreOper
 import { GithubPushEntity } from './GithubPushEntity.js'
 import { GithubAccountKey, GithubRepoKey } from '../../types/GithubKeys.js'
 import { GithubPush } from '../../types/GithubPush.js'
-import { GithubRepoId } from '../../types/GithubRepoId.js'
+
+import { GitHubRepoId } from '../../../types/GitHubIdTypes.js'
 
 // Stores the latest run event per workflow run
 const GithubWorkflowRunEntity: CicadaEntity<
@@ -46,12 +47,12 @@ export function githubActivityEntityPk({ accountId }: GithubAccountKey) {
 }
 
 // Also used by GithubWorkflowRunEventEntity and GithubPushEntity
-export function githubActivityEntityGSISk(repoId: GithubRepoId, dateTime: string) {
+export function githubActivityEntityGSISk(repoId: GitHubRepoId, dateTime: string) {
   return `${githubActivityEntityGSISkPrefix(repoId)}#DATETIME#${dateTime}`
 }
 
 // Also used by GithubWorkflowRunEventEntity and GithubPushEntity
-export function githubActivityEntityGSISkPrefix(repoId: GithubRepoId) {
+export function githubActivityEntityGSISkPrefix(repoId: GitHubRepoId) {
   return `REPO#${repoId}`
 }
 

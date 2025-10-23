@@ -10,7 +10,6 @@ import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken.js'
 import { fromRawGithubUserId, GithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
 import { fromRawGithubInstallationId } from '../../../src/app/domain/types/GithubInstallationId.js'
-import { fromRawGithubRepoId } from '../../../src/app/domain/types/GithubRepoId.js'
 import { fromRawGithubWorkflowId } from '../../../src/app/domain/types/GithubWorkflowId.js'
 import { fromRawGithubWorkflowRunId } from '../../../src/app/domain/types/GithubWorkflowRunId.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
@@ -20,7 +19,10 @@ import {
   GithubRepoSummary,
   GithubWorkflowSummary
 } from '../../../src/app/domain/types/GithubSummaries.js'
-import { fromRawGitHubAccountId } from '../../../src/app/domain/types/fromRawGitHubIds.js'
+import {
+  fromRawGitHubAccountId,
+  fromRawGitHubRepoId
+} from '../../../src/app/domain/types/fromRawGitHubIds.js'
 
 export const cicadaTestUserAccountKey: GithubAccountKey = {
   accountId: fromRawGitHubAccountId(162360409)
@@ -96,7 +98,7 @@ export const accountMemberships: Record<GithubUserId, GithubAccountMembership> =
 }
 
 export const personalTestRepoSummary: GithubRepoSummary = {
-  repoId: fromRawGithubRepoId(767679529),
+  repoId: fromRawGitHubRepoId(767679529),
   repoName: 'personal-test-repo',
   accountId: fromRawGitHubAccountId(162360409),
   accountName: 'cicada-test-user',
@@ -123,13 +125,13 @@ export const testPersonalTestRepo: GithubRepo = {
 
 export const orgTestRepoOneSummary: GithubRepoSummary = {
   ...cicadaTestOrgAccountSummary,
-  repoId: fromRawGithubRepoId(768206479),
+  repoId: fromRawGitHubRepoId(768206479),
   repoName: 'org-test-repo-one'
 }
 
 export const orgTestRepoTwoSummary: GithubRepoSummary = {
   ...cicadaTestOrgAccountSummary,
-  repoId: fromRawGithubRepoId(768207426),
+  repoId: fromRawGitHubRepoId(768207426),
   repoName: 'org-test-repo-two'
 }
 
@@ -382,7 +384,7 @@ export const testPersonalTestRepoPush: GithubPush = {
   accountName: 'cicada-test-user',
   accountType: 'user',
   ref: 'refs/heads/main',
-  repoId: fromRawGithubRepoId(767679529),
+  repoId: fromRawGitHubRepoId(767679529),
   repoName: 'personal-test-repo'
 }
 
@@ -409,7 +411,7 @@ export const testOrgTestRepoOnePush: GithubPush = {
   accountName: 'cicada-test-org',
   accountType: 'organization',
   ref: 'refs/heads/main',
-  repoId: fromRawGithubRepoId(768206479),
+  repoId: fromRawGitHubRepoId(768206479),
   repoName: 'org-test-repo-one'
 }
 
@@ -436,7 +438,7 @@ export const testOrgTestRepoOnePushFC94: GithubPush = {
   accountName: 'cicada-test-org',
   accountType: 'organization',
   ref: 'refs/heads/main',
-  repoId: fromRawGithubRepoId(768206479),
+  repoId: fromRawGitHubRepoId(768206479),
   repoName: 'org-test-repo-one',
   repoUrl: 'https://github.com/cicada-test-org/org-test-repo-one'
 }

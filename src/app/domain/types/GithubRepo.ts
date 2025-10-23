@@ -1,8 +1,7 @@
 import { RawGithubRepo } from './rawGithub/RawGithubRepo.js'
 import { fromRawAccountType } from './GithubAccountType.js'
-import { fromRawGithubRepoId } from './GithubRepoId.js'
 import { GithubRepoSummary, isGithubRepoSummary } from './GithubSummaries.js'
-import { fromRawGitHubAccountId } from './fromRawGitHubIds.js'
+import { fromRawGitHubAccountId, fromRawGitHubRepoId } from './fromRawGitHubIds.js'
 
 export interface GithubRepo extends GithubRepoSummary {
   fullName: string
@@ -47,7 +46,7 @@ export function fromRawGithubRepo(raw: RawGithubRepo): GithubRepo {
     accountId: fromRawGitHubAccountId(raw.owner.id),
     accountName: raw.owner.login,
     accountType: fromRawAccountType(raw.owner.type),
-    repoId: fromRawGithubRepoId(raw.id),
+    repoId: fromRawGitHubRepoId(raw.id),
     repoName: raw.name,
     fullName: raw.full_name,
     private: raw.private,

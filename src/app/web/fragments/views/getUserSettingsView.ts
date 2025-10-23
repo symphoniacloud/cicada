@@ -10,8 +10,7 @@ import {
 import { HiccoughElement } from '../../hiccough/hiccoughElement.js'
 import { GithubRepoKey, GithubWorkflowKey } from '../../../domain/types/GithubKeys.js'
 import { colSm, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
-import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
-import { GithubRepoId } from '../../../domain/types/GithubRepoId.js'
+import { GitHubAccountId, GitHubRepoId } from '../../../types/GitHubIdTypes.js'
 import { GithubWorkflowId } from '../../../domain/types/GithubWorkflowId.js'
 
 export function createGetUserSettingsResponse(
@@ -43,7 +42,7 @@ export function accountControlsRow(
   if (accountSettings.visible) {
     repoRows.push(divRow(colSm(1), colSm(11, b('Repository'))))
     for (const [repoId, repoSettings] of Object.entries(accountSettings.repos)) {
-      repoRows.push(repoControlsRow({ accountId, repoId: repoId as GithubRepoId }, repoSettings))
+      repoRows.push(repoControlsRow({ accountId, repoId: repoId as GitHubRepoId }, repoSettings))
     }
   }
 

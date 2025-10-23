@@ -14,8 +14,7 @@ import { isoDifferenceMs } from '../../util/dateAndTime.js'
 import { GithubUserId } from '../types/GithubUserId.js'
 import { GithubRepoSummary, GithubWorkflowSummary } from '../types/GithubSummaries.js'
 import { getWorkflow } from '../entityStore/entities/GithubWorkflowEntity.js'
-import { fromRawGitHubAccountId } from '../types/fromRawGitHubIds.js'
-import { fromRawGithubRepoId } from '../types/GithubRepoId.js'
+import { fromRawGitHubAccountId, fromRawGitHubRepoId } from '../types/fromRawGitHubIds.js'
 import { fromRawGithubWorkflowId } from '../types/GithubWorkflowId.js'
 import { GithubWorkflowKey } from '../types/GithubKeys.js'
 import { fromRawAccountType } from '../types/GithubAccountType.js'
@@ -47,7 +46,7 @@ async function readOrLookupWorkflow(
 ) {
   const workflowKey: GithubWorkflowKey = {
     accountId: fromRawGitHubAccountId(rawRunEvent.repository.owner.id),
-    repoId: fromRawGithubRepoId(rawRunEvent.repository.id),
+    repoId: fromRawGitHubRepoId(rawRunEvent.repository.id),
     workflowId: fromRawGithubWorkflowId(rawRunEvent.workflow_id)
   }
   const loadedWorkflow = await getWorkflow(appState.entityStore, workflowKey)

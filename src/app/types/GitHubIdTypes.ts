@@ -12,7 +12,7 @@ export function isGitHubAccountId(x: unknown): x is GitHubAccountId {
 }
 
 // -- Repo
-const GITHUB_REPO_ID_PREFIX = `GHRepo`
+export const GITHUB_REPO_ID_PREFIX = `GHRepo`
 
 export const GitHubRepoIdSchema = z
   .templateLiteral([z.literal(GITHUB_REPO_ID_PREFIX), z.number().int().nonnegative()])

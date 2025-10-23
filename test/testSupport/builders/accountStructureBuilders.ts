@@ -5,14 +5,16 @@ import {
   GithubRepoStructure,
   UserScopeReferenceData
 } from '../../../src/app/domain/types/UserScopeReferenceData.js'
-import { fromRawGithubRepoId } from '../../../src/app/domain/types/GithubRepoId.js'
 import {
   GithubAccountType,
   ORGANIZATION_ACCOUNT_TYPE
 } from '../../../src/app/domain/types/GithubAccountType.js'
 import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
-import { fromRawGitHubAccountId } from '../../../src/app/domain/types/fromRawGitHubIds.js'
+import {
+  fromRawGitHubAccountId,
+  fromRawGitHubRepoId
+} from '../../../src/app/domain/types/fromRawGitHubIds.js'
 
 export interface BuildAccountSummaryOptions {
   simpleAccountId?: number
@@ -36,7 +38,7 @@ export interface BuildRepoSummaryOptions extends BuildAccountSummaryOptions {
 export function buildRepoSummmary(options?: BuildRepoSummaryOptions): GithubRepoSummary {
   return {
     ...buildAccountSummary(options),
-    repoId: fromRawGithubRepoId(options?.simpleRepoId ?? '456'),
+    repoId: fromRawGitHubRepoId(options?.simpleRepoId ?? '456'),
     repoName: options?.repoName ?? ''
   }
 }
