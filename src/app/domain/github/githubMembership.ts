@@ -7,14 +7,14 @@ import {
   putMemberships
 } from '../entityStore/entities/GithubAccountMembershipEntity.js'
 import { arrayDifferenceDeep } from '../../util/collections.js'
-import { GithubAccountId } from '../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { GithubUserId } from '../types/GithubUserId.js'
 import { throwFunction } from '../../../multipleContexts/errors.js'
 
 export async function setMemberships(
   appState: AppState,
   latestMembers: GithubUser[],
-  accountId: GithubAccountId
+  accountId: GitHubAccountId
 ) {
   const memberships = latestMembers.map(({ userId }) => ({
     userId,
@@ -30,7 +30,7 @@ export async function setMemberships(
 export async function getInstalledAccountIdForUser(
   appState: AppState,
   userId: GithubUserId
-): Promise<GithubAccountId> {
+): Promise<GitHubAccountId> {
   return (
     (await getAllMembershipsForUserId(appState.entityStore, userId))[0]?.accountId ??
     throwFunction(`User ${userId} has no memberships - request shouldn't have been authorized `)()
@@ -41,6 +41,6 @@ export async function isUserAMemberOfAnyInstalledAccount(appState: AppState, use
   return (await getAllMembershipsForUserId(appState.entityStore, user.userId)).length > 0
 }
 
-export async function getUserIdsForAccount(appState: AppState, accountId: GithubAccountId) {
+export async function getUserIdsForAccount(appState: AppState, accountId: GitHubAccountId) {
   return (await getAllMembershipsForAccount(appState.entityStore, accountId)).map(({ userId }) => userId)
 }

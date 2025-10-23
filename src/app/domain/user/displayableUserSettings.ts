@@ -24,7 +24,7 @@ import {
   getWorkflowFromRepo
 } from '../github/userScopeReferenceData.js'
 import { logger } from '../../util/logging.js'
-import { GithubAccountId } from '../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { GithubRepoId } from '../types/GithubRepoId.js'
 import { GithubWorkflowId } from '../types/GithubWorkflowId.js'
 
@@ -49,11 +49,11 @@ function toDisplayableUserSettings(
   userSettings: CalculatedUserSettings,
   refData: UserScopeReferenceData
 ): DisplayableUserSettings {
-  const accountsSettings: Record<GithubAccountId, DisplayableGithubAccountSettings> = {}
+  const accountsSettings: Record<GitHubAccountId, DisplayableGithubAccountSettings> = {}
   for (const [accountId, accountSettings] of Object.entries(userSettings.github.accounts)) {
-    const account = getAccountStructure(refData, accountId as GithubAccountId)
+    const account = getAccountStructure(refData, accountId as GitHubAccountId)
     if (account) {
-      accountsSettings[accountId as GithubAccountId] = toDisplayableAccountSettings(accountSettings, account)
+      accountsSettings[accountId as GitHubAccountId] = toDisplayableAccountSettings(accountSettings, account)
     }
   }
 

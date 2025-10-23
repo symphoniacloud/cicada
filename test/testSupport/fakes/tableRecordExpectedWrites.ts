@@ -11,7 +11,7 @@ import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWork
 import { GithubUser } from '../../../src/app/domain/types/GithubUser.js'
 import { GithubAccountMembership } from '../../../src/app/domain/types/GithubAccountMembership.js'
 import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription.js'
-import { GithubAccountId } from '../../../src/app/domain/types/GithubAccountId.js'
+import { GitHubAccountId } from '../../../src/app/types/GitHubIdTypes.js'
 import { GithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 
@@ -171,7 +171,7 @@ export function expectedBatchWriteGithubMemberships(memberships: GithubAccountMe
 }
 
 export function expectedBatchDeleteGithubMemberships(
-  memberships: { accountId: GithubAccountId; userId: GithubUserId }[]
+  memberships: { accountId: GitHubAccountId; userId: GithubUserId }[]
 ) {
   return buildBatchDelete(
     'fakeGithubAccountMemberships',

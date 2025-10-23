@@ -5,7 +5,7 @@ import {
   UserScopeReferenceData
 } from '../types/UserScopeReferenceData.js'
 import { getUnarchivedRepositoriesForAccount, narrowToRepoSummary, repoKeysEqual } from './githubRepo.js'
-import { GithubAccountId } from '../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { GithubRepoId } from '../types/GithubRepoId.js'
 import { getActiveWorkflowsForAccount } from './githubWorkflow.js'
 import { getPublicAccountsForInstallationAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
@@ -46,10 +46,10 @@ export async function loadAccountStructure<TAccount extends GithubAccountSummary
 
 export async function loadPublicAccountsStructure(
   appState: AppState,
-  accountId: GithubAccountId
-): Promise<Record<GithubAccountId, GithubAccountStructure>> {
+  accountId: GitHubAccountId
+): Promise<Record<GitHubAccountId, GithubAccountStructure>> {
   const allPublicAccounts = await getPublicAccountsForInstallationAccount(appState.entityStore, accountId)
-  const allPublicAccountStructure: Record<GithubAccountId, GithubAccountStructure> = {}
+  const allPublicAccountStructure: Record<GitHubAccountId, GithubAccountStructure> = {}
   for (const publicAccount of allPublicAccounts) {
     allPublicAccountStructure[publicAccount.accountId] = await loadAccountStructure(
       appState,
@@ -62,7 +62,7 @@ export async function loadPublicAccountsStructure(
 
 async function loadReposStructure(
   appState: AppState,
-  accountId: GithubAccountId
+  accountId: GitHubAccountId
 ): Promise<Record<GithubRepoId, GithubRepoStructure>> {
   const allRepos = await getUnarchivedRepositoriesForAccount(appState, accountId)
   const allWorkflows = await getActiveWorkflowsForAccount(appState, accountId)
@@ -82,7 +82,7 @@ function buildRepoStructure(repo: GithubRepo, allWorkflows: GithubWorkflow[]): G
 
 export function getAccountStructure(
   refData: UserScopeReferenceData,
-  accountId: GithubAccountId
+  accountId: GitHubAccountId
 ): GithubAccountStructure | undefined {
   return refData.memberAccount.accountId === accountId
     ? refData.memberAccount
@@ -118,7 +118,7 @@ export function getWorkflowFromRefData(
 }
 
 export function allAccountIDsFromRefData(refData: UserScopeReferenceData) {
-  return [refData.memberAccount.accountId, ...(Object.keys(refData.publicAccounts) as GithubAccountId[])]
+  return [refData.memberAccount.accountId, ...(Object.keys(refData.publicAccounts) as GitHubAccountId[])]
 }
 
 export function allAccountsFromRefData(refData: UserScopeReferenceData) {

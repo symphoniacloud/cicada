@@ -6,7 +6,7 @@ import {
   isCrawlableResource
 } from '../../../multipleContexts/githubCrawler.js'
 import { isNotNullObject } from '../../util/types.js'
-import { GithubAccountId, isGithubAccountId } from '../../domain/types/GithubAccountId.js'
+import { GitHubAccountId, isGitHubAccountId } from '../../types/GitHubIdTypes.js'
 
 export type CrawlEvent = { resourceType: CrawlableResource }
 
@@ -30,7 +30,7 @@ export type CrawlPublicAccountsEvent = {
 export type CrawlPublicAccountEvent = {
   resourceType: 'publicAccount'
   installation: GithubInstallation
-  publicAccountId: GithubAccountId
+  publicAccountId: GitHubAccountId
   lookbackHours: number
 }
 
@@ -63,7 +63,7 @@ export function isCrawlPublicAccountEvent(x: CrawlEvent): x is CrawlPublicAccoun
     ('installation' in x &&
       isGithubInstallation(x.installation) &&
       'publicAccountId' in x &&
-      isGithubAccountId(x.publicAccountId) &&
+      isGitHubAccountId(x.publicAccountId) &&
       'lookbackHours' in x &&
       typeof x.lookbackHours === 'number') ||
     throwError(`Invalid object for ${CRAWLABLE_RESOURCES.PUBLIC_ACCOUNT} : ${JSON.stringify(x)}`)()

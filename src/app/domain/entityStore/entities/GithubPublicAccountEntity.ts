@@ -1,7 +1,7 @@
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GITHUB_PUBLIC_ACCOUNT } from '../entityTypes.js'
 import { GithubPublicAccount, isGithubPublicAccount } from '../../types/GithubPublicAccount.js'
-import { GithubAccountId } from '../../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 
 const GithubPublicAccountEntity: CicadaEntity<
@@ -25,15 +25,15 @@ export async function putPublicAccount(entityStore: AllEntitiesStore, account: G
 
 export async function getPublicAccountsForInstallationAccount(
   entityStore: AllEntitiesStore,
-  installationAccountId: GithubAccountId
+  installationAccountId: GitHubAccountId
 ) {
   return await store(entityStore).queryAllByPk({ installationAccountId })
 }
 
 export async function getPublicAccount(
   entityStore: AllEntitiesStore,
-  installationAccountId: GithubAccountId,
-  accountId: GithubAccountId
+  installationAccountId: GitHubAccountId,
+  accountId: GitHubAccountId
 ) {
   return await store(entityStore).getOrUndefined({
     installationAccountId,

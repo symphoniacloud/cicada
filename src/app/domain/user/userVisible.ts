@@ -3,7 +3,7 @@ import { latestWorkflowRunEventsPerWorkflowForAccounts } from '../github/githubL
 import { FullGithubWorkflowRunEvent, GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
 import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings.js'
 import { CalculatedUserSettings } from '../types/UserSettings.js'
-import { GithubAccountId } from '../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys.js'
 import { recentActiveBranchesForAccounts } from '../github/githubLatestPushesPerRef.js'
 import { GithubPush } from '../types/GithubPush.js'
@@ -55,7 +55,7 @@ export async function getLatestWorkflowRunEventsForUserWithUserSettings(
 export async function getLatestWorkflowRunEventsForAccountForUser(
   appState: AppState,
   refData: UserScopeReferenceData,
-  accountId: GithubAccountId
+  accountId: GitHubAccountId
 ): Promise<Result<VisibleFullWorkflowRunEvents>> {
   if (!getAccountStructure(refData, accountId)) return failureNotAuthorized
 
@@ -140,7 +140,7 @@ export async function getRecentActiveBranchesForUserWithUserSettings(
 export async function getRecentActiveBranchesForUserAndAccount(
   appState: AppState,
   refData: UserScopeReferenceData,
-  accountId: GithubAccountId
+  accountId: GitHubAccountId
 ): Promise<Result<VisiblePushes>> {
   if (!getAccountStructure(refData, accountId)) return failureNotAuthorized
   return successWith(toVisiblePushes(await recentActiveBranchesForAccounts(appState, [accountId])))

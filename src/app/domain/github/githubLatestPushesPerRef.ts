@@ -6,7 +6,7 @@ import {
   queryRecentLatestPushesByAccount
 } from '../entityStore/entities/GithubLatestPushPerRefEntity.js'
 import { dateTimeAddDays } from '../../util/dateAndTime.js'
-import { GithubAccountId } from '../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 
 export async function saveLatestPushes(appState: AppState, newPushes: GithubPush[]) {
   for (const newPush of newPushes) {
@@ -16,7 +16,7 @@ export async function saveLatestPushes(appState: AppState, newPushes: GithubPush
   }
 }
 
-export async function recentActiveBranchesForAccounts(appState: AppState, accountIds: GithubAccountId[]) {
+export async function recentActiveBranchesForAccounts(appState: AppState, accountIds: GitHubAccountId[]) {
   const branches: GithubPush[] = []
   for (const accountId of accountIds) {
     branches.push(...(await recentActiveBranches(appState, accountId)))
@@ -24,7 +24,7 @@ export async function recentActiveBranchesForAccounts(appState: AppState, accoun
   return branches
 }
 
-export async function recentActiveBranches(appState: AppState, accountId: GithubAccountId) {
+export async function recentActiveBranches(appState: AppState, accountId: GitHubAccountId) {
   return await queryRecentLatestPushesByAccount(
     appState.entityStore,
     accountId,

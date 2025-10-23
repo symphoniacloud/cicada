@@ -6,10 +6,10 @@ import {
   DisplayableGithubRepoSettings,
   DisplayableGithubWorkflowSettings
 } from '../../../domain/types/UserSettings.js'
-import { GithubAccountId } from '../../../domain/types/GithubAccountId.js'
+import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
 
 export function createUpdateUserAccountSettingResponse(
-  accountId: GithubAccountId,
+  accountId: GitHubAccountId,
   settings: DisplayableGithubAccountSettings
 ) {
   return fragmentViewResult(accountControlsRow(accountId, settings))

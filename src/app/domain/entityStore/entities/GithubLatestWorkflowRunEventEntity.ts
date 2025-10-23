@@ -5,7 +5,7 @@ import {
   rangeWhereSkBeginsWith,
   typePredicateParser
 } from '@symphoniacloud/dynamodb-entity-store'
-import { GithubAccountId } from '../../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
 import { GithubRepoKey } from '../../types/GithubKeys.js'
 import { sortBy } from '../../../util/collections.js'
 import { workflowRunEventUpdatedTimestamp } from '../../github/githubWorkflowRunEvent.js'
@@ -53,7 +53,7 @@ export async function putRunEventIfNoKeyExistsOrNewerThanExisting(
 
 export async function latestWorkflowRunEventsPerWorkflowForAccount(
   entityStore: AllEntitiesStore,
-  accountId: GithubAccountId
+  accountId: GitHubAccountId
 ) {
   return store(entityStore).queryAllWithGsiByPk(
     { accountId },

@@ -8,7 +8,7 @@ import {
 } from '../../../outboundInterfaces/githubInstallationClient.js'
 import { crawlAccountContents } from './crawlAccountContents.js'
 import { GithubPublicAccount, isGithubPublicAccount } from '../../types/GithubPublicAccount.js'
-import { GithubAccountId } from '../../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
 import {
   getPublicAccount,
   getPublicAccountsForInstallationAccount
@@ -28,7 +28,7 @@ export async function crawlInstallationAccount(
 export async function crawlPublicAccount(
   appState: AppState,
   installation: GithubInstallation,
-  publicAccountId: GithubAccountId,
+  publicAccountId: GitHubAccountId,
   lookbackHours: number
 ) {
   const githubClient = appState.githubClient.clientForInstallation(installation.installationId)

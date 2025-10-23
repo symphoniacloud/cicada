@@ -5,10 +5,10 @@ import {
   workflowUpdater
 } from '../../../../../src/app/domain/user/persistedUserSettings.js'
 import { PersistedUserSettings } from '../../../../../src/app/domain/types/UserSettings.js'
-import { fromRawGithubAccountId } from '../../../../../src/app/domain/types/GithubAccountId.js'
 import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId.js'
 import { fromRawGithubRepoId } from '../../../../../src/app/domain/types/GithubRepoId.js'
 import { fromRawGithubWorkflowId } from '../../../../../src/app/domain/types/GithubWorkflowId.js'
+import { fromRawGitHubAccountId } from '../../../../../src/app/domain/types/fromRawGitHubIds.js'
 
 function emptySettings(rawUserId: number): PersistedUserSettings {
   return {
@@ -20,7 +20,7 @@ function emptySettings(rawUserId: number): PersistedUserSettings {
 }
 
 test('update settings new account', () => {
-  const newSettings = accountUpdater(fromRawGithubAccountId(123), 'visible', true)(emptySettings(11))
+  const newSettings = accountUpdater(fromRawGitHubAccountId(123), 'visible', true)(emptySettings(11))
   expect(newSettings.github.accounts).toEqual({
     GHAccount123: {
       visible: true,
@@ -36,7 +36,7 @@ test('update settings existing account', () => {
     repos: {}
   }
 
-  const newSettings = accountUpdater(fromRawGithubAccountId(123), 'visible', true)(settings)
+  const newSettings = accountUpdater(fromRawGitHubAccountId(123), 'visible', true)(settings)
   expect(newSettings.github.accounts).toEqual({
     GHAccount123: {
       notify: true,
@@ -48,7 +48,7 @@ test('update settings existing account', () => {
 
 test('update settings new repo', () => {
   const newSettings = repoUpdater(
-    { accountId: fromRawGithubAccountId(123), repoId: fromRawGithubRepoId(456) },
+    { accountId: fromRawGitHubAccountId(123), repoId: fromRawGithubRepoId(456) },
     'visible',
     true
   )(emptySettings(11))
@@ -75,7 +75,7 @@ test('update settings existing repo', () => {
   }
 
   const newSettings = repoUpdater(
-    { accountId: fromRawGithubAccountId(123), repoId: fromRawGithubRepoId(456) },
+    { accountId: fromRawGitHubAccountId(123), repoId: fromRawGithubRepoId(456) },
     'visible',
     true
   )(settings)
@@ -88,7 +88,7 @@ test('update settings existing repo', () => {
 test('update settings new workflow', () => {
   const newSettings = workflowUpdater(
     {
-      accountId: fromRawGithubAccountId(123),
+      accountId: fromRawGitHubAccountId(123),
       repoId: fromRawGithubRepoId(456),
       workflowId: fromRawGithubWorkflowId(789)
     },
@@ -129,7 +129,7 @@ test('update settings existing repo', () => {
 
   const newSettings = workflowUpdater(
     {
-      accountId: fromRawGithubAccountId(123),
+      accountId: fromRawGitHubAccountId(123),
       repoId: fromRawGithubRepoId(456),
       workflowId: fromRawGithubWorkflowId(789)
     },

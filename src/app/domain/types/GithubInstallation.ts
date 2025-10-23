@@ -1,7 +1,6 @@
 import { RawGithubInstallation } from './rawGithub/RawGithubInstallation.js'
 import { fromRawAccountType } from './GithubAccountType.js'
 import { isString } from '../../util/types.js'
-import { fromRawGithubAccountId } from './GithubAccountId.js'
 import { fromRawGithubAppId, GithubAppId, isGithubAppId } from './GithubAppId.js'
 import {
   fromRawGithubInstallationId,
@@ -9,6 +8,7 @@ import {
   isGithubInstallationId
 } from './GithubInstallationId.js'
 import { GithubAccountSummary, isGithubAccountSummary } from './GithubSummaries.js'
+import { fromRawGitHubAccountId } from './fromRawGitHubIds.js'
 
 export interface GithubInstallation extends GithubAccountSummary {
   installationId: GithubInstallationId
@@ -34,7 +34,7 @@ export function fromRawGithubInstallation(raw: RawGithubInstallation): GithubIns
     appId: fromRawGithubAppId(raw.app_id),
     appSlug: raw.app_slug,
     accountName: raw.account.login,
-    accountId: fromRawGithubAccountId(raw.account.id),
+    accountId: fromRawGitHubAccountId(raw.account.id),
     accountType: fromRawAccountType(raw.target_type)
   }
 }

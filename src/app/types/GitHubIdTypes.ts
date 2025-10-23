@@ -1,7 +1,7 @@
 import * as z from 'zod'
 
 // -- Account
-const GITHUB_ACCOUNT_ID_PREFIX = `GHAccount`
+export const GITHUB_ACCOUNT_ID_PREFIX = `GHAccount`
 export const GitHubAccountIdSchema = z
   .templateLiteral([z.literal(GITHUB_ACCOUNT_ID_PREFIX), z.number().int().nonnegative()])
   .readonly()

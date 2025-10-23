@@ -9,7 +9,7 @@ import {
 import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys.js'
 import { getUserSettings, saveUserSettings } from '../entityStore/entities/UserSettingsEntity.js'
 import { getOrSetNewAndReturn } from '../../util/collections.js'
-import { GithubAccountId } from '../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { GithubUserId } from '../types/GithubUserId.js'
 
 export async function getPersistedUserSettingsOrDefaults(
@@ -38,14 +38,14 @@ function initialUserSettings(userId: GithubUserId): PersistedUserSettings {
 export async function updateAndSaveAccountSetting(
   appState: AppState,
   userId: GithubUserId,
-  accountId: GithubAccountId,
+  accountId: GitHubAccountId,
   setting: UserSetting,
   value: boolean
 ) {
   return updateAndSaveSettings(appState, userId, accountUpdater(accountId, setting, value))
 }
 
-export function accountUpdater(accountId: GithubAccountId, setting: UserSetting, value: boolean) {
+export function accountUpdater(accountId: GitHubAccountId, setting: UserSetting, value: boolean) {
   return (settings: PersistedUserSettings) => {
     const accountSettings = getOrCreateAndReturnAccountSettings(settings, accountId)
     accountSettings[setting] = value
@@ -102,7 +102,7 @@ export async function updateAndSaveSettings(
 
 function getOrCreateAndReturnAccountSettings(
   settings: PersistedUserSettings,
-  accountId: GithubAccountId
+  accountId: GitHubAccountId
 ): PersistedGithubAccountSettings {
   return getOrSetNewAndReturn(settings.github.accounts, `${accountId}`, () => ({
     repos: {}

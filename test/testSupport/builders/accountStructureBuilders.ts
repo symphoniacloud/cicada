@@ -6,13 +6,13 @@ import {
   UserScopeReferenceData
 } from '../../../src/app/domain/types/UserScopeReferenceData.js'
 import { fromRawGithubRepoId } from '../../../src/app/domain/types/GithubRepoId.js'
-import { fromRawGithubAccountId } from '../../../src/app/domain/types/GithubAccountId.js'
 import {
   GithubAccountType,
   ORGANIZATION_ACCOUNT_TYPE
 } from '../../../src/app/domain/types/GithubAccountType.js'
 import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
+import { fromRawGitHubAccountId } from '../../../src/app/domain/types/fromRawGitHubIds.js'
 
 export interface BuildAccountSummaryOptions {
   simpleAccountId?: number
@@ -22,7 +22,7 @@ export interface BuildAccountSummaryOptions {
 
 export function buildAccountSummary(options?: BuildAccountSummaryOptions): GithubAccountSummary {
   return {
-    accountId: fromRawGithubAccountId(options?.simpleAccountId ?? '123'),
+    accountId: fromRawGitHubAccountId(options?.simpleAccountId ?? '123'),
     accountName: options?.accountName ?? '',
     accountType: options?.accountType ?? ORGANIZATION_ACCOUNT_TYPE
   }

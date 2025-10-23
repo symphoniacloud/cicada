@@ -3,7 +3,7 @@ import { GITHUB_WORKFLOW } from '../entityTypes.js'
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubWorkflow, isGithubWorkflow } from '../../types/GithubWorkflow.js'
 import { GithubWorkflowKey } from '../../types/GithubKeys.js'
-import { GithubAccountId } from '../../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
 
 const GithubWorkflowEntity: CicadaEntity<
   GithubWorkflow,
@@ -34,7 +34,7 @@ export async function getWorkflow(entityStore: AllEntitiesStore, workflowKey: Gi
   return store(entityStore).getOrUndefined(workflowKey)
 }
 
-export async function getWorkflowsForAccount(entityStore: AllEntitiesStore, accountId: GithubAccountId) {
+export async function getWorkflowsForAccount(entityStore: AllEntitiesStore, accountId: GitHubAccountId) {
   return store(entityStore).queryAllByPk({ accountId })
 }
 

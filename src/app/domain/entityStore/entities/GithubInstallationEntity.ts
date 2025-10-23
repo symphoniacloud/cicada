@@ -1,7 +1,7 @@
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubInstallation, isGithubInstallation } from '../../types/GithubInstallation.js'
 import { GITHUB_INSTALLATION } from '../entityTypes.js'
-import { GithubAccountId } from '../../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
 import { cicadaEntityFromPkOnlyEntity } from '../entityStoreEntitySupport.js'
 
 const GithubInstallationEntity = cicadaEntityFromPkOnlyEntity({
@@ -21,14 +21,14 @@ export async function putInstallation(
 
 export async function getInstallationOrUndefined(
   entityStore: AllEntitiesStore,
-  accountId: GithubAccountId
+  accountId: GitHubAccountId
 ): Promise<GithubInstallation | undefined> {
   return store(entityStore).getOrUndefined({ accountId })
 }
 
 export async function getInstallationOrThrow(
   entityStore: AllEntitiesStore,
-  accountId: GithubAccountId
+  accountId: GitHubAccountId
 ): Promise<GithubInstallation> {
   return store(entityStore).getOrThrow({ accountId })
 }
