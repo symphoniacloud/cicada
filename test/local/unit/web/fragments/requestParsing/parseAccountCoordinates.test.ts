@@ -34,3 +34,22 @@ test('Get Account ID', () => {
     throw new Error('Should have been a valid result')
   }
 })
+
+test('Get Account ID removes superfluous fields', () => {
+  const result = parseAccountCoordinates({
+    ...createStubApiGatewayProxyEvent(),
+    username: '',
+    refData: buildUserScopedRefData(),
+    queryStringParameters: {
+      accountId: 'GHAccount123',
+      unused: 'XYZ'
+    }
+  })
+  if (result.isSuccessResult) {
+    expect(result.result).toEqual({
+      accountId: 'GHAccount123'
+    })
+  } else {
+    throw new Error('Should have been a valid result')
+  }
+})

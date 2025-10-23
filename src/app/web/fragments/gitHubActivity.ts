@@ -8,7 +8,7 @@ import {
   createGithubPushTableResponse,
   createWorkflowRunEventTableResponse
 } from './views/activityAndStatusView.js'
-import { getOptionalWorkflowCoordinates } from './requestParsing/getOptionalWorkflowCoordinates.js'
+import { parsePartialWorkflowCoordinates } from './requestParsing/parsePartialWorkflowCoordinates.js'
 import { GithubRepoKey, GithubWorkflowKey } from '../../domain/types/GithubKeys.js'
 import {
   getAllRunEventsForWorkflowForUser,
@@ -26,7 +26,7 @@ export const gitHubActivityFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
 }
 
 export async function gitHubActivity(appState: AppState, event: CicadaAuthorizedAPIEvent) {
-  const coordinatesResult = getOptionalWorkflowCoordinates(event)
+  const coordinatesResult = parsePartialWorkflowCoordinates(event)
 
   if (isFailure(coordinatesResult)) return coordinatesResult.failureResult
   const { accountId, repoId, workflowId } = coordinatesResult.result

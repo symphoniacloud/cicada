@@ -7,7 +7,7 @@ import {
   createUpdateUserWorkflowSettingResponse
 } from './views/postUserSettingView.js'
 import { logger } from '../../util/logging.js'
-import { getPostUserSettingParameters } from './requestParsing/getPostUserSettingParameters.js'
+import { parsePostUserSettingParameters } from './requestParsing/parsePostUserSettingParameters.js'
 import { isFailure } from '../../util/structuredResult.js'
 import { invalidRequestResponse } from '../htmlResponses.js'
 import { GithubRepoKey, GithubWorkflowKey } from '../../domain/types/GithubKeys.js'
@@ -43,7 +43,7 @@ export const postUserSettingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
 
 export async function updateUserSetting(appState: AppState, event: CicadaAuthorizedAPIEvent) {
   console.log(event.queryStringParameters)
-  const parseResult = getPostUserSettingParameters(event)
+  const parseResult = parsePostUserSettingParameters(event)
   if (isFailure(parseResult)) return parseResult.failureResult
 
   const { accountId, repoId, workflowId, setting, enabled } = parseResult.result

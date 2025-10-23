@@ -1,21 +1,21 @@
 import { CicadaAuthorizedAPIEvent } from '../../../inboundInterfaces/lambdaTypes.js'
 import { failedWithResult, Result, successWith } from '../../../util/structuredResult.js'
-import { APIGatewayProxyResult } from 'aws-lambda'
 import { logger } from '../../../util/logging.js'
 import { invalidRequestResponse } from '../../htmlResponses.js'
+import { APIGatewayProxyResult } from 'aws-lambda'
 import {
-  PartialGitHubRepoCoordinates,
-  PartialGitHubRepoCoordinatesSchema
-} from '../../../types/GitHubCoordinateTypes.js'
+  PostUserSettingsParameters,
+  PostUserSettingsParametersSchema
+} from '../../../types/PostUserSettingsParametersType.js'
 
-export function parsePartialRepoCoordinates(
+export function parsePostUserSettingParameters(
   event: CicadaAuthorizedAPIEvent
-): Result<PartialGitHubRepoCoordinates, APIGatewayProxyResult> {
-  const result = PartialGitHubRepoCoordinatesSchema.safeParse(event.queryStringParameters ?? {})
+): Result<PostUserSettingsParameters, APIGatewayProxyResult> {
+  const result = PostUserSettingsParametersSchema.safeParse(event.queryStringParameters)
   if (result.success) {
     return successWith(result.data)
   }
 
-  logger.warn('Invalid request in parsePartialRepoCoordinates')
+  logger.warn('Invalid request in parsePostUserSettingParameters')
   return failedWithResult('Invalid request', invalidRequestResponse)
 }
