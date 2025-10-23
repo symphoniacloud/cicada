@@ -1,7 +1,7 @@
 import * as z from 'zod'
-import { GitHubAccountIdSchema } from './GitHubAccountId.js'
-import { GitHubRepoIdSchema } from './GitHubRepoId.js'
+import { GitHubAccountIdSchema, GitHubRepoIdSchema, GitHubWorkflowIdSchema } from './GitHubIdTypes.js'
 
+// -- Account
 export const GitHubAccountCoordinatesSchema = z.object({
   accountId: GitHubAccountIdSchema
 })
@@ -12,9 +12,10 @@ export function isGitHubAccountCoordinates(x: unknown): x is GitHubAccountCoordi
   return GitHubAccountCoordinatesSchema.safeParse(x).success
 }
 
-export const GitHubRepoCoordinatesSchema = z.object({
-  repoId: GitHubRepoIdSchema,
-  accountId: GitHubAccountIdSchema
+// -- Repo
+
+export const GitHubRepoCoordinatesSchema = GitHubAccountCoordinatesSchema.extend({
+  repoId: GitHubRepoIdSchema
 })
 
 export type GitHubRepoCoordinates = z.infer<typeof GitHubRepoCoordinatesSchema>
@@ -23,10 +24,24 @@ export function isGitHubRepoCoordinates(x: unknown): x is GitHubRepoCoordinates 
   return GitHubRepoCoordinatesSchema.safeParse(x).success
 }
 
+// -- Partial Repo
+
 export const PartialGitHubRepoCoordinatesSchema = GitHubRepoCoordinatesSchema.partial()
 
 export type PartialGitHubRepoCoordinates = z.infer<typeof PartialGitHubRepoCoordinatesSchema>
 
 export function isPartialGitHubRepoCoordinates(x: unknown): x is PartialGitHubRepoCoordinates {
   return PartialGitHubRepoCoordinatesSchema.safeParse(x).success
+}
+
+// -- Workflow
+
+export const GitHubWorkflowCoordinatesSchema = GitHubRepoCoordinatesSchema.extend({
+  workflowId: GitHubWorkflowIdSchema
+})
+
+export type GitHubWorkflowCoordinates = z.infer<typeof GitHubWorkflowCoordinatesSchema>
+
+export function isGitHubWorkflowCoordinates(x: unknown): x is GitHubWorkflowCoordinates {
+  return GitHubWorkflowCoordinatesSchema.safeParse(x).success
 }
