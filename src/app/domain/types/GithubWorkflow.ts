@@ -1,7 +1,8 @@
 import { GithubRepoSummary, GithubWorkflowSummary, isGithubWorkflowSummary } from './GithubSummaries.js'
 import { isStringOrUndefined } from '../../util/types.js'
 import { RawGithubWorkflow } from './rawGithub/RawGithubWorkflow.js'
-import { fromRawGithubWorkflowId } from './GithubWorkflowId.js'
+
+import { fromRawGitHubWorkflowId } from './fromRawGitHubIds.js'
 
 export interface GithubWorkflow extends GithubWorkflowSummary {
   workflowPath: string
@@ -35,7 +36,7 @@ export function fromRawGithubWorkflow(repo: GithubRepoSummary, raw: RawGithubWor
     accountType: repo.accountType,
     repoId: repo.repoId,
     repoName: repo.repoName,
-    workflowId: fromRawGithubWorkflowId(raw.id),
+    workflowId: fromRawGitHubWorkflowId(raw.id),
     workflowName: raw.name,
     workflowPath: raw.path,
     workflowState: raw.state,

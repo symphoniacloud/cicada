@@ -10,7 +10,6 @@ import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken.js'
 import { fromRawGithubUserId, GithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
 import { fromRawGithubInstallationId } from '../../../src/app/domain/types/GithubInstallationId.js'
-import { fromRawGithubWorkflowId } from '../../../src/app/domain/types/GithubWorkflowId.js'
 import { fromRawGithubWorkflowRunId } from '../../../src/app/domain/types/GithubWorkflowRunId.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 import { GithubAccountKey } from '../../../src/app/domain/types/GithubKeys.js'
@@ -21,7 +20,8 @@ import {
 } from '../../../src/app/domain/types/GithubSummaries.js'
 import {
   fromRawGitHubAccountId,
-  fromRawGitHubRepoId
+  fromRawGitHubRepoId,
+  fromRawGitHubWorkflowId
 } from '../../../src/app/domain/types/fromRawGitHubIds.js'
 
 export const cicadaTestUserAccountKey: GithubAccountKey = {
@@ -173,13 +173,13 @@ export const testOrgTestRepoTwo: GithubRepo = {
 
 export const testOrgTestWorkflowOneSummary: GithubWorkflowSummary = {
   ...orgTestRepoOneSummary,
-  workflowId: fromRawGithubWorkflowId(88508779),
+  workflowId: fromRawGitHubWorkflowId(88508779),
   workflowName: 'Test Workflow'
 }
 
 export const testOrgTestWorkflowOne: GithubWorkflow = {
   ...testOrgTestWorkflowOneSummary,
-  workflowId: fromRawGithubWorkflowId(88508779),
+  workflowId: fromRawGitHubWorkflowId(88508779),
   workflowName: 'Test Workflow',
   workflowState: 'active',
   workflowPath: '.github/workflows/test.yml',
@@ -192,7 +192,7 @@ export const testOrgTestWorkflowOne: GithubWorkflow = {
 
 export const testOrgTestWorkflowOneFromJsonSummary: GithubWorkflowSummary = {
   ...orgTestRepoOneSummary,
-  workflowId: fromRawGithubWorkflowId(88647110),
+  workflowId: fromRawGitHubWorkflowId(88647110),
   workflowName: 'Test Repo One Workflow'
 }
 
@@ -233,7 +233,7 @@ export const testOrgTestWorkflowOneFromJsonRun: GithubWorkflowRunEvent = {
 
 export const personalTestRepoWorkflowSummary: GithubWorkflowSummary = {
   ...personalTestRepoSummary,
-  workflowId: fromRawGithubWorkflowId(88508779),
+  workflowId: fromRawGitHubWorkflowId(88508779),
   workflowName: 'Test Workflow'
 }
 
@@ -303,7 +303,7 @@ export const testOrgTestRepoOneWorkflowRunOne: GithubWorkflowRunEvent = {
 
 export const testOrgTestRepoOneWorkflowFromJsonRunOne: GithubWorkflowRunEvent = {
   ...orgTestRepoOneSummary,
-  workflowId: fromRawGithubWorkflowId(88647110),
+  workflowId: fromRawGitHubWorkflowId(88647110),
   workflowName: 'Test Repo One Workflow',
   actor: {
     avatarUrl: 'https://avatars.githubusercontent.com/u/49635?v=4',

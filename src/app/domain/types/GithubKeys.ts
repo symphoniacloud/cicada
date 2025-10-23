@@ -1,11 +1,12 @@
 import { isNotNullObject } from '../../util/types.js'
-import { GithubWorkflowId, isGithubWorkflowId } from './GithubWorkflowId.js'
 import { GithubUserId, isGithubUserId } from './GithubUserId.js'
 import {
   GitHubAccountId,
   GitHubRepoId,
+  GitHubWorkflowId,
   isGitHubAccountId,
-  isGitHubRepoId
+  isGitHubRepoId,
+  isGitHubWorkflowId
 } from '../../types/GitHubIdTypes.js'
 
 export interface GithubAccountKey {
@@ -17,7 +18,7 @@ export interface GithubRepoKey extends GithubAccountKey {
 }
 
 export interface GithubWorkflowKey extends GithubRepoKey {
-  workflowId: GithubWorkflowId
+  workflowId: GitHubWorkflowId
 }
 
 export interface GithubUserKey {
@@ -33,7 +34,7 @@ export function isGithubRepoKey(x: unknown): x is GithubRepoKey {
 }
 
 export function isGithubWorkflowKey(x: unknown): x is GithubWorkflowKey {
-  return isGithubRepoKey(x) && 'workflowId' in x && isGithubWorkflowId(x.workflowId)
+  return isGithubRepoKey(x) && 'workflowId' in x && isGitHubWorkflowId(x.workflowId)
 }
 
 export function isGithubUserKey(x: unknown): x is GithubUserKey {

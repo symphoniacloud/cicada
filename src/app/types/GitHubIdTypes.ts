@@ -25,7 +25,7 @@ export function isGitHubRepoId(x: unknown): x is GitHubRepoId {
 }
 
 // -- Workflow
-const GITHUB_WORKFLOW_ID_PREFIX = `GHWorkflow`
+export const GITHUB_WORKFLOW_ID_PREFIX = `GHWorkflow`
 
 export const GitHubWorkflowIdSchema = z
   .templateLiteral([z.literal(GITHUB_WORKFLOW_ID_PREFIX), z.number().int().nonnegative()])
