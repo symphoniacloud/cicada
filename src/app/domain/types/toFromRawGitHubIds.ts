@@ -1,15 +1,18 @@
 import {
   GITHUB_ACCOUNT_ID_PREFIX,
+  GITHUB_APP_ID_PREFIX,
   GITHUB_REPO_ID_PREFIX,
   GITHUB_USER_ID_PREFIX,
   GITHUB_WORKFLOW_ID_PREFIX,
   GITHUB_WORKFLOW_RUN_ID_PREFIX,
   GitHubAccountId,
+  GitHubAppId,
   GitHubRepoId,
   GitHubUserId,
   GitHubWorkflowId,
   GitHubWorkflowRunId,
   isGitHubAccountId,
+  isGitHubAppId,
   isGitHubRepoId,
   isGitHubUserId,
   isGitHubWorkflowId,
@@ -50,4 +53,17 @@ export function fromRawGithubWorkflowRunId(x: unknown): GitHubWorkflowRunId {
     throw new Error(`Invalid raw github workflow run id: ${x}`)
   }
   return cicadaRunId
+}
+
+export function fromRawGithubAppId(x: unknown): GitHubAppId {
+  const cicadaGithubAppId = `${GITHUB_APP_ID_PREFIX}${x}`
+  if (!isGitHubAppId(cicadaGithubAppId)) {
+    throw new Error(`Invalid raw github app id: ${x}`)
+  } else {
+    return cicadaGithubAppId
+  }
+}
+
+export function toRawGithubAppId(appId: GitHubAppId) {
+  return appId.slice(GITHUB_APP_ID_PREFIX.length)
 }

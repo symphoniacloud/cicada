@@ -14,7 +14,7 @@ import {
   fromRawGitHubRepoId,
   fromRawGithubUserId,
   fromRawGitHubWorkflowId
-} from '../../../src/app/domain/types/fromRawGitHubIds.js'
+} from '../../../src/app/domain/types/toFromRawGitHubIds.js'
 
 export interface BuildAccountSummaryOptions {
   simpleAccountId?: number

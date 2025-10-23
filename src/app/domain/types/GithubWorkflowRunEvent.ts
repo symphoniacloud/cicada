@@ -8,7 +8,7 @@ import {
 import { isString } from '../../util/types.js'
 import { narrowToWorkflowSummary } from '../github/githubWorkflow.js'
 import { GithubWorkflow } from './GithubWorkflow.js'
-import { fromRawGithubUserId, fromRawGithubWorkflowRunId } from './fromRawGitHubIds.js'
+import { fromRawGithubUserId, fromRawGithubWorkflowRunId } from './toFromRawGitHubIds.js'
 import { GitHubWorkflowRunId, isGitHubWorkflowRunId } from '../../types/GitHubIdTypes.js'
 
 export interface GithubWorkflowRunEvent extends GithubWorkflowSummary {

@@ -4,7 +4,8 @@ import {
   TableNames,
   WebPushVapidConfig
 } from '../../../src/app/environment/config.js'
-import { fromRawGithubAppId } from '../../../src/app/domain/types/GithubAppId.js'
+
+import { fromRawGithubAppId } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
 
 export const defaultFakeWebHostname = 'fake-cicada.example.com'
 

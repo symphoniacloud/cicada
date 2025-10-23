@@ -5,7 +5,7 @@ import { isRawGithubWorkflowRunEvent } from '../../../types/rawGithub/RawGithubW
 import { processRawRunEvent } from '../../githubWorkflowRunEvent.js'
 import { getInstallationOrUndefined } from '../../../entityStore/entities/GithubInstallationEntity.js'
 
-import { fromRawGitHubAccountId } from '../../../types/fromRawGitHubIds.js'
+import { fromRawGitHubAccountId } from '../../../types/toFromRawGitHubIds.js'
 
 export const githubWebhookWorkflowRunProcessor: WebhookProcessor = async (
   appState: AppState,

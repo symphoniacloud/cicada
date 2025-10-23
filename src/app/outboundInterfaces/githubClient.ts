@@ -8,7 +8,8 @@ import { createOAuthUserAuth } from '@octokit/auth-oauth-user'
 import { logger } from '../util/logging.js'
 import { RawGithubUser } from '../domain/types/rawGithub/RawGithubUser.js'
 import { GithubInstallationId } from '../domain/types/GithubInstallationId.js'
-import { toRawGithubAppId } from '../domain/types/GithubAppId.js'
+
+import { toRawGithubAppId } from '../domain/types/toFromRawGitHubIds.js'
 
 export interface GithubClient {
   clientForInstallation(installationId: GithubInstallationId): GithubInstallationClient

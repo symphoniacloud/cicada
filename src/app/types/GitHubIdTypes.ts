@@ -52,7 +52,7 @@ export function isGitHubUserId(x: unknown): x is GitHubUserId {
   return GitHubUserIdSchema.safeParse(x).success
 }
 
-// -- Workflow Run ID
+// -- Workflow Run
 
 export const GITHUB_WORKFLOW_RUN_ID_PREFIX = `GHWorkflowRun`
 
@@ -64,4 +64,18 @@ export type GitHubWorkflowRunId = z.infer<typeof GitHubWorkflowRunIdSchema>
 
 export function isGitHubWorkflowRunId(x: unknown): x is GitHubWorkflowRunId {
   return GitHubWorkflowRunIdSchema.safeParse(x).success
+}
+
+// -- App
+
+export const GITHUB_APP_ID_PREFIX = `GHApp`
+
+export const GitHubAppIdSchema = z
+  .templateLiteral([z.literal(GITHUB_APP_ID_PREFIX), z.number().int().nonnegative()])
+  .readonly()
+
+export type GitHubAppId = z.infer<typeof GitHubAppIdSchema>
+
+export function isGitHubAppId(x: unknown): x is GitHubAppId {
+  return GitHubAppIdSchema.safeParse(x).success
 }

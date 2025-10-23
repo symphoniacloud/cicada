@@ -13,7 +13,7 @@ import {
 } from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
 import { expectedPutGithubInstallation } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 
-import { fromRawGithubAppId } from '../../../../../../src/app/domain/types/GithubAppId.js'
+import { fromRawGithubAppId } from '../../../../../../src/app/domain/types/toFromRawGitHubIds.js'
 
 test('app-crawler-for-personal-account-installation', async () => {
   // A

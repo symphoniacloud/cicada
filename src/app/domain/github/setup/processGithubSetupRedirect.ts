@@ -12,7 +12,8 @@ import {
 import { logger } from '../../../util/logging.js'
 import { fromRawAccountType, ORGANIZATION_ACCOUNT_TYPE } from '../../types/GithubAccountType.js'
 import { a, p } from '../../../web/hiccough/hiccoughElements.js'
-import { fromRawGithubAppId, GithubAppId } from '../../types/GithubAppId.js'
+import { fromRawGithubAppId } from '../../types/toFromRawGitHubIds.js'
+import { GitHubAppId } from '../../../types/GitHubIdTypes.js'
 
 export const setupRedirectRoute: Route<APIGatewayProxyEvent, GithubSetupAppState> = {
   path: '/github/setup/redirect',
@@ -55,7 +56,7 @@ async function processRedirect(appState: GithubSetupAppState, event: APIGatewayP
 }
 
 export async function callGithubToFinishAppCreation(code: string): Promise<{
-  appId: GithubAppId
+  appId: GitHubAppId
   appName: string
   clientId: string
   clientSecret: string
@@ -99,7 +100,7 @@ async function saveGithubAppConfiguration(
     privateKey,
     webhookSecret
   }: {
-    appId: GithubAppId
+    appId: GitHubAppId
     clientId: string
     clientSecret: string
     privateKey: string

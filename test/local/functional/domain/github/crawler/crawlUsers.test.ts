@@ -28,7 +28,7 @@ import { successWith } from '../../../../../../src/app/util/structuredResult.js'
 import {
   fromRawGitHubAccountId,
   fromRawGithubUserId
-} from '../../../../../../src/app/domain/types/fromRawGitHubIds.js'
+} from '../../../../../../src/app/domain/types/toFromRawGitHubIds.js'
 
 test('user-crawler-for-personal-account-installation', async () => {
   // A
