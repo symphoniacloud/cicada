@@ -14,7 +14,7 @@ import { invalidRequestResponse } from '../../htmlResponses.js'
 import {
   WorkflowCoordinatesQueryStringParameters,
   workflowCoordinatesSchema
-} from './getWorkflowCoordinates.js'
+} from './parseWorkflowCoordinates.js'
 import { GithubAccountId, isGithubAccountId } from '../../../domain/types/GithubAccountId.js'
 import { GithubRepoId, isGithubRepoId } from '../../../domain/types/GithubRepoId.js'
 import { GithubWorkflowId, isGithubWorkflowId } from '../../../domain/types/GithubWorkflowId.js'
