@@ -4,18 +4,18 @@ import { logger } from '../../../util/logging.js'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { invalidRequestResponse } from '../../htmlResponses.js'
 import {
-  GitHubAccountCoordinates,
-  GitHubAccountCoordinatesSchema
+  PartialGitHubWorkflowCoordinates,
+  PartialGitHubWorkflowCoordinatesSchema
 } from '../../../types/GitHubCoordinateTypes.js'
 
-export function parseAccountCoordinates(
+export function parsePartialWorkflowCoordinates(
   event: CicadaAuthorizedAPIEvent
-): Result<GitHubAccountCoordinates, APIGatewayProxyResult> {
-  const result = GitHubAccountCoordinatesSchema.safeParse(event.queryStringParameters)
+): Result<PartialGitHubWorkflowCoordinates, APIGatewayProxyResult> {
+  const result = PartialGitHubWorkflowCoordinatesSchema.safeParse(event.queryStringParameters ?? {})
   if (result.success) {
     return successWith(result.data)
   }
 
-  logger.warn('Invalid request in getAccountCoordinates')
-  return failedWithResult('Invalid request - no account ID', invalidRequestResponse)
+  logger.warn('Invalid request in parsePartialWorkflowCoordinates')
+  return failedWithResult('Invalid request', invalidRequestResponse)
 }

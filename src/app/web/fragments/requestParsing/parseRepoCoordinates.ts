@@ -3,17 +3,17 @@ import { failedWithResult, Result, successWith } from '../../../util/structuredR
 import { logger } from '../../../util/logging.js'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { invalidRequestResponse } from '../../htmlResponses.js'
-import { GitHubRepoCoordinates, isGitHubRepoCoordinates } from '../../../types/GitHubCoordinateTypes.js'
+import { GitHubRepoCoordinates, GitHubRepoCoordinatesSchema } from '../../../types/GitHubCoordinateTypes.js'
 import { JTDSchemaType } from 'ajv/dist/jtd.js'
-import { pickProperties } from '../../../util/collections.js'
 
 export function parseRepoCoordinates(
   event: CicadaAuthorizedAPIEvent
 ): Result<GitHubRepoCoordinates, APIGatewayProxyResult> {
-  if (isGitHubRepoCoordinates(event.queryStringParameters)) {
-    return successWith(pickProperties(event.queryStringParameters, ['accountId', 'repoId']))
+  const result = GitHubRepoCoordinatesSchema.safeParse(event.queryStringParameters)
+  if (result.success) {
+    return successWith(result.data)
   }
-  logger.warn('Invalid request in getRepoCoordinates')
+  logger.warn('Invalid request in parseRepoCoordinates')
   return failedWithResult('Invalid request - no account ID', invalidRequestResponse)
 }
 
