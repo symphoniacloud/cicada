@@ -18,7 +18,6 @@ import {
   fromRawGitHubRepoId,
   fromRawGitHubWorkflowId
 } from '../types/toFromRawGitHubIds.js'
-import { GithubWorkflowKey } from '../types/GithubKeys.js'
 import { fromRawAccountType } from '../types/GithubAccountType.js'
 import { crawlOneWorkflow } from './crawler/crawlWorkflows.js'
 import { GithubInstallationClient } from '../../outboundInterfaces/githubInstallationClient.js'
@@ -26,6 +25,7 @@ import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { getWorkflowFromRefData } from './userScopeReferenceData.js'
 import { throwFunction } from '../../../multipleContexts/errors.js'
 import { GitHubUserId } from '../../types/GitHubIdTypes.js'
+import { GitHubWorkflowKey } from '../../types/GitHubKeyTypes.js'
 
 export async function processRawRunEvent(
   appState: AppState,
@@ -47,7 +47,7 @@ async function readOrLookupWorkflow(
   rawRunEvent: RawGithubWorkflowRunEvent,
   installationClient: GithubInstallationClient
 ) {
-  const workflowKey: GithubWorkflowKey = {
+  const workflowKey: GitHubWorkflowKey = {
     accountId: fromRawGitHubAccountId(rawRunEvent.repository.owner.id),
     repoId: fromRawGitHubRepoId(rawRunEvent.repository.id),
     workflowId: fromRawGitHubWorkflowId(rawRunEvent.workflow_id)

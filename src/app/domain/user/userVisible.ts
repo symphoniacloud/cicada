@@ -4,7 +4,6 @@ import { FullGithubWorkflowRunEvent, GithubWorkflowRunEvent } from '../types/Git
 import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings.js'
 import { CalculatedUserSettings } from '../types/UserSettings.js'
 import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
-import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys.js'
 import { recentActiveBranchesForAccounts } from '../github/githubLatestPushesPerRef.js'
 import { GithubPush } from '../types/GithubPush.js'
 import { getRecentActivityForRepo, GithubActivity } from '../github/githubActivity.js'
@@ -26,6 +25,7 @@ import { failedWithResult, Result, successWith } from '../../util/structuredResu
 import { OnePageResponse } from '@symphoniacloud/dynamodb-entity-store'
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { toFullWorkflowRunEvents } from '../github/githubWorkflowRunEvent.js'
+import { GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubKeyTypes.js'
 
 interface UserVisibleObjects<T> {
   allEvents: T[]
@@ -72,7 +72,7 @@ export async function getLatestWorkflowRunEventsForAccountForUser(
 export async function getLatestWorkflowRunEventsForRepoForUser(
   appState: AppState,
   refData: UserScopeReferenceData,
-  repo: GithubRepoKey
+  repo: GitHubRepoKey
 ): Promise<Result<VisibleFullWorkflowRunEvents>> {
   if (!getRepoStructure(refData, repo)) return failureNotAuthorized
 
@@ -90,7 +90,7 @@ export async function getLatestWorkflowRunEventsForRepoForUser(
 export async function getAllRunEventsForWorkflowForUser(
   appState: AppState,
   refData: UserScopeReferenceData,
-  workflow: GithubWorkflowKey
+  workflow: GitHubWorkflowKey
 ): Promise<Result<VisibleFullWorkflowRunEvents>> {
   if (!getWorkflowFromRefData(refData, workflow)) return failureNotAuthorized
 
@@ -105,7 +105,7 @@ export async function getAllRunEventsForWorkflowForUser(
 export async function getAvailableRunEventsForWorkflowForUser(
   appState: AppState,
   refData: UserScopeReferenceData,
-  workflow: GithubWorkflowKey,
+  workflow: GitHubWorkflowKey,
   limit?: number
 ): Promise<Result<OnePageResponse<GithubWorkflowRunEvent>>> {
   if (!getWorkflowFromRefData(refData, workflow)) return failureNotAuthorized
@@ -116,7 +116,7 @@ export async function getAvailableRunEventsForWorkflowForUser(
 export async function getRecentActivityForRepoForUser(
   appState: AppState,
   refData: UserScopeReferenceData,
-  repo: GithubRepoKey
+  repo: GitHubRepoKey
 ): Promise<Result<VisibleActivity>> {
   if (!getRepoStructure(refData, repo)) return failureNotAuthorized
   const allEvents = await getRecentActivityForRepo(appState, refData, repo)

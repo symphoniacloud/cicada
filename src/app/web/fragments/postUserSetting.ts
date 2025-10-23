@@ -10,7 +10,6 @@ import { logger } from '../../util/logging.js'
 import { parsePostUserSettingParameters } from './requestParsing/parsePostUserSettingParameters.js'
 import { isFailure } from '../../util/structuredResult.js'
 import { invalidRequestResponse } from '../htmlResponses.js'
-import { GithubRepoKey, GithubWorkflowKey } from '../../domain/types/GithubKeys.js'
 import {
   toDisplayableAccountSettings,
   toDisplayableRepoSettings,
@@ -34,6 +33,7 @@ import {
 } from '../../domain/github/userScopeReferenceData.js'
 
 import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData.js'
+import { GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubKeyTypes.js'
 
 export const postUserSettingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('userSetting'),
@@ -108,7 +108,7 @@ async function processUpdateAccountSetting(
 async function processUpdateRepoSetting(
   appState: AppState,
   refData: UserScopeReferenceData,
-  repoKey: GithubRepoKey,
+  repoKey: GitHubRepoKey,
   setting: UserSetting,
   enabled: boolean
 ) {
@@ -133,7 +133,7 @@ async function processUpdateRepoSetting(
 async function processUpdateWorkflowSetting(
   appState: AppState,
   refData: UserScopeReferenceData,
-  workflowKey: GithubWorkflowKey,
+  workflowKey: GitHubWorkflowKey,
   setting: UserSetting,
   enabled: boolean
 ) {

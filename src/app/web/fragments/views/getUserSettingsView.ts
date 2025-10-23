@@ -8,9 +8,9 @@ import {
   PersistedVisibleAndNotifyConfigurable
 } from '../../../domain/types/UserSettings.js'
 import { HiccoughElement } from '../../hiccough/hiccoughElement.js'
-import { GithubRepoKey, GithubWorkflowKey } from '../../../domain/types/GithubKeys.js'
 import { colSm, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
 import { GitHubAccountId, GitHubRepoId, GitHubWorkflowId } from '../../../types/GitHubIdTypes.js'
+import { GitHubRepoKey, GitHubWorkflowKey } from '../../../types/GitHubKeyTypes.js'
 
 export function createGetUserSettingsResponse(
   settings: DisplayableUserSettings,
@@ -53,7 +53,7 @@ export function accountControlsRow(
   )
 }
 
-export function repoControlsRow(repoKey: GithubRepoKey, repoSettings: DisplayableGithubRepoSettings) {
+export function repoControlsRow(repoKey: GitHubRepoKey, repoSettings: DisplayableGithubRepoSettings) {
   const workflowRows: HiccoughElement[] = []
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const workflowEntries = Object.entries(repoSettings.workflows).sort(([_, a], [__, b]) =>
@@ -86,7 +86,7 @@ export function repoControlsRow(repoKey: GithubRepoKey, repoSettings: Displayabl
 }
 
 export function workflowControlsRow(
-  { accountId, repoId, workflowId }: GithubWorkflowKey,
+  { accountId, repoId, workflowId }: GitHubWorkflowKey,
   settings: DisplayableGithubWorkflowSettings
 ) {
   const partialQs = `accountId=${accountId}&repoId=${repoId}&workflowId=${workflowId}`

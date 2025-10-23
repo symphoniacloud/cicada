@@ -3,15 +3,12 @@ import { failedWithResult, Result, successWith } from '../../../util/structuredR
 import { logger } from '../../../util/logging.js'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { invalidRequestResponse } from '../../htmlResponses.js'
-import {
-  GitHubAccountCoordinates,
-  GitHubAccountCoordinatesSchema
-} from '../../../types/GitHubCoordinateTypes.js'
+import { GitHubAccountKeySchema, GitHubAccountKey } from '../../../types/GitHubKeyTypes.js'
 
 export function parseAccountCoordinates(
   event: CicadaAuthorizedAPIEvent
-): Result<GitHubAccountCoordinates, APIGatewayProxyResult> {
-  const result = GitHubAccountCoordinatesSchema.safeParse(event.queryStringParameters)
+): Result<GitHubAccountKey, APIGatewayProxyResult> {
+  const result = GitHubAccountKeySchema.safeParse(event.queryStringParameters)
   if (result.success) {
     return successWith(result.data)
   }

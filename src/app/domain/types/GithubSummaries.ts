@@ -1,24 +1,24 @@
 import { isString } from '../../util/types.js'
-import {
-  GithubAccountKey,
-  GithubRepoKey,
-  GithubUserKey,
-  GithubWorkflowKey,
-  isGithubAccountKey,
-  isGithubRepoKey,
-  isGithubUserKey,
-  isGithubWorkflowKey
-} from './GithubKeys.js'
 import { GithubAccountType, isGithubAccountType } from './GithubAccountType.js'
+import {
+  GitHubAccountKey,
+  GitHubRepoKey,
+  GitHubUserKey,
+  GitHubWorkflowKey,
+  isGitHubAccountKey,
+  isGitHubRepoKey,
+  isGithubUserKey,
+  isGitHubWorkflowKey
+} from '../../types/GitHubKeyTypes.js'
 
-export interface GithubAccountSummary extends GithubAccountKey {
+export interface GithubAccountSummary extends GitHubAccountKey {
   accountName: string
   accountType: GithubAccountType
 }
 
 export function isGithubAccountSummary(x: unknown): x is GithubAccountSummary {
   return (
-    isGithubAccountKey(x) &&
+    isGitHubAccountKey(x) &&
     'accountName' in x &&
     isString(x.accountName) &&
     'accountType' in x &&
@@ -26,23 +26,23 @@ export function isGithubAccountSummary(x: unknown): x is GithubAccountSummary {
   )
 }
 
-export interface GithubRepoSummary extends GithubRepoKey, GithubAccountSummary {
+export interface GithubRepoSummary extends GitHubRepoKey, GithubAccountSummary {
   repoName: string
 }
 
 export function isGithubRepoSummary(x: unknown): x is GithubRepoSummary {
-  return isGithubRepoKey(x) && isGithubAccountSummary(x) && 'repoName' in x && isString(x.repoName)
+  return isGitHubRepoKey(x) && isGithubAccountSummary(x) && 'repoName' in x && isString(x.repoName)
 }
 
-export interface GithubWorkflowSummary extends GithubWorkflowKey, GithubRepoSummary {
+export interface GithubWorkflowSummary extends GitHubWorkflowKey, GithubRepoSummary {
   workflowName: string
 }
 
 export function isGithubWorkflowSummary(x: unknown): x is GithubWorkflowSummary {
-  return isGithubWorkflowKey(x) && isGithubRepoSummary(x) && 'workflowName' in x && isString(x.workflowName)
+  return isGitHubWorkflowKey(x) && isGithubRepoSummary(x) && 'workflowName' in x && isString(x.workflowName)
 }
 
-export interface GithubUserSummary extends GithubUserKey {
+export interface GithubUserSummary extends GitHubUserKey {
   userName: string
 }
 

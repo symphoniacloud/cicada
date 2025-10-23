@@ -6,8 +6,8 @@ import {
   typePredicateParser
 } from '@symphoniacloud/dynamodb-entity-store'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
-import { GithubWorkflowKey } from '../../types/GithubKeys.js'
 import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkflowRunEntity.js'
+import { GitHubWorkflowKey } from '../../../types/GitHubKeyTypes.js'
 
 // We will eventually get several of these per actual run - e.g. started, completed, etc
 // Multiple events per run might have same ID but we differentiate by updated_time and status (this allows for same second multiple events)
@@ -63,7 +63,7 @@ export function putWorkflowRunEventIfKeyDoesntExist(
 // Returns *all* the run events for each run (including in_progress) even if the run is complete
 // If you just want the most recent run event per run then use githubWorkflowRun.ts instead
 // TODO - Use paged since otherwise could blow up with too-large result
-export async function getRunEventsForWorkflow(entityStore: AllEntitiesStore, key: GithubWorkflowKey) {
+export async function getRunEventsForWorkflow(entityStore: AllEntitiesStore, key: GitHubWorkflowKey) {
   return store(entityStore).queryAllByPkAndSk(key, rangeWhereSkBeginsWith(skPrefix(key)), {
     scanIndexForward: false
   })
@@ -71,7 +71,7 @@ export async function getRunEventsForWorkflow(entityStore: AllEntitiesStore, key
 
 export async function getRunEventsForWorkflowPage(
   entityStore: AllEntitiesStore,
-  { accountId, repoId, workflowId }: GithubWorkflowKey,
+  { accountId, repoId, workflowId }: GitHubWorkflowKey,
   limit?: number
 ) {
   return store(entityStore).queryOnePageByPkAndSk(

@@ -5,8 +5,8 @@ import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSetting
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
 import { GithubWorkflowSummary } from '../types/GithubSummaries.js'
-import { GithubRepoKey } from '../types/GithubKeys.js'
 import { GitHubUserId } from '../../types/GitHubIdTypes.js'
+import { GitHubRepoKey } from '../../types/GitHubKeyTypes.js'
 
 export async function filterWorkflowNotifyEnabled(
   appState: AppState,
@@ -51,7 +51,7 @@ export async function filterRepoNotifyEnabled(
   appState: AppState,
   refData: UserScopeReferenceData,
   userIds: GitHubUserId[],
-  repo: GithubRepoKey
+  repo: GitHubRepoKey
 ): Promise<GitHubUserId[]> {
   const enabledUserIds: GitHubUserId[] = []
   for (const userId of userIds) {
@@ -72,7 +72,7 @@ export async function filterRepoNotifyEnabled(
 
 async function getRepoNotifyEnabledForUser(
   appState: AppState,
-  repo: GithubRepoKey,
+  repo: GitHubRepoKey,
   refData: UserScopeReferenceData
 ) {
   const userSettings = await loadCalculatedUserSettingsOrUseDefaults(appState, refData)

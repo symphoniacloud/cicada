@@ -10,10 +10,10 @@ import {
   getLatestWorkflowRunEventsForRepoForUser,
   getLatestWorkflowRunEventsForUserWithUserSettings
 } from '../../domain/user/userVisible.js'
-import { GithubRepoKey } from '../../domain/types/GithubKeys.js'
 import { fragmentPath } from '../routingCommon.js'
 import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData.js'
+import { GitHubRepoKey } from '../../types/GitHubKeyTypes.js'
 
 export const actionsStatusFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('actionsStatus'),
@@ -50,7 +50,7 @@ async function actionsStatusForAccount(
 async function actionsStatusForRepo(
   appState: AppState,
   refData: UserScopeReferenceData,
-  repoKey: GithubRepoKey
+  repoKey: GitHubRepoKey
 ) {
   const latestEventsResult = await getLatestWorkflowRunEventsForRepoForUser(appState, refData, repoKey)
   if (!isSuccess(latestEventsResult)) return notFoundHTMLResponse

@@ -1,6 +1,6 @@
 import { isNotNullObject } from '../../util/types.js'
-import { GithubUserKey, isGithubUserKey } from './GithubKeys.js'
 import { GitHubAccountId, GitHubRepoId, GitHubWorkflowId } from '../../types/GitHubIdTypes.js'
+import { GitHubUserKey, isGithubUserKey } from '../../types/GitHubKeyTypes.js'
 
 export type UserSetting = 'visible' | 'notify'
 
@@ -8,7 +8,7 @@ export function isUserSetting(x: unknown): x is UserSetting {
   return x === 'visible' || x === 'notify'
 }
 
-export interface PersistedUserSettings extends GithubUserKey {
+export interface PersistedUserSettings extends GitHubUserKey {
   github: {
     accounts: Record<GitHubAccountId, PersistedGithubAccountSettings>
   }
@@ -36,7 +36,7 @@ export type PersistedGithubWorkflowSettings = PersistedVisibleAndNotifyConfigura
 
 // ***
 
-export interface CalculatedUserSettings extends GithubUserKey {
+export interface CalculatedUserSettings extends GitHubUserKey {
   github: {
     accounts: Record<GitHubAccountId, CalculatedGithubAccountSettings>
   }
@@ -56,7 +56,7 @@ export type CalculatedGithubWorkflowSettings = CalculatedVisibleAndNotifyConfigu
 
 // ***
 
-export interface DisplayableUserSettings extends GithubUserKey {
+export interface DisplayableUserSettings extends GitHubUserKey {
   github: {
     accounts: Record<GitHubAccountId, DisplayableGithubAccountSettings>
   }

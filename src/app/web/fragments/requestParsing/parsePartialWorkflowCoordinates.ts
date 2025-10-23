@@ -3,15 +3,12 @@ import { failedWithResult, Result, successWith } from '../../../util/structuredR
 import { logger } from '../../../util/logging.js'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { invalidRequestResponse } from '../../htmlResponses.js'
-import {
-  GitHubWorkflowCoordinates,
-  GitHubWorkflowCoordinatesSchema
-} from '../../../types/GitHubCoordinateTypes.js'
+import { GitHubWorkflowKey, GitHubWorkflowKeySchema } from '../../../types/GitHubKeyTypes.js'
 
 export function parsePartialWorkflowCoordinates(
   event: CicadaAuthorizedAPIEvent
-): Result<Partial<GitHubWorkflowCoordinates>, APIGatewayProxyResult> {
-  const result = GitHubWorkflowCoordinatesSchema.partial().safeParse(event.queryStringParameters ?? {})
+): Result<Partial<GitHubWorkflowKey>, APIGatewayProxyResult> {
+  const result = GitHubWorkflowKeySchema.partial().safeParse(event.queryStringParameters ?? {})
   if (result.success) {
     return successWith(result.data)
   }

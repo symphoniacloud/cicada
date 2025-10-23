@@ -8,7 +8,6 @@ import {
 import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
-import { GithubAccountKey } from '../../../src/app/domain/types/GithubKeys.js'
 import {
   GithubAccountSummary,
   GithubRepoSummary,
@@ -24,8 +23,9 @@ import {
 } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
 import { GitHubUserId } from '../../../src/app/types/GitHubIdTypes.js'
 import { GitHubAccountMembership } from '../../../src/app/types/GitHubObjectTypes.js'
+import { GitHubAccountKey } from '../../../src/app/types/GitHubKeyTypes.js'
 
-export const cicadaTestUserAccountKey: GithubAccountKey = {
+export const cicadaTestUserAccountKey: GitHubAccountKey = {
   accountId: fromRawGitHubAccountId(162360409)
 }
 

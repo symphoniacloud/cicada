@@ -6,10 +6,10 @@ import {
   typePredicateParser
 } from '@symphoniacloud/dynamodb-entity-store'
 import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
-import { GithubRepoKey } from '../../types/GithubKeys.js'
 import { sortBy } from '../../../util/collections.js'
 import { workflowRunEventUpdatedTimestamp } from '../../github/githubWorkflowRunEvent.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
+import { GitHubRepoKey } from '../../../types/GitHubKeyTypes.js'
 
 const GithubLatestWorkflowRunEventEntity: CicadaEntity<
   GithubWorkflowRunEvent,
@@ -65,7 +65,7 @@ export async function latestWorkflowRunEventsPerWorkflowForAccount(
 
 export async function latestWorkflowRunEventsPerWorkflowForRepo(
   entityStore: AllEntitiesStore,
-  repoKey: GithubRepoKey
+  repoKey: GitHubRepoKey
 ) {
   const latestEvents = await store(entityStore).queryAllByPkAndSk(
     repoKey,
