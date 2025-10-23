@@ -4,14 +4,14 @@ import { logger } from '../../../util/logging.js'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { invalidRequestResponse } from '../../htmlResponses.js'
 import {
-  PartialGitHubWorkflowCoordinates,
-  PartialGitHubWorkflowCoordinatesSchema
+  GitHubWorkflowCoordinates,
+  GitHubWorkflowCoordinatesSchema
 } from '../../../types/GitHubCoordinateTypes.js'
 
 export function parsePartialWorkflowCoordinates(
   event: CicadaAuthorizedAPIEvent
-): Result<PartialGitHubWorkflowCoordinates, APIGatewayProxyResult> {
-  const result = PartialGitHubWorkflowCoordinatesSchema.safeParse(event.queryStringParameters ?? {})
+): Result<Partial<GitHubWorkflowCoordinates>, APIGatewayProxyResult> {
+  const result = GitHubWorkflowCoordinatesSchema.partial().safeParse(event.queryStringParameters ?? {})
   if (result.success) {
     return successWith(result.data)
   }

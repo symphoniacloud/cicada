@@ -24,16 +24,6 @@ export function isGitHubRepoCoordinates(x: unknown): x is GitHubRepoCoordinates 
   return GitHubRepoCoordinatesSchema.safeParse(x).success
 }
 
-// -- Partial Repo
-
-export const PartialGitHubRepoCoordinatesSchema = GitHubRepoCoordinatesSchema.partial()
-
-export type PartialGitHubRepoCoordinates = z.infer<typeof PartialGitHubRepoCoordinatesSchema>
-
-export function isPartialGitHubRepoCoordinates(x: unknown): x is PartialGitHubRepoCoordinates {
-  return PartialGitHubRepoCoordinatesSchema.safeParse(x).success
-}
-
 // -- Workflow
 
 export const GitHubWorkflowCoordinatesSchema = GitHubRepoCoordinatesSchema.extend({
@@ -44,14 +34,4 @@ export type GitHubWorkflowCoordinates = z.infer<typeof GitHubWorkflowCoordinates
 
 export function isGitHubWorkflowCoordinates(x: unknown): x is GitHubWorkflowCoordinates {
   return GitHubWorkflowCoordinatesSchema.safeParse(x).success
-}
-
-// -- Partial Workflow
-
-export const PartialGitHubWorkflowCoordinatesSchema = GitHubWorkflowCoordinatesSchema.partial()
-
-export type PartialGitHubWorkflowCoordinates = z.infer<typeof PartialGitHubWorkflowCoordinatesSchema>
-
-export function isPartialGitHubWorkflowCoordinates(x: unknown): x is PartialGitHubWorkflowCoordinates {
-  return PartialGitHubWorkflowCoordinatesSchema.safeParse(x).success
 }
