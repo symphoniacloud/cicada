@@ -50,6 +50,7 @@ export function fromRawGithubUserId(x: unknown): GitHubUserId {
     return cicadaGithubUserId
   }
 }
+
 export function fromRawGithubWorkflowRunId(x: unknown): GitHubWorkflowRunId {
   const cicadaRunId = `${GITHUB_WORKFLOW_RUN_ID_PREFIX}${x}`
   if (!isGitHubWorkflowRunId(cicadaRunId)) {
