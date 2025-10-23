@@ -17,7 +17,7 @@ import {
   fromRawGitHubAccountId,
   fromRawGitHubRepoId,
   fromRawGitHubWorkflowId
-} from '../types/fromRawGitHubIds.js'
+} from '../types/toFromRawGitHubIds.js'
 import { GithubWorkflowKey } from '../types/GithubKeys.js'
 import { fromRawAccountType } from '../types/GithubAccountType.js'
 import { crawlOneWorkflow } from './crawler/crawlWorkflows.js'

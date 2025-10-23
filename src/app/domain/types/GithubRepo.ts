@@ -1,7 +1,7 @@
 import { RawGithubRepo } from './rawGithub/RawGithubRepo.js'
 import { fromRawAccountType } from './GithubAccountType.js'
 import { GithubRepoSummary, isGithubRepoSummary } from './GithubSummaries.js'
-import { fromRawGitHubAccountId, fromRawGitHubRepoId } from './fromRawGitHubIds.js'
+import { fromRawGitHubAccountId, fromRawGitHubRepoId } from './toFromRawGitHubIds.js'
 
 export interface GithubRepo extends GithubRepoSummary {
   fullName: string

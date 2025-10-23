@@ -21,7 +21,7 @@ import {
   fromRawGithubUserId,
   fromRawGitHubWorkflowId,
   fromRawGithubWorkflowRunId
-} from '../../../src/app/domain/types/fromRawGitHubIds.js'
+} from '../../../src/app/domain/types/toFromRawGitHubIds.js'
 import { GitHubUserId } from '../../../src/app/types/GitHubIdTypes.js'
 import { GitHubAccountMembership } from '../../../src/app/types/GitHubObjectTypes.js'
 

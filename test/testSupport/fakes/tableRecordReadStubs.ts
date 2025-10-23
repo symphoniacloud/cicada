@@ -26,7 +26,7 @@ import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscr
 import { FakeDynamoDBInterfaceStubber, MetaDataProvider } from './dynamoDB/fakeDynamoDBInterfaceStubber.js'
 import { fakeTableNames } from './fakeCicadaConfig.js'
 
-import { fromRawGithubUserId } from '../../../src/app/domain/types/fromRawGitHubIds.js'
+import { fromRawGithubUserId } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
 import { GitHubUserId } from '../../../src/app/types/GitHubIdTypes.js'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

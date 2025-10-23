@@ -2,7 +2,7 @@ import { GithubRepoSummary, GithubWorkflowSummary, isGithubWorkflowSummary } fro
 import { isStringOrUndefined } from '../../util/types.js'
 import { RawGithubWorkflow } from './rawGithub/RawGithubWorkflow.js'
 
-import { fromRawGitHubWorkflowId } from './fromRawGitHubIds.js'
+import { fromRawGitHubWorkflowId } from './toFromRawGitHubIds.js'
 
 export interface GithubWorkflow extends GithubWorkflowSummary {
   workflowPath: string

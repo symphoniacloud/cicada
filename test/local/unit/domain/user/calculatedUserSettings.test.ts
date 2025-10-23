@@ -16,7 +16,7 @@ import {
   buildRepoStructure,
   buildWorkflow
 } from '../../../../testSupport/builders/accountStructureBuilders.js'
-import { fromRawGithubUserId } from '../../../../../src/app/domain/types/fromRawGitHubIds.js'
+import { fromRawGithubUserId } from '../../../../../src/app/domain/types/toFromRawGitHubIds.js'
 
 test('calculateVisibleAndNotifyConfigurable / calculateWorkflowSettings', () => {
   const permutations: [

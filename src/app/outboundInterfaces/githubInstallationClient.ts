@@ -7,9 +7,10 @@ import { RawGithubEvent } from '../domain/types/rawGithub/RawGithubEvent.js'
 import { metrics } from '../util/metrics.js'
 import { MetricUnit } from '@aws-lambda-powertools/metrics'
 import { failedWith, Result, successWith } from '../util/structuredResult.js'
-import { GithubAppId, toRawGithubAppId } from '../domain/types/GithubAppId.js'
 import { GithubInstallationId, toRawGithubInstallationId } from '../domain/types/GithubInstallationId.js'
 import { RawGithubWorkflow } from '../domain/types/rawGithub/RawGithubWorkflow.js'
+import { toRawGithubAppId } from '../domain/types/toFromRawGitHubIds.js'
+import { GitHubAppId } from '../types/GitHubIdTypes.js'
 
 export interface GithubInstallationClient {
   listWorkflowRunsForRepo(
@@ -46,7 +47,7 @@ export interface GithubInstallationClientMeta {
 }
 
 export function createRealGithubInstallationClient(
-  appId: GithubAppId,
+  appId: GitHubAppId,
   privateKey: string,
   clientId: string,
   clientSecret: string,

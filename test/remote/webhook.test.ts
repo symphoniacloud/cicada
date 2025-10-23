@@ -8,7 +8,7 @@ import { deletePushesForAccount, getPushesForAccount } from './integrationTestSu
 import { sleep } from './integrationTestSupport/utils.js'
 import { createSignatureHeader } from '../../src/app/domain/github/webhookProcessor/githubWebhookProcessor.js'
 
-import { fromRawGitHubAccountId } from '../../src/app/domain/types/fromRawGitHubIds.js'
+import { fromRawGitHubAccountId } from '../../src/app/domain/types/toFromRawGitHubIds.js'
 
 // GitHub Webhook - these are directly stored in S3, and then async processing occurs
 test('webhook test', async () => {
