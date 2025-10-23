@@ -7,8 +7,7 @@ import {
   putMemberships
 } from '../entityStore/entities/GithubAccountMembershipEntity.js'
 import { arrayDifferenceDeep } from '../../util/collections.js'
-import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
-import { GithubUserId } from '../types/GithubUserId.js'
+import { GitHubAccountId, GitHubUserId } from '../../types/GitHubIdTypes.js'
 import { throwFunction } from '../../../multipleContexts/errors.js'
 
 export async function setMemberships(
@@ -29,7 +28,7 @@ export async function setMemberships(
 // ToEventually - support multiple installed accounts / user
 export async function getInstalledAccountIdForUser(
   appState: AppState,
-  userId: GithubUserId
+  userId: GitHubUserId
 ): Promise<GitHubAccountId> {
   return (
     (await getAllMembershipsForUserId(appState.entityStore, userId))[0]?.accountId ??

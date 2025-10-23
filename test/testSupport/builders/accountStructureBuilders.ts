@@ -8,11 +8,11 @@ import {
   GithubAccountType,
   ORGANIZATION_ACCOUNT_TYPE
 } from '../../../src/app/domain/types/GithubAccountType.js'
-import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 import {
   fromRawGitHubAccountId,
   fromRawGitHubRepoId,
+  fromRawGithubUserId,
   fromRawGitHubWorkflowId
 } from '../../../src/app/domain/types/fromRawGitHubIds.js'
 

@@ -1,8 +1,8 @@
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubUser, isGithubUser } from '../../types/GithubUser.js'
 import { GITHUB_USER } from '../entityTypes.js'
-import { GithubUserId } from '../../types/GithubUserId.js'
 import { cicadaEntityFromPkOnlyEntity } from '../entityStoreEntitySupport.js'
+import { GitHubUserId } from '../../../types/GitHubIdTypes.js'
 
 const GithubUserEntity = cicadaEntityFromPkOnlyEntity({
   type: GITHUB_USER,
@@ -18,7 +18,7 @@ export async function batchPutUsers(entityStore: AllEntitiesStore, users: Github
 
 export async function getUserById(
   entityStore: AllEntitiesStore,
-  userId: GithubUserId
+  userId: GitHubUserId
 ): Promise<GithubUser | undefined> {
   return store(entityStore).getOrUndefined({ userId })
 }

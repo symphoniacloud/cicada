@@ -1,5 +1,4 @@
 import { RawGithubWorkflowRunEvent } from './rawGithub/RawGithubWorkflowRunEvent.js'
-import { fromRawGithubUserId } from './GithubUserId.js'
 import {
   GithubUserSummary,
   GithubWorkflowSummary,
@@ -14,6 +13,7 @@ import {
 import { isString } from '../../util/types.js'
 import { narrowToWorkflowSummary } from '../github/githubWorkflow.js'
 import { GithubWorkflow } from './GithubWorkflow.js'
+import { fromRawGithubUserId } from './fromRawGitHubIds.js'
 
 export interface GithubWorkflowRunEvent extends GithubWorkflowSummary {
   repoHtmlUrl: string

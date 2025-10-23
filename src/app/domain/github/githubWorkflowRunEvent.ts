@@ -11,7 +11,6 @@ import { RawGithubWorkflowRunEvent } from '../types/rawGithub/RawGithubWorkflowR
 import { getUserIdsForAccount } from './githubMembership.js'
 import { saveRuns } from './githubWorkflowRun.js'
 import { isoDifferenceMs } from '../../util/dateAndTime.js'
-import { GithubUserId } from '../types/GithubUserId.js'
 import { GithubRepoSummary, GithubWorkflowSummary } from '../types/GithubSummaries.js'
 import { getWorkflow } from '../entityStore/entities/GithubWorkflowEntity.js'
 import {
@@ -26,6 +25,7 @@ import { GithubInstallationClient } from '../../outboundInterfaces/githubInstall
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { getWorkflowFromRefData } from './userScopeReferenceData.js'
 import { throwFunction } from '../../../multipleContexts/errors.js'
+import { GitHubUserId } from '../../types/GitHubIdTypes.js'
 
 export async function processRawRunEvent(
   appState: AppState,
@@ -109,7 +109,7 @@ async function saveEvents(appState: AppState, eventsToKeep: GithubWorkflowRunEve
 export async function getRelatedMemberIdsForRunEvent(
   appState: AppState,
   runEvent: GithubWorkflowRunEvent
-): Promise<GithubUserId[]> {
+): Promise<GitHubUserId[]> {
   return getUserIdsForAccount(appState, runEvent.accountId)
 }
 

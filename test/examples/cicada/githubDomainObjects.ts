@@ -1,6 +1,5 @@
 import { GithubInstallation } from '../../../src/app/domain/types/GithubInstallation.js'
 import { GithubUser } from '../../../src/app/domain/types/GithubUser.js'
-import { GithubAccountMembership } from '../../../src/app/domain/types/GithubAccountMembership.js'
 import { GithubRepo } from '../../../src/app/domain/types/GithubRepo.js'
 import {
   FullGithubWorkflowRunEvent,
@@ -8,7 +7,6 @@ import {
 } from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
 import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken.js'
-import { fromRawGithubUserId, GithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
 import { fromRawGithubInstallationId } from '../../../src/app/domain/types/GithubInstallationId.js'
 import { fromRawGithubWorkflowRunId } from '../../../src/app/domain/types/GithubWorkflowRunId.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
@@ -21,8 +19,11 @@ import {
 import {
   fromRawGitHubAccountId,
   fromRawGitHubRepoId,
+  fromRawGithubUserId,
   fromRawGitHubWorkflowId
 } from '../../../src/app/domain/types/fromRawGitHubIds.js'
+import { GitHubUserId } from '../../../src/app/types/GitHubIdTypes.js'
+import { GitHubAccountMembership } from '../../../src/app/types/GitHubObjectTypes.js'
 
 export const cicadaTestUserAccountKey: GithubAccountKey = {
   accountId: fromRawGitHubAccountId(162360409)
@@ -77,22 +78,22 @@ export const testMikeRobertsUser: GithubUser = {
   url: 'https://api.github.com/users/mikebroberts'
 }
 
-export const testTestUserMembershipOfPersonalInstallation: GithubAccountMembership = {
+export const testTestUserMembershipOfPersonalInstallation: GitHubAccountMembership = {
   accountId: fromRawGitHubAccountId(162360409),
   userId: fromRawGithubUserId(162360409)
 }
 
-export const testTestUserMembershipOfOrg: GithubAccountMembership = {
+export const testTestUserMembershipOfOrg: GitHubAccountMembership = {
   accountId: fromRawGitHubAccountId(162483619),
   userId: fromRawGithubUserId(162360409)
 }
 
-export const testMikeRobertsUserMembershipOfOrg: GithubAccountMembership = {
+export const testMikeRobertsUserMembershipOfOrg: GitHubAccountMembership = {
   accountId: fromRawGitHubAccountId(162483619),
   userId: fromRawGithubUserId(49635)
 }
 
-export const accountMemberships: Record<GithubUserId, GithubAccountMembership> = {
+export const accountMemberships: Record<GitHubUserId, GitHubAccountMembership> = {
   GHUser162360409: testTestUserMembershipOfOrg,
   GHUser49635: testMikeRobertsUserMembershipOfOrg
 }
