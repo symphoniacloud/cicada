@@ -4,6 +4,8 @@ import {
   excludeKeys,
   mergeOrderedLists,
   objectMap,
+  pickOptionalProperties,
+  pickProperties,
   removeNullAndUndefined,
   selectKeys,
   sortBy
@@ -86,4 +88,27 @@ test('removeNullAndUndefined', () => {
 test('objectMap', () => {
   const mapped = objectMap({ a: 1, b: 2, c: 3 }, (key: string, value: number) => [`foo${key}`, [value + 1]])
   expect(mapped).toEqual({ fooa: [2], foob: [3], fooc: [4] })
+})
+
+test('pickProperties', () => {
+  expect(pickProperties({ a: 1, b: 2 }, [])).toEqual({})
+  expect(pickProperties({ x: 10, y: 20 }, ['x', 'y'])).toEqual({ x: 10, y: 20 })
+  expect(pickProperties({ a: 1, b: 2, c: 3 }, ['a', 'b'])).toEqual({ a: 1, b: 2 })
+
+  const mixed = { name: 'test', count: 42, active: true, data: [1, 2, 3] }
+  expect(pickProperties(mixed, ['name', 'active'])).toEqual({ name: 'test', active: true })
+  expect(pickProperties(mixed, ['count', 'data'])).toEqual({ count: 42, data: [1, 2, 3] })
+})
+
+test('pickOptionalProperties', () => {
+  // Test with some missing keys
+  expect(pickOptionalProperties({ a: 1, b: 2 }, ['a', 'c'])).toEqual({ a: 1 })
+  expect(pickOptionalProperties({ a: 1, b: 2, c: 3 }, ['a', 'c', 'd'])).toEqual({ a: 1, c: 3 })
+
+  expect(pickOptionalProperties({ a: 1, b: 2 }, ['a', 'b'])).toEqual({ a: 1, b: 2 })
+  expect(pickOptionalProperties({ a: 1, b: 2 }, ['x', 'y'])).toEqual({})
+  expect(pickOptionalProperties({ a: 1, b: 2 }, [])).toEqual({})
+
+  const mixed = { name: 'test', count: 42, active: true }
+  expect(pickOptionalProperties(mixed, ['name', 'missing', 'active'])).toEqual({ name: 'test', active: true })
 })
