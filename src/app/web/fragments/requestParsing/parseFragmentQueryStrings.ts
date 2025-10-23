@@ -31,6 +31,18 @@ export function parseWorkflowKeyFromQueryString(
   return parseQueryStringWithSchema(event, GitHubWorkflowKeySchema, 'parseWorkflowCoordinates')
 }
 
+export function parsePartialRepoKeyFromQueryString(
+  event: CicadaAuthorizedAPIEvent
+): Result<Partial<GitHubRepoKey>, APIGatewayProxyResult> {
+  return parsePartialQueryStringWithSchema(event, GitHubRepoKeySchema, 'parsePartialRepoCoordinates')
+}
+
+export function parsePartialWorkflowKeyFromQueryString(
+  event: CicadaAuthorizedAPIEvent
+): Result<Partial<GitHubWorkflowKey>, APIGatewayProxyResult> {
+  return parsePartialQueryStringWithSchema(event, GitHubWorkflowKeySchema, 'parsePartialWorkflowCoordinates')
+}
+
 function parseQueryStringWithSchema<T extends z.ZodTypeAny>(
   event: CicadaAuthorizedAPIEvent,
   schema: T,
@@ -43,4 +55,16 @@ function parseQueryStringWithSchema<T extends z.ZodTypeAny>(
 
   logger.warn(`Invalid request in ${errorContext}`)
   return failedWithResult('Invalid request', invalidRequestResponse)
+}
+
+function parsePartialQueryStringWithSchema<T extends z.ZodObject<z.ZodRawShape>>(
+  event: CicadaAuthorizedAPIEvent,
+  schema: T,
+  errorContext: string
+): Result<Partial<z.infer<T>>, APIGatewayProxyResult> {
+  const eventWithDefault = { ...event, queryStringParameters: event.queryStringParameters ?? {} }
+  return parseQueryStringWithSchema(eventWithDefault, schema.partial(), errorContext) as Result<
+    Partial<z.infer<T>>,
+    APIGatewayProxyResult
+  >
 }
