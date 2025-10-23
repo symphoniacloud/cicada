@@ -62,9 +62,13 @@ function parsePartialQueryStringWithSchema<T extends z.ZodObject<z.ZodRawShape>>
   schema: T,
   errorContext: string
 ): Result<Partial<z.infer<T>>, APIGatewayProxyResult> {
-  const eventWithDefault = { ...event, queryStringParameters: event.queryStringParameters ?? {} }
-  return parseQueryStringWithSchema(eventWithDefault, schema.partial(), errorContext) as Result<
-    Partial<z.infer<T>>,
-    APIGatewayProxyResult
-  >
+  const params = event.queryStringParameters ?? {}
+  const result = schema.partial().safeParse(params)
+  if (result.success) {
+    // Safe cast: schema.partial().safeParse() returns Partial<z.infer<T>> by design
+    return successWith(result.data as Partial<z.infer<T>>)
+  }
+
+  logger.warn(`Invalid request in ${errorContext}`)
+  return failedWithResult('Invalid request', invalidRequestResponse)
 }
