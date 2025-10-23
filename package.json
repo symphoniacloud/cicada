@@ -13,7 +13,7 @@
     "lint": "eslint --max-warnings=0 --fix-dry-run \"{src,test}/**/*.{js,ts}\"",
     "format": "prettier --check \"{src,test}/**/*.{js,ts}\"",
     "format-fix": "prettier --write \"{src,test}/**/*.{js,ts}\"",
-    "local-tests": "npx vitest run --dir test/local",
+    "local-tests": "npx vitest run --dir test/local --config test/local/vitest.config.mjs",
     "remote-tests": "npx vitest run --dir test/remote --config test/remote/vitest.config.mjs",
     "pre-deploy-check": "npx tsc",
     "deploy-cdk": "cd src/cdk && npx cdk deploy",
@@ -37,7 +37,7 @@
     "tsx": "4.x",
     "typescript": "5.x",
     "typescript-eslint": "8.x",
-    "vitest": "4.x"
+    "vitest": "3.x"
   },
   "dependencies": {
     "@aws-lambda-powertools/logger": "2.x",
@@ -57,6 +57,7 @@
     "ajv": "8.x",
     "unzipper": "0.x",
     "url-pattern": "1.x",
-    "web-push": "3.x"
+    "web-push": "3.x",
+    "zod": "4.x"
   }
 }
