@@ -2,10 +2,10 @@ import { expect, test } from 'vitest'
 import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes/awsStubs.js'
 import { buildUserScopedRefData } from '../../../../../testSupport/builders/accountStructureBuilders.js'
 import { invalidRequestResponse } from '../../../../../../src/app/web/htmlResponses.js'
-import { parsePartialWorkflowCoordinates } from '../../../../../../src/app/web/fragments/requestParsing/parsePartialWorkflowCoordinates.js'
+import { parsePartialWorkflowKeyFromQueryString } from '../../../../../../src/app/web/fragments/requestParsing/parseFragmentQueryStrings.js'
 
 test('Fails if invalid account ID', () => {
-  const result = parsePartialWorkflowCoordinates({
+  const result = parsePartialWorkflowKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
@@ -22,7 +22,7 @@ test('Fails if invalid account ID', () => {
 })
 
 test('Fails if invalid repo ID', () => {
-  const result = parsePartialWorkflowCoordinates({
+  const result = parsePartialWorkflowKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
@@ -39,7 +39,7 @@ test('Fails if invalid repo ID', () => {
 })
 
 test('Fails if invalid workflow ID', () => {
-  const result = parsePartialWorkflowCoordinates({
+  const result = parsePartialWorkflowKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
@@ -57,7 +57,7 @@ test('Fails if invalid workflow ID', () => {
 })
 
 test('Success if no IDs', () => {
-  const result = parsePartialWorkflowCoordinates({
+  const result = parsePartialWorkflowKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData()
@@ -70,7 +70,7 @@ test('Success if no IDs', () => {
 })
 
 test('Success if only Account ID', () => {
-  const result = parsePartialWorkflowCoordinates({
+  const result = parsePartialWorkflowKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
@@ -86,7 +86,7 @@ test('Success if only Account ID', () => {
 })
 
 test('Success if only Repo ID', () => {
-  const result = parsePartialWorkflowCoordinates({
+  const result = parsePartialWorkflowKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
@@ -102,7 +102,7 @@ test('Success if only Repo ID', () => {
 })
 
 test('Success if only Workflow ID', () => {
-  const result = parsePartialWorkflowCoordinates({
+  const result = parsePartialWorkflowKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
@@ -118,7 +118,7 @@ test('Success if only Workflow ID', () => {
 })
 
 test('Get all IDs', () => {
-  const result = parsePartialWorkflowCoordinates({
+  const result = parsePartialWorkflowKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),

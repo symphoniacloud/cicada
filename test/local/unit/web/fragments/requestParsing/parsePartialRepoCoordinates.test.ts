@@ -2,10 +2,10 @@ import { expect, test } from 'vitest'
 import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes/awsStubs.js'
 import { buildUserScopedRefData } from '../../../../../testSupport/builders/accountStructureBuilders.js'
 import { invalidRequestResponse } from '../../../../../../src/app/web/htmlResponses.js'
-import { parsePartialRepoCoordinates } from '../../../../../../src/app/web/fragments/requestParsing/parsePartialRepoCoordinates.js'
+import { parsePartialRepoKeyFromQueryString } from '../../../../../../src/app/web/fragments/requestParsing/parseFragmentQueryStrings.js'
 
 test('Fails if invalid account ID', () => {
-  const result = parsePartialRepoCoordinates({
+  const result = parsePartialRepoKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
@@ -22,7 +22,7 @@ test('Fails if invalid account ID', () => {
 })
 
 test('Fails if invalid repo ID', () => {
-  const result = parsePartialRepoCoordinates({
+  const result = parsePartialRepoKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
@@ -39,7 +39,7 @@ test('Fails if invalid repo ID', () => {
 })
 
 test('Success if no Account ID and Repo ID', () => {
-  const result = parsePartialRepoCoordinates({
+  const result = parsePartialRepoKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData()
@@ -52,7 +52,7 @@ test('Success if no Account ID and Repo ID', () => {
 })
 
 test('Success if only Account ID', () => {
-  const result = parsePartialRepoCoordinates({
+  const result = parsePartialRepoKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
@@ -68,7 +68,7 @@ test('Success if only Account ID', () => {
 })
 
 test('Success if only Repo ID', () => {
-  const result = parsePartialRepoCoordinates({
+  const result = parsePartialRepoKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
@@ -84,7 +84,7 @@ test('Success if only Repo ID', () => {
 })
 
 test('Get Account ID and Repo ID', () => {
-  const result = parsePartialRepoCoordinates({
+  const result = parsePartialRepoKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
