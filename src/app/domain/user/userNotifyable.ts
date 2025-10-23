@@ -1,5 +1,4 @@
 import { AppState } from '../../environment/AppState.js'
-import { GithubUserId } from '../types/GithubUserId.js'
 import { logger } from '../../util/logging.js'
 import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings.js'
 
@@ -7,14 +6,15 @@ import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
 import { GithubWorkflowSummary } from '../types/GithubSummaries.js'
 import { GithubRepoKey } from '../types/GithubKeys.js'
+import { GitHubUserId } from '../../types/GitHubIdTypes.js'
 
 export async function filterWorkflowNotifyEnabled(
   appState: AppState,
   refData: UserScopeReferenceData,
-  userIds: GithubUserId[],
+  userIds: GitHubUserId[],
   workflowRun: GithubWorkflowRunEvent
-): Promise<GithubUserId[]> {
-  const enabledUserIds: GithubUserId[] = []
+): Promise<GitHubUserId[]> {
+  const enabledUserIds: GitHubUserId[] = []
   for (const userId of userIds) {
     if (
       // TODO - don't do this! This is a hack while all users have same visibility to
@@ -50,10 +50,10 @@ async function getWorkflowNotifyEnabledForUser(
 export async function filterRepoNotifyEnabled(
   appState: AppState,
   refData: UserScopeReferenceData,
-  userIds: GithubUserId[],
+  userIds: GitHubUserId[],
   repo: GithubRepoKey
-): Promise<GithubUserId[]> {
-  const enabledUserIds: GithubUserId[] = []
+): Promise<GitHubUserId[]> {
+  const enabledUserIds: GitHubUserId[] = []
   for (const userId of userIds) {
     if (
       // TODO - don't do this! This is a hack while all users have same visibility to

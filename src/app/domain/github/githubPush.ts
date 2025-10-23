@@ -6,8 +6,8 @@ import { GithubPush } from '../types/GithubPush.js'
 import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport.js'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
 import { saveLatestPushes } from './githubLatestPushesPerRef.js'
-import { GithubUserId } from '../types/GithubUserId.js'
 import { getUserIdsForAccount } from './githubMembership.js'
+import { GitHubUserId } from '../../types/GitHubIdTypes.js'
 
 export async function processPushes(appState: AppState, pushes: GithubPush[], publishNotifications: boolean) {
   if (pushes.length > 0) {
@@ -44,6 +44,6 @@ export function latestCommitInPush(push: Pick<GithubPush, 'commits'>) {
 export async function getRelatedMemberIdsForPush(
   appState: AppState,
   push: GithubPush
-): Promise<GithubUserId[]> {
+): Promise<GitHubUserId[]> {
   return getUserIdsForAccount(appState, push.accountId)
 }

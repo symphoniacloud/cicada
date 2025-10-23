@@ -5,13 +5,13 @@ import {
   toDisplayableRepoSettings,
   toDisplayableWorkflowSettings
 } from '../../../../../src/app/domain/user/displayableUserSettings.js'
-import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId.js'
 import {
   buildAccountStructure,
   buildUserScopedRefData,
   buildRepoStructure,
   buildWorkflow
 } from '../../../../testSupport/builders/accountStructureBuilders.js'
+import { fromRawGithubUserId } from '../../../../../src/app/domain/types/fromRawGitHubIds.js'
 
 test('toDisplayableWorkflowSettings', () => {
   const workflow = buildWorkflow({ workflowName: 'workflow1' })

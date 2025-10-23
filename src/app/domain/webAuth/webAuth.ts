@@ -2,12 +2,12 @@
 
 import { CicadaAPIAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
 import { logger } from '../../util/logging.js'
-import { GithubUserId, isGithubUserId } from '../types/GithubUserId.js'
+import { GitHubUserId, isGitHubUserId } from '../../types/GitHubIdTypes.js'
 
-export function userIdFromEvent(event: CicadaAPIAuthorizedAPIEvent): GithubUserId {
+export function userIdFromEvent(event: CicadaAPIAuthorizedAPIEvent): GitHubUserId {
   const userId = event.requestContext.authorizer.userId
 
-  if (!isGithubUserId(userId)) {
+  if (!isGitHubUserId(userId)) {
     const message = `Invalid Github User ID on API Event: ${userId}`
     logger.error(message)
     throw new Error(message)

@@ -4,13 +4,13 @@ import { isSuccess, Result, successWith } from '../../util/structuredResult.js'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
 import { getInstalledAccountIdForUser } from './githubMembership.js'
-import { GithubUserId } from '../types/GithubUserId.js'
 import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity.js'
 import { putPublicAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
+import { GitHubUserId } from '../../types/GitHubIdTypes.js'
 
 export async function savePublicAccountWithName(
   appState: AppState,
-  adminUserId: GithubUserId,
+  adminUserId: GitHubUserId,
   accountName: string
 ): Promise<Result<GithubPublicAccount>> {
   // TOEventually - when a user can be a member of multiple installed accounts then need to

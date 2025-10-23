@@ -36,3 +36,17 @@ export type GitHubWorkflowId = z.infer<typeof GitHubWorkflowIdSchema>
 export function isGitHubWorkflowId(x: unknown): x is GitHubWorkflowId {
   return GitHubWorkflowIdSchema.safeParse(x).success
 }
+
+// -- User
+
+export const GITHUB_USER_ID_PREFIX = `GHUser`
+
+export const GitHubUserIdSchema = z
+  .templateLiteral([z.literal(GITHUB_USER_ID_PREFIX), z.number().int().nonnegative()])
+  .readonly()
+
+export type GitHubUserId = z.infer<typeof GitHubUserIdSchema>
+
+export function isGitHubUserId(x: unknown): x is GitHubUserId {
+  return GitHubUserIdSchema.safeParse(x).success
+}

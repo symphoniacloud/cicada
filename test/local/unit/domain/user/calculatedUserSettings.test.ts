@@ -10,13 +10,13 @@ import {
   PersistedGithubAccountSettings,
   PersistedVisibleAndNotifyConfigurable
 } from '../../../../../src/app/domain/types/UserSettings.js'
-import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId.js'
 import {
   buildAccountStructure,
   buildUserScopedRefData,
   buildRepoStructure,
   buildWorkflow
 } from '../../../../testSupport/builders/accountStructureBuilders.js'
+import { fromRawGithubUserId } from '../../../../../src/app/domain/types/fromRawGitHubIds.js'
 
 test('calculateVisibleAndNotifyConfigurable / calculateWorkflowSettings', () => {
   const permutations: [

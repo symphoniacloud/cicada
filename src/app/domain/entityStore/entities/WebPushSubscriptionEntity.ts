@@ -2,7 +2,8 @@ import { WEB_PUSH_SUBSCRIPTION } from '../entityTypes.js'
 import { isWebPushSubscription, WebPushSubscription } from '../../types/WebPushSubscription.js'
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
-import { GithubUserId } from '../../types/GithubUserId.js'
+
+import { GitHubUserId } from '../../../types/GitHubIdTypes.js'
 
 const WebPushSubscriptionEntity: CicadaEntity<
   WebPushSubscription,
@@ -28,13 +29,13 @@ export async function putWebPushSubscription(
 
 export async function deleteWebPushSubscription(
   entityStore: AllEntitiesStore,
-  userId: GithubUserId,
+  userId: GitHubUserId,
   endpoint: string
 ) {
   await store(entityStore).delete({ userId, endpoint })
 }
 
-export async function getAllWebPushSubscriptionsForUser(entityStore: AllEntitiesStore, userId: GithubUserId) {
+export async function getAllWebPushSubscriptionsForUser(entityStore: AllEntitiesStore, userId: GitHubUserId) {
   return await store(entityStore).queryAllByPk({ userId })
 }
 

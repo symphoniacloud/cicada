@@ -5,10 +5,10 @@ import {
   workflowUpdater
 } from '../../../../../src/app/domain/user/persistedUserSettings.js'
 import { PersistedUserSettings } from '../../../../../src/app/domain/types/UserSettings.js'
-import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId.js'
 import {
   fromRawGitHubAccountId,
   fromRawGitHubRepoId,
+  fromRawGithubUserId,
   fromRawGitHubWorkflowId
 } from '../../../../../src/app/domain/types/fromRawGitHubIds.js'
 

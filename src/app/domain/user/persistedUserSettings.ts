@@ -9,24 +9,23 @@ import {
 import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys.js'
 import { getUserSettings, saveUserSettings } from '../entityStore/entities/UserSettingsEntity.js'
 import { getOrSetNewAndReturn } from '../../util/collections.js'
-import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
-import { GithubUserId } from '../types/GithubUserId.js'
+import { GitHubAccountId, GitHubUserId } from '../../types/GitHubIdTypes.js'
 
 export async function getPersistedUserSettingsOrDefaults(
   appState: AppState,
-  userId: GithubUserId
+  userId: GitHubUserId
 ): Promise<PersistedUserSettings> {
   return (await getUserSettings(appState.entityStore, userId)) ?? initialUserSettings(userId)
 }
 
 export async function resetPersistedUserSettings(
   appState: AppState,
-  userId: GithubUserId
+  userId: GitHubUserId
 ): Promise<PersistedUserSettings> {
   return await saveUserSettings(appState.entityStore, initialUserSettings(userId))
 }
 
-function initialUserSettings(userId: GithubUserId): PersistedUserSettings {
+function initialUserSettings(userId: GitHubUserId): PersistedUserSettings {
   return {
     userId,
     github: {
@@ -37,7 +36,7 @@ function initialUserSettings(userId: GithubUserId): PersistedUserSettings {
 
 export async function updateAndSaveAccountSetting(
   appState: AppState,
-  userId: GithubUserId,
+  userId: GitHubUserId,
   accountId: GitHubAccountId,
   setting: UserSetting,
   value: boolean
@@ -55,7 +54,7 @@ export function accountUpdater(accountId: GitHubAccountId, setting: UserSetting,
 
 export async function updateAndSaveRepoSetting(
   appState: AppState,
-  userId: GithubUserId,
+  userId: GitHubUserId,
   repoKey: GithubRepoKey,
   setting: UserSetting,
   value: boolean
@@ -73,7 +72,7 @@ export function repoUpdater(repoKey: GithubRepoKey, setting: UserSetting, value:
 
 export async function updateAndSaveWorkflowSetting(
   appState: AppState,
-  userId: GithubUserId,
+  userId: GitHubUserId,
   workflowKey: GithubWorkflowKey,
   setting: UserSetting,
   value: boolean
@@ -91,7 +90,7 @@ export function workflowUpdater(workflowKey: GithubWorkflowKey, setting: UserSet
 
 export async function updateAndSaveSettings(
   appState: AppState,
-  userId: GithubUserId,
+  userId: GitHubUserId,
   updateSettings: (settings: PersistedUserSettings) => PersistedUserSettings
 ) {
   return await saveUserSettings(

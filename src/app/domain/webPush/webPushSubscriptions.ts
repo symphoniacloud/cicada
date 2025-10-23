@@ -2,15 +2,15 @@ import { AppState } from '../../environment/AppState.js'
 import { logger } from '../../util/logging.js'
 import { isWebPushSubscription, WebPushSubscription } from '../types/WebPushSubscription.js'
 import { emptySuccess, failedWith } from '../../util/structuredResult.js'
-import { GithubUserId } from '../types/GithubUserId.js'
 import {
   deleteWebPushSubscription,
   putWebPushSubscription
 } from '../entityStore/entities/WebPushSubscriptionEntity.js'
+import { GitHubUserId } from '../../types/GitHubIdTypes.js'
 
 export async function registerSubscription(
   appState: AppState,
-  userId: GithubUserId,
+  userId: GitHubUserId,
   userName: string,
   rawSubscription: string
 ) {
@@ -31,7 +31,7 @@ export async function registerSubscription(
 
 export async function deregisterSubscription(
   appState: AppState,
-  userId: GithubUserId,
+  userId: GitHubUserId,
   rawSubscription: string
 ) {
   logger.debug(`Deregistering web push subscription for ${userId}`)

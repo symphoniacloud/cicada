@@ -9,11 +9,10 @@ import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import { GithubRepo } from '../../../src/app/domain/types/GithubRepo.js'
 import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
 import { GithubUser } from '../../../src/app/domain/types/GithubUser.js'
-import { GithubAccountMembership } from '../../../src/app/domain/types/GithubAccountMembership.js'
 import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription.js'
-import { GitHubAccountId } from '../../../src/app/types/GitHubIdTypes.js'
-import { GithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
+import { GitHubAccountId, GitHubUserId } from '../../../src/app/types/GitHubIdTypes.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
+import { GitHubAccountMembership } from '../../../src/app/types/GitHubObjectTypes.js'
 
 export function expectedPutGithubInstallation(installation: GithubInstallation) {
   return buildPut('fakeGithubInstallationsTable', 'githubInstallation', {
@@ -156,7 +155,7 @@ export function expectedBatchWriteGithubUsers(users: GithubUser[]) {
   )
 }
 
-export function expectedBatchWriteGithubMemberships(memberships: GithubAccountMembership[]) {
+export function expectedBatchWriteGithubMemberships(memberships: GitHubAccountMembership[]) {
   return buildBatchWriteForEntity(
     'fakeGithubAccountMemberships',
     'githubAccountMembership',
@@ -171,7 +170,7 @@ export function expectedBatchWriteGithubMemberships(memberships: GithubAccountMe
 }
 
 export function expectedBatchDeleteGithubMemberships(
-  memberships: { accountId: GitHubAccountId; userId: GithubUserId }[]
+  memberships: { accountId: GitHubAccountId; userId: GitHubUserId }[]
 ) {
   return buildBatchDelete(
     'fakeGithubAccountMemberships',

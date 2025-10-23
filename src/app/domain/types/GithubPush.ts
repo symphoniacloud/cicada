@@ -7,9 +7,8 @@ import {
 import { fromRawAccountType } from './GithubAccountType.js'
 import { NonEmptyArray } from '../../util/collections.js'
 import { timestampToIso } from '../../util/dateAndTime.js'
-import { fromRawGithubUserId } from './GithubUserId.js'
 import { GithubRepoSummary, GithubUserSummary, isGithubRepoSummary } from './GithubSummaries.js'
-import { fromRawGitHubAccountId, fromRawGitHubRepoId } from './fromRawGitHubIds.js'
+import { fromRawGitHubAccountId, fromRawGitHubRepoId, fromRawGithubUserId } from './fromRawGitHubIds.js'
 
 // There's no consistent ID between pushes sourced from Webhooks vs Events, so use combination
 // of owner, repo, ref, and first commit SHA to create a key

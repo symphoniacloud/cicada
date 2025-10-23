@@ -4,13 +4,13 @@ import { isTestUserToken, processTestToken } from './userAuthorizerForTests.js'
 import { getUserByTokenUsingTokenCache } from '../github/githubUser.js'
 import { WithHeadersEvent } from '../../inboundInterfaces/lambdaTypes.js'
 
-import { GithubUserId } from '../types/GithubUserId.js'
+import { GitHubUserId } from '../../types/GitHubIdTypes.js'
 
 export type AuthorizationResult = SuccessfulAuthorizationResult | undefined
 
 export type SuccessfulAuthorizationResult = {
   username: string
-  userId: GithubUserId
+  userId: GitHubUserId
 }
 
 // Common code used by both API Gateway Lambda Authorizer AND /appa/... Lambda function

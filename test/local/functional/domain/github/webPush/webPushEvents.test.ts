@@ -16,7 +16,8 @@ import {
   stubQueryWebPushSubscription,
   stubQueryWorkflows
 } from '../../../../../testSupport/fakes/tableRecordReadStubs.js'
-import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/GithubUserId.js'
+
+import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/fromRawGitHubIds.js'
 
 test('newWorkflowRunEvent', async () => {
   const appState = new FakeAppState()

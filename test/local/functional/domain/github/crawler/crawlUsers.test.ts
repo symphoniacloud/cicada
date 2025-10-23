@@ -25,8 +25,10 @@ import {
   expectedBatchWriteGithubUsers
 } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 import { successWith } from '../../../../../../src/app/util/structuredResult.js'
-import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/GithubUserId.js'
-import { fromRawGitHubAccountId } from '../../../../../../src/app/domain/types/fromRawGitHubIds.js'
+import {
+  fromRawGitHubAccountId,
+  fromRawGithubUserId
+} from '../../../../../../src/app/domain/types/fromRawGitHubIds.js'
 
 test('user-crawler-for-personal-account-installation', async () => {
   // A

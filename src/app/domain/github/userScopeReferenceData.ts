@@ -5,7 +5,7 @@ import {
   UserScopeReferenceData
 } from '../types/UserScopeReferenceData.js'
 import { getUnarchivedRepositoriesForAccount, narrowToRepoSummary, repoKeysEqual } from './githubRepo.js'
-import { GitHubAccountId, GitHubRepoId } from '../../types/GitHubIdTypes.js'
+import { GitHubAccountId, GitHubRepoId, GitHubUserId } from '../../types/GitHubIdTypes.js'
 import { getActiveWorkflowsForAccount } from './githubWorkflow.js'
 import { getPublicAccountsForInstallationAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
 import { GithubAccountSummary } from '../types/GithubSummaries.js'
@@ -13,13 +13,12 @@ import { narrowToAccountSummary } from './githubAccount.js'
 import { GithubRepoKey, GithubWorkflowKey } from '../types/GithubKeys.js'
 import { GithubRepo } from '../types/GithubRepo.js'
 import { GithubWorkflow } from '../types/GithubWorkflow.js'
-import { GithubUserId } from '../types/GithubUserId.js'
 import { getInstalledAccountIdForUser } from './githubMembership.js'
 import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity.js'
 
 export async function loadUserScopeReferenceData(
   appState: AppState,
-  userId: GithubUserId
+  userId: GitHubUserId
 ): Promise<UserScopeReferenceData> {
   const memberAccountId = await getInstalledAccountIdForUser(appState, userId)
   const memberAccount = await getInstallationOrThrow(appState.entityStore, memberAccountId)
