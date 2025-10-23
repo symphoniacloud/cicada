@@ -5,7 +5,7 @@ import { failedWithResult, isFailure, Result, successWith } from '../../../util/
 import { logger } from '../../../util/logging.js'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { invalidRequestResponse } from '../../htmlResponses.js'
-import { RepoCoordinatesQueryStringParameters, repoCoordinatesSchema } from './getRepoCoordinates.js'
+import { RepoCoordinatesQueryStringParameters, repoCoordinatesSchema } from './parseRepoCoordinates.js'
 import { GithubAccountId, isGithubAccountId } from '../../../domain/types/GithubAccountId.js'
 import { GithubRepoId, isGithubRepoId } from '../../../domain/types/GithubRepoId.js'
 import { GithubWorkflowId, isGithubWorkflowId } from '../../../domain/types/GithubWorkflowId.js'

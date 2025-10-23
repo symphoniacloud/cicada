@@ -4,7 +4,7 @@ import { logger } from '../../../util/logging.js'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { invalidRequestResponse } from '../../htmlResponses.js'
 import { GithubAccountId } from '../../../domain/types/GithubAccountId.js'
-import { isGitHubAccountCoordinates } from '../../../types/GitHubAccountCoordinates.js'
+import { isGitHubAccountCoordinates } from '../../../types/GitHubCoordinateTypes.js'
 
 export function parseAccountCoordinates(
   event: CicadaAuthorizedAPIEvent

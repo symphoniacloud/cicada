@@ -4,7 +4,6 @@ import { Result } from '../util/structuredResult.js'
 
 export type QueryStringParameters = { [name: string]: string | undefined } | null
 
-
 export function validatingQueryStringParser<T>(
   schema: JTDSchemaType<T>
 ): (params: QueryStringParameters) => Result<T> {
