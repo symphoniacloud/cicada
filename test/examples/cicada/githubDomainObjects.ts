@@ -8,7 +8,6 @@ import {
 import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken.js'
 import { fromRawGithubInstallationId } from '../../../src/app/domain/types/GithubInstallationId.js'
-import { fromRawGithubWorkflowRunId } from '../../../src/app/domain/types/GithubWorkflowRunId.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 import { GithubAccountKey } from '../../../src/app/domain/types/GithubKeys.js'
 import {
@@ -20,7 +19,8 @@ import {
   fromRawGitHubAccountId,
   fromRawGitHubRepoId,
   fromRawGithubUserId,
-  fromRawGitHubWorkflowId
+  fromRawGitHubWorkflowId,
+  fromRawGithubWorkflowRunId
 } from '../../../src/app/domain/types/fromRawGitHubIds.js'
 import { GitHubUserId } from '../../../src/app/types/GitHubIdTypes.js'
 import { GitHubAccountMembership } from '../../../src/app/types/GitHubObjectTypes.js'
