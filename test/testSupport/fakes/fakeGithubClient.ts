@@ -6,17 +6,17 @@ import { arrayStubResponse } from './fakeSupport.js'
 import { RawGithubUser } from '../../../src/app/domain/types/rawGithub/RawGithubUser.js'
 import { FakeGithubInstallationClient } from './fakeGithubInstallationClient.js'
 
-import { GithubInstallationId } from '../../../src/app/domain/types/GithubInstallationId.js'
+import { GitHubInstallationId } from '../../../src/app/types/GitHubIdTypes.js'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 export class FakeGithubClient implements GithubClient {
-  public fakeClientsForInstallation = arrayStubResponse<GithubInstallationId, FakeGithubInstallationClient>()
+  public fakeClientsForInstallation = arrayStubResponse<GitHubInstallationId, FakeGithubInstallationClient>()
   public stubInstallations: RawGithubInstallation[] = []
   public stubOAuthUserAuths = arrayStubResponse<string, OAuthAppAuthentication>()
   public stubGithubUsers = arrayStubResponse<string, RawGithubUser>()
 
-  clientForInstallation(installationId: GithubInstallationId): GithubInstallationClient {
+  clientForInstallation(installationId: GitHubInstallationId): GithubInstallationClient {
     return this.fakeClientsForInstallation.getResponseOrThrow(installationId)
   }
 

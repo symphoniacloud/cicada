@@ -79,3 +79,17 @@ export type GitHubAppId = z.infer<typeof GitHubAppIdSchema>
 export function isGitHubAppId(x: unknown): x is GitHubAppId {
   return GitHubAppIdSchema.safeParse(x).success
 }
+
+// -- Installation
+
+export const GITHUB_INSTALLATION_ID_PREFIX = `GHInstallation`
+
+export const GitHubInstallationIdSchema = z
+  .templateLiteral([z.literal(GITHUB_INSTALLATION_ID_PREFIX), z.number().int().nonnegative()])
+  .readonly()
+
+export type GitHubInstallationId = z.infer<typeof GitHubInstallationIdSchema>
+
+export function isGitHubInstallationId(x: unknown): x is GitHubInstallationId {
+  return GitHubInstallationIdSchema.safeParse(x).success
+}

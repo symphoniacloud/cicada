@@ -23,7 +23,8 @@ import {
   stubGetWorkflow
 } from '../../../../../testSupport/fakes/tableRecordReadStubs.js'
 import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient.js'
-import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/types/GithubInstallationId.js'
+
+import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/types/toFromRawGitHubIds.js'
 
 test('run-event', async () => {
   // Arrange
