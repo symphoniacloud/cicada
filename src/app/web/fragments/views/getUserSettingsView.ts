@@ -10,8 +10,7 @@ import {
 import { HiccoughElement } from '../../hiccough/hiccoughElement.js'
 import { GithubRepoKey, GithubWorkflowKey } from '../../../domain/types/GithubKeys.js'
 import { colSm, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
-import { GitHubAccountId, GitHubRepoId } from '../../../types/GitHubIdTypes.js'
-import { GithubWorkflowId } from '../../../domain/types/GithubWorkflowId.js'
+import { GitHubAccountId, GitHubRepoId, GitHubWorkflowId } from '../../../types/GitHubIdTypes.js'
 
 export function createGetUserSettingsResponse(
   settings: DisplayableUserSettings,
@@ -64,7 +63,7 @@ export function repoControlsRow(repoKey: GithubRepoKey, repoSettings: Displayabl
     workflowRows.push(divRow(colSm(2), colSm(10, b('Workflow'))))
     for (const [workflowId, workflowSettings] of workflowEntries) {
       workflowRows.push(
-        workflowControlsRow({ ...repoKey, workflowId: workflowId as GithubWorkflowId }, workflowSettings)
+        workflowControlsRow({ ...repoKey, workflowId: workflowId as GitHubWorkflowId }, workflowSettings)
       )
     }
     workflowRows.push(divRow('&nbsp;'))

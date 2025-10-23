@@ -1,5 +1,4 @@
 import { GithubAccountSummary, GithubRepoSummary } from '../../../src/app/domain/types/GithubSummaries.js'
-import { fromRawGithubWorkflowId } from '../../../src/app/domain/types/GithubWorkflowId.js'
 import {
   GithubAccountStructure,
   GithubRepoStructure,
@@ -13,7 +12,8 @@ import { fromRawGithubUserId } from '../../../src/app/domain/types/GithubUserId.
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 import {
   fromRawGitHubAccountId,
-  fromRawGitHubRepoId
+  fromRawGitHubRepoId,
+  fromRawGitHubWorkflowId
 } from '../../../src/app/domain/types/fromRawGitHubIds.js'
 
 export interface BuildAccountSummaryOptions {
@@ -58,7 +58,7 @@ export interface BuildWorkflowOptions extends BuildRepoSummaryOptions {
 export function buildWorkflow(options?: BuildWorkflowOptions): GithubWorkflow {
   return {
     ...buildRepoSummmary(options),
-    workflowId: fromRawGithubWorkflowId(options?.simpleWorkflowId ?? '789'),
+    workflowId: fromRawGitHubWorkflowId(options?.simpleWorkflowId ?? '789'),
     workflowName: options?.workflowName ?? '',
     workflowPath: options?.path ?? '',
     workflowState: options?.state ?? '',

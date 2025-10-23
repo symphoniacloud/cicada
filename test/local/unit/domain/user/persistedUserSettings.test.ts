@@ -6,10 +6,10 @@ import {
 } from '../../../../../src/app/domain/user/persistedUserSettings.js'
 import { PersistedUserSettings } from '../../../../../src/app/domain/types/UserSettings.js'
 import { fromRawGithubUserId } from '../../../../../src/app/domain/types/GithubUserId.js'
-import { fromRawGithubWorkflowId } from '../../../../../src/app/domain/types/GithubWorkflowId.js'
 import {
   fromRawGitHubAccountId,
-  fromRawGitHubRepoId
+  fromRawGitHubRepoId,
+  fromRawGitHubWorkflowId
 } from '../../../../../src/app/domain/types/fromRawGitHubIds.js'
 
 function emptySettings(rawUserId: number): PersistedUserSettings {
@@ -92,7 +92,7 @@ test('update settings new workflow', () => {
     {
       accountId: fromRawGitHubAccountId(123),
       repoId: fromRawGitHubRepoId(456),
-      workflowId: fromRawGithubWorkflowId(789)
+      workflowId: fromRawGitHubWorkflowId(789)
     },
     'visible',
     true
@@ -133,7 +133,7 @@ test('update settings existing repo', () => {
     {
       accountId: fromRawGitHubAccountId(123),
       repoId: fromRawGitHubRepoId(456),
-      workflowId: fromRawGithubWorkflowId(789)
+      workflowId: fromRawGitHubWorkflowId(789)
     },
     'visible',
     true

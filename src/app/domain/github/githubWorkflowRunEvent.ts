@@ -14,8 +14,11 @@ import { isoDifferenceMs } from '../../util/dateAndTime.js'
 import { GithubUserId } from '../types/GithubUserId.js'
 import { GithubRepoSummary, GithubWorkflowSummary } from '../types/GithubSummaries.js'
 import { getWorkflow } from '../entityStore/entities/GithubWorkflowEntity.js'
-import { fromRawGitHubAccountId, fromRawGitHubRepoId } from '../types/fromRawGitHubIds.js'
-import { fromRawGithubWorkflowId } from '../types/GithubWorkflowId.js'
+import {
+  fromRawGitHubAccountId,
+  fromRawGitHubRepoId,
+  fromRawGitHubWorkflowId
+} from '../types/fromRawGitHubIds.js'
 import { GithubWorkflowKey } from '../types/GithubKeys.js'
 import { fromRawAccountType } from '../types/GithubAccountType.js'
 import { crawlOneWorkflow } from './crawler/crawlWorkflows.js'
@@ -47,7 +50,7 @@ async function readOrLookupWorkflow(
   const workflowKey: GithubWorkflowKey = {
     accountId: fromRawGitHubAccountId(rawRunEvent.repository.owner.id),
     repoId: fromRawGitHubRepoId(rawRunEvent.repository.id),
-    workflowId: fromRawGithubWorkflowId(rawRunEvent.workflow_id)
+    workflowId: fromRawGitHubWorkflowId(rawRunEvent.workflow_id)
   }
   const loadedWorkflow = await getWorkflow(appState.entityStore, workflowKey)
   if (loadedWorkflow) return loadedWorkflow
@@ -82,7 +85,7 @@ export function fromRawRunEvents(
 ) {
   function workflowForRawRunEvent(run: RawGithubWorkflowRunEvent) {
     return (
-      workflows.find(({ workflowId }) => workflowId === fromRawGithubWorkflowId(run.workflow_id)) ??
+      workflows.find(({ workflowId }) => workflowId === fromRawGitHubWorkflowId(run.workflow_id)) ??
       throwFunction(`No workflow found for workflow ID on raw run ${run.id}`)()
     )
   }
