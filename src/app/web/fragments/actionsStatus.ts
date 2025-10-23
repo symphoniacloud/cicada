@@ -4,7 +4,7 @@ import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js
 import { isFailure, isSuccess } from '../../util/structuredResult.js'
 import { invalidRequestResponse, notFoundHTMLResponse } from '../htmlResponses.js'
 import { createWorkflowRunEventTableResponse } from './views/activityAndStatusView.js'
-import { getOptionalRepoCoordinates } from './requestParsing/getOptionalRepoCoordinates.js'
+import { parsePartialRepoCoordinates } from './requestParsing/parsePartialRepoCoordinates.js'
 import {
   getLatestWorkflowRunEventsForAccountForUser,
   getLatestWorkflowRunEventsForRepoForUser,
@@ -21,7 +21,7 @@ export const actionsStatusFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
 }
 
 export async function actionsStatus(appState: AppState, event: CicadaAuthorizedAPIEvent) {
-  const coordinatesResult = getOptionalRepoCoordinates(event)
+  const coordinatesResult = parsePartialRepoCoordinates(event)
 
   if (isFailure(coordinatesResult)) return coordinatesResult.failureResult
   const { accountId, repoId } = coordinatesResult.result

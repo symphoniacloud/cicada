@@ -72,3 +72,16 @@ export function objectMap<TInputKey extends string, TInputValue, TOutputKey exte
     Object.entries(obj).map(([key, value], i) => fn(key as TInputKey, value as TInputValue, i))
   ) as Record<TOutputKey, TOutputValue>
 }
+
+export function pickProperties<T extends object, K extends keyof T>(obj: T, keys: readonly K[]): Pick<T, K> {
+  return Object.fromEntries(keys.map((key) => [key, obj[key]])) as Pick<T, K>
+}
+
+export function pickOptionalProperties<T extends object, K extends string>(
+  obj: T,
+  keys: readonly K[]
+): Partial<Pick<T, K extends keyof T ? K : never>> {
+  return Object.fromEntries(
+    keys.filter((key) => key in obj).map((key) => [key, (obj as Record<string, unknown>)[key]])
+  ) as Partial<Pick<T, K extends keyof T ? K : never>>
+}

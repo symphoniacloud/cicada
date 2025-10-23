@@ -5,16 +5,14 @@ import { APIGatewayProxyResult } from 'aws-lambda'
 import { invalidRequestResponse } from '../../htmlResponses.js'
 import { GitHubRepoCoordinates, isGitHubRepoCoordinates } from '../../../types/GitHubCoordinateTypes.js'
 import { JTDSchemaType } from 'ajv/dist/jtd.js'
+import { pickProperties } from '../../../util/collections.js'
 
 export function parseRepoCoordinates(
   event: CicadaAuthorizedAPIEvent
 ): Result<GitHubRepoCoordinates, APIGatewayProxyResult> {
-  if (isGitHubRepoCoordinates(event.queryStringParameters))
-    // Might be other query string params, so remove them
-    return successWith({
-      accountId: event.queryStringParameters.accountId,
-      repoId: event.queryStringParameters.repoId
-    })
+  if (isGitHubRepoCoordinates(event.queryStringParameters)) {
+    return successWith(pickProperties(event.queryStringParameters, ['accountId', 'repoId']))
+  }
   logger.warn('Invalid request in getRepoCoordinates')
   return failedWithResult('Invalid request - no account ID', invalidRequestResponse)
 }

@@ -3,14 +3,14 @@ import { failedWithResult, Result, successWith } from '../../../util/structuredR
 import { logger } from '../../../util/logging.js'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { invalidRequestResponse } from '../../htmlResponses.js'
-import { GithubAccountId } from '../../../domain/types/GithubAccountId.js'
-import { isGitHubAccountCoordinates } from '../../../types/GitHubCoordinateTypes.js'
+import { GitHubAccountCoordinates, isGitHubAccountCoordinates } from '../../../types/GitHubCoordinateTypes.js'
+import { pickProperties } from '../../../util/collections.js'
 
 export function parseAccountCoordinates(
   event: CicadaAuthorizedAPIEvent
-): Result<{ accountId: GithubAccountId }, APIGatewayProxyResult> {
+): Result<GitHubAccountCoordinates, APIGatewayProxyResult> {
   if (isGitHubAccountCoordinates(event.queryStringParameters))
-    return successWith({ accountId: event.queryStringParameters.accountId })
+    return successWith(pickProperties(event.queryStringParameters, ['accountId']))
   logger.warn('Invalid request in getAccountCoordinates')
   return failedWithResult('Invalid request - no account ID', invalidRequestResponse)
 }

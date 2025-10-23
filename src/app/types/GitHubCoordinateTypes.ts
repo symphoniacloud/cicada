@@ -22,3 +22,11 @@ export type GitHubRepoCoordinates = z.infer<typeof GitHubRepoCoordinatesSchema>
 export function isGitHubRepoCoordinates(x: unknown): x is GitHubRepoCoordinates {
   return GitHubRepoCoordinatesSchema.safeParse(x).success
 }
+
+export const PartialGitHubRepoCoordinatesSchema = GitHubRepoCoordinatesSchema.partial()
+
+export type PartialGitHubRepoCoordinates = z.infer<typeof PartialGitHubRepoCoordinatesSchema>
+
+export function isPartialGitHubRepoCoordinates(x: unknown): x is PartialGitHubRepoCoordinates {
+  return PartialGitHubRepoCoordinatesSchema.safeParse(x).success
+}
