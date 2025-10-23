@@ -1,17 +1,21 @@
 import { RawGithubInstallation } from './rawGithub/RawGithubInstallation.js'
 import { fromRawAccountType } from './GithubAccountType.js'
 import { isString } from '../../util/types.js'
-import {
-  fromRawGithubInstallationId,
-  GithubInstallationId,
-  isGithubInstallationId
-} from './GithubInstallationId.js'
 import { GithubAccountSummary, isGithubAccountSummary } from './GithubSummaries.js'
-import { fromRawGitHubAccountId, fromRawGithubAppId } from './toFromRawGitHubIds.js'
-import { GitHubAppId, isGitHubAppId } from '../../types/GitHubIdTypes.js'
+import {
+  fromRawGitHubAccountId,
+  fromRawGithubAppId,
+  fromRawGithubInstallationId
+} from './toFromRawGitHubIds.js'
+import {
+  GitHubAppId,
+  GitHubInstallationId,
+  isGitHubAppId,
+  isGitHubInstallationId
+} from '../../types/GitHubIdTypes.js'
 
 export interface GithubInstallation extends GithubAccountSummary {
-  installationId: GithubInstallationId
+  installationId: GitHubInstallationId
   appId: GitHubAppId
   appSlug: string
 }
@@ -20,7 +24,7 @@ export function isGithubInstallation(x: unknown): x is GithubInstallation {
   return (
     isGithubAccountSummary(x) &&
     'installationId' in x &&
-    isGithubInstallationId(x.installationId) &&
+    isGitHubInstallationId(x.installationId) &&
     'appId' in x &&
     isGitHubAppId(x.appId) &&
     'appSlug' in x &&

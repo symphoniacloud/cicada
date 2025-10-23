@@ -1,18 +1,21 @@
 import {
   GITHUB_ACCOUNT_ID_PREFIX,
   GITHUB_APP_ID_PREFIX,
+  GITHUB_INSTALLATION_ID_PREFIX,
   GITHUB_REPO_ID_PREFIX,
   GITHUB_USER_ID_PREFIX,
   GITHUB_WORKFLOW_ID_PREFIX,
   GITHUB_WORKFLOW_RUN_ID_PREFIX,
   GitHubAccountId,
   GitHubAppId,
+  GitHubInstallationId,
   GitHubRepoId,
   GitHubUserId,
   GitHubWorkflowId,
   GitHubWorkflowRunId,
   isGitHubAccountId,
   isGitHubAppId,
+  isGitHubInstallationId,
   isGitHubRepoId,
   isGitHubUserId,
   isGitHubWorkflowId,
@@ -66,4 +69,17 @@ export function fromRawGithubAppId(x: unknown): GitHubAppId {
 
 export function toRawGithubAppId(appId: GitHubAppId) {
   return appId.slice(GITHUB_APP_ID_PREFIX.length)
+}
+
+export function fromRawGithubInstallationId(x: unknown): GitHubInstallationId {
+  const cicadaGithubInstallationId = `${GITHUB_INSTALLATION_ID_PREFIX}${x}`
+  if (!isGitHubInstallationId(cicadaGithubInstallationId)) {
+    throw new Error(`Invalid raw github installation id: ${x}`)
+  } else {
+    return cicadaGithubInstallationId
+  }
+}
+
+export function toRawGithubInstallationId(installationId: GitHubInstallationId) {
+  return installationId.slice(GITHUB_INSTALLATION_ID_PREFIX.length)
 }

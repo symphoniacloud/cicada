@@ -7,12 +7,12 @@ import { OAuthAppAuthentication } from '@octokit/auth-oauth-user'
 import { createOAuthUserAuth } from '@octokit/auth-oauth-user'
 import { logger } from '../util/logging.js'
 import { RawGithubUser } from '../domain/types/rawGithub/RawGithubUser.js'
-import { GithubInstallationId } from '../domain/types/GithubInstallationId.js'
 
 import { toRawGithubAppId } from '../domain/types/toFromRawGitHubIds.js'
+import { GitHubInstallationId } from '../types/GitHubIdTypes.js'
 
 export interface GithubClient {
-  clientForInstallation(installationId: GithubInstallationId): GithubInstallationClient
+  clientForInstallation(installationId: GitHubInstallationId): GithubInstallationClient
 
   listInstallations(): Promise<RawGithubInstallation[]>
 
@@ -37,11 +37,11 @@ export function createRealGithubClient({
     }
   })
 
-  const perInstallation: Record<GithubInstallationId, GithubInstallationClient> = {}
+  const perInstallation: Record<GitHubInstallationId, GithubInstallationClient> = {}
 
   return {
     // TOEventually - in theory we should be able to create installation client using app client's octokit
-    clientForInstallation(installationId: GithubInstallationId): GithubInstallationClient {
+    clientForInstallation(installationId: GitHubInstallationId): GithubInstallationClient {
       if (!perInstallation[installationId]) {
         perInstallation[installationId] = createRealGithubInstallationClient(
           appId,

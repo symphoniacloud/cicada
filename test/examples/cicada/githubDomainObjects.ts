@@ -7,7 +7,6 @@ import {
 } from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
 import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken.js'
-import { fromRawGithubInstallationId } from '../../../src/app/domain/types/GithubInstallationId.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 import { GithubAccountKey } from '../../../src/app/domain/types/GithubKeys.js'
 import {
@@ -17,6 +16,7 @@ import {
 } from '../../../src/app/domain/types/GithubSummaries.js'
 import {
   fromRawGitHubAccountId,
+  fromRawGithubInstallationId,
   fromRawGitHubRepoId,
   fromRawGithubUserId,
   fromRawGitHubWorkflowId,
