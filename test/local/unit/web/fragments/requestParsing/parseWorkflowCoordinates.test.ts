@@ -2,10 +2,11 @@ import { expect, test } from 'vitest'
 import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes/awsStubs.js'
 import { buildUserScopedRefData } from '../../../../../testSupport/builders/accountStructureBuilders.js'
 import { invalidRequestResponse } from '../../../../../../src/app/web/htmlResponses.js'
-import { parseWorkflowCoordinates } from '../../../../../../src/app/web/fragments/requestParsing/parseWorkflowCoordinates.js'
+
+import { parseWorkflowKeyFromQueryString } from '../../../../../../src/app/web/fragments/requestParsing/parseFragmentQueryStrings.js'
 
 test('Fails if no IDs', () => {
-  const result = parseWorkflowCoordinates({
+  const result = parseWorkflowKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData()
@@ -18,7 +19,7 @@ test('Fails if no IDs', () => {
 })
 
 test('Get Account ID and Repo ID', () => {
-  const result = parseWorkflowCoordinates({
+  const result = parseWorkflowKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
