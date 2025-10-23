@@ -5,19 +5,15 @@ import {
   isGithubUserSummary,
   isGithubWorkflowSummary
 } from './GithubSummaries.js'
-import {
-  fromRawGithubWorkflowRunId,
-  GithubWorkflowRunId,
-  isGithubWorkflowRunId
-} from './GithubWorkflowRunId.js'
 import { isString } from '../../util/types.js'
 import { narrowToWorkflowSummary } from '../github/githubWorkflow.js'
 import { GithubWorkflow } from './GithubWorkflow.js'
-import { fromRawGithubUserId } from './fromRawGitHubIds.js'
+import { fromRawGithubUserId, fromRawGithubWorkflowRunId } from './fromRawGitHubIds.js'
+import { GitHubWorkflowRunId, isGitHubWorkflowRunId } from '../../types/GitHubIdTypes.js'
 
 export interface GithubWorkflowRunEvent extends GithubWorkflowSummary {
   repoHtmlUrl: string
-  workflowRunId: GithubWorkflowRunId
+  workflowRunId: GitHubWorkflowRunId
   runNumber: number
   runAttempt?: number
   displayTitle: string
@@ -47,7 +43,7 @@ export function isGithubWorkflowRunEvent(x: unknown): x is GithubWorkflowRunEven
     'repoHtmlUrl' in x &&
     isString(x.repoHtmlUrl) &&
     'workflowRunId' in x &&
-    isGithubWorkflowRunId(x.workflowRunId) &&
+    isGitHubWorkflowRunId(x.workflowRunId) &&
     'runNumber' in x &&
     'event' in x &&
     'headSha' in x &&

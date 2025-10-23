@@ -3,14 +3,17 @@ import {
   GITHUB_REPO_ID_PREFIX,
   GITHUB_USER_ID_PREFIX,
   GITHUB_WORKFLOW_ID_PREFIX,
+  GITHUB_WORKFLOW_RUN_ID_PREFIX,
   GitHubAccountId,
   GitHubRepoId,
   GitHubUserId,
   GitHubWorkflowId,
+  GitHubWorkflowRunId,
   isGitHubAccountId,
   isGitHubRepoId,
   isGitHubUserId,
-  isGitHubWorkflowId
+  isGitHubWorkflowId,
+  isGitHubWorkflowRunId
 } from '../../types/GitHubIdTypes.js'
 
 export function fromRawGitHubAccountId(x: unknown): GitHubAccountId {
@@ -40,4 +43,11 @@ export function fromRawGithubUserId(x: unknown): GitHubUserId {
   } else {
     return cicadaGithubUserId
   }
+}
+export function fromRawGithubWorkflowRunId(x: unknown): GitHubWorkflowRunId {
+  const cicadaRunId = `${GITHUB_WORKFLOW_RUN_ID_PREFIX}${x}`
+  if (!isGitHubWorkflowRunId(cicadaRunId)) {
+    throw new Error(`Invalid raw github workflow run id: ${x}`)
+  }
+  return cicadaRunId
 }
