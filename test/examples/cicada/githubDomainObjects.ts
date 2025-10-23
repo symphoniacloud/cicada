@@ -8,7 +8,6 @@ import {
 } from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
 import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken.js'
-import { fromRawGithubAccountId } from '../../../src/app/domain/types/GithubAccountId.js'
 import { fromRawGithubUserId, GithubUserId } from '../../../src/app/domain/types/GithubUserId.js'
 import { fromRawGithubInstallationId } from '../../../src/app/domain/types/GithubInstallationId.js'
 import { fromRawGithubRepoId } from '../../../src/app/domain/types/GithubRepoId.js'
@@ -21,9 +20,10 @@ import {
   GithubRepoSummary,
   GithubWorkflowSummary
 } from '../../../src/app/domain/types/GithubSummaries.js'
+import { fromRawGitHubAccountId } from '../../../src/app/domain/types/fromRawGitHubIds.js'
 
 export const cicadaTestUserAccountKey: GithubAccountKey = {
-  accountId: fromRawGithubAccountId(162360409)
+  accountId: fromRawGitHubAccountId(162360409)
 }
 
 export const cicadaTestUserAccountSummary: GithubAccountSummary = {
@@ -33,7 +33,7 @@ export const cicadaTestUserAccountSummary: GithubAccountSummary = {
 }
 
 export const cicadaTestOrgAccountSummary: GithubAccountSummary = {
-  accountId: fromRawGithubAccountId(162483619),
+  accountId: fromRawGitHubAccountId(162483619),
   accountName: 'cicada-test-org',
   accountType: 'organization'
 }
@@ -76,17 +76,17 @@ export const testMikeRobertsUser: GithubUser = {
 }
 
 export const testTestUserMembershipOfPersonalInstallation: GithubAccountMembership = {
-  accountId: fromRawGithubAccountId(162360409),
+  accountId: fromRawGitHubAccountId(162360409),
   userId: fromRawGithubUserId(162360409)
 }
 
 export const testTestUserMembershipOfOrg: GithubAccountMembership = {
-  accountId: fromRawGithubAccountId(162483619),
+  accountId: fromRawGitHubAccountId(162483619),
   userId: fromRawGithubUserId(162360409)
 }
 
 export const testMikeRobertsUserMembershipOfOrg: GithubAccountMembership = {
-  accountId: fromRawGithubAccountId(162483619),
+  accountId: fromRawGitHubAccountId(162483619),
   userId: fromRawGithubUserId(49635)
 }
 
@@ -98,7 +98,7 @@ export const accountMemberships: Record<GithubUserId, GithubAccountMembership> =
 export const personalTestRepoSummary: GithubRepoSummary = {
   repoId: fromRawGithubRepoId(767679529),
   repoName: 'personal-test-repo',
-  accountId: fromRawGithubAccountId(162360409),
+  accountId: fromRawGitHubAccountId(162360409),
   accountName: 'cicada-test-user',
   accountType: 'user'
 }
@@ -378,7 +378,7 @@ export const testPersonalTestRepoPush: GithubPush = {
     }
   ],
   dateTime: '2024-03-05T18:01:12Z',
-  accountId: fromRawGithubAccountId(162360409),
+  accountId: fromRawGitHubAccountId(162360409),
   accountName: 'cicada-test-user',
   accountType: 'user',
   ref: 'refs/heads/main',
@@ -405,7 +405,7 @@ export const testOrgTestRepoOnePush: GithubPush = {
     }
   ],
   dateTime: '2024-03-06T17:00:40Z',
-  accountId: fromRawGithubAccountId(162483619),
+  accountId: fromRawGitHubAccountId(162483619),
   accountName: 'cicada-test-org',
   accountType: 'organization',
   ref: 'refs/heads/main',
@@ -432,7 +432,7 @@ export const testOrgTestRepoOnePushFC94: GithubPush = {
     }
   ],
   dateTime: '2024-03-06T21:26:18.000Z',
-  accountId: fromRawGithubAccountId(162483619),
+  accountId: fromRawGitHubAccountId(162483619),
   accountName: 'cicada-test-org',
   accountType: 'organization',
   ref: 'refs/heads/main',

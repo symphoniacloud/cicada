@@ -10,31 +10,31 @@ import {
 import { HiccoughElement } from '../../hiccough/hiccoughElement.js'
 import { GithubRepoKey, GithubWorkflowKey } from '../../../domain/types/GithubKeys.js'
 import { colSm, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
-import { GithubAccountId } from '../../../domain/types/GithubAccountId.js'
+import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
 import { GithubRepoId } from '../../../domain/types/GithubRepoId.js'
 import { GithubWorkflowId } from '../../../domain/types/GithubWorkflowId.js'
 
 export function createGetUserSettingsResponse(
   settings: DisplayableUserSettings,
-  memberAccountId: GithubAccountId
+  memberAccountId: GitHubAccountId
 ) {
   return fragmentViewResult(...userSettingsElement(settings, memberAccountId))
 }
 
-export function userSettingsElement(settings: DisplayableUserSettings, memberAccountId: GithubAccountId) {
+export function userSettingsElement(settings: DisplayableUserSettings, memberAccountId: GitHubAccountId) {
   // Show member account first, then public accounts
   // TOEventually - when a user can be a member of multiple accounts then change this
   const elements = [accountControlsRow(memberAccountId, settings.github.accounts[memberAccountId])]
 
   for (const [accountId, accountSettings] of Object.entries(settings.github.accounts)) {
     if (!(accountId === memberAccountId))
-      elements.push(accountControlsRow(accountId as GithubAccountId, accountSettings))
+      elements.push(accountControlsRow(accountId as GitHubAccountId, accountSettings))
   }
   return elements
 }
 
 export function accountControlsRow(
-  accountId: GithubAccountId,
+  accountId: GitHubAccountId,
   accountSettings: DisplayableGithubAccountSettings
 ) {
   const partialQs = `accountId=${accountId}`

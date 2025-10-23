@@ -17,7 +17,7 @@ import {
   getRecentActivityForRepoForUser
 } from '../../domain/user/userVisible.js'
 import { fragmentPath } from '../routingCommon.js'
-import { GithubAccountId } from '../../domain/types/GithubAccountId.js'
+import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData.js'
 
 export const gitHubActivityFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
@@ -54,7 +54,7 @@ async function githubActivityForDashboard(appState: AppState, refData: UserScope
 async function githubActivityForAccount(
   appState: AppState,
   refData: UserScopeReferenceData,
-  accountId: GithubAccountId
+  accountId: GitHubAccountId
 ) {
   const pushesResult = await getRecentActiveBranchesForUserAndAccount(appState, refData, accountId)
   if (!isSuccess(pushesResult)) return notFoundHTMLResponse

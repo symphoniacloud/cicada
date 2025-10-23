@@ -25,7 +25,7 @@ import {
 } from '../../domain/user/persistedUserSettings.js'
 import { UserSetting } from '../../domain/types/UserSettings.js'
 import { fragmentPath } from '../routingCommon.js'
-import { GithubAccountId } from '../../domain/types/GithubAccountId.js'
+import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { calculateAccountSettings, calculateUserSettings } from '../../domain/user/calculatedUserSettings.js'
 import {
   getAccountStructure,
@@ -77,7 +77,7 @@ export async function updateUserSetting(appState: AppState, event: CicadaAuthori
 async function processUpdateAccountSetting(
   appState: AppState,
   refData: UserScopeReferenceData,
-  accountId: GithubAccountId,
+  accountId: GitHubAccountId,
   setting: UserSetting,
   enabled: boolean
 ) {

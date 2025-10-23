@@ -4,7 +4,7 @@ import {
   isGithubOrganizationMembership
 } from '../../types/GithubAccountMembership.js'
 import { GITHUB_ACCOUNT_MEMBERSHIP } from '../entityTypes.js'
-import { GithubAccountId } from '../../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
 import { GithubUserId } from '../../types/GithubUserId.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 
@@ -44,7 +44,7 @@ export async function deleteMemberships(
   await store(entityStore).advancedOperations.batchDelete(memberships)
 }
 
-export async function getAllMembershipsForAccount(entityStore: AllEntitiesStore, accountId: GithubAccountId) {
+export async function getAllMembershipsForAccount(entityStore: AllEntitiesStore, accountId: GitHubAccountId) {
   return store(entityStore).queryAllByPk({ accountId })
 }
 

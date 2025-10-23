@@ -1,7 +1,7 @@
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubRepo, isGithubRepo } from '../../types/GithubRepo.js'
 import { GITHUB_REPOSITORY } from '../entityTypes.js'
-import { GithubAccountId } from '../../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 
 const GithubRepositoryEntity: CicadaEntity<
@@ -25,7 +25,7 @@ export async function putRepositories(entityStore: AllEntitiesStore, repos: Gith
 
 export async function getRepositories(
   entityStore: AllEntitiesStore,
-  accountId: GithubAccountId
+  accountId: GitHubAccountId
 ): Promise<GithubRepo[]> {
   return store(entityStore).queryAllByPk({ accountId })
 }

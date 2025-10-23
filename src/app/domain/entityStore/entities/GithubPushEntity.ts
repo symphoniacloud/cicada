@@ -4,7 +4,7 @@ import { GITHUB_PUSH } from '../entityTypes.js'
 import { latestCommitInPush } from '../../github/githubPush.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkflowRunEntity.js'
-import { GithubAccountId } from '../../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
 
 // Exported since also used by GithubWorkflowRunEntity
 export const GithubPushEntity: CicadaEntity<
@@ -44,7 +44,7 @@ export async function putPushIfNoKeyExists(entityStore: AllEntitiesStore, push: 
 // CAREFUL - Don't use this for production code! Only just used for integration tests
 export async function onlyUseInTestsGetAllGithubPushesForAccount(
   entityStore: AllEntitiesStore,
-  accountId: GithubAccountId
+  accountId: GitHubAccountId
 ) {
   return store(entityStore).queryAllByPk({ accountId })
 }

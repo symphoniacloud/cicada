@@ -7,14 +7,14 @@ import { GithubPush } from '../domain/types/GithubPush.js'
 import { GithubWorkflowRunEvent } from '../domain/types/GithubWorkflowRunEvent.js'
 import { WebPushTestEvent } from '../domain/webPush/WebPushTestEvent.js'
 import { GithubInstallation } from '../domain/types/GithubInstallation.js'
-import { GithubAccountId } from '../domain/types/GithubAccountId.js'
+import { GitHubAccountId } from '../types/GitHubIdTypes.js'
 
 export type CicadaEventBridgeData =
   | GithubPush
   | GithubWorkflowRunEvent
   | WebPushTestEvent
   | GithubInstallation
-  | { installation: GithubInstallation; publicAccountId: GithubAccountId }
+  | { installation: GithubInstallation; publicAccountId: GitHubAccountId }
 
 // This exists since eventually would be nice to add metadata (see https://community.aws/posts/eventbridge-schema-registry-best-practices)
 export interface CicadaEventBridgeDetail {

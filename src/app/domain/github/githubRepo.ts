@@ -3,7 +3,7 @@ import { RawGithubRepo } from '../types/rawGithub/RawGithubRepo.js'
 import { fromRawGithubRepo } from '../types/GithubRepo.js'
 import { getRepositories, putRepositories } from '../entityStore/entities/GithubRepositoryEntity.js'
 import { GithubRepoKey } from '../types/GithubKeys.js'
-import { GithubAccountId } from '../types/GithubAccountId.js'
+import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { GithubRepoSummary } from '../types/GithubSummaries.js'
 import { accountKeysEqual, narrowToAccountSummary } from './githubAccount.js'
 
@@ -26,6 +26,6 @@ export async function processRawRepositories(appState: AppState, rawRepos: RawGi
   return repos
 }
 
-export async function getUnarchivedRepositoriesForAccount(appState: AppState, accountId: GithubAccountId) {
+export async function getUnarchivedRepositoriesForAccount(appState: AppState, accountId: GitHubAccountId) {
   return (await getRepositories(appState.entityStore, accountId)).filter(({ archived }) => !archived)
 }

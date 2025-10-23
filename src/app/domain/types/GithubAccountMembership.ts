@@ -1,10 +1,10 @@
 import { isNotNullObject } from '../../util/types.js'
-import { GithubAccountId, isGithubAccountId } from './GithubAccountId.js'
 import { GithubUserId, isGithubUserId } from './GithubUserId.js'
+import { GitHubAccountId, isGitHubAccountId } from '../../types/GitHubIdTypes.js'
 
 export interface GithubAccountMembership {
   userId: GithubUserId
-  accountId: GithubAccountId
+  accountId: GitHubAccountId
 }
 
 export function isGithubOrganizationMembership(x: unknown): x is GithubAccountMembership {
@@ -13,6 +13,6 @@ export function isGithubOrganizationMembership(x: unknown): x is GithubAccountMe
     'userId' in x &&
     isGithubUserId(x.userId) &&
     'accountId' in x &&
-    isGithubAccountId(x.accountId)
+    isGitHubAccountId(x.accountId)
   )
 }
