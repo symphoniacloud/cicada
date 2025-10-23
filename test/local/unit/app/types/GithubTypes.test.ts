@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { isGitHubAccountCoordinates } from '../../../../../src/app/types/GitHubAccountCoordinates.js'
+import { isGitHubAccountCoordinates } from '../../../../../src/app/types/GitHubCoordinateTypes.js'
 import { isGitHubAccountId } from '../../../../../src/app/types/GitHubAccountId.js'
 
 test('GitHub Account Id type', () => {

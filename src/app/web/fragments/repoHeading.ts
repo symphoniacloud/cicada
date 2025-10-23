@@ -4,7 +4,7 @@ import { CicadaAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js
 import { isFailure } from '../../util/structuredResult.js'
 import { createRepoHeadingResponse } from './views/repoHeadingView.js'
 import { notFoundHTMLResponse } from '../htmlResponses.js'
-import { getRepoCoordinates } from './requestParsing/getRepoCoordinates.js'
+import { parseRepoCoordinates } from './requestParsing/parseRepoCoordinates.js'
 import { fragmentPath } from '../routingCommon.js'
 import { getRepoStructure } from '../../domain/github/userScopeReferenceData.js'
 
@@ -14,7 +14,7 @@ export const repoHeadingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
 }
 
 export async function repoHeading(_: AppState, event: CicadaAuthorizedAPIEvent) {
-  const repoCoordinatesResult = getRepoCoordinates(event)
+  const repoCoordinatesResult = parseRepoCoordinates(event)
   if (isFailure(repoCoordinatesResult)) return repoCoordinatesResult.failureResult
 
   const repo = getRepoStructure(event.refData, repoCoordinatesResult.result)

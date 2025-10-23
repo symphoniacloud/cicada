@@ -11,7 +11,7 @@ import { logger } from '../../../util/logging.js'
 import { invalidRequestResponse } from '../../htmlResponses.js'
 import { validatingQueryStringParser } from '../../../schema/urlPathParser.js'
 import { JTDSchemaType } from 'ajv/dist/jtd.js'
-import { RepoCoordinatesQueryStringParameters, repoCoordinatesSchema } from './getRepoCoordinates.js'
+import { RepoCoordinatesQueryStringParameters, repoCoordinatesSchema } from './parseRepoCoordinates.js'
 import { GithubAccountId, isGithubAccountId } from '../../../domain/types/GithubAccountId.js'
 import { GithubRepoId, isGithubRepoId } from '../../../domain/types/GithubRepoId.js'
 
