@@ -1,11 +1,11 @@
 import { expect, test } from 'vitest'
 import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes/awsStubs.js'
 import { buildUserScopedRefData } from '../../../../../testSupport/builders/accountStructureBuilders.js'
-import { parseRepoCoordinates } from '../../../../../../src/app/web/fragments/requestParsing/parseRepoCoordinates.js'
 import { invalidRequestResponse } from '../../../../../../src/app/web/htmlResponses.js'
+import { parseRepoKeyFromQueryString } from '../../../../../../src/app/web/fragments/requestParsing/parseFragmentQueryStrings.js'
 
 test('Fails if no Account ID and Repo ID', () => {
-  const result = parseRepoCoordinates({
+  const result = parseRepoKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData()
@@ -18,7 +18,7 @@ test('Fails if no Account ID and Repo ID', () => {
 })
 
 test('Get Account ID and Repo ID', () => {
-  const result = parseRepoCoordinates({
+  const result = parseRepoKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),

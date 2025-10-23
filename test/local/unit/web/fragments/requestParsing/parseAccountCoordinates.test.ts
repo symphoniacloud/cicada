@@ -1,11 +1,11 @@
 import { expect, test } from 'vitest'
-import { parseAccountCoordinates } from '../../../../../../src/app/web/fragments/requestParsing/parseAccountCoordinates.js'
+import { parseAccountKeyFromQueryString } from '../../../../../../src/app/web/fragments/requestParsing/parseFragmentQueryStrings.js'
 import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes/awsStubs.js'
 import { buildUserScopedRefData } from '../../../../../testSupport/builders/accountStructureBuilders.js'
 import { invalidRequestResponse } from '../../../../../../src/app/web/htmlResponses.js'
 
 test('Fails if no Account ID', () => {
-  const result = parseAccountCoordinates({
+  const result = parseAccountKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData()
@@ -18,7 +18,7 @@ test('Fails if no Account ID', () => {
 })
 
 test('Get Account ID', () => {
-  const result = parseAccountCoordinates({
+  const result = parseAccountKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
@@ -36,7 +36,7 @@ test('Get Account ID', () => {
 })
 
 test('Get Account ID removes superfluous fields', () => {
-  const result = parseAccountCoordinates({
+  const result = parseAccountKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
     refData: buildUserScopedRefData(),
