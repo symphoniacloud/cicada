@@ -17,7 +17,7 @@ import {
   fromRawGitHubRepoId,
   fromRawGitHubWorkflowId
 } from '../types/toFromRawGitHubIds.js'
-import { fromRawAccountType } from '../types/GithubAccountType.js'
+import { fromRawAccountType } from '../types/fromRawGitHub.js'
 import { crawlOneWorkflow } from './crawler/crawlWorkflows.js'
 import { GithubInstallationClient } from '../../outboundInterfaces/githubInstallationClient.js'
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'

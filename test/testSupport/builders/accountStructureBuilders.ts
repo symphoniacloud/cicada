@@ -3,7 +3,6 @@ import {
   GithubRepoStructure,
   UserScopeReferenceData
 } from '../../../src/app/domain/types/UserScopeReferenceData.js'
-import { GithubAccountType } from '../../../src/app/domain/types/GithubAccountType.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 import {
   fromRawGitHubAccountId,
@@ -12,12 +11,16 @@ import {
   fromRawGitHubWorkflowId
 } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../../src/app/types/schemas/GitHubSchemas.js'
-import { GitHubAccountSummary, GitHubRepoSummary } from '../../../src/app/types/GitHubTypes.js'
+import {
+  GitHubAccountSummary,
+  GitHubAccountType,
+  GitHubRepoSummary
+} from '../../../src/app/types/GitHubTypes.js'
 
 export interface BuildAccountSummaryOptions {
   simpleAccountId?: number
   accountName?: string
-  accountType?: GithubAccountType
+  accountType?: GitHubAccountType
 }
 
 export function buildAccountSummary(options?: BuildAccountSummaryOptions): GitHubAccountSummary {
