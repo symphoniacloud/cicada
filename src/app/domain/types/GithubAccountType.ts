@@ -1,5 +1,5 @@
-export const ORGANIZATION_ACCOUNT_TYPE = 'organization'
-export const USER_ACCOUNT_TYPE = 'user'
+import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../../types/schemas/GitHubSchemas.js'
+
 export const ACCOUNT_TYPES = [ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE] as const
 
 export type GithubAccountType = (typeof ACCOUNT_TYPES)[number]
