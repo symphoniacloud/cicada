@@ -1,5 +1,4 @@
 import { AppState } from '../../environment/AppState.js'
-import { GithubUser } from '../types/GithubUser.js'
 import {
   deleteMemberships,
   getAllMembershipsForAccount,
@@ -8,11 +7,11 @@ import {
 } from '../entityStore/entities/GithubAccountMembershipEntity.js'
 import { arrayDifferenceDeep } from '../../util/collections.js'
 import { throwFunction } from '../../../multipleContexts/errors.js'
-import { GitHubAccountId, GitHubUserId } from '../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubUser, GitHubUserId } from '../../types/GitHubTypes.js'
 
 export async function setMemberships(
   appState: AppState,
-  latestMembers: GithubUser[],
+  latestMembers: GitHubUser[],
   accountId: GitHubAccountId
 ) {
   const memberships = latestMembers.map(({ userId }) => ({
@@ -36,7 +35,7 @@ export async function getInstalledAccountIdForUser(
   )
 }
 
-export async function isUserAMemberOfAnyInstalledAccount(appState: AppState, user: GithubUser) {
+export async function isUserAMemberOfAnyInstalledAccount(appState: AppState, user: GitHubUser) {
   return (await getAllMembershipsForUserId(appState.entityStore, user.userId)).length > 0
 }
 
