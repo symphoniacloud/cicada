@@ -16,9 +16,8 @@ import {
   getRecentActivityForRepoForUser
 } from '../../domain/user/userVisible.js'
 import { fragmentPath } from '../routingCommon.js'
-import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData.js'
-import { GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubKeyTypes.js'
+import { GitHubAccountId, GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubTypes.js'
 
 export const gitHubActivityFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('gitHubActivity'),

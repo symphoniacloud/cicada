@@ -1,6 +1,6 @@
 import { isNotNullObject } from '../../util/types.js'
-import { GitHubAccountId, GitHubRepoId, GitHubWorkflowId } from '../../types/GitHubIdTypes.js'
-import { GitHubUserKey, isGitHubUserKey } from '../../types/GitHubKeyTypes.js'
+import { GitHubAccountId, GitHubRepoId, GitHubUserKey, GitHubWorkflowId } from '../../types/GitHubTypes.js'
+import { isGitHubUserKey } from '../../types/GitHubTypeChecks.js'
 
 export type UserSetting = 'visible' | 'notify'
 

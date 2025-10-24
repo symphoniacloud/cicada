@@ -7,8 +7,8 @@ import {
   putMemberships
 } from '../entityStore/entities/GithubAccountMembershipEntity.js'
 import { arrayDifferenceDeep } from '../../util/collections.js'
-import { GitHubAccountId, GitHubUserId } from '../../types/GitHubIdTypes.js'
 import { throwFunction } from '../../../multipleContexts/errors.js'
+import { GitHubAccountId, GitHubUserId } from '../../types/GitHubTypes.js'
 
 export async function setMemberships(
   appState: AppState,

@@ -1,8 +1,9 @@
 import { GithubAccountSummary, isGithubAccountSummary } from './GithubSummaries.js'
 import { RawGithubUser } from './rawGithub/RawGithubUser.js'
 import { fromRawAccountType } from './GithubAccountType.js'
-import { GitHubAccountId, isGitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { fromRawGitHubAccountId } from './toFromRawGitHubIds.js'
+import { isGitHubAccountId } from '../../types/GitHubTypeChecks.js'
+import { GitHubAccountId } from '../../types/GitHubTypes.js'
 
 export interface GithubPublicAccount extends GithubAccountSummary {
   installationAccountId: GitHubAccountId

@@ -2,8 +2,7 @@ import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { GITHUB_WORKFLOW } from '../entityTypes.js'
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubWorkflow, isGithubWorkflow } from '../../types/GithubWorkflow.js'
-import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
-import { GitHubWorkflowKey } from '../../../types/GitHubKeyTypes.js'
+import { GitHubAccountId, GitHubWorkflowKey } from '../../../types/GitHubTypes.js'
 
 const GithubWorkflowEntity: CicadaEntity<
   GithubWorkflow,

@@ -13,7 +13,8 @@ import { logger } from '../../../util/logging.js'
 import { fromRawAccountType, ORGANIZATION_ACCOUNT_TYPE } from '../../types/GithubAccountType.js'
 import { a, p } from '../../../web/hiccough/hiccoughElements.js'
 import { fromRawGithubAppId } from '../../types/toFromRawGitHubIds.js'
-import { GitHubAppId } from '../../../types/GitHubIdTypes.js'
+
+import { GitHubAppId } from '../../../types/GitHubTypes.js'
 
 export const setupRedirectRoute: Route<APIGatewayProxyEvent, GithubSetupAppState> = {
   path: '/github/setup/redirect',

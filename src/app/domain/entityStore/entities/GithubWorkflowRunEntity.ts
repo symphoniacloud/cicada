@@ -10,8 +10,7 @@ import { domainObjectsFromMultipleEventEntityResponse } from '../entityStoreOper
 import { GithubPushEntity } from './GithubPushEntity.js'
 import { GithubPush } from '../../types/GithubPush.js'
 
-import { GitHubRepoId } from '../../../types/GitHubIdTypes.js'
-import { GitHubAccountKey, GitHubRepoKey } from '../../../types/GitHubKeyTypes.js'
+import { GitHubAccountKey, GitHubRepoId, GitHubRepoKey } from '../../../types/GitHubTypes.js'
 
 // Stores the latest run event per workflow run
 const GithubWorkflowRunEntity: CicadaEntity<

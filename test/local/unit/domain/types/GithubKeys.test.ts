@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { isGitHubAppId, isGitHubInstallationId } from '../../../../../src/app/types/GitHubIdTypes.js'
+import { isGitHubAppId, isGitHubInstallationId } from '../../../../../src/app/types/GitHubTypeChecks.js'
 
 test('isGithubAppId', () => {
   expect(isGitHubAppId('GHApp123')).toBeTruthy()

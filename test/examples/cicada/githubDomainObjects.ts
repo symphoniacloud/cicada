@@ -21,9 +21,11 @@ import {
   fromRawGitHubWorkflowId,
   fromRawGithubWorkflowRunId
 } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
-import { GitHubUserId } from '../../../src/app/types/GitHubIdTypes.js'
-import { GitHubAccountMembership } from '../../../src/app/types/GitHubObjectTypes.js'
-import { GitHubAccountKey } from '../../../src/app/types/GitHubKeyTypes.js'
+import {
+  GitHubAccountKey,
+  GitHubAccountMembership,
+  GitHubUserId
+} from '../../../src/app/types/GitHubTypes.js'
 
 export const cicadaTestUserAccountKey: GitHubAccountKey = {
   accountId: fromRawGitHubAccountId(162360409)

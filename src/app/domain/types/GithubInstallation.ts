@@ -7,12 +7,8 @@ import {
   fromRawGithubAppId,
   fromRawGithubInstallationId
 } from './toFromRawGitHubIds.js'
-import {
-  GitHubAppId,
-  GitHubInstallationId,
-  isGitHubAppId,
-  isGitHubInstallationId
-} from '../../types/GitHubIdTypes.js'
+import { isGitHubAppId, isGitHubInstallationId } from '../../types/GitHubTypeChecks.js'
+import { GitHubAppId, GitHubInstallationId } from '../../types/GitHubTypes.js'
 
 export interface GithubInstallation extends GithubAccountSummary {
   installationId: GitHubInstallationId

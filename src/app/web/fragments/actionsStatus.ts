@@ -11,9 +11,8 @@ import {
   getLatestWorkflowRunEventsForUserWithUserSettings
 } from '../../domain/user/userVisible.js'
 import { fragmentPath } from '../routingCommon.js'
-import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData.js'
-import { GitHubRepoKey } from '../../types/GitHubKeyTypes.js'
+import { GitHubAccountId, GitHubRepoKey } from '../../types/GitHubTypes.js'
 
 export const actionsStatusFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('actionsStatus'),

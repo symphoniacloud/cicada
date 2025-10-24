@@ -24,8 +24,7 @@ import { GithubInstallationClient } from '../../outboundInterfaces/githubInstall
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { getWorkflowFromRefData } from './userScopeReferenceData.js'
 import { throwFunction } from '../../../multipleContexts/errors.js'
-import { GitHubUserId } from '../../types/GitHubIdTypes.js'
-import { GitHubWorkflowKey } from '../../types/GitHubKeyTypes.js'
+import { GitHubUserId, GitHubWorkflowKey } from '../../types/GitHubTypes.js'
 
 export async function processRawRunEvent(
   appState: AppState,

@@ -3,7 +3,8 @@ import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper.j
 import { WebPushSubscription } from '../types/WebPushSubscription.js'
 
 import { getAllWebPushSubscriptionsForUser } from '../entityStore/entities/WebPushSubscriptionEntity.js'
-import { GitHubUserId } from '../../types/GitHubIdTypes.js'
+
+import { GitHubUserId } from '../../types/GitHubTypes.js'
 
 // TOEventually - consider parallel processing
 export async function publishToSubscriptionsForUsers(

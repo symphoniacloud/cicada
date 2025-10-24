@@ -1,4 +1,4 @@
-import { GitHubUserId } from '../../types/GitHubIdTypes.js'
+import { GitHubUserId } from '../../types/GitHubTypes.js'
 
 export type WebPushTestEvent = { userId: GitHubUserId }
 

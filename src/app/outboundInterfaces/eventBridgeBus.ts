@@ -7,7 +7,8 @@ import { GithubPush } from '../domain/types/GithubPush.js'
 import { GithubWorkflowRunEvent } from '../domain/types/GithubWorkflowRunEvent.js'
 import { WebPushTestEvent } from '../domain/webPush/WebPushTestEvent.js'
 import { GithubInstallation } from '../domain/types/GithubInstallation.js'
-import { GitHubAccountId } from '../types/GitHubIdTypes.js'
+
+import { GitHubAccountId } from '../types/GitHubTypes.js'
 
 export type CicadaEventBridgeData =
   | GithubPush

@@ -1,6 +1,6 @@
 import { GithubAccountSummary, GithubRepoSummary } from './GithubSummaries.js'
 import { GithubWorkflow } from './GithubWorkflow.js'
-import { GitHubAccountId, GitHubRepoId, GitHubUserId, GitHubWorkflowId } from '../../types/GitHubIdTypes.js'
+import { GitHubAccountId, GitHubRepoId, GitHubUserId, GitHubWorkflowId } from '../../types/GitHubTypes.js'
 
 export interface GithubAccountStructure extends GithubAccountSummary {
   isMemberAccount: boolean

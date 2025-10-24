@@ -27,7 +27,8 @@ import { FakeDynamoDBInterfaceStubber, MetaDataProvider } from './dynamoDB/fakeD
 import { fakeTableNames } from './fakeCicadaConfig.js'
 
 import { fromRawGithubUserId } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
-import { GitHubUserId } from '../../../src/app/types/GitHubIdTypes.js'
+
+import { GitHubUserId } from '../../../src/app/types/GitHubTypes.js'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const metaDataProvider: MetaDataProvider = (_tableName: string) => {
