@@ -1,5 +1,4 @@
 import { Clock } from '../../../util/dateAndTime.js'
-import { FullGithubWorkflowRunEvent } from '../../../domain/types/GithubWorkflowRunEvent.js'
 import { fragmentViewResult } from '../../viewResultWrappers.js'
 import { standardTable } from '../../domainComponents/genericComponents.js'
 import { GithubPush } from '../../../domain/types/GithubPush.js'
@@ -13,6 +12,7 @@ import {
   VisiblePushes,
   VisibleFullWorkflowRunEvents
 } from '../../../domain/user/userVisible.js'
+import { FullGitHubWorkflowRunEvent } from '../../../types/GitHubTypes.js'
 
 export type WorkflowRunEventTableType = 'homeStatus' | 'accountStatus' | 'repoStatus' | 'workflowActivity'
 export type GithubPushTableType = 'homeActivity' | 'accountActivity'
@@ -96,7 +96,7 @@ const workflowRowConfig: Record<WorkflowRowMode, WorkflowRowOptions> = {
   workflowActivity: { showElapsed: true }
 }
 
-export function workflowRowForMode(mode: WorkflowRowMode, clock: Clock, event: FullGithubWorkflowRunEvent) {
+export function workflowRowForMode(mode: WorkflowRowMode, clock: Clock, event: FullGitHubWorkflowRunEvent) {
   return workflowRow(clock, event, workflowRowConfig[mode])
 }
 

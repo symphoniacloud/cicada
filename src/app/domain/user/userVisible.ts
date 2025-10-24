@@ -1,6 +1,5 @@
 import { AppState } from '../../environment/AppState.js'
 import { latestWorkflowRunEventsPerWorkflowForAccounts } from '../github/githubLatestWorkflowRunEvents.js'
-import { FullGithubWorkflowRunEvent, GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
 import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings.js'
 import { CalculatedUserSettings } from '../types/UserSettings.js'
 import { recentActiveBranchesForAccounts } from '../github/githubLatestPushesPerRef.js'
@@ -24,7 +23,13 @@ import { failedWithResult, Result, successWith } from '../../util/structuredResu
 import { OnePageResponse } from '@symphoniacloud/dynamodb-entity-store'
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { toFullWorkflowRunEvents } from '../github/githubWorkflowRunEvent.js'
-import { GitHubAccountId, GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubTypes.js'
+import {
+  FullGitHubWorkflowRunEvent,
+  GitHubAccountId,
+  GitHubRepoKey,
+  GitHubWorkflowKey,
+  GitHubWorkflowRunEvent
+} from '../../types/GitHubTypes.js'
 
 interface UserVisibleObjects<T> {
   allEvents: T[]
@@ -32,7 +37,7 @@ interface UserVisibleObjects<T> {
   someEventsHidden: boolean
 }
 
-export type VisibleFullWorkflowRunEvents = UserVisibleObjects<FullGithubWorkflowRunEvent>
+export type VisibleFullWorkflowRunEvents = UserVisibleObjects<FullGitHubWorkflowRunEvent>
 export type VisiblePushes = UserVisibleObjects<GithubPush>
 export type VisibleActivity = UserVisibleObjects<GithubActivity>
 
@@ -106,7 +111,7 @@ export async function getAvailableRunEventsForWorkflowForUser(
   refData: UserScopeReferenceData,
   workflow: GitHubWorkflowKey,
   limit?: number
-): Promise<Result<OnePageResponse<GithubWorkflowRunEvent>>> {
+): Promise<Result<OnePageResponse<GitHubWorkflowRunEvent>>> {
   if (!getWorkflowFromRefData(refData, workflow)) return failureNotAuthorized
 
   return successWith(await getRunEventsForWorkflowPage(appState.entityStore, workflow, limit))
@@ -145,7 +150,7 @@ export async function getRecentActiveBranchesForUserAndAccount(
   return successWith(toVisiblePushes(await recentActiveBranchesForAccounts(appState, [accountId])))
 }
 
-function toVisibleEvents(allEvents: FullGithubWorkflowRunEvent[], userSettings?: CalculatedUserSettings) {
+function toVisibleEvents(allEvents: FullGitHubWorkflowRunEvent[], userSettings?: CalculatedUserSettings) {
   const visibleEvents = userSettings
     ? allEvents.filter(
         ({ accountId, repoId, workflowId }) =>

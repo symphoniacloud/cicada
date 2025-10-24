@@ -1,5 +1,4 @@
 import { GITHUB_PUSH, GITHUB_WORKFLOW_RUN } from '../entityTypes.js'
-import { GithubWorkflowRunEvent, isGithubWorkflowRunEvent } from '../../types/GithubWorkflowRunEvent.js'
 import {
   AllEntitiesStore,
   rangeWhereSkBeginsWith,
@@ -10,30 +9,36 @@ import { domainObjectsFromMultipleEventEntityResponse } from '../entityStoreOper
 import { GithubPushEntity } from './GithubPushEntity.js'
 import { GithubPush } from '../../types/GithubPush.js'
 
-import { GitHubAccountKey, GitHubRepoId, GitHubRepoKey } from '../../../types/GitHubTypes.js'
+import {
+  GitHubAccountKey,
+  GitHubRepoId,
+  GitHubRepoKey,
+  GitHubWorkflowRunEvent
+} from '../../../types/GitHubTypes.js'
+import { isGitHubWorkflowRunEvent } from '../../../types/GitHubTypeChecks.js'
 
 // Stores the latest run event per workflow run
 const GithubWorkflowRunEntity: CicadaEntity<
-  GithubWorkflowRunEvent,
-  Pick<GithubWorkflowRunEvent, 'accountId'>,
-  Pick<GithubWorkflowRunEvent, 'repoId' | 'workflowId' | 'workflowRunId'>
+  GitHubWorkflowRunEvent,
+  Pick<GitHubWorkflowRunEvent, 'accountId'>,
+  Pick<GitHubWorkflowRunEvent, 'repoId' | 'workflowId' | 'workflowRunId'>
 > = {
   type: GITHUB_WORKFLOW_RUN,
-  parse: typePredicateParser(isGithubWorkflowRunEvent, GITHUB_WORKFLOW_RUN),
-  pk(source: Pick<GithubWorkflowRunEvent, 'accountId'>) {
+  parse: typePredicateParser(isGitHubWorkflowRunEvent, GITHUB_WORKFLOW_RUN),
+  pk(source: Pick<GitHubWorkflowRunEvent, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   },
-  sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'workflowId' | 'workflowRunId'>) {
+  sk(source: Pick<GitHubWorkflowRunEvent, 'repoId' | 'workflowId' | 'workflowRunId'>) {
     return `REPO#${source.repoId}#WORKFLOW#${source.workflowId}#WORKFLOW_RUN#RUN#${source.workflowRunId}`
   },
   gsis: {
     // Shared format with GithubWorkflowRunEventEntity and GithubPushEntity
     // Allows querying multiple entity types in one query operation
     gsi1: {
-      pk(source: Pick<GithubWorkflowRunEvent, 'accountId'>) {
+      pk(source: Pick<GitHubWorkflowRunEvent, 'accountId'>) {
         return githubActivityEntityPk(source)
       },
-      sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'runEventUpdatedAt'>) {
+      sk(source: Pick<GitHubWorkflowRunEvent, 'repoId' | 'runEventUpdatedAt'>) {
         return githubActivityEntityGSISk(source.repoId, source.runEventUpdatedAt)
       }
     }
@@ -57,7 +62,7 @@ export function githubActivityEntityGSISkPrefix(repoId: GitHubRepoId) {
 
 export async function putGithubWorkflowRunfNoKeyExistsOrNewerThanExisting(
   entityStore: AllEntitiesStore,
-  event: GithubWorkflowRunEvent
+  event: GitHubWorkflowRunEvent
 ) {
   return await store(entityStore).put(event, {
     conditionExpression: 'attribute_not_exists(PK) OR #runEventUpdatedAt < :newRunEventUpdatedAt',
@@ -75,7 +80,7 @@ export async function queryRunsAndPushesForRepo(
   entityStore: AllEntitiesStore,
   repoKey: GitHubRepoKey
 ): Promise<{
-  runs: GithubWorkflowRunEvent[]
+  runs: GitHubWorkflowRunEvent[]
   pushes: GithubPush[]
 }> {
   const result = await entityStore

@@ -1,5 +1,4 @@
 import { GITHUB_WORKFLOW_RUN_EVENT } from '../entityTypes.js'
-import { GithubWorkflowRunEvent, isGithubWorkflowRunEvent } from '../../types/GithubWorkflowRunEvent.js'
 import {
   AllEntitiesStore,
   rangeWhereSkBeginsWith,
@@ -7,25 +6,26 @@ import {
 } from '@symphoniacloud/dynamodb-entity-store'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkflowRunEntity.js'
-import { GitHubWorkflowKey } from '../../../types/GitHubTypes.js'
+import { GitHubWorkflowKey, GitHubWorkflowRunEvent } from '../../../types/GitHubTypes.js'
+import { isGitHubWorkflowRunEvent } from '../../../types/GitHubTypeChecks.js'
 
 // We will eventually get several of these per actual run - e.g. started, completed, etc
 // Multiple events per run might have same ID but we differentiate by updated_time and status (this allows for same second multiple events)
 // Stored in same table as Runs and Pushes
 const GithubWorkflowRunEventEntity: CicadaEntity<
-  GithubWorkflowRunEvent,
-  Pick<GithubWorkflowRunEvent, 'accountId'>,
-  Pick<GithubWorkflowRunEvent, 'repoId' | 'runEventUpdatedAt' | 'workflowId' | 'workflowRunId' | 'status'>
+  GitHubWorkflowRunEvent,
+  Pick<GitHubWorkflowRunEvent, 'accountId'>,
+  Pick<GitHubWorkflowRunEvent, 'repoId' | 'runEventUpdatedAt' | 'workflowId' | 'workflowRunId' | 'status'>
 > = {
   type: GITHUB_WORKFLOW_RUN_EVENT,
-  parse: typePredicateParser(isGithubWorkflowRunEvent, GITHUB_WORKFLOW_RUN_EVENT),
-  pk(source: Pick<GithubWorkflowRunEvent, 'accountId'>) {
+  parse: typePredicateParser(isGitHubWorkflowRunEvent, GITHUB_WORKFLOW_RUN_EVENT),
+  pk(source: Pick<GitHubWorkflowRunEvent, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   },
   // UPDATED_AT goes before RUN_ID for when querying activity per workflow, by date
   sk(
     source: Pick<
-      GithubWorkflowRunEvent,
+      GitHubWorkflowRunEvent,
       'repoId' | 'runEventUpdatedAt' | 'workflowId' | 'workflowRunId' | 'status'
     >
   ) {
@@ -36,24 +36,24 @@ const GithubWorkflowRunEventEntity: CicadaEntity<
   gsis: {
     // Shared format with GithubWorkflowRunEntity and GithubPushEntity
     gsi1: {
-      pk(source: Pick<GithubWorkflowRunEvent, 'accountId'>) {
+      pk(source: Pick<GitHubWorkflowRunEvent, 'accountId'>) {
         return githubActivityEntityPk(source)
       },
-      sk(source: Pick<GithubWorkflowRunEvent, 'repoId' | 'runEventUpdatedAt'>) {
+      sk(source: Pick<GitHubWorkflowRunEvent, 'repoId' | 'runEventUpdatedAt'>) {
         return githubActivityEntityGSISk(source.repoId, source.runEventUpdatedAt)
       }
     }
   }
 }
 
-function skPrefix({ repoId, workflowId }: Pick<GithubWorkflowRunEvent, 'repoId' | 'workflowId'>) {
+function skPrefix({ repoId, workflowId }: Pick<GitHubWorkflowRunEvent, 'repoId' | 'workflowId'>) {
   // We add #WORKFLOW_RUN_EVENT since in future we _might_ have workflow job events with similar structure
   return `REPO#${repoId}#WORKFLOW#${workflowId}#WORKFLOW_RUN_EVENT`
 }
 
 export function putWorkflowRunEventIfKeyDoesntExist(
   entityStore: AllEntitiesStore,
-  runEvent: GithubWorkflowRunEvent
+  runEvent: GitHubWorkflowRunEvent
 ) {
   return store(entityStore).put(runEvent, {
     conditionExpression: 'attribute_not_exists(PK)'

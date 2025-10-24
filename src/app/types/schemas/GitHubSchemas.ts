@@ -177,3 +177,31 @@ export const GitHubWorkflowSchema = z
     workflowUpdatedAt: z.string()
   })
   .readonly()
+
+export const GithubWorkflowRunEventActorSchema = z.object({
+  ...GitHubUserSummarySchema.unwrap().shape,
+  avatarUrl: z.string(),
+  htmlUrl: z.string()
+})
+
+export const GitHubWorkflowRunEventSchema = z
+  .object({
+    ...GitHubWorkflowSummarySchema.unwrap().shape,
+    repoHtmlUrl: z.string(),
+    workflowRunId: GitHubWorkflowRunIdSchema,
+    runNumber: z.int().positive(),
+    runAttempt: z.int().positive().optional(),
+    displayTitle: z.string(),
+    event: z.string(),
+    status: z.string().optional(),
+    headBranch: z.string().optional(),
+    headSha: z.string(),
+    conclusion: z.string().optional(),
+    runEventCreatedAt: z.string(),
+    runEventUpdatedAt: z.string(),
+    runStartedAt: z.string().optional(),
+    runHtmlUrl: z.string(),
+    // TOEventually - what happens here for a manual push? Do we still get an actor?
+    actor: GithubWorkflowRunEventActorSchema.optional()
+  })
+  .readonly()

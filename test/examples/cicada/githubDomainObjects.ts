@@ -1,7 +1,3 @@
-import {
-  FullGithubWorkflowRunEvent,
-  GithubWorkflowRunEvent
-} from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
 import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import {
   fromRawGitHubAccountId,
@@ -12,6 +8,7 @@ import {
   fromRawGithubWorkflowRunId
 } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
 import {
+  FullGitHubWorkflowRunEvent,
   GitHubAccountKey,
   GitHubAccountMembership,
   GitHubAccountSummary,
@@ -22,6 +19,7 @@ import {
   GitHubUserId,
   GitHubUserToken,
   GitHubWorkflow,
+  GitHubWorkflowRunEvent,
   GitHubWorkflowSummary
 } from '../../../src/app/types/GitHubTypes.js'
 
@@ -208,7 +206,7 @@ export const testOrgTestWorkflowOneFromJson: GitHubWorkflow = {
   workflowUpdatedAt: '2024-03-05T18:01:40Z'
 }
 
-export const testOrgTestWorkflowOneFromJsonRun: GithubWorkflowRunEvent = {
+export const testOrgTestWorkflowOneFromJsonRun: GitHubWorkflowRunEvent = {
   ...testOrgTestWorkflowOneFromJsonSummary,
   actor: {
     userId: fromRawGithubUserId(49635),
@@ -249,7 +247,7 @@ export const personalTestRepoWorkflow: GitHubWorkflow = {
   workflowUpdatedAt: '2024-03-05T18:01:40Z'
 }
 
-export const testPersonalTestRepoWorkflowRun: GithubWorkflowRunEvent = {
+export const testPersonalTestRepoWorkflowRun: GitHubWorkflowRunEvent = {
   ...personalTestRepoWorkflowSummary,
   actor: {
     userId: fromRawGithubUserId(162360409),
@@ -273,12 +271,12 @@ export const testPersonalTestRepoWorkflowRun: GithubWorkflowRunEvent = {
   runEventUpdatedAt: '2024-03-05T18:01:40Z'
 }
 
-export const fullTestPersonalTestRepoWorkflowRun: FullGithubWorkflowRunEvent = {
+export const fullTestPersonalTestRepoWorkflowRun: FullGitHubWorkflowRunEvent = {
   ...personalTestRepoWorkflow,
   ...testPersonalTestRepoWorkflowRun
 }
 
-export const testOrgTestRepoOneWorkflowRunOne: GithubWorkflowRunEvent = {
+export const testOrgTestRepoOneWorkflowRunOne: GitHubWorkflowRunEvent = {
   ...testOrgTestWorkflowOneSummary,
   actor: {
     avatarUrl: 'https://avatars.githubusercontent.com/u/49635?v=4',
@@ -302,7 +300,7 @@ export const testOrgTestRepoOneWorkflowRunOne: GithubWorkflowRunEvent = {
   runEventUpdatedAt: '2024-03-06T17:02:54Z'
 }
 
-export const testOrgTestRepoOneWorkflowFromJsonRunOne: GithubWorkflowRunEvent = {
+export const testOrgTestRepoOneWorkflowFromJsonRunOne: GitHubWorkflowRunEvent = {
   ...orgTestRepoOneSummary,
   workflowId: fromRawGitHubWorkflowId(88647110),
   workflowName: 'Test Repo One Workflow',
@@ -328,12 +326,12 @@ export const testOrgTestRepoOneWorkflowFromJsonRunOne: GithubWorkflowRunEvent = 
   runEventUpdatedAt: '2024-03-06T17:02:54Z'
 }
 
-export const fullTestOrgTestRepoOneWorkflowRunOne: FullGithubWorkflowRunEvent = {
+export const fullTestOrgTestRepoOneWorkflowRunOne: FullGitHubWorkflowRunEvent = {
   ...testOrgTestWorkflowOne,
   ...testOrgTestRepoOneWorkflowRunOne
 }
 
-export const testOrgTestRepoOneWorkflowRunThree: GithubWorkflowRunEvent = {
+export const testOrgTestRepoOneWorkflowRunThree: GitHubWorkflowRunEvent = {
   ...testOrgTestWorkflowOneSummary,
   actor: {
     userId: fromRawGithubUserId(49635),
@@ -357,7 +355,7 @@ export const testOrgTestRepoOneWorkflowRunThree: GithubWorkflowRunEvent = {
   repoHtmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one'
 }
 
-export const fullTestOrgTestRepoOneWorkflowRunThree: FullGithubWorkflowRunEvent = {
+export const fullTestOrgTestRepoOneWorkflowRunThree: FullGitHubWorkflowRunEvent = {
   ...testOrgTestWorkflowOne,
   ...testOrgTestRepoOneWorkflowRunThree
 }
