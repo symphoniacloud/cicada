@@ -3,7 +3,6 @@ import { latestWorkflowRunEventsPerWorkflowForAccounts } from '../github/githubL
 import { FullGithubWorkflowRunEvent, GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
 import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings.js'
 import { CalculatedUserSettings } from '../types/UserSettings.js'
-import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { recentActiveBranchesForAccounts } from '../github/githubLatestPushesPerRef.js'
 import { GithubPush } from '../types/GithubPush.js'
 import { getRecentActivityForRepo, GithubActivity } from '../github/githubActivity.js'
@@ -25,7 +24,7 @@ import { failedWithResult, Result, successWith } from '../../util/structuredResu
 import { OnePageResponse } from '@symphoniacloud/dynamodb-entity-store'
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { toFullWorkflowRunEvents } from '../github/githubWorkflowRunEvent.js'
-import { GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubKeyTypes.js'
+import { GitHubAccountId, GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubTypes.js'
 
 interface UserVisibleObjects<T> {
   allEvents: T[]

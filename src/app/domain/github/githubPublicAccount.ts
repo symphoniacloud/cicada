@@ -6,7 +6,8 @@ import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.
 import { getInstalledAccountIdForUser } from './githubMembership.js'
 import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity.js'
 import { putPublicAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
-import { GitHubUserId } from '../../types/GitHubIdTypes.js'
+
+import { GitHubUserId } from '../../types/GitHubTypes.js'
 
 export async function savePublicAccountWithName(
   appState: AppState,

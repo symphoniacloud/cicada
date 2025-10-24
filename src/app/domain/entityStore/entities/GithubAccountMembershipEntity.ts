@@ -1,8 +1,8 @@
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GITHUB_ACCOUNT_MEMBERSHIP } from '../entityTypes.js'
-import { GitHubAccountId, GitHubUserId } from '../../../types/GitHubIdTypes.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
-import { GitHubAccountMembership, isGitHubOrganizationMembership } from '../../../types/GitHubObjectTypes.js'
+import { isGitHubOrganizationMembership } from '../../../types/GitHubTypeChecks.js'
+import { GitHubAccountId, GitHubAccountMembership, GitHubUserId } from '../../../types/GitHubTypes.js'
 
 const GithubAccountMembershipEntity: CicadaEntity<
   GitHubAccountMembership,

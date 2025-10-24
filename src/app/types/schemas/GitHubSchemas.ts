@@ -1,5 +1,6 @@
 import * as z from 'zod'
 
+// ** IDs
 export const GITHUB_ACCOUNT_ID_PREFIX = `GHAccount`
 export const GitHubAccountIdSchema = z
   .templateLiteral([z.literal(GITHUB_ACCOUNT_ID_PREFIX), z.number().int().nonnegative()])
@@ -37,6 +38,8 @@ export const GitHubInstallationIdSchema = z
 
 // Not putting .readonly() on object schemas since if we do I can't currently extend() them
 
+// ** Keys
+
 export const GitHubAccountKeySchema = z.object({
   accountId: GitHubAccountIdSchema
 })
@@ -51,4 +54,11 @@ export const GitHubWorkflowKeySchema = GitHubRepoKeySchema.extend({
 
 export const GitHubUserKeySchema = z.object({
   userId: GitHubUserIdSchema
+})
+
+// ** Objects
+
+export const GitHubAccountMembershipSchema = z.object({
+  userId: GitHubUserIdSchema,
+  accountId: GitHubAccountIdSchema
 })

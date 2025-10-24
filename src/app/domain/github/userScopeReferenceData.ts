@@ -5,7 +5,6 @@ import {
   UserScopeReferenceData
 } from '../types/UserScopeReferenceData.js'
 import { getUnarchivedRepositoriesForAccount, narrowToRepoSummary, repoKeysEqual } from './githubRepo.js'
-import { GitHubAccountId, GitHubRepoId, GitHubUserId } from '../../types/GitHubIdTypes.js'
 import { getActiveWorkflowsForAccount } from './githubWorkflow.js'
 import { getPublicAccountsForInstallationAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
 import { GithubAccountSummary } from '../types/GithubSummaries.js'
@@ -14,7 +13,13 @@ import { GithubRepo } from '../types/GithubRepo.js'
 import { GithubWorkflow } from '../types/GithubWorkflow.js'
 import { getInstalledAccountIdForUser } from './githubMembership.js'
 import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity.js'
-import { GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubKeyTypes.js'
+import {
+  GitHubAccountId,
+  GitHubRepoId,
+  GitHubRepoKey,
+  GitHubUserId,
+  GitHubWorkflowKey
+} from '../../types/GitHubTypes.js'
 
 export async function loadUserScopeReferenceData(
   appState: AppState,

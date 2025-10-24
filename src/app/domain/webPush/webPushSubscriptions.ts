@@ -6,7 +6,8 @@ import {
   deleteWebPushSubscription,
   putWebPushSubscription
 } from '../entityStore/entities/WebPushSubscriptionEntity.js'
-import { GitHubUserId } from '../../types/GitHubIdTypes.js'
+
+import { GitHubUserId } from '../../types/GitHubTypes.js'
 
 export async function registerSubscription(
   appState: AppState,

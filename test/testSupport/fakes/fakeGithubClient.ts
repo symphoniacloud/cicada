@@ -6,7 +6,7 @@ import { arrayStubResponse } from './fakeSupport.js'
 import { RawGithubUser } from '../../../src/app/domain/types/rawGithub/RawGithubUser.js'
 import { FakeGithubInstallationClient } from './fakeGithubInstallationClient.js'
 
-import { GitHubInstallationId } from '../../../src/app/types/GitHubIdTypes.js'
+import { GitHubInstallationId } from '../../../src/app/types/GitHubTypes.js'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 

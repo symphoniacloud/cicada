@@ -5,7 +5,8 @@ import {
   latestWorkflowRunEventsPerWorkflowForAccount,
   putRunEventIfNoKeyExistsOrNewerThanExisting
 } from '../entityStore/entities/GithubLatestWorkflowRunEventEntity.js'
-import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
+
+import { GitHubAccountId } from '../../types/GitHubTypes.js'
 
 export async function saveLatestRunPerWorkflow(appState: AppState, latestRun: GithubWorkflowRunEvent) {
   return await executeAndCatchConditionalCheckFailed(async () => {

@@ -9,7 +9,8 @@ import { isString } from '../../util/types.js'
 import { narrowToWorkflowSummary } from '../github/githubWorkflow.js'
 import { GithubWorkflow } from './GithubWorkflow.js'
 import { fromRawGithubUserId, fromRawGithubWorkflowRunId } from './toFromRawGitHubIds.js'
-import { GitHubWorkflowRunId, isGitHubWorkflowRunId } from '../../types/GitHubIdTypes.js'
+import { isGitHubWorkflowRunId } from '../../types/GitHubTypeChecks.js'
+import { GitHubWorkflowRunId } from '../../types/GitHubTypes.js'
 
 export interface GithubWorkflowRunEvent extends GithubWorkflowSummary {
   repoHtmlUrl: string

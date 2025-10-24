@@ -8,12 +8,12 @@ import {
 } from '../../../outboundInterfaces/githubInstallationClient.js'
 import { crawlAccountContents } from './crawlAccountContents.js'
 import { GithubPublicAccount, isGithubPublicAccount } from '../../types/GithubPublicAccount.js'
-import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
 import {
   getPublicAccount,
   getPublicAccountsForInstallationAccount
 } from '../../entityStore/entities/GithubPublicAccountEntity.js'
 import { getAllInstallations } from '../../entityStore/entities/GithubInstallationEntity.js'
+import { GitHubAccountId } from '../../../types/GitHubTypes.js'
 
 export async function crawlInstallationAccount(
   appState: AppState,

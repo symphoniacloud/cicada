@@ -1,15 +1,12 @@
 import { isString } from '../../util/types.js'
 import { GithubAccountType, isGithubAccountType } from './GithubAccountType.js'
+import { GitHubAccountKey, GitHubRepoKey, GitHubUserKey, GitHubWorkflowKey } from '../../types/GitHubTypes.js'
 import {
-  GitHubAccountKey,
-  GitHubRepoKey,
-  GitHubUserKey,
-  GitHubWorkflowKey,
   isGitHubAccountKey,
   isGitHubRepoKey,
   isGitHubUserKey,
   isGitHubWorkflowKey
-} from '../../types/GitHubKeyTypes.js'
+} from '../../types/GitHubTypeChecks.js'
 
 export interface GithubAccountSummary extends GitHubAccountKey {
   accountName: string

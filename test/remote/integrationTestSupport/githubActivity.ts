@@ -3,7 +3,8 @@ import {
   batchDeleteGithubPushes,
   onlyUseInTestsGetAllGithubPushesForAccount
 } from '../../../src/app/domain/entityStore/entities/GithubPushEntity.js'
-import { GitHubAccountId } from '../../../src/app/types/GitHubIdTypes.js'
+
+import { GitHubAccountId } from '../../../src/app/types/GitHubTypes.js'
 
 export async function getPushesForAccount(appState: AppState, accountId: GitHubAccountId) {
   return await onlyUseInTestsGetAllGithubPushesForAccount(appState.entityStore, accountId)

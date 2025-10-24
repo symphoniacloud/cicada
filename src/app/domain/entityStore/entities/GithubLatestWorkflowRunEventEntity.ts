@@ -5,11 +5,10 @@ import {
   rangeWhereSkBeginsWith,
   typePredicateParser
 } from '@symphoniacloud/dynamodb-entity-store'
-import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
 import { sortBy } from '../../../util/collections.js'
 import { workflowRunEventUpdatedTimestamp } from '../../github/githubWorkflowRunEvent.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
-import { GitHubRepoKey } from '../../../types/GitHubKeyTypes.js'
+import { GitHubAccountId, GitHubRepoKey } from '../../../types/GitHubTypes.js'
 
 const GithubLatestWorkflowRunEventEntity: CicadaEntity<
   GithubWorkflowRunEvent,

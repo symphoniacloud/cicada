@@ -24,7 +24,6 @@ import {
 } from '../../domain/user/persistedUserSettings.js'
 import { UserSetting } from '../../domain/types/UserSettings.js'
 import { fragmentPath } from '../routingCommon.js'
-import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { calculateAccountSettings, calculateUserSettings } from '../../domain/user/calculatedUserSettings.js'
 import {
   getAccountStructure,
@@ -33,7 +32,7 @@ import {
 } from '../../domain/github/userScopeReferenceData.js'
 
 import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData.js'
-import { GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubKeyTypes.js'
+import { GitHubAccountId, GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubTypes.js'
 
 export const postUserSettingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('userSetting'),

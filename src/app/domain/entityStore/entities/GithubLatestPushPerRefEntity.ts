@@ -2,8 +2,8 @@ import { GITHUB_LATEST_PUSH_PER_REF } from '../entityTypes.js'
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GithubPush, isGithubPush } from '../../types/GithubPush.js'
 import { rangeWhereSkGreaterThan } from '@symphoniacloud/dynamodb-entity-store'
-import { GitHubAccountId } from '../../../types/GitHubIdTypes.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
+import { GitHubAccountId } from '../../../types/GitHubTypes.js'
 
 const GithubLatestPushPerRefEntity: CicadaEntity<
   GithubPush,

@@ -3,7 +3,7 @@ import { isWebPushSubscription, WebPushSubscription } from '../../types/WebPushS
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 
-import { GitHubUserId } from '../../../types/GitHubIdTypes.js'
+import { GitHubUserId } from '../../../types/GitHubTypes.js'
 
 const WebPushSubscriptionEntity: CicadaEntity<
   WebPushSubscription,

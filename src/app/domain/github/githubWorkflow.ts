@@ -3,8 +3,8 @@ import { AppState } from '../../environment/AppState.js'
 import { RawGithubWorkflow } from '../types/rawGithub/RawGithubWorkflow.js'
 import { fromRawGithubWorkflow, GithubWorkflow } from '../types/GithubWorkflow.js'
 import { getWorkflowsForAccount, putWorkflows } from '../entityStore/entities/GithubWorkflowEntity.js'
-import { GitHubAccountId } from '../../types/GitHubIdTypes.js'
 import { narrowToRepoSummary } from './githubRepo.js'
+import { GitHubAccountId } from '../../types/GitHubTypes.js'
 
 export async function processRawWorkflows(
   appState: AppState,

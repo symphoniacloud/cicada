@@ -9,8 +9,13 @@ import {
 } from '../../../domain/types/UserSettings.js'
 import { HiccoughElement } from '../../hiccough/hiccoughElement.js'
 import { colSm, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
-import { GitHubAccountId, GitHubRepoId, GitHubWorkflowId } from '../../../types/GitHubIdTypes.js'
-import { GitHubRepoKey, GitHubWorkflowKey } from '../../../types/GitHubKeyTypes.js'
+import {
+  GitHubAccountId,
+  GitHubRepoId,
+  GitHubRepoKey,
+  GitHubWorkflowId,
+  GitHubWorkflowKey
+} from '../../../types/GitHubTypes.js'
 
 export function createGetUserSettingsResponse(
   settings: DisplayableUserSettings,

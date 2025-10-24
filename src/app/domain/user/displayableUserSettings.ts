@@ -24,7 +24,7 @@ import {
   getWorkflowFromRepo
 } from '../github/userScopeReferenceData.js'
 import { logger } from '../../util/logging.js'
-import { GitHubAccountId, GitHubRepoId, GitHubWorkflowId } from '../../types/GitHubIdTypes.js'
+import { GitHubAccountId, GitHubRepoId, GitHubWorkflowId } from '../../types/GitHubTypes.js'
 
 export async function loadCalculatedAndDisplayableUserSettingsOrUseDefaults(
   appState: AppState,

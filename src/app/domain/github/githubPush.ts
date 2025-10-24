@@ -7,7 +7,8 @@ import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStor
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
 import { saveLatestPushes } from './githubLatestPushesPerRef.js'
 import { getUserIdsForAccount } from './githubMembership.js'
-import { GitHubUserId } from '../../types/GitHubIdTypes.js'
+
+import { GitHubUserId } from '../../types/GitHubTypes.js'
 
 export async function processPushes(appState: AppState, pushes: GithubPush[], publishNotifications: boolean) {
   if (pushes.length > 0) {
