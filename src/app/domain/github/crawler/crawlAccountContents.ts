@@ -1,5 +1,4 @@
 import { AppState } from '../../../environment/AppState.js'
-import { GithubInstallation } from '../../types/GithubInstallation.js'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
 import { processRawRepositories } from '../githubRepo.js'
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../../types/schemas/GitHubSchemas.js'
@@ -9,12 +8,12 @@ import { crawlWorkflows } from './crawlWorkflows.js'
 import { logger } from '../../../util/logging.js'
 import { dateTimeAddHours } from '../../../util/dateAndTime.js'
 import { processRawRunEvents } from '../githubWorkflowRunEvent.js'
-import { GitHubRepoSummary, GitHubWorkflowSummary } from '../../../types/GitHubTypes.js'
+import { GitHubInstallation, GitHubRepoSummary, GitHubWorkflowSummary } from '../../../types/GitHubTypes.js'
 
 export async function crawlAccountContents(
   appState: AppState,
   githubClient: GithubInstallationClient,
-  account: GithubPublicAccount | GithubInstallation,
+  account: GithubPublicAccount | GitHubInstallation,
   lookbackHours: number
 ) {
   logger.info(`Crawling account contents of ${account.accountName}`)

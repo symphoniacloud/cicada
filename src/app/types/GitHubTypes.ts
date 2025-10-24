@@ -8,6 +8,7 @@ import {
   GitHubAccountTypeSchema,
   GitHubAppIdSchema,
   GitHubInstallationIdSchema,
+  GitHubInstallationSchema,
   GitHubRepoIdSchema,
   GitHubRepoKeySchema,
   GitHubRepoSummarySchema,
@@ -53,3 +54,5 @@ export type GitHubRepoSummary = z.infer<typeof GitHubRepoSummarySchema>
 export type GitHubWorkflowSummary = z.infer<typeof GitHubWorkflowSummarySchema>
 
 export type GitHubUserSummary = z.infer<typeof GitHubUserSummarySchema>
+
+export type GitHubInstallation = z.infer<typeof GitHubInstallationSchema>

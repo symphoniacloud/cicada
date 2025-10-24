@@ -4,7 +4,6 @@ import {
   buildDelete,
   buildPut
 } from './dynamoDB/fakeDynamoDBInterfaceExpectations.js'
-import { GithubInstallation } from '../../../src/app/domain/types/GithubInstallation.js'
 import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import { GithubRepo } from '../../../src/app/domain/types/GithubRepo.js'
 import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
@@ -12,9 +11,14 @@ import { GithubUser } from '../../../src/app/domain/types/GithubUser.js'
 import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 
-import { GitHubAccountId, GitHubAccountMembership, GitHubUserId } from '../../../src/app/types/GitHubTypes.js'
+import {
+  GitHubAccountId,
+  GitHubAccountMembership,
+  GitHubInstallation,
+  GitHubUserId
+} from '../../../src/app/types/GitHubTypes.js'
 
-export function expectedPutGithubInstallation(installation: GithubInstallation) {
+export function expectedPutGithubInstallation(installation: GitHubInstallation) {
   return buildPut('fakeGithubInstallationsTable', 'githubInstallation', {
     PK: `ACCOUNT#${installation.accountId}`,
     ...installation

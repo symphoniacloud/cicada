@@ -1,5 +1,4 @@
 import { AppState } from '../../environment/AppState.js'
-import { fromRawGithubInstallation, GithubInstallation } from '../types/GithubInstallation.js'
 import {
   getInstallationOrUndefined,
   putInstallation
@@ -7,12 +6,14 @@ import {
 import { logger } from '../../util/logging.js'
 import deepEqual from 'deep-equal'
 import { RawGithubInstallation } from '../types/rawGithub/RawGithubInstallation.js'
+import { GitHubInstallation } from '../../types/GitHubTypes.js'
+import { fromRawGithubInstallation } from '../types/fromRawGitHub.js'
 
 export async function processRawInstallation(appState: AppState, rawInstallation: RawGithubInstallation) {
   return await processInstallation(appState, fromRawGithubInstallation(rawInstallation))
 }
 
-export async function processInstallation(appState: AppState, installation: GithubInstallation) {
+export async function processInstallation(appState: AppState, installation: GitHubInstallation) {
   if (`${installation.appId}` !== (await appState.config.github()).appId) {
     logger.warn(`Not processing invalid installation - unexpected app ID`)
     return null
@@ -21,7 +22,7 @@ export async function processInstallation(appState: AppState, installation: Gith
   return await saveInstallation(appState, installation)
 }
 
-async function saveInstallation(appState: AppState, installation: GithubInstallation) {
+async function saveInstallation(appState: AppState, installation: GitHubInstallation) {
   const previousInstallation = await getInstallationOrUndefined(appState.entityStore, installation.accountId)
   const isNewInstallation = previousInstallation === undefined
   const installationChanged = !isNewInstallation && !deepEqual(previousInstallation, installation)

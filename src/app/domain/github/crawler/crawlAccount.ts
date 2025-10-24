@@ -1,5 +1,4 @@
 import { AppState } from '../../../environment/AppState.js'
-import { GithubInstallation } from '../../types/GithubInstallation.js'
 import { logger } from '../../../util/logging.js'
 import { crawlUsers } from './crawlUsers.js'
 import {
@@ -13,11 +12,11 @@ import {
   getPublicAccountsForInstallationAccount
 } from '../../entityStore/entities/GithubPublicAccountEntity.js'
 import { getAllInstallations } from '../../entityStore/entities/GithubInstallationEntity.js'
-import { GitHubAccountId } from '../../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubInstallation } from '../../../types/GitHubTypes.js'
 
 export async function crawlInstallationAccount(
   appState: AppState,
-  installation: GithubInstallation,
+  installation: GitHubInstallation,
   lookbackDays: number
 ) {
   logger.info(`Crawling Installation for ${installation.accountName}`)
@@ -27,7 +26,7 @@ export async function crawlInstallationAccount(
 
 export async function crawlPublicAccount(
   appState: AppState,
-  installation: GithubInstallation,
+  installation: GitHubInstallation,
   publicAccountId: GitHubAccountId,
   lookbackHours: number
 ) {
@@ -61,7 +60,7 @@ export async function crawlPublicAccounts(appState: AppState, lookbackHours: num
 export async function crawlAccount(
   appState: AppState,
   githubClient: GithubInstallationClient,
-  account: GithubPublicAccount | GithubInstallation,
+  account: GithubPublicAccount | GitHubInstallation,
   lookbackHours: number
 ) {
   logger.info(`Crawling Account ${account.accountName}`)

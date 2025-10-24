@@ -1,39 +1,39 @@
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
-import { GithubInstallation, isGithubInstallation } from '../../types/GithubInstallation.js'
 import { GITHUB_INSTALLATION } from '../entityTypes.js'
 import { cicadaEntityFromPkOnlyEntity } from '../entityStoreEntitySupport.js'
-import { GitHubAccountId } from '../../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubInstallation } from '../../../types/GitHubTypes.js'
+import { isGithubInstallation } from '../../../types/GitHubTypeChecks.js'
 
 const GithubInstallationEntity = cicadaEntityFromPkOnlyEntity({
   type: GITHUB_INSTALLATION,
   parse: typePredicateParser(isGithubInstallation, GITHUB_INSTALLATION),
-  pk(source: Pick<GithubInstallation, 'accountId'>) {
+  pk(source: Pick<GitHubInstallation, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   }
 })
 
 export async function putInstallation(
   entityStore: AllEntitiesStore,
-  installation: GithubInstallation
-): Promise<GithubInstallation> {
+  installation: GitHubInstallation
+): Promise<GitHubInstallation> {
   return store(entityStore).put(installation)
 }
 
 export async function getInstallationOrUndefined(
   entityStore: AllEntitiesStore,
   accountId: GitHubAccountId
-): Promise<GithubInstallation | undefined> {
+): Promise<GitHubInstallation | undefined> {
   return store(entityStore).getOrUndefined({ accountId })
 }
 
 export async function getInstallationOrThrow(
   entityStore: AllEntitiesStore,
   accountId: GitHubAccountId
-): Promise<GithubInstallation> {
+): Promise<GitHubInstallation> {
   return store(entityStore).getOrThrow({ accountId })
 }
 
-export async function getAllInstallations(entityStore: AllEntitiesStore): Promise<GithubInstallation[]> {
+export async function getAllInstallations(entityStore: AllEntitiesStore): Promise<GitHubInstallation[]> {
   return store(entityStore).scanAll()
 }
 

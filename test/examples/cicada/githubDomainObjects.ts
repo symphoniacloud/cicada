@@ -1,4 +1,3 @@
-import { GithubInstallation } from '../../../src/app/domain/types/GithubInstallation.js'
 import { GithubUser } from '../../../src/app/domain/types/GithubUser.js'
 import { GithubRepo } from '../../../src/app/domain/types/GithubRepo.js'
 import {
@@ -20,6 +19,7 @@ import {
   GitHubAccountKey,
   GitHubAccountMembership,
   GitHubAccountSummary,
+  GitHubInstallation,
   GitHubRepoSummary,
   GitHubUserId,
   GitHubWorkflowSummary
@@ -41,14 +41,14 @@ export const cicadaTestOrgAccountSummary: GitHubAccountSummary = {
   accountType: 'organization'
 }
 
-export const cicadaTestUserInstallation: GithubInstallation = {
+export const cicadaTestUserInstallation: GitHubInstallation = {
   ...cicadaTestUserAccountSummary,
   appId: 'GHApp849936',
   appSlug: 'cicada-test-personal',
   installationId: fromRawGithubInstallationId(48093071)
 }
 
-export const cicadaTestOrgInstallation: GithubInstallation = {
+export const cicadaTestOrgInstallation: GitHubInstallation = {
   ...cicadaTestOrgAccountSummary,
   appId: 'GHApp850768',
   appSlug: 'cicada-test-org',
