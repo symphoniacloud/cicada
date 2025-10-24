@@ -1,13 +1,13 @@
 import { GITHUB_WORKFLOW_RUN_EVENT } from '../entityTypes.js'
 import {
   AllEntitiesStore,
-  rangeWhereSkBeginsWith,
-  typePredicateParser
+  DynamoDBValues,
+  rangeWhereSkBeginsWith
 } from '@symphoniacloud/dynamodb-entity-store'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkflowRunEntity.js'
 import { GitHubWorkflowKey, GitHubWorkflowRunEvent } from '../../../ioTypes/GitHubTypes.js'
-import { isGitHubWorkflowRunEvent } from '../../../ioTypes/GitHubTypeChecks.js'
+import { GitHubWorkflowRunEventSchema } from '../../../ioTypes/GitHubSchemas.js'
 
 // We will eventually get several of these per actual run - e.g. started, completed, etc
 // Multiple events per run might have same ID but we differentiate by updated_time and status (this allows for same second multiple events)
@@ -18,7 +18,7 @@ const GithubWorkflowRunEventEntity: CicadaEntity<
   Pick<GitHubWorkflowRunEvent, 'repoId' | 'runEventUpdatedAt' | 'workflowId' | 'workflowRunId' | 'status'>
 > = {
   type: GITHUB_WORKFLOW_RUN_EVENT,
-  parse: typePredicateParser(isGitHubWorkflowRunEvent, GITHUB_WORKFLOW_RUN_EVENT),
+  parse: (rawItem: DynamoDBValues) => GitHubWorkflowRunEventSchema.parse(rawItem),
   pk(source: Pick<GitHubWorkflowRunEvent, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   },

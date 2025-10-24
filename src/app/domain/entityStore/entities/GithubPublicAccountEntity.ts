@@ -1,8 +1,8 @@
-import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { AllEntitiesStore, DynamoDBValues } from '@symphoniacloud/dynamodb-entity-store'
 import { GITHUB_PUBLIC_ACCOUNT } from '../entityTypes.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { GitHubAccountId, GitHubPublicAccount } from '../../../ioTypes/GitHubTypes.js'
-import { isGitHubPublicAccount } from '../../../ioTypes/GitHubTypeChecks.js'
+import { GitHubPublicAccountSchema } from '../../../ioTypes/GitHubSchemas.js'
 
 const GithubPublicAccountEntity: CicadaEntity<
   GitHubPublicAccount,
@@ -10,7 +10,7 @@ const GithubPublicAccountEntity: CicadaEntity<
   Pick<GitHubPublicAccount, 'accountId'>
 > = {
   type: GITHUB_PUBLIC_ACCOUNT,
-  parse: typePredicateParser(isGitHubPublicAccount, GITHUB_PUBLIC_ACCOUNT),
+  parse: (rawItem: DynamoDBValues) => GitHubPublicAccountSchema.parse(rawItem),
   pk(source: Pick<GitHubPublicAccount, 'installationAccountId'>) {
     return `INSTALLATION_ACCOUNT#${source.installationAccountId}`
   },

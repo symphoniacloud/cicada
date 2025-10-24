@@ -1,13 +1,13 @@
-import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { AllEntitiesStore, DynamoDBValues } from '@symphoniacloud/dynamodb-entity-store'
 import { GITHUB_USER } from '../entityTypes.js'
 import { cicadaEntityFromPkOnlyEntity } from '../entityStoreEntitySupport.js'
 
 import { GitHubUser, GitHubUserId } from '../../../ioTypes/GitHubTypes.js'
-import { isGitHubUser } from '../../../ioTypes/GitHubTypeChecks.js'
+import { GitHubUserSchema } from '../../../ioTypes/GitHubSchemas.js'
 
 const GithubUserEntity = cicadaEntityFromPkOnlyEntity({
   type: GITHUB_USER,
-  parse: typePredicateParser(isGitHubUser, GITHUB_USER),
+  parse: (rawItem: DynamoDBValues) => GitHubUserSchema.parse(rawItem),
   pk(source: Pick<GitHubUser, 'userId'>) {
     return `USER#${source.userId}`
   }

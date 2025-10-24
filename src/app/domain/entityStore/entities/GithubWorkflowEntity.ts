@@ -1,8 +1,8 @@
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { GITHUB_WORKFLOW } from '../entityTypes.js'
-import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { AllEntitiesStore, DynamoDBValues } from '@symphoniacloud/dynamodb-entity-store'
 import { GitHubAccountId, GitHubWorkflow, GitHubWorkflowKey } from '../../../ioTypes/GitHubTypes.js'
-import { isGitHubWorkflow } from '../../../ioTypes/GitHubTypeChecks.js'
+import { GitHubWorkflowSchema } from '../../../ioTypes/GitHubSchemas.js'
 
 const GithubWorkflowEntity: CicadaEntity<
   GitHubWorkflow,
@@ -10,7 +10,7 @@ const GithubWorkflowEntity: CicadaEntity<
   Pick<GitHubWorkflow, 'repoId' | 'workflowId'>
 > = {
   type: GITHUB_WORKFLOW,
-  parse: typePredicateParser(isGitHubWorkflow, GITHUB_WORKFLOW),
+  parse: (rawItem: DynamoDBValues) => GitHubWorkflowSchema.parse(rawItem),
   pk(source: Pick<GitHubWorkflow, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   },

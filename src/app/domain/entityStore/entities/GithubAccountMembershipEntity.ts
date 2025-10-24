@@ -1,8 +1,8 @@
-import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { AllEntitiesStore, DynamoDBValues } from '@symphoniacloud/dynamodb-entity-store'
 import { GITHUB_ACCOUNT_MEMBERSHIP } from '../entityTypes.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
-import { isGitHubOrganizationMembership } from '../../../ioTypes/GitHubTypeChecks.js'
 import { GitHubAccountId, GitHubAccountMembership, GitHubUserId } from '../../../ioTypes/GitHubTypes.js'
+import { GitHubAccountMembershipSchema } from '../../../ioTypes/GitHubSchemas.js'
 
 const GithubAccountMembershipEntity: CicadaEntity<
   GitHubAccountMembership,
@@ -10,7 +10,7 @@ const GithubAccountMembershipEntity: CicadaEntity<
   Pick<GitHubAccountMembership, 'userId'>
 > = {
   type: GITHUB_ACCOUNT_MEMBERSHIP,
-  parse: typePredicateParser(isGitHubOrganizationMembership, GITHUB_ACCOUNT_MEMBERSHIP),
+  parse: (rawItem: DynamoDBValues) => GitHubAccountMembershipSchema.parse(rawItem),
   pk(source: Pick<GitHubAccountMembership, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   },

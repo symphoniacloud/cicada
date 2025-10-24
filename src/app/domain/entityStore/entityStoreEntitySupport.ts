@@ -16,3 +16,15 @@ export function cicadaEntityFromPkOnlyEntity<TItem extends TPKSource, TPKSource>
 ) {
   return entityFromPkOnlyEntity(pkOnlyEntity) as CicadaEntity<TItem, TPKSource, unknown>
 }
+
+// export function zodEntityParser<TItem extends DynamoDBValues>(
+//   typePredicate: TypePredicateFunction<TItem>,
+//   entityType: string
+// ): EntityParser<TItem> {
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   return (rawItem: DynamoDBValues, allMetaAttributeNames: string[]) => {
+//     const item = excludeKeys(rawItem, allMetaAttributeNames)
+//     if (typePredicate(item)) return item
+//     else throw new Error(`Failed to parse entity to type ${entityType}`)
+//   }
+// }

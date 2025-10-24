@@ -1,7 +1,6 @@
 import {
   GitHubAccountIdSchema,
   GitHubAccountKeySchema,
-  GitHubAccountMembershipSchema,
   GitHubAccountTypeSchema,
   GitHubAppIdSchema,
   GitHubInstallationIdSchema,
@@ -9,35 +8,22 @@ import {
   GitHubPublicAccountSchema,
   GithubPushSchema,
   GitHubRepoIdSchema,
-  GitHubRepoSchema,
   GitHubUserIdSchema,
-  GitHubUserKeySchema,
-  GitHubUserSchema,
-  GitHubUserSummarySchema,
-  GitHubUserTokenSchema,
   GitHubWorkflowIdSchema,
   GitHubWorkflowRunEventSchema,
-  GitHubWorkflowRunIdSchema,
-  GitHubWorkflowSchema
+  GitHubWorkflowRunIdSchema
 } from './GitHubSchemas.js'
 import {
   GitHubAccountId,
   GitHubAccountKey,
-  GitHubAccountMembership,
   GitHubAccountType,
   GitHubAppId,
   GitHubInstallation,
   GitHubInstallationId,
   GitHubPublicAccount,
   GitHubPush,
-  GitHubRepo,
   GitHubRepoId,
-  GitHubUser,
   GitHubUserId,
-  GitHubUserKey,
-  GitHubUserSummary,
-  GitHubUserToken,
-  GitHubWorkflow,
   GitHubWorkflowId,
   GitHubWorkflowRunEvent,
   GitHubWorkflowRunId
@@ -77,20 +63,8 @@ export function isGitHubAccountKey(x: unknown): x is GitHubAccountKey {
   return GitHubAccountKeySchema.safeParse(x).success
 }
 
-export function isGitHubUserKey(x: unknown): x is GitHubUserKey {
-  return GitHubUserKeySchema.safeParse(x).success
-}
-
-export function isGitHubOrganizationMembership(x: unknown): x is GitHubAccountMembership {
-  return GitHubAccountMembershipSchema.safeParse(x).success
-}
-
 export function isGithubAccountType(x: unknown): x is GitHubAccountType {
   return GitHubAccountTypeSchema.safeParse(x).success
-}
-
-export function isGitHubUserSummary(x: unknown): x is GitHubUserSummary {
-  return GitHubUserSummarySchema.safeParse(x).success
 }
 
 export function isGithubInstallation(x: unknown): x is GitHubInstallation {
@@ -99,22 +73,6 @@ export function isGithubInstallation(x: unknown): x is GitHubInstallation {
 
 export function isGitHubPublicAccount(x: unknown): x is GitHubPublicAccount {
   return GitHubPublicAccountSchema.safeParse(x).success
-}
-
-export function isGitHubUser(x: unknown): x is GitHubUser {
-  return GitHubUserSchema.safeParse(x).success
-}
-
-export function isGitHubUserToken(x: unknown): x is GitHubUserToken {
-  return GitHubUserTokenSchema.safeParse(x).success
-}
-
-export function isGitHubRepo(x: unknown): x is GitHubRepo {
-  return GitHubRepoSchema.safeParse(x).success
-}
-
-export function isGitHubWorkflow(x: unknown): x is GitHubWorkflow {
-  return GitHubWorkflowSchema.safeParse(x).success
 }
 
 export function isGitHubWorkflowRunEvent(x: unknown): x is GitHubWorkflowRunEvent {
