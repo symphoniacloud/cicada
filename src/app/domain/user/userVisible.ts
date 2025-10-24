@@ -3,7 +3,6 @@ import { latestWorkflowRunEventsPerWorkflowForAccounts } from '../github/githubL
 import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings.js'
 import { CalculatedUserSettings } from '../types/UserSettings.js'
 import { recentActiveBranchesForAccounts } from '../github/githubLatestPushesPerRef.js'
-import { GithubPush } from '../types/GithubPush.js'
 import { getRecentActivityForRepo, GithubActivity } from '../github/githubActivity.js'
 import {
   allAccountIDsFromRefData,
@@ -26,6 +25,7 @@ import { toFullWorkflowRunEvents } from '../github/githubWorkflowRunEvent.js'
 import {
   FullGitHubWorkflowRunEvent,
   GitHubAccountId,
+  GitHubPush,
   GitHubRepoKey,
   GitHubWorkflowKey,
   GitHubWorkflowRunEvent
@@ -38,7 +38,7 @@ interface UserVisibleObjects<T> {
 }
 
 export type VisibleFullWorkflowRunEvents = UserVisibleObjects<FullGitHubWorkflowRunEvent>
-export type VisiblePushes = UserVisibleObjects<GithubPush>
+export type VisiblePushes = UserVisibleObjects<GitHubPush>
 export type VisibleActivity = UserVisibleObjects<GithubActivity>
 
 const UNAUTHORIZED_FAILURE = 'unauthorized'
@@ -164,7 +164,7 @@ function toVisibleEvents(allEvents: FullGitHubWorkflowRunEvent[], userSettings?:
   }
 }
 
-function toVisiblePushes(allEvents: GithubPush[], userSettings?: CalculatedUserSettings) {
+function toVisiblePushes(allEvents: GitHubPush[], userSettings?: CalculatedUserSettings) {
   const visibleEvents = userSettings
     ? allEvents.filter(
         ({ accountId, repoId }) => userSettings.github.accounts[accountId]?.repos[repoId]?.visible ?? false

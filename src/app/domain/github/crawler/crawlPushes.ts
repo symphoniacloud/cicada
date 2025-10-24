@@ -3,11 +3,11 @@ import {
   hasTypeForPushEvent,
   isRawGithubPushEventEvent
 } from '../../types/rawGithub/RawGithubAPIPushEventEvent.js'
-import { fromRawGithubPushEventEvent, GithubPush } from '../../types/GithubPush.js'
 import { processPushes } from '../githubPush.js'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
 
-import { GitHubRepoSummary } from '../../../types/GitHubTypes.js'
+import { GitHubPush, GitHubRepoSummary } from '../../../types/GitHubTypes.js'
+import { fromRawGithubPushEventEvent } from '../../types/fromRawGitHub.js'
 
 // TOEventually - only get all pushes back to lookback in crawl configuration, however GitHub doesn't keep
 // them around for very long
@@ -29,7 +29,7 @@ export async function crawlPushes(
   // (this isn't required for webhook translation)
   const pushes = rawPushes
     .map((push) => fromRawGithubPushEventEvent(repo, push))
-    .filter((x: GithubPush | undefined): x is GithubPush => x !== undefined)
+    .filter((x: GitHubPush | undefined): x is GitHubPush => x !== undefined)
 
   await processPushes(appState, pushes, false)
 }

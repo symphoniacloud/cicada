@@ -3,13 +3,17 @@ import { logger } from '../util/logging.js'
 import { EventBridgeDetailType } from '../../multipleContexts/eventBridge.js'
 import { tracer } from '../util/tracing.js'
 import { AppState } from '../environment/AppState.js'
-import { GithubPush } from '../domain/types/GithubPush.js'
 import { WebPushTestEvent } from '../domain/webPush/WebPushTestEvent.js'
 
-import { GitHubAccountId, GitHubInstallation, GitHubWorkflowRunEvent } from '../types/GitHubTypes.js'
+import {
+  GitHubAccountId,
+  GitHubInstallation,
+  GitHubPush,
+  GitHubWorkflowRunEvent
+} from '../types/GitHubTypes.js'
 
 export type CicadaEventBridgeData =
-  | GithubPush
+  | GitHubPush
   | GitHubWorkflowRunEvent
   | WebPushTestEvent
   | GitHubInstallation

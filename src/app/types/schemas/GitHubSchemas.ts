@@ -178,11 +178,13 @@ export const GitHubWorkflowSchema = z
   })
   .readonly()
 
-export const GithubWorkflowRunEventActorSchema = z.object({
-  ...GitHubUserSummarySchema.unwrap().shape,
-  avatarUrl: z.string(),
-  htmlUrl: z.string()
-})
+export const GitHubWorkflowRunEventActorSchema = z
+  .object({
+    ...GitHubUserSummarySchema.unwrap().shape,
+    avatarUrl: z.string(),
+    htmlUrl: z.string()
+  })
+  .readonly()
 
 export const GitHubWorkflowRunEventSchema = z
   .object({
@@ -202,6 +204,44 @@ export const GitHubWorkflowRunEventSchema = z
     runStartedAt: z.string().optional(),
     runHtmlUrl: z.string(),
     // TOEventually - what happens here for a manual push? Do we still get an actor?
-    actor: GithubWorkflowRunEventActorSchema.optional()
+    actor: GitHubWorkflowRunEventActorSchema.optional()
+  })
+  .readonly()
+
+export const GitHubPushActorSchema = z
+  .object({
+    ...GitHubUserSummarySchema.unwrap().shape,
+    avatarUrl: z.string()
+  })
+  .readonly()
+
+export const GitHubPushCommitAuthorSchema = z
+  .object({
+    email: z.string().optional(),
+    name: z.string().optional()
+  })
+  .readonly()
+
+export const GitHubPushCommitSchema = z
+  .object({
+    sha: z.string(),
+    message: z.string(),
+    distinct: z.boolean(),
+    author: GitHubPushCommitAuthorSchema.optional()
+  })
+  .readonly()
+
+// There's no consistent ID between pushes sourced from Webhooks vs Events, so use combination
+// of owner, repo, ref, and first commit SHA to create a key
+export const GithubPushSchema = z
+  .object({
+    ...GitHubRepoSummarySchema.unwrap().shape,
+    repoUrl: z.string().optional(),
+    actor: GitHubPushActorSchema,
+    // dateTime isn't guaranteed to be consistent between pushes sourced from Webhooks vs Events
+    dateTime: z.string(),
+    ref: z.string(),
+    before: z.string(),
+    commits: z.array(GitHubPushCommitSchema).nonempty()
   })
   .readonly()

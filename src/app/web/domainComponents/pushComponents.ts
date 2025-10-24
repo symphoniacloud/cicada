@@ -1,18 +1,17 @@
 import { Clock, displayDateTime } from '../../util/dateAndTime.js'
-import { GithubPush } from '../../domain/types/GithubPush.js'
 import { td, tr } from '../hiccough/hiccoughElements.js'
 import { latestCommitInPush } from '../../domain/github/githubPush.js'
 import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents.js'
 import { userCell } from './userComponents.js'
 import { githubAnchor } from './genericComponents.js'
-import { GitHubRepoSummary } from '../../types/GitHubTypes.js'
+import { GitHubPush, GitHubRepoSummary } from '../../types/GitHubTypes.js'
 
 export type PushRowOptions = {
   showDescription: boolean
   showRepo: boolean
 }
 
-export function pushRow(clock: Clock, push: GithubPush, options: PushRowOptions) {
+export function pushRow(clock: Clock, push: GitHubPush, options: PushRowOptions) {
   return tr(
     { class: 'table-light' },
     options.showDescription ? pushDescriptionCell : undefined,
@@ -26,16 +25,16 @@ export function pushRow(clock: Clock, push: GithubPush, options: PushRowOptions)
 
 const pushDescriptionCell = td('Push')
 
-function repoCellForPush(push: GithubPush) {
+function repoCellForPush(push: GitHubPush) {
   return repoCell({ ...push, repoHtmlUrl: githubRepoUrl(push) })
 }
 
-function branchCell(push: GitHubRepoSummary & Pick<GithubPush, 'ref'>) {
+function branchCell(push: GitHubRepoSummary & Pick<GitHubPush, 'ref'>) {
   const branchName = push.ref.split('/')[2]
   return td(branchName, `&nbsp;`, githubAnchor(`${githubRepoUrl(push)}/tree/${branchName}`))
 }
 
-function commitCellForPush(push: GithubPush) {
+function commitCellForPush(push: GitHubPush) {
   // Use the message of the **last** commit
   const commit = latestCommitInPush(push)
   return commitCell({

@@ -2,15 +2,14 @@ import { AppState } from '../../environment/AppState.js'
 import { logger } from '../../util/logging.js'
 import { putPushIfNoKeyExists } from '../entityStore/entities/GithubPushEntity.js'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
-import { GithubPush } from '../types/GithubPush.js'
 import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport.js'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
 import { saveLatestPushes } from './githubLatestPushesPerRef.js'
 import { getUserIdsForAccount } from './githubMembership.js'
 
-import { GitHubUserId } from '../../types/GitHubTypes.js'
+import { GitHubPush, GitHubUserId } from '../../types/GitHubTypes.js'
 
-export async function processPushes(appState: AppState, pushes: GithubPush[], publishNotifications: boolean) {
+export async function processPushes(appState: AppState, pushes: GitHubPush[], publishNotifications: boolean) {
   if (pushes.length > 0) {
     logger.debug(`Processing ${pushes.length} pushes for ${pushes[0].accountName}/${pushes[0].repoName}`)
   }
@@ -26,7 +25,7 @@ export async function processPushes(appState: AppState, pushes: GithubPush[], pu
   }
 }
 
-async function savePushes(appState: AppState, pushes: GithubPush[]) {
+async function savePushes(appState: AppState, pushes: GitHubPush[]) {
   return (
     await Promise.all(
       pushes.map(async (push) => {
@@ -35,16 +34,16 @@ async function savePushes(appState: AppState, pushes: GithubPush[]) {
         })
       })
     )
-  ).filter((x): x is GithubPush => x !== undefined)
+  ).filter((x): x is GitHubPush => x !== undefined)
 }
 
-export function latestCommitInPush(push: Pick<GithubPush, 'commits'>) {
+export function latestCommitInPush(push: Pick<GitHubPush, 'commits'>) {
   return push.commits[push.commits.length - 1]
 }
 
 export async function getRelatedMemberIdsForPush(
   appState: AppState,
-  push: GithubPush
+  push: GitHubPush
 ): Promise<GitHubUserId[]> {
   return getUserIdsForAccount(appState, push.accountId)
 }

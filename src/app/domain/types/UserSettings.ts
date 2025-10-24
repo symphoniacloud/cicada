@@ -4,10 +4,6 @@ import { isGitHubUserKey } from '../../types/GitHubTypeChecks.js'
 
 export type UserSetting = 'visible' | 'notify'
 
-export function isUserSetting(x: unknown): x is UserSetting {
-  return x === 'visible' || x === 'notify'
-}
-
 export interface PersistedUserSettings extends GitHubUserKey {
   github: {
     accounts: Record<GitHubAccountId, PersistedGithubAccountSettings>
