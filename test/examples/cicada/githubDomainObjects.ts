@@ -4,7 +4,6 @@ import {
   GithubWorkflowRunEvent
 } from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
 import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
-import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 import {
   fromRawGitHubAccountId,
@@ -22,6 +21,7 @@ import {
   GitHubRepoSummary,
   GitHubUser,
   GitHubUserId,
+  GitHubUserToken,
   GitHubWorkflowSummary
 } from '../../../src/app/types/GitHubTypes.js'
 
@@ -55,7 +55,7 @@ export const cicadaTestOrgInstallation: GitHubInstallation = {
   installationId: fromRawGithubInstallationId(48133709)
 }
 
-export const testTestUserTokenRecord: GithubUserToken = {
+export const testTestUserTokenRecord: GitHubUserToken = {
   token: 'validUserToken',
   userId: fromRawGithubUserId(162360409),
   userName: 'cicada-test-user',

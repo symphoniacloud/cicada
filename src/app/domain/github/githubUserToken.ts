@@ -1,14 +1,14 @@
 import { AppState } from '../../environment/AppState.js'
 import { getGithubUserToken, putGithubUserToken } from '../entityStore/entities/GithubUserTokenEntity.js'
 import { secondsTimestampInFutureHours, timestampSecondsIsInPast } from '../../util/dateAndTime.js'
-import { GithubUserToken } from '../types/GithubUserToken.js'
 import { failedWithResult, Result, successWith } from '../../util/structuredResult.js'
+import { GitHubUserToken } from '../../types/GitHubTypes.js'
 
 const EXPIRE_CACHED_GITHUB_TOKENS_HOURS = 1
 
 export async function saveOrRefreshGithubUserToken(
   appState: AppState,
-  tokenRecord: Pick<GithubUserToken, 'token' | 'userId' | 'userName'>
+  tokenRecord: Pick<GitHubUserToken, 'token' | 'userId' | 'userName'>
 ) {
   await putGithubUserToken(
     appState.entityStore,
@@ -26,7 +26,7 @@ export type InvalidTokenStatus = (typeof INVALID_TOKEN)[number]
 export async function getTokenRecord(
   appState: AppState,
   token: string
-): Promise<Result<GithubUserToken, InvalidTokenStatus>> {
+): Promise<Result<GitHubUserToken, InvalidTokenStatus>> {
   const tokenRecord = await getGithubUserToken(appState.entityStore, token)
   if (!tokenRecord) return failedWithResult('No token', 'NO_TOKEN')
 
