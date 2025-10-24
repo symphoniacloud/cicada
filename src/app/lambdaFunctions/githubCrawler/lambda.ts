@@ -6,13 +6,7 @@ import { powertoolsMiddlewares } from '../../middleware/standardMiddleware.js'
 import { logger } from '../../util/logging.js'
 import { isFailure } from '../../util/structuredResult.js'
 import { crawlInstallations } from '../../domain/github/crawler/crawlInstallations.js'
-import {
-  isCrawlEvent,
-  isCrawlInstallationEvent,
-  isCrawlInstallationsEvent,
-  isCrawlPublicAccountEvent,
-  isCrawlPublicAccountsEvent
-} from './githubCrawlerEvents.js'
+import { CrawlEventSchema } from './githubCrawlerEvents.js'
 import {
   crawlInstallationAccount,
   crawlPublicAccount,
@@ -32,27 +26,34 @@ export const baseHandler: Handler<unknown, unknown> = async (event) => {
     appState = startup.result
   }
 
-  if (!isCrawlEvent(event)) {
-    throw new Error('No resourceType field')
+  const parseResult = CrawlEventSchema.safeParse(event)
+  if (!parseResult.success) {
+    throw new Error(`Invalid crawl event: ${parseResult.error.message}`)
   }
 
-  if (isCrawlInstallationsEvent(event)) {
-    return await crawlInstallations(appState)
-  }
+  const crawlEvent = parseResult.data
 
-  if (isCrawlInstallationEvent(event)) {
-    return await crawlInstallationAccount(appState, event.installation, event.lookbackDays)
-  }
+  switch (crawlEvent.resourceType) {
+    case 'installations':
+      return await crawlInstallations(appState)
 
-  if (isCrawlPublicAccountsEvent(event)) {
-    return await crawlPublicAccounts(appState, event.lookbackHours)
-  }
+    case 'installation':
+      return await crawlInstallationAccount(appState, crawlEvent.installation, crawlEvent.lookbackDays)
 
-  if (isCrawlPublicAccountEvent(event)) {
-    return await crawlPublicAccount(appState, event.installation, event.publicAccountId, event.lookbackHours)
-  }
+    case 'publicAccounts':
+      return await crawlPublicAccounts(appState, crawlEvent.lookbackHours)
 
-  throw new Error(`unknown event format: ${event}`)
+    case 'publicAccount':
+      return await crawlPublicAccount(
+        appState,
+        crawlEvent.installation,
+        crawlEvent.publicAccountId,
+        crawlEvent.lookbackHours
+      )
+
+    default:
+      throw new Error(`Unknown crawl event type ${parseResult.data.resourceType}`)
+  }
 }
 
 // Entry point - usage is defined by CDK
