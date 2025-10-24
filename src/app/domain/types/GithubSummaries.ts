@@ -7,7 +7,7 @@ import {
   GitHubWorkflowKey,
   isGitHubAccountKey,
   isGitHubRepoKey,
-  isGithubUserKey,
+  isGitHubUserKey,
   isGitHubWorkflowKey
 } from '../../types/GitHubKeyTypes.js'
 
@@ -47,5 +47,5 @@ export interface GithubUserSummary extends GitHubUserKey {
 }
 
 export function isGithubUserSummary(x: unknown): x is GithubUserSummary {
-  return isGithubUserKey(x) && 'userName' in x && isString(x.userName)
+  return isGitHubUserKey(x) && 'userName' in x && isString(x.userName)
 }
