@@ -7,7 +7,6 @@ import {
 import { getUnarchivedRepositoriesForAccount, narrowToRepoSummary, repoKeysEqual } from './githubRepo.js'
 import { getActiveWorkflowsForAccount } from './githubWorkflow.js'
 import { getPublicAccountsForInstallationAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
-import { GithubAccountSummary } from '../types/GithubSummaries.js'
 import { narrowToAccountSummary } from './githubAccount.js'
 import { GithubRepo } from '../types/GithubRepo.js'
 import { GithubWorkflow } from '../types/GithubWorkflow.js'
@@ -15,6 +14,7 @@ import { getInstalledAccountIdForUser } from './githubMembership.js'
 import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity.js'
 import {
   GitHubAccountId,
+  GitHubAccountSummary,
   GitHubRepoId,
   GitHubRepoKey,
   GitHubUserId,
@@ -35,7 +35,7 @@ export async function loadUserScopeReferenceData(
   }
 }
 
-export async function loadAccountStructure<TAccount extends GithubAccountSummary>(
+export async function loadAccountStructure<TAccount extends GitHubAccountSummary>(
   appState: AppState,
   account: TAccount,
   isMemberAccount: boolean

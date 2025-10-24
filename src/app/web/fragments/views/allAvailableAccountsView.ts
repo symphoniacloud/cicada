@@ -2,10 +2,10 @@ import { fragmentViewResult } from '../../viewResultWrappers.js'
 import { standardTable } from '../../domainComponents/genericComponents.js'
 import { td, tr } from '../../hiccough/hiccoughElements.js'
 import { accountCell } from '../../domainComponents/accountComponents.js'
-import { GithubAccountSummary } from '../../../domain/types/GithubSummaries.js'
 
 import { UserScopeReferenceData } from '../../../domain/types/UserScopeReferenceData.js'
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../../types/schemas/GitHubSchemas.js'
+import { GitHubAccountSummary } from '../../../types/GitHubTypes.js'
 
 export function createAllAvailableAccountsResponse(refData: UserScopeReferenceData) {
   return fragmentViewResult(...allAvailableAccountsResponse(refData))
@@ -23,7 +23,7 @@ export function allAvailableAccountsResponse(refData: UserScopeReferenceData) {
   ]
 }
 
-function accountRow(account: GithubAccountSummary, isInstalledAccount: boolean) {
+function accountRow(account: GitHubAccountSummary, isInstalledAccount: boolean) {
   const isOrganizationAccount = account.accountType === ORGANIZATION_ACCOUNT_TYPE
 
   const comment = isInstalledAccount

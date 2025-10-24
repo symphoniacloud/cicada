@@ -1,18 +1,16 @@
 import { RawGithubWorkflowRunEvent } from './rawGithub/RawGithubWorkflowRunEvent.js'
-import {
-  GithubUserSummary,
-  GithubWorkflowSummary,
-  isGithubUserSummary,
-  isGithubWorkflowSummary
-} from './GithubSummaries.js'
 import { isString } from '../../util/types.js'
 import { narrowToWorkflowSummary } from '../github/githubWorkflow.js'
 import { GithubWorkflow } from './GithubWorkflow.js'
 import { fromRawGithubUserId, fromRawGithubWorkflowRunId } from './toFromRawGitHubIds.js'
-import { isGitHubWorkflowRunId } from '../../types/GitHubTypeChecks.js'
-import { GitHubWorkflowRunId } from '../../types/GitHubTypes.js'
+import {
+  isGitHubUserSummary,
+  isGitHubWorkflowRunId,
+  isGitHubWorkflowSummary
+} from '../../types/GitHubTypeChecks.js'
+import { GitHubUserSummary, GitHubWorkflowRunId, GitHubWorkflowSummary } from '../../types/GitHubTypes.js'
 
-export interface GithubWorkflowRunEvent extends GithubWorkflowSummary {
+export interface GithubWorkflowRunEvent extends GitHubWorkflowSummary {
   repoHtmlUrl: string
   workflowRunId: GitHubWorkflowRunId
   runNumber: number
@@ -31,7 +29,7 @@ export interface GithubWorkflowRunEvent extends GithubWorkflowSummary {
   actor?: GithubWorkflowRunEventActor
 }
 
-export interface GithubWorkflowRunEventActor extends GithubUserSummary {
+export interface GithubWorkflowRunEventActor extends GitHubUserSummary {
   avatarUrl: string
   htmlUrl: string
 }
@@ -40,7 +38,7 @@ export interface FullGithubWorkflowRunEvent extends GithubWorkflowRunEvent, Gith
 
 export function isGithubWorkflowRunEvent(x: unknown): x is GithubWorkflowRunEvent {
   return (
-    isGithubWorkflowSummary(x) &&
+    isGitHubWorkflowSummary(x) &&
     'repoHtmlUrl' in x &&
     isString(x.repoHtmlUrl) &&
     'workflowRunId' in x &&
@@ -58,7 +56,7 @@ export function isGithubWorkflowRunEvent(x: unknown): x is GithubWorkflowRunEven
 
 export function isGithubWorkflowRunEventActor(x: unknown): x is GithubWorkflowRunEventActor {
   return (
-    isGithubUserSummary(x) &&
+    isGitHubUserSummary(x) &&
     'avatarUrl' in x &&
     isString(x.avatarUrl) &&
     'htmlUrl' in x &&
@@ -68,7 +66,7 @@ export function isGithubWorkflowRunEventActor(x: unknown): x is GithubWorkflowRu
 
 // TOEventually - consider dateTimes, e.g. for Pushes we get localized times
 export function fromRawGithubWorkflowRunEvent(
-  workflow: GithubWorkflowSummary,
+  workflow: GitHubWorkflowSummary,
   raw: RawGithubWorkflowRunEvent
 ): GithubWorkflowRunEvent {
   return {

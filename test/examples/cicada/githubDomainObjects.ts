@@ -9,11 +9,6 @@ import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import { GithubUserToken } from '../../../src/app/domain/types/GithubUserToken.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 import {
-  GithubAccountSummary,
-  GithubRepoSummary,
-  GithubWorkflowSummary
-} from '../../../src/app/domain/types/GithubSummaries.js'
-import {
   fromRawGitHubAccountId,
   fromRawGithubInstallationId,
   fromRawGitHubRepoId,
@@ -24,20 +19,23 @@ import {
 import {
   GitHubAccountKey,
   GitHubAccountMembership,
-  GitHubUserId
+  GitHubAccountSummary,
+  GitHubRepoSummary,
+  GitHubUserId,
+  GitHubWorkflowSummary
 } from '../../../src/app/types/GitHubTypes.js'
 
 export const cicadaTestUserAccountKey: GitHubAccountKey = {
   accountId: fromRawGitHubAccountId(162360409)
 }
 
-export const cicadaTestUserAccountSummary: GithubAccountSummary = {
+export const cicadaTestUserAccountSummary: GitHubAccountSummary = {
   ...cicadaTestUserAccountKey,
   accountName: 'cicada-test-user',
   accountType: 'user'
 }
 
-export const cicadaTestOrgAccountSummary: GithubAccountSummary = {
+export const cicadaTestOrgAccountSummary: GitHubAccountSummary = {
   accountId: fromRawGitHubAccountId(162483619),
   accountName: 'cicada-test-org',
   accountType: 'organization'
@@ -100,7 +98,7 @@ export const accountMemberships: Record<GitHubUserId, GitHubAccountMembership> =
   GHUser49635: testMikeRobertsUserMembershipOfOrg
 }
 
-export const personalTestRepoSummary: GithubRepoSummary = {
+export const personalTestRepoSummary: GitHubRepoSummary = {
   repoId: fromRawGitHubRepoId(767679529),
   repoName: 'personal-test-repo',
   accountId: fromRawGitHubAccountId(162360409),
@@ -126,13 +124,13 @@ export const testPersonalTestRepo: GithubRepo = {
   visibility: 'private'
 }
 
-export const orgTestRepoOneSummary: GithubRepoSummary = {
+export const orgTestRepoOneSummary: GitHubRepoSummary = {
   ...cicadaTestOrgAccountSummary,
   repoId: fromRawGitHubRepoId(768206479),
   repoName: 'org-test-repo-one'
 }
 
-export const orgTestRepoTwoSummary: GithubRepoSummary = {
+export const orgTestRepoTwoSummary: GitHubRepoSummary = {
   ...cicadaTestOrgAccountSummary,
   repoId: fromRawGitHubRepoId(768207426),
   repoName: 'org-test-repo-two'
@@ -174,7 +172,7 @@ export const testOrgTestRepoTwo: GithubRepo = {
   visibility: 'private'
 }
 
-export const testOrgTestWorkflowOneSummary: GithubWorkflowSummary = {
+export const testOrgTestWorkflowOneSummary: GitHubWorkflowSummary = {
   ...orgTestRepoOneSummary,
   workflowId: fromRawGitHubWorkflowId(88508779),
   workflowName: 'Test Workflow'
@@ -193,7 +191,7 @@ export const testOrgTestWorkflowOne: GithubWorkflow = {
   workflowUpdatedAt: '2024-03-05T18:01:40Z'
 }
 
-export const testOrgTestWorkflowOneFromJsonSummary: GithubWorkflowSummary = {
+export const testOrgTestWorkflowOneFromJsonSummary: GitHubWorkflowSummary = {
   ...orgTestRepoOneSummary,
   workflowId: fromRawGitHubWorkflowId(88647110),
   workflowName: 'Test Repo One Workflow'
@@ -234,7 +232,7 @@ export const testOrgTestWorkflowOneFromJsonRun: GithubWorkflowRunEvent = {
   repoHtmlUrl: 'https://github.com/cicada-test-org/org-test-repo-one'
 }
 
-export const personalTestRepoWorkflowSummary: GithubWorkflowSummary = {
+export const personalTestRepoWorkflowSummary: GitHubWorkflowSummary = {
   ...personalTestRepoSummary,
   workflowId: fromRawGitHubWorkflowId(88508779),
   workflowName: 'Test Workflow'

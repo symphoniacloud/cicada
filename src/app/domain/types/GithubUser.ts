@@ -1,9 +1,10 @@
 import { RawGithubUser } from './rawGithub/RawGithubUser.js'
 import { isString } from '../../util/types.js'
-import { GithubUserSummary, isGithubUserSummary } from './GithubSummaries.js'
 import { fromRawGithubUserId } from './toFromRawGitHubIds.js'
+import { GitHubUserSummary } from '../../types/GitHubTypes.js'
+import { isGitHubUserSummary } from '../../types/GitHubTypeChecks.js'
 
-export interface GithubUser extends GithubUserSummary {
+export interface GithubUser extends GitHubUserSummary {
   avatarUrl: string
   htmlUrl: string
   url: string
@@ -11,7 +12,7 @@ export interface GithubUser extends GithubUserSummary {
 
 export function isGithubUser(x: unknown): x is GithubUser {
   return (
-    isGithubUserSummary(x) &&
+    isGitHubUserSummary(x) &&
     'avatarUrl' in x &&
     isString(x.avatarUrl) &&
     'htmlUrl' in x &&

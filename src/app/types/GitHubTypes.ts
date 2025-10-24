@@ -4,15 +4,19 @@ import {
   GitHubAccountIdSchema,
   GitHubAccountKeySchema,
   GitHubAccountMembershipSchema,
+  GitHubAccountSummarySchema,
   GitHubAppIdSchema,
   GitHubInstallationIdSchema,
   GitHubRepoIdSchema,
   GitHubRepoKeySchema,
+  GitHubRepoSummarySchema,
   GitHubUserIdSchema,
   GitHubUserKeySchema,
+  GitHubUserSummarySchema,
   GitHubWorkflowIdSchema,
   GitHubWorkflowKeySchema,
-  GitHubWorkflowRunIdSchema
+  GitHubWorkflowRunIdSchema,
+  GitHubWorkflowSummarySchema
 } from './schemas/GitHubSchemas.js'
 
 export type GitHubAccountId = z.infer<typeof GitHubAccountIdSchema>
@@ -38,3 +42,11 @@ export type GitHubWorkflowKey = z.infer<typeof GitHubWorkflowKeySchema>
 export type GitHubUserKey = z.infer<typeof GitHubUserKeySchema>
 
 export type GitHubAccountMembership = z.infer<typeof GitHubAccountMembershipSchema>
+
+export type GitHubAccountSummary = z.infer<typeof GitHubAccountSummarySchema>
+
+export type GitHubRepoSummary = z.infer<typeof GitHubRepoSummarySchema>
+
+export type GitHubWorkflowSummary = z.infer<typeof GitHubWorkflowSummarySchema>
+
+export type GitHubUserSummary = z.infer<typeof GitHubUserSummarySchema>

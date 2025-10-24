@@ -1,13 +1,19 @@
-import { GithubAccountSummary, GithubRepoSummary } from './GithubSummaries.js'
 import { GithubWorkflow } from './GithubWorkflow.js'
-import { GitHubAccountId, GitHubRepoId, GitHubUserId, GitHubWorkflowId } from '../../types/GitHubTypes.js'
+import {
+  GitHubAccountId,
+  GitHubAccountSummary,
+  GitHubRepoId,
+  GitHubRepoSummary,
+  GitHubUserId,
+  GitHubWorkflowId
+} from '../../types/GitHubTypes.js'
 
-export interface GithubAccountStructure extends GithubAccountSummary {
+export interface GithubAccountStructure extends GitHubAccountSummary {
   isMemberAccount: boolean
   repos: Record<GitHubRepoId, GithubRepoStructure>
 }
 
-export interface GithubRepoStructure extends GithubRepoSummary {
+export interface GithubRepoStructure extends GitHubRepoSummary {
   workflows: Record<GitHubWorkflowId, GithubWorkflow>
 }
 

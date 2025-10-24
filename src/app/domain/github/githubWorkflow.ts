@@ -1,14 +1,13 @@
-import { GithubRepoSummary, GithubWorkflowSummary } from '../types/GithubSummaries.js'
 import { AppState } from '../../environment/AppState.js'
 import { RawGithubWorkflow } from '../types/rawGithub/RawGithubWorkflow.js'
 import { fromRawGithubWorkflow, GithubWorkflow } from '../types/GithubWorkflow.js'
 import { getWorkflowsForAccount, putWorkflows } from '../entityStore/entities/GithubWorkflowEntity.js'
 import { narrowToRepoSummary } from './githubRepo.js'
-import { GitHubAccountId } from '../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubRepoSummary, GitHubWorkflowSummary } from '../../types/GitHubTypes.js'
 
 export async function processRawWorkflows(
   appState: AppState,
-  repo: GithubRepoSummary,
+  repo: GitHubRepoSummary,
   rawWorkflows: RawGithubWorkflow[]
 ) {
   return putWorkflows(
@@ -17,7 +16,7 @@ export async function processRawWorkflows(
   )
 }
 
-export function narrowToWorkflowSummary<T extends GithubWorkflowSummary>(x: T): GithubWorkflowSummary {
+export function narrowToWorkflowSummary<T extends GitHubWorkflowSummary>(x: T): GitHubWorkflowSummary {
   return {
     ...narrowToRepoSummary(x),
     workflowId: x.workflowId,

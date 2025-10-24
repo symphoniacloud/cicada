@@ -4,8 +4,7 @@ import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSetting
 
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
-import { GithubWorkflowSummary } from '../types/GithubSummaries.js'
-import { GitHubRepoKey, GitHubUserId } from '../../types/GitHubTypes.js'
+import { GitHubRepoKey, GitHubUserId, GitHubWorkflowSummary } from '../../types/GitHubTypes.js'
 
 export async function filterWorkflowNotifyEnabled(
   appState: AppState,
@@ -32,7 +31,7 @@ export async function filterWorkflowNotifyEnabled(
 
 async function getWorkflowNotifyEnabledForUser(
   appState: AppState,
-  workflow: GithubWorkflowSummary,
+  workflow: GitHubWorkflowSummary,
   refData: UserScopeReferenceData
 ) {
   const userSettings = await loadCalculatedUserSettingsOrUseDefaults(appState, refData)

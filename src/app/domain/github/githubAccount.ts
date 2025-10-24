@@ -1,16 +1,14 @@
-import { GithubAccountSummary } from '../types/GithubSummaries.js'
-
-import { GitHubAccountKey } from '../../types/GitHubTypes.js'
+import { GitHubAccountKey, GitHubAccountSummary } from '../../types/GitHubTypes.js'
 
 export function accountKeysEqual(a1: GitHubAccountKey, a2: GitHubAccountKey) {
   return a1.accountId === a2.accountId
 }
 
-export function narrowToAccountSummary<T extends GithubAccountSummary>({
+export function narrowToAccountSummary<T extends GitHubAccountSummary>({
   accountId,
   accountName,
   accountType
-}: T): GithubAccountSummary {
+}: T): GitHubAccountSummary {
   return {
     accountId: accountId,
     accountName: accountName,

@@ -2,29 +2,37 @@ import {
   GitHubAccountIdSchema,
   GitHubAccountKeySchema,
   GitHubAccountMembershipSchema,
+  GitHubAccountSummarySchema,
   GitHubAppIdSchema,
   GitHubInstallationIdSchema,
   GitHubRepoIdSchema,
   GitHubRepoKeySchema,
+  GitHubRepoSummarySchema,
   GitHubUserIdSchema,
   GitHubUserKeySchema,
+  GitHubUserSummarySchema,
   GitHubWorkflowIdSchema,
   GitHubWorkflowKeySchema,
-  GitHubWorkflowRunIdSchema
+  GitHubWorkflowRunIdSchema,
+  GitHubWorkflowSummarySchema
 } from './schemas/GitHubSchemas.js'
 import {
   GitHubAccountId,
   GitHubAccountKey,
   GitHubAccountMembership,
+  GitHubAccountSummary,
   GitHubAppId,
   GitHubInstallationId,
   GitHubRepoId,
   GitHubRepoKey,
+  GitHubRepoSummary,
   GitHubUserId,
   GitHubUserKey,
+  GitHubUserSummary,
   GitHubWorkflowId,
   GitHubWorkflowKey,
-  GitHubWorkflowRunId
+  GitHubWorkflowRunId,
+  GitHubWorkflowSummary
 } from './GitHubTypes.js'
 
 // TODO These may be able to mostly go away if we start just using safe parse more
@@ -74,4 +82,20 @@ export function isGitHubUserKey(x: unknown): x is GitHubUserKey {
 
 export function isGitHubOrganizationMembership(x: unknown): x is GitHubAccountMembership {
   return GitHubAccountMembershipSchema.safeParse(x).success
+}
+
+export function isGitHubAccountSummary(x: unknown): x is GitHubAccountSummary {
+  return GitHubAccountSummarySchema.safeParse(x).success
+}
+
+export function isGitHubRepoSummary(x: unknown): x is GitHubRepoSummary {
+  return GitHubRepoSummarySchema.safeParse(x).success
+}
+
+export function isGitHubWorkflowSummary(x: unknown): x is GitHubWorkflowSummary {
+  return GitHubWorkflowSummarySchema.safeParse(x).success
+}
+
+export function isGitHubUserSummary(x: unknown): x is GitHubUserSummary {
+  return GitHubUserSummarySchema.safeParse(x).success
 }

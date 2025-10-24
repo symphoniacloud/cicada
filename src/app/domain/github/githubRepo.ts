@@ -2,15 +2,14 @@ import { AppState } from '../../environment/AppState.js'
 import { RawGithubRepo } from '../types/rawGithub/RawGithubRepo.js'
 import { fromRawGithubRepo } from '../types/GithubRepo.js'
 import { getRepositories, putRepositories } from '../entityStore/entities/GithubRepositoryEntity.js'
-import { GithubRepoSummary } from '../types/GithubSummaries.js'
 import { accountKeysEqual, narrowToAccountSummary } from './githubAccount.js'
-import { GitHubAccountId, GitHubRepoKey } from '../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubRepoKey, GitHubRepoSummary } from '../../types/GitHubTypes.js'
 
 export function repoKeysEqual(r1: GitHubRepoKey, r2: GitHubRepoKey) {
   return accountKeysEqual(r1, r2) && r1.repoId === r2.repoId
 }
 
-export function narrowToRepoSummary<T extends GithubRepoSummary>(x: T): GithubRepoSummary {
+export function narrowToRepoSummary<T extends GitHubRepoSummary>(x: T): GitHubRepoSummary {
   return {
     ...narrowToAccountSummary(x),
     repoId: x.repoId,

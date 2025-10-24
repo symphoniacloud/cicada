@@ -1,4 +1,3 @@
-import { GithubAccountSummary, GithubRepoSummary } from '../../../src/app/domain/types/GithubSummaries.js'
 import {
   GithubAccountStructure,
   GithubRepoStructure,
@@ -13,6 +12,7 @@ import {
   fromRawGitHubWorkflowId
 } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../../src/app/types/schemas/GitHubSchemas.js'
+import { GitHubAccountSummary, GitHubRepoSummary } from '../../../src/app/types/GitHubTypes.js'
 
 export interface BuildAccountSummaryOptions {
   simpleAccountId?: number
@@ -20,7 +20,7 @@ export interface BuildAccountSummaryOptions {
   accountType?: GithubAccountType
 }
 
-export function buildAccountSummary(options?: BuildAccountSummaryOptions): GithubAccountSummary {
+export function buildAccountSummary(options?: BuildAccountSummaryOptions): GitHubAccountSummary {
   return {
     accountId: fromRawGitHubAccountId(options?.simpleAccountId ?? '123'),
     accountName: options?.accountName ?? '',
@@ -33,7 +33,7 @@ export interface BuildRepoSummaryOptions extends BuildAccountSummaryOptions {
   repoName?: string
 }
 
-export function buildRepoSummmary(options?: BuildRepoSummaryOptions): GithubRepoSummary {
+export function buildRepoSummmary(options?: BuildRepoSummaryOptions): GitHubRepoSummary {
   return {
     ...buildAccountSummary(options),
     repoId: fromRawGitHubRepoId(options?.simpleRepoId ?? '456'),
