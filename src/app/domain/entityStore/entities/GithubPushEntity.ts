@@ -1,11 +1,11 @@
-import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { AllEntitiesStore, DynamoDBValues } from '@symphoniacloud/dynamodb-entity-store'
 import { GITHUB_PUSH } from '../entityTypes.js'
 import { latestCommitInPush } from '../../github/githubPush.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkflowRunEntity.js'
 
 import { GitHubAccountId, GitHubPush } from '../../../ioTypes/GitHubTypes.js'
-import { isGitHubPush } from '../../../ioTypes/GitHubTypeChecks.js'
+import { GithubPushSchema } from '../../../ioTypes/GitHubSchemas.js'
 
 // Exported since also used by GithubWorkflowRunEntity
 export const GithubPushEntity: CicadaEntity<
@@ -14,7 +14,7 @@ export const GithubPushEntity: CicadaEntity<
   Pick<GitHubPush, 'repoId' | 'ref' | 'commits'>
 > = {
   type: GITHUB_PUSH,
-  parse: typePredicateParser(isGitHubPush, GITHUB_PUSH),
+  parse: (rawItem: DynamoDBValues) => GithubPushSchema.parse(rawItem),
   pk(source: Pick<GitHubPush, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   },

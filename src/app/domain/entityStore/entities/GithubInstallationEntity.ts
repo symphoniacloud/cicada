@@ -1,12 +1,12 @@
-import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { AllEntitiesStore, DynamoDBValues } from '@symphoniacloud/dynamodb-entity-store'
 import { GITHUB_INSTALLATION } from '../entityTypes.js'
 import { cicadaEntityFromPkOnlyEntity } from '../entityStoreEntitySupport.js'
 import { GitHubAccountId, GitHubInstallation } from '../../../ioTypes/GitHubTypes.js'
-import { isGithubInstallation } from '../../../ioTypes/GitHubTypeChecks.js'
+import { GitHubInstallationSchema } from '../../../ioTypes/GitHubSchemas.js'
 
 const GithubInstallationEntity = cicadaEntityFromPkOnlyEntity({
   type: GITHUB_INSTALLATION,
-  parse: typePredicateParser(isGithubInstallation, GITHUB_INSTALLATION),
+  parse: (rawItem: DynamoDBValues) => GitHubInstallationSchema.parse(rawItem),
   pk(source: Pick<GitHubInstallation, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   }

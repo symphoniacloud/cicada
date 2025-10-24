@@ -1,9 +1,9 @@
 import { WEB_PUSH_SUBSCRIPTION } from '../entityTypes.js'
-import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
+import { AllEntitiesStore, DynamoDBValues } from '@symphoniacloud/dynamodb-entity-store'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 
 import { GitHubUserId } from '../../../ioTypes/GitHubTypes.js'
-import { isWebPushSubscription, WebPushSubscription } from '../../../ioTypes/WebPushSchemasAndTypes.js'
+import { WebPushSubscription, WebPushSubscriptionSchema } from '../../../ioTypes/WebPushSchemasAndTypes.js'
 
 const WebPushSubscriptionEntity: CicadaEntity<
   WebPushSubscription,
@@ -11,7 +11,7 @@ const WebPushSubscriptionEntity: CicadaEntity<
   Pick<WebPushSubscription, 'endpoint'>
 > = {
   type: WEB_PUSH_SUBSCRIPTION,
-  parse: typePredicateParser(isWebPushSubscription, WEB_PUSH_SUBSCRIPTION),
+  parse: (rawItem: DynamoDBValues) => WebPushSubscriptionSchema.parse(rawItem),
   pk(source: Pick<WebPushSubscription, 'userId'>) {
     return `USER#${source.userId}`
   },

@@ -1,14 +1,14 @@
 import { GITHUB_LATEST_WORKFLOW_RUN_EVENT } from '../entityTypes.js'
 import {
   AllEntitiesStore,
-  rangeWhereSkBeginsWith,
-  typePredicateParser
+  DynamoDBValues,
+  rangeWhereSkBeginsWith
 } from '@symphoniacloud/dynamodb-entity-store'
 import { sortBy } from '../../../util/collections.js'
 import { workflowRunEventUpdatedTimestamp } from '../../github/githubWorkflowRunEvent.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { GitHubAccountId, GitHubRepoKey, GitHubWorkflowRunEvent } from '../../../ioTypes/GitHubTypes.js'
-import { isGitHubWorkflowRunEvent } from '../../../ioTypes/GitHubTypeChecks.js'
+import { GitHubWorkflowRunEventSchema } from '../../../ioTypes/GitHubSchemas.js'
 
 const GithubLatestWorkflowRunEventEntity: CicadaEntity<
   GitHubWorkflowRunEvent,
@@ -16,7 +16,7 @@ const GithubLatestWorkflowRunEventEntity: CicadaEntity<
   Pick<GitHubWorkflowRunEvent, 'repoId' | 'workflowId'>
 > = {
   type: GITHUB_LATEST_WORKFLOW_RUN_EVENT,
-  parse: typePredicateParser(isGitHubWorkflowRunEvent, GITHUB_LATEST_WORKFLOW_RUN_EVENT),
+  parse: (rawItem: DynamoDBValues) => GitHubWorkflowRunEventSchema.parse(rawItem),
   pk(source: Pick<GitHubWorkflowRunEvent, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   },

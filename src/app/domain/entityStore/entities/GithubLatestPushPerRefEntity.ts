@@ -1,9 +1,12 @@
 import { GITHUB_LATEST_PUSH_PER_REF } from '../entityTypes.js'
-import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
-import { rangeWhereSkGreaterThan } from '@symphoniacloud/dynamodb-entity-store'
+import {
+  AllEntitiesStore,
+  DynamoDBValues,
+  rangeWhereSkGreaterThan
+} from '@symphoniacloud/dynamodb-entity-store'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { GitHubAccountId, GitHubPush } from '../../../ioTypes/GitHubTypes.js'
-import { isGitHubPush } from '../../../ioTypes/GitHubTypeChecks.js'
+import { GithubPushSchema } from '../../../ioTypes/GitHubSchemas.js'
 
 const GithubLatestPushPerRefEntity: CicadaEntity<
   GitHubPush,
@@ -11,7 +14,7 @@ const GithubLatestPushPerRefEntity: CicadaEntity<
   Pick<GitHubPush, 'repoId' | 'ref'>
 > = {
   type: GITHUB_LATEST_PUSH_PER_REF,
-  parse: typePredicateParser(isGitHubPush, GITHUB_LATEST_PUSH_PER_REF),
+  parse: (rawItem: DynamoDBValues) => GithubPushSchema.parse(rawItem),
   pk(source: Pick<GitHubPush, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   },
