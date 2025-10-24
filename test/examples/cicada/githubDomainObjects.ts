@@ -3,7 +3,6 @@ import {
   GithubWorkflowRunEvent
 } from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
 import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
-import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 import {
   fromRawGitHubAccountId,
   fromRawGithubInstallationId,
@@ -22,6 +21,7 @@ import {
   GitHubUser,
   GitHubUserId,
   GitHubUserToken,
+  GitHubWorkflow,
   GitHubWorkflowSummary
 } from '../../../src/app/types/GitHubTypes.js'
 
@@ -178,7 +178,7 @@ export const testOrgTestWorkflowOneSummary: GitHubWorkflowSummary = {
   workflowName: 'Test Workflow'
 }
 
-export const testOrgTestWorkflowOne: GithubWorkflow = {
+export const testOrgTestWorkflowOne: GitHubWorkflow = {
   ...testOrgTestWorkflowOneSummary,
   workflowId: fromRawGitHubWorkflowId(88508779),
   workflowName: 'Test Workflow',
@@ -197,7 +197,7 @@ export const testOrgTestWorkflowOneFromJsonSummary: GitHubWorkflowSummary = {
   workflowName: 'Test Repo One Workflow'
 }
 
-export const testOrgTestWorkflowOneFromJson: GithubWorkflow = {
+export const testOrgTestWorkflowOneFromJson: GitHubWorkflow = {
   ...testOrgTestWorkflowOneFromJsonSummary,
   workflowState: 'active',
   workflowPath: '.github/workflows/test.yml',
@@ -238,7 +238,7 @@ export const personalTestRepoWorkflowSummary: GitHubWorkflowSummary = {
   workflowName: 'Test Workflow'
 }
 
-export const personalTestRepoWorkflow: GithubWorkflow = {
+export const personalTestRepoWorkflow: GitHubWorkflow = {
   ...personalTestRepoWorkflowSummary,
   workflowState: 'active',
   workflowPath: '.github/workflows/test.yml',

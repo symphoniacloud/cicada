@@ -2,11 +2,11 @@ import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-
 import { GITHUB_USER_TOKEN } from '../entityTypes.js'
 import { cicadaEntityFromPkOnlyEntity } from '../entityStoreEntitySupport.js'
 import { GitHubUserToken } from '../../../types/GitHubTypes.js'
-import { isGithubUserToken } from '../../../types/GitHubTypeChecks.js'
+import { isGitHubUserToken } from '../../../types/GitHubTypeChecks.js'
 
 const GithubUserTokenEntity = cicadaEntityFromPkOnlyEntity({
   type: GITHUB_USER_TOKEN,
-  parse: typePredicateParser(isGithubUserToken, GITHUB_USER_TOKEN),
+  parse: typePredicateParser(isGitHubUserToken, GITHUB_USER_TOKEN),
   pk(source: Pick<GitHubUserToken, 'token'>) {
     return `USER_TOKEN#${source.token}`
   }

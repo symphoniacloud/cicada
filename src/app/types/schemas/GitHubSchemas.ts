@@ -128,33 +128,52 @@ export const GitHubPublicAccountSchema = z
   })
   .readonly()
 
-export const GitHubUserSchema = z.object({
-  ...GitHubUserSummarySchema.unwrap().shape,
-  avatarUrl: z.string(),
-  htmlUrl: z.string(),
-  url: z.string()
-})
+export const GitHubUserSchema = z
+  .object({
+    ...GitHubUserSummarySchema.unwrap().shape,
+    avatarUrl: z.string(),
+    htmlUrl: z.string(),
+    url: z.string()
+  })
+  .readonly()
 
-export const GitHubUserTokenSchema = z.object({
-  ...GitHubUserSummarySchema.unwrap().shape,
-  token: z.string(),
-  nextCheckTime: z.int().positive()
-})
+export const GitHubUserTokenSchema = z
+  .object({
+    ...GitHubUserSummarySchema.unwrap().shape,
+    token: z.string(),
+    nextCheckTime: z.int().positive()
+  })
+  .readonly()
 
-export const GitHubRepoSchema = z.object({
-  ...GitHubRepoSummarySchema.unwrap().shape,
-  fullName: z.string(),
-  private: z.boolean(),
-  htmlUrl: z.string(),
-  description: z.string(),
-  fork: z.boolean(),
-  url: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  pushedAt: z.string(),
-  homepage: z.string(),
-  archived: z.boolean(),
-  disabled: z.boolean(),
-  visibility: z.string(),
-  defaultBranch: z.string()
-})
+export const GitHubRepoSchema = z
+  .object({
+    ...GitHubRepoSummarySchema.unwrap().shape,
+    fullName: z.string(),
+    private: z.boolean(),
+    htmlUrl: z.string(),
+    description: z.string(),
+    fork: z.boolean(),
+    url: z.string(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    pushedAt: z.string(),
+    homepage: z.string(),
+    archived: z.boolean(),
+    disabled: z.boolean(),
+    visibility: z.string(),
+    defaultBranch: z.string()
+  })
+  .readonly()
+
+export const GitHubWorkflowSchema = z
+  .object({
+    ...GitHubWorkflowSummarySchema.unwrap().shape,
+    workflowPath: z.string(),
+    workflowState: z.string(),
+    workflowUrl: z.string(),
+    workflowHtmlUrl: z.string(),
+    workflowBadgeUrl: z.string(),
+    workflowCreatedAt: z.string(),
+    workflowUpdatedAt: z.string()
+  })
+  .readonly()

@@ -1,14 +1,18 @@
 import { RawGithubWorkflowRunEvent } from './rawGithub/RawGithubWorkflowRunEvent.js'
 import { isString } from '../../util/types.js'
 import { narrowToWorkflowSummary } from '../github/githubWorkflow.js'
-import { GithubWorkflow } from './GithubWorkflow.js'
 import { fromRawGithubUserId, fromRawGithubWorkflowRunId } from './toFromRawGitHubIds.js'
 import {
   isGitHubUserSummary,
   isGitHubWorkflowRunId,
   isGitHubWorkflowSummary
 } from '../../types/GitHubTypeChecks.js'
-import { GitHubUserSummary, GitHubWorkflowRunId, GitHubWorkflowSummary } from '../../types/GitHubTypes.js'
+import {
+  GitHubUserSummary,
+  GitHubWorkflow,
+  GitHubWorkflowRunId,
+  GitHubWorkflowSummary
+} from '../../types/GitHubTypes.js'
 
 export interface GithubWorkflowRunEvent extends GitHubWorkflowSummary {
   repoHtmlUrl: string
@@ -34,7 +38,7 @@ export interface GithubWorkflowRunEventActor extends GitHubUserSummary {
   htmlUrl: string
 }
 
-export interface FullGithubWorkflowRunEvent extends GithubWorkflowRunEvent, GithubWorkflow {}
+export interface FullGithubWorkflowRunEvent extends GithubWorkflowRunEvent, GitHubWorkflow {}
 
 export function isGithubWorkflowRunEvent(x: unknown): x is GithubWorkflowRunEvent {
   return (

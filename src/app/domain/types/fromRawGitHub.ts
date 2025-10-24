@@ -4,7 +4,9 @@ import {
   GitHubInstallation,
   GitHubPublicAccount,
   GitHubRepo,
-  GitHubUser
+  GitHubRepoSummary,
+  GitHubUser,
+  GitHubWorkflow
 } from '../../types/GitHubTypes.js'
 import { isGithubAccountType } from '../../types/GitHubTypeChecks.js'
 import { RawGithubInstallation } from './rawGithub/RawGithubInstallation.js'
@@ -13,10 +15,12 @@ import {
   fromRawGithubAppId,
   fromRawGithubInstallationId,
   fromRawGitHubRepoId,
-  fromRawGithubUserId
+  fromRawGithubUserId,
+  fromRawGitHubWorkflowId
 } from './toFromRawGitHubIds.js'
 import { RawGithubUser } from './rawGithub/RawGithubUser.js'
 import { RawGithubRepo } from './rawGithub/RawGithubRepo.js'
+import { RawGithubWorkflow } from './rawGithub/RawGithubWorkflow.js'
 
 // TODO - can use zod parsing for this
 
@@ -87,5 +91,26 @@ export function fromRawGithubRepo(raw: RawGithubRepo): GitHubRepo {
     disabled: raw.disabled,
     visibility: raw.visibility,
     defaultBranch: raw.default_branch
+  }
+}
+
+// We store more on a Workflow than we get from the Github API, so workflows can only
+// be stored in the context of a repo
+export function fromRawGithubWorkflow(repo: GitHubRepoSummary, raw: RawGithubWorkflow): GitHubWorkflow {
+  return {
+    accountId: repo.accountId,
+    accountName: repo.accountName,
+    accountType: repo.accountType,
+    repoId: repo.repoId,
+    repoName: repo.repoName,
+    workflowId: fromRawGitHubWorkflowId(raw.id),
+    workflowName: raw.name,
+    workflowPath: raw.path,
+    workflowState: raw.state,
+    workflowUrl: raw.url,
+    workflowHtmlUrl: raw.html_url,
+    workflowBadgeUrl: raw.badge_url,
+    workflowCreatedAt: raw.created_at,
+    workflowUpdatedAt: raw.updated_at
   }
 }

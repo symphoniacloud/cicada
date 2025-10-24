@@ -20,6 +20,7 @@ import {
   GitHubWorkflowIdSchema,
   GitHubWorkflowKeySchema,
   GitHubWorkflowRunIdSchema,
+  GitHubWorkflowSchema,
   GitHubWorkflowSummarySchema
 } from './schemas/GitHubSchemas.js'
 import {
@@ -41,6 +42,7 @@ import {
   GitHubUserKey,
   GitHubUserSummary,
   GitHubUserToken,
+  GitHubWorkflow,
   GitHubWorkflowId,
   GitHubWorkflowKey,
   GitHubWorkflowRunId,
@@ -129,10 +131,14 @@ export function isGitHubUser(x: unknown): x is GitHubUser {
   return GitHubUserSchema.safeParse(x).success
 }
 
-export function isGithubUserToken(x: unknown): x is GitHubUserToken {
+export function isGitHubUserToken(x: unknown): x is GitHubUserToken {
   return GitHubUserTokenSchema.safeParse(x).success
 }
 
-export function isGithubRepo(x: unknown): x is GitHubRepo {
+export function isGitHubRepo(x: unknown): x is GitHubRepo {
   return GitHubRepoSchema.safeParse(x).success
+}
+
+export function isGitHubWorkflow(x: unknown): x is GitHubWorkflow {
+  return GitHubWorkflowSchema.safeParse(x).success
 }
