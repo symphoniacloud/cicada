@@ -120,3 +120,10 @@ export const GitHubInstallationSchema = z
     appSlug: z.string()
   })
   .readonly()
+
+export const GitHubPublicAccountSchema = z
+  .object({
+    ...GitHubAccountSummarySchema.unwrap().shape,
+    installationAccountId: GitHubAccountIdSchema
+  })
+  .readonly()

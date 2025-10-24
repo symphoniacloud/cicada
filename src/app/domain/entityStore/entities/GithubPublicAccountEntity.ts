@@ -1,25 +1,25 @@
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GITHUB_PUBLIC_ACCOUNT } from '../entityTypes.js'
-import { GithubPublicAccount, isGithubPublicAccount } from '../../types/GithubPublicAccount.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
-import { GitHubAccountId } from '../../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubPublicAccount } from '../../../types/GitHubTypes.js'
+import { isGitHubPublicAccount } from '../../../types/GitHubTypeChecks.js'
 
 const GithubPublicAccountEntity: CicadaEntity<
-  GithubPublicAccount,
-  Pick<GithubPublicAccount, 'installationAccountId'>,
-  Pick<GithubPublicAccount, 'accountId'>
+  GitHubPublicAccount,
+  Pick<GitHubPublicAccount, 'installationAccountId'>,
+  Pick<GitHubPublicAccount, 'accountId'>
 > = {
   type: GITHUB_PUBLIC_ACCOUNT,
-  parse: typePredicateParser(isGithubPublicAccount, GITHUB_PUBLIC_ACCOUNT),
-  pk(source: Pick<GithubPublicAccount, 'installationAccountId'>) {
+  parse: typePredicateParser(isGitHubPublicAccount, GITHUB_PUBLIC_ACCOUNT),
+  pk(source: Pick<GitHubPublicAccount, 'installationAccountId'>) {
     return `INSTALLATION_ACCOUNT#${source.installationAccountId}`
   },
-  sk(source: Pick<GithubPublicAccount, 'accountId'>) {
+  sk(source: Pick<GitHubPublicAccount, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   }
 }
 
-export async function putPublicAccount(entityStore: AllEntitiesStore, account: GithubPublicAccount) {
+export async function putPublicAccount(entityStore: AllEntitiesStore, account: GitHubPublicAccount) {
   return await store(entityStore).put(account)
 }
 

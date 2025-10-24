@@ -2,25 +2,30 @@ import { AppState } from '../../../environment/AppState.js'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
 import { processRawRepositories } from '../githubRepo.js'
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../../types/schemas/GitHubSchemas.js'
-import { GithubPublicAccount, isGithubPublicAccount } from '../../types/GithubPublicAccount.js'
 import { crawlPushes } from './crawlPushes.js'
 import { crawlWorkflows } from './crawlWorkflows.js'
 import { logger } from '../../../util/logging.js'
 import { dateTimeAddHours } from '../../../util/dateAndTime.js'
 import { processRawRunEvents } from '../githubWorkflowRunEvent.js'
-import { GitHubInstallation, GitHubRepoSummary, GitHubWorkflowSummary } from '../../../types/GitHubTypes.js'
+import {
+  GitHubInstallation,
+  GitHubPublicAccount,
+  GitHubRepoSummary,
+  GitHubWorkflowSummary
+} from '../../../types/GitHubTypes.js'
+import { isGitHubPublicAccount } from '../../../types/GitHubTypeChecks.js'
 
 export async function crawlAccountContents(
   appState: AppState,
   githubClient: GithubInstallationClient,
-  account: GithubPublicAccount | GitHubInstallation,
+  account: GitHubPublicAccount | GitHubInstallation,
   lookbackHours: number
 ) {
   logger.info(`Crawling account contents of ${account.accountName}`)
   const rawRepos =
     account.accountType === ORGANIZATION_ACCOUNT_TYPE
       ? await githubClient.listOrganizationRepositories(account.accountName)
-      : isGithubPublicAccount(account)
+      : isGitHubPublicAccount(account)
         ? await githubClient.listPublicRepositoriesForUser(account.accountName)
         : await githubClient.listInstallationRepositories()
 
