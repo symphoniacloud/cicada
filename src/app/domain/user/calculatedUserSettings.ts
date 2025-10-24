@@ -1,13 +1,11 @@
-import {
-  CalculatedGithubAccountSettings,
-  CalculatedGithubRepoSettings,
-  CalculatedUserSettings,
-  CalculatedVisibleAndNotifyConfigurable
-} from '../types/UserSettings.js'
 import { objectMap } from '../../util/collections.js'
 import { AppState } from '../../environment/AppState.js'
 import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings.js'
 import {
+  CalculatedGithubAccountSettings,
+  CalculatedGithubRepoSettings,
+  CalculatedUserSettings,
+  CalculatedVisibleAndNotifyConfigurable,
   GithubAccountStructure,
   GithubRepoStructure,
   UserScopeReferenceData

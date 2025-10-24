@@ -1,13 +1,3 @@
-import {
-  CalculatedGithubAccountSettings,
-  CalculatedGithubRepoSettings,
-  CalculatedGithubWorkflowSettings,
-  CalculatedUserSettings,
-  DisplayableGithubAccountSettings,
-  DisplayableGithubRepoSettings,
-  DisplayableGithubWorkflowSettings,
-  DisplayableUserSettings
-} from '../types/UserSettings.js'
 import { calculateUserSettings } from './calculatedUserSettings.js'
 import { AppState } from '../../environment/AppState.js'
 import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings.js'
@@ -24,6 +14,14 @@ import {
   GitHubWorkflowSummary
 } from '../../ioTypes/GitHubTypes.js'
 import {
+  CalculatedGithubAccountSettings,
+  CalculatedGithubRepoSettings,
+  CalculatedGithubWorkflowSettings,
+  CalculatedUserSettings,
+  DisplayableGithubAccountSettings,
+  DisplayableGithubRepoSettings,
+  DisplayableGithubWorkflowSettings,
+  DisplayableUserSettings,
   GithubAccountStructure,
   GithubRepoStructure,
   UserScopeReferenceData

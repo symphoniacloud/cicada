@@ -5,7 +5,6 @@ import {
   calculateSettings,
   calculateUserSettings
 } from '../../../../../src/app/domain/user/calculatedUserSettings.js'
-import { CalculatedVisibleAndNotifyConfigurable } from '../../../../../src/app/domain/types/UserSettings.js'
 import {
   buildAccountStructure,
   buildUserScopedRefData,
@@ -17,6 +16,7 @@ import {
   PersistedGithubAccountSettings,
   PersistedVisibleAndNotifyConfigurable
 } from '../../../../../src/app/ioTypes/UserSettingsSchemasAndTypes.js'
+import { CalculatedVisibleAndNotifyConfigurable } from '../../../../../src/app/domain/types/internalTypes.js'
 
 test('calculateVisibleAndNotifyConfigurable / calculateWorkflowSettings', () => {
   const permutations: [
