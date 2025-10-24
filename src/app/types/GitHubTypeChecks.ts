@@ -15,6 +15,7 @@ import {
   GitHubUserKeySchema,
   GitHubUserSchema,
   GitHubUserSummarySchema,
+  GitHubUserTokenSchema,
   GitHubWorkflowIdSchema,
   GitHubWorkflowKeySchema,
   GitHubWorkflowRunIdSchema,
@@ -37,6 +38,7 @@ import {
   GitHubUserId,
   GitHubUserKey,
   GitHubUserSummary,
+  GitHubUserToken,
   GitHubWorkflowId,
   GitHubWorkflowKey,
   GitHubWorkflowRunId,
@@ -123,4 +125,8 @@ export function isGitHubPublicAccount(x: unknown): x is GitHubPublicAccount {
 
 export function isGitHubUser(x: unknown): x is GitHubUser {
   return GitHubUserSchema.safeParse(x).success
+}
+
+export function isGithubUserToken(x: unknown): x is GitHubUserToken {
+  return GitHubUserTokenSchema.safeParse(x).success
 }

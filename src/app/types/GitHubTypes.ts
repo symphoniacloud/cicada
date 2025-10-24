@@ -17,6 +17,7 @@ import {
   GitHubUserKeySchema,
   GitHubUserSchema,
   GitHubUserSummarySchema,
+  GitHubUserTokenSchema,
   GitHubWorkflowIdSchema,
   GitHubWorkflowKeySchema,
   GitHubWorkflowRunIdSchema,
@@ -62,3 +63,5 @@ export type GitHubInstallation = z.infer<typeof GitHubInstallationSchema>
 export type GitHubPublicAccount = z.infer<typeof GitHubPublicAccountSchema>
 
 export type GitHubUser = z.infer<typeof GitHubUserSchema>
+
+export type GitHubUserToken = z.infer<typeof GitHubUserTokenSchema>

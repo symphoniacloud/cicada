@@ -134,3 +134,9 @@ export const GitHubUserSchema = z.object({
   htmlUrl: z.string(),
   url: z.string()
 })
+
+export const GitHubUserTokenSchema = z.object({
+  ...GitHubUserSummarySchema.unwrap().shape,
+  token: z.string(),
+  nextCheckTime: z.int().positive()
+})

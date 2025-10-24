@@ -1,19 +1,20 @@
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
 import { GITHUB_USER_TOKEN } from '../entityTypes.js'
-import { GithubUserToken, isGithubUserToken } from '../../types/GithubUserToken.js'
 import { cicadaEntityFromPkOnlyEntity } from '../entityStoreEntitySupport.js'
+import { GitHubUserToken } from '../../../types/GitHubTypes.js'
+import { isGithubUserToken } from '../../../types/GitHubTypeChecks.js'
 
 const GithubUserTokenEntity = cicadaEntityFromPkOnlyEntity({
   type: GITHUB_USER_TOKEN,
   parse: typePredicateParser(isGithubUserToken, GITHUB_USER_TOKEN),
-  pk(source: Pick<GithubUserToken, 'token'>) {
+  pk(source: Pick<GitHubUserToken, 'token'>) {
     return `USER_TOKEN#${source.token}`
   }
 })
 
 export async function putGithubUserToken(
   entityStore: AllEntitiesStore,
-  userToken: GithubUserToken,
+  userToken: GitHubUserToken,
   ttlInFutureDays: number
 ) {
   return await store(entityStore).put(userToken, { ttlInFutureDays })
