@@ -42,7 +42,3 @@ export type PersistedGithubRepoSettings = z.infer<typeof PersistedGithubRepoSett
 export type PersistedGithubWorkflowSettings = z.infer<typeof PersistedGithubWorkflowSettingsSchema>
 
 export type PersistedUserSettings = z.infer<typeof PersistedUserSettingsSchema>
-
-export function isUserSettings(x: unknown): x is PersistedUserSettings {
-  return PersistedUserSettingsSchema.safeParse(x).success
-}

@@ -6,11 +6,9 @@ import {
   GitHubInstallationIdSchema,
   GitHubInstallationSchema,
   GitHubPublicAccountSchema,
-  GithubPushSchema,
   GitHubRepoIdSchema,
   GitHubUserIdSchema,
   GitHubWorkflowIdSchema,
-  GitHubWorkflowRunEventSchema,
   GitHubWorkflowRunIdSchema
 } from './GitHubSchemas.js'
 import {
@@ -21,11 +19,9 @@ import {
   GitHubInstallation,
   GitHubInstallationId,
   GitHubPublicAccount,
-  GitHubPush,
   GitHubRepoId,
   GitHubUserId,
   GitHubWorkflowId,
-  GitHubWorkflowRunEvent,
   GitHubWorkflowRunId
 } from './GitHubTypes.js'
 
@@ -73,12 +69,4 @@ export function isGithubInstallation(x: unknown): x is GitHubInstallation {
 
 export function isGitHubPublicAccount(x: unknown): x is GitHubPublicAccount {
   return GitHubPublicAccountSchema.safeParse(x).success
-}
-
-export function isGitHubWorkflowRunEvent(x: unknown): x is GitHubWorkflowRunEvent {
-  return GitHubWorkflowRunEventSchema.safeParse(x).success
-}
-
-export function isGitHubPush(x: unknown): x is GitHubPush {
-  return GithubPushSchema.safeParse(x).success
 }

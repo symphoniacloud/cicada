@@ -7,7 +7,7 @@ import {
 } from '../entityStore/entities/WebPushSubscriptionEntity.js'
 
 import { GitHubUserId } from '../../ioTypes/GitHubTypes.js'
-import { isWebPushSubscription, WebPushSubscription } from '../../ioTypes/WebPushSchemasAndTypes.js'
+import { WebPushSubscriptionSchema } from '../../ioTypes/WebPushSchemasAndTypes.js'
 
 export async function registerSubscription(
   appState: AppState,
@@ -16,17 +16,19 @@ export async function registerSubscription(
   rawSubscription: string
 ) {
   logger.debug(`Registering new web push subscription for ${userId}`)
-  const webPushSubscription: WebPushSubscription = {
+
+  const webPushSubscriptionParseResult = WebPushSubscriptionSchema.safeParse({
     userName,
     userId,
     ...JSON.parse(rawSubscription)
-  }
-  if (!isWebPushSubscription(webPushSubscription)) {
+  })
+
+  if (!webPushSubscriptionParseResult.success) {
     logger.warn('Received invalid web push subscription', { rawSubscription })
     return failedWith('invalid event format')
   }
 
-  await putWebPushSubscription(appState.entityStore, webPushSubscription)
+  await putWebPushSubscription(appState.entityStore, webPushSubscriptionParseResult.data)
   return emptySuccess
 }
 
