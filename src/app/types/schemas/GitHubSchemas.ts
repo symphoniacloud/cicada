@@ -76,33 +76,47 @@ export const USER_ACCOUNT_TYPE = 'user'
 
 export const GitHubAccountTypeSchema = z.literal([ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE])
 
-export const GitHubAccountSummarySchema = z.object({
-  ...GitHubAccountKeySchema.unwrap().shape,
-  accountName: z.string(),
-  accountType: GitHubAccountTypeSchema
-})
+export const GitHubAccountSummarySchema = z
+  .object({
+    ...GitHubAccountKeySchema.unwrap().shape,
+    accountName: z.string(),
+    accountType: GitHubAccountTypeSchema
+  })
+  .readonly()
 
-export const GitHubRepoSummarySchema = z.object({
-  ...GitHubRepoKeySchema.unwrap().shape,
-  ...GitHubAccountSummarySchema.shape,
-  repoName: z.string()
-})
+export const GitHubRepoSummarySchema = z
+  .object({
+    ...GitHubRepoKeySchema.unwrap().shape,
+    ...GitHubAccountSummarySchema.unwrap().shape,
+    repoName: z.string()
+  })
+  .readonly()
 
-export const GitHubWorkflowSummarySchema = z.object({
-  ...GitHubWorkflowKeySchema.unwrap().shape,
-  ...GitHubRepoSummarySchema.shape,
-  workflowName: z.string()
-})
+export const GitHubWorkflowSummarySchema = z
+  .object({
+    ...GitHubWorkflowKeySchema.unwrap().shape,
+    ...GitHubRepoSummarySchema.unwrap().shape,
+    workflowName: z.string()
+  })
+  .readonly()
 
-export const GitHubUserSummarySchema = z.object({
-  ...GitHubUserKeySchema.unwrap().shape,
-  userName: z.string()
-})
+export const GitHubUserSummarySchema = z
+  .object({
+    ...GitHubUserKeySchema.unwrap().shape,
+    userName: z.string()
+  })
+  .readonly()
 
 export const GitHubAccountMembershipSchema = z.object({
   userId: GitHubUserIdSchema,
   accountId: GitHubAccountIdSchema
 })
 
-// export const GitHubInstallationSchema = GithubAccountSummarySchema.extend({
-// })
+export const GitHubInstallationSchema = z
+  .object({
+    ...GitHubAccountSummarySchema.unwrap().shape,
+    installationId: GitHubInstallationIdSchema,
+    appId: GitHubAppIdSchema,
+    appSlug: z.string()
+  })
+  .readonly()

@@ -1,20 +1,20 @@
 import { AppState } from '../../../environment/AppState.js'
-import { GithubInstallation } from '../../types/GithubInstallation.js'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
 import { processRawUsers } from '../githubUser.js'
 import { isSuccess } from '../../../util/structuredResult.js'
 import { ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE } from '../../../types/schemas/GitHubSchemas.js'
+import { GitHubInstallation } from '../../../types/GitHubTypes.js'
 
 export async function crawlUsers(
   appState: AppState,
-  installation: GithubInstallation,
+  installation: GitHubInstallation,
   githubClient: GithubInstallationClient
 ) {
   const latestRawUsers = await readRawUsers(installation, githubClient)
   await processRawUsers(appState, latestRawUsers, installation)
 }
 
-async function readRawUsers(installation: GithubInstallation, githubClient: GithubInstallationClient) {
+async function readRawUsers(installation: GitHubInstallation, githubClient: GithubInstallationClient) {
   if (installation.accountType === ORGANIZATION_ACCOUNT_TYPE) {
     return await githubClient.listOrganizationMembers(installation.accountName)
   } else if (installation.accountType === USER_ACCOUNT_TYPE) {

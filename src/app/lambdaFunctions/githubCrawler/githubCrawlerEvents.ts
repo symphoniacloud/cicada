@@ -1,4 +1,3 @@
-import { GithubInstallation, isGithubInstallation } from '../../domain/types/GithubInstallation.js'
 import { throwError } from '@symphoniacloud/dynamodb-entity-store'
 import {
   CRAWLABLE_RESOURCES,
@@ -6,8 +5,8 @@ import {
   isCrawlableResource
 } from '../../../multipleContexts/githubCrawler.js'
 import { isNotNullObject } from '../../util/types.js'
-import { isGitHubAccountId } from '../../types/GitHubTypeChecks.js'
-import { GitHubAccountId } from '../../types/GitHubTypes.js'
+import { isGitHubAccountId, isGithubInstallation } from '../../types/GitHubTypeChecks.js'
+import { GitHubAccountId, GitHubInstallation } from '../../types/GitHubTypes.js'
 
 export type CrawlEvent = { resourceType: CrawlableResource }
 
@@ -19,7 +18,7 @@ export type CrawlInstallationsEvent = { resourceType: 'installations' }
 
 export type CrawlInstallationEvent = {
   resourceType: 'installation'
-  installation: GithubInstallation
+  installation: GitHubInstallation
   lookbackDays: number
 }
 
@@ -30,7 +29,7 @@ export type CrawlPublicAccountsEvent = {
 
 export type CrawlPublicAccountEvent = {
   resourceType: 'publicAccount'
-  installation: GithubInstallation
+  installation: GitHubInstallation
   publicAccountId: GitHubAccountId
   lookbackHours: number
 }

@@ -6,6 +6,7 @@ import {
   GitHubAccountTypeSchema,
   GitHubAppIdSchema,
   GitHubInstallationIdSchema,
+  GitHubInstallationSchema,
   GitHubRepoIdSchema,
   GitHubRepoKeySchema,
   GitHubRepoSummarySchema,
@@ -24,6 +25,7 @@ import {
   GitHubAccountSummary,
   GitHubAccountType,
   GitHubAppId,
+  GitHubInstallation,
   GitHubInstallationId,
   GitHubRepoId,
   GitHubRepoKey,
@@ -66,6 +68,7 @@ export function isGitHubAppId(x: unknown): x is GitHubAppId {
 export function isGitHubInstallationId(x: unknown): x is GitHubInstallationId {
   return GitHubInstallationIdSchema.safeParse(x).success
 }
+
 export function isGitHubAccountKey(x: unknown): x is GitHubAccountKey {
   return GitHubAccountKeySchema.safeParse(x).success
 }
@@ -104,4 +107,8 @@ export function isGitHubWorkflowSummary(x: unknown): x is GitHubWorkflowSummary 
 
 export function isGitHubUserSummary(x: unknown): x is GitHubUserSummary {
   return GitHubUserSummarySchema.safeParse(x).success
+}
+
+export function isGithubInstallation(x: unknown): x is GitHubInstallation {
+  return GitHubInstallationSchema.safeParse(x).success
 }
