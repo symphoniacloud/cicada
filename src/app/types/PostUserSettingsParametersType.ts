@@ -1,5 +1,5 @@
 import * as z from 'zod'
-import { GitHubAccountIdSchema, GitHubRepoIdSchema, GitHubWorkflowIdSchema } from './GitHubIdTypes.js'
+import { GitHubAccountIdSchema, GitHubRepoIdSchema, GitHubWorkflowIdSchema } from './schemas/GitHubSchemas.js'
 
 // TODO - readonly here and elsewhere
 

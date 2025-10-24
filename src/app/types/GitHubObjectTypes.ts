@@ -1,4 +1,4 @@
-import { GitHubAccountIdSchema, GitHubUserIdSchema } from './GitHubIdTypes.js'
+import { GitHubAccountIdSchema, GitHubUserIdSchema } from './schemas/GitHubSchemas.js'
 import * as z from 'zod'
 
 export const GitHubAccountMembershipSchema = z.object({

@@ -1,11 +1,4 @@
 import {
-  GITHUB_ACCOUNT_ID_PREFIX,
-  GITHUB_APP_ID_PREFIX,
-  GITHUB_INSTALLATION_ID_PREFIX,
-  GITHUB_REPO_ID_PREFIX,
-  GITHUB_USER_ID_PREFIX,
-  GITHUB_WORKFLOW_ID_PREFIX,
-  GITHUB_WORKFLOW_RUN_ID_PREFIX,
   GitHubAccountId,
   GitHubAppId,
   GitHubInstallationId,
@@ -21,6 +14,15 @@ import {
   isGitHubWorkflowId,
   isGitHubWorkflowRunId
 } from '../../types/GitHubIdTypes.js'
+import {
+  GITHUB_ACCOUNT_ID_PREFIX,
+  GITHUB_APP_ID_PREFIX,
+  GITHUB_INSTALLATION_ID_PREFIX,
+  GITHUB_REPO_ID_PREFIX,
+  GITHUB_USER_ID_PREFIX,
+  GITHUB_WORKFLOW_ID_PREFIX,
+  GITHUB_WORKFLOW_RUN_ID_PREFIX
+} from '../../types/schemas/GitHubSchemas.js'
 
 export function fromRawGitHubAccountId(x: unknown): GitHubAccountId {
   const cicadaGitHubAccountId = `${GITHUB_ACCOUNT_ID_PREFIX}${x}`

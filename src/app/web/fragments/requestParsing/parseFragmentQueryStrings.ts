@@ -3,15 +3,13 @@ import { failedWithResult, Result, successWith } from '../../../util/structuredR
 import { logger } from '../../../util/logging.js'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { invalidRequestResponse } from '../../htmlResponses.js'
-import {
-  GitHubAccountKey,
-  GitHubAccountKeySchema,
-  GitHubRepoKey,
-  GitHubRepoKeySchema,
-  GitHubWorkflowKey,
-  GitHubWorkflowKeySchema
-} from '../../../types/GitHubKeyTypes.js'
+import { GitHubAccountKey, GitHubRepoKey, GitHubWorkflowKey } from '../../../types/GitHubKeyTypes.js'
 import { z } from 'zod'
+import {
+  GitHubAccountKeySchema,
+  GitHubRepoKeySchema,
+  GitHubWorkflowKeySchema
+} from '../../../types/schemas/GitHubSchemas.js'
 
 export function parseAccountKeyFromQueryString(
   event: CicadaAuthorizedAPIEvent
