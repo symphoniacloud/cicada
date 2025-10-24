@@ -8,13 +8,13 @@ import { getUnarchivedRepositoriesForAccount, narrowToRepoSummary, repoKeysEqual
 import { getActiveWorkflowsForAccount } from './githubWorkflow.js'
 import { getPublicAccountsForInstallationAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
 import { narrowToAccountSummary } from './githubAccount.js'
-import { GithubRepo } from '../types/GithubRepo.js'
 import { GithubWorkflow } from '../types/GithubWorkflow.js'
 import { getInstalledAccountIdForUser } from './githubMembership.js'
 import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity.js'
 import {
   GitHubAccountId,
   GitHubAccountSummary,
+  GitHubRepo,
   GitHubRepoId,
   GitHubRepoKey,
   GitHubUserId,
@@ -72,7 +72,7 @@ async function loadReposStructure(
   return Object.fromEntries(allRepos.map((repo) => [repo.repoId, buildRepoStructure(repo, allWorkflows)]))
 }
 
-function buildRepoStructure(repo: GithubRepo, allWorkflows: GithubWorkflow[]): GithubRepoStructure {
+function buildRepoStructure(repo: GitHubRepo, allWorkflows: GithubWorkflow[]): GithubRepoStructure {
   return {
     ...narrowToRepoSummary(repo),
     workflows: Object.fromEntries(

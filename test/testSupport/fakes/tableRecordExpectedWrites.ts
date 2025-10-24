@@ -5,7 +5,6 @@ import {
   buildPut
 } from './dynamoDB/fakeDynamoDBInterfaceExpectations.js'
 import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
-import { GithubRepo } from '../../../src/app/domain/types/GithubRepo.js'
 import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
 import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
@@ -14,6 +13,7 @@ import {
   GitHubAccountId,
   GitHubAccountMembership,
   GitHubInstallation,
+  GitHubRepo,
   GitHubUser,
   GitHubUserId
 } from '../../../src/app/types/GitHubTypes.js'
@@ -136,7 +136,7 @@ export function expectedPutLatestGithubWorkflowRunEvent(event: GithubWorkflowRun
   )
 }
 
-export function expectedBatchWriteGithubRepositories(repos: GithubRepo[]) {
+export function expectedBatchWriteGithubRepositories(repos: GitHubRepo[]) {
   return buildBatchWriteForEntity(
     'fakeGithubRepositoriesTable',
     'githubRepository',

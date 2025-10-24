@@ -3,6 +3,7 @@ import {
   GitHubAccountType,
   GitHubInstallation,
   GitHubPublicAccount,
+  GitHubRepo,
   GitHubUser
 } from '../../types/GitHubTypes.js'
 import { isGithubAccountType } from '../../types/GitHubTypeChecks.js'
@@ -11,9 +12,11 @@ import {
   fromRawGitHubAccountId,
   fromRawGithubAppId,
   fromRawGithubInstallationId,
+  fromRawGitHubRepoId,
   fromRawGithubUserId
 } from './toFromRawGitHubIds.js'
 import { RawGithubUser } from './rawGithub/RawGithubUser.js'
+import { RawGithubRepo } from './rawGithub/RawGithubRepo.js'
 
 // TODO - can use zod parsing for this
 
@@ -60,5 +63,29 @@ export function fromRawGithubUser(raw: RawGithubUser): GitHubUser {
     url: raw.url,
     avatarUrl: raw.avatar_url,
     htmlUrl: raw.html_url
+  }
+}
+
+export function fromRawGithubRepo(raw: RawGithubRepo): GitHubRepo {
+  return {
+    accountId: fromRawGitHubAccountId(raw.owner.id),
+    accountName: raw.owner.login,
+    accountType: fromRawAccountType(raw.owner.type),
+    repoId: fromRawGitHubRepoId(raw.id),
+    repoName: raw.name,
+    fullName: raw.full_name,
+    private: raw.private,
+    htmlUrl: raw.html_url,
+    description: raw.description ?? '',
+    fork: raw.fork,
+    url: raw.url,
+    createdAt: raw.created_at,
+    updatedAt: raw.updated_at,
+    pushedAt: raw.pushed_at,
+    homepage: raw.homepage ?? '',
+    archived: raw.archived,
+    disabled: raw.disabled,
+    visibility: raw.visibility,
+    defaultBranch: raw.default_branch
   }
 }

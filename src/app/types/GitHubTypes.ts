@@ -12,6 +12,7 @@ import {
   GitHubPublicAccountSchema,
   GitHubRepoIdSchema,
   GitHubRepoKeySchema,
+  GitHubRepoSchema,
   GitHubRepoSummarySchema,
   GitHubUserIdSchema,
   GitHubUserKeySchema,
@@ -65,3 +66,5 @@ export type GitHubPublicAccount = z.infer<typeof GitHubPublicAccountSchema>
 export type GitHubUser = z.infer<typeof GitHubUserSchema>
 
 export type GitHubUserToken = z.infer<typeof GitHubUserTokenSchema>
+
+export type GitHubRepo = z.infer<typeof GitHubRepoSchema>

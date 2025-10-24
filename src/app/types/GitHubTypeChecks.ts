@@ -10,6 +10,7 @@ import {
   GitHubPublicAccountSchema,
   GitHubRepoIdSchema,
   GitHubRepoKeySchema,
+  GitHubRepoSchema,
   GitHubRepoSummarySchema,
   GitHubUserIdSchema,
   GitHubUserKeySchema,
@@ -31,6 +32,7 @@ import {
   GitHubInstallation,
   GitHubInstallationId,
   GitHubPublicAccount,
+  GitHubRepo,
   GitHubRepoId,
   GitHubRepoKey,
   GitHubRepoSummary,
@@ -129,4 +131,8 @@ export function isGitHubUser(x: unknown): x is GitHubUser {
 
 export function isGithubUserToken(x: unknown): x is GitHubUserToken {
   return GitHubUserTokenSchema.safeParse(x).success
+}
+
+export function isGithubRepo(x: unknown): x is GitHubRepo {
+  return GitHubRepoSchema.safeParse(x).success
 }
