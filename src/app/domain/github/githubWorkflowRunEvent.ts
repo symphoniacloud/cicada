@@ -1,9 +1,4 @@
 import { AppState } from '../../environment/AppState.js'
-import {
-  fromRawGithubWorkflowRunEvent,
-  FullGithubWorkflowRunEvent,
-  GithubWorkflowRunEvent
-} from '../types/GithubWorkflowRunEvent.js'
 import { logger } from '../../util/logging.js'
 import { putWorkflowRunEventIfKeyDoesntExist } from '../entityStore/entities/GithubWorkflowRunEventEntity.js'
 import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport.js'
@@ -17,16 +12,18 @@ import {
   fromRawGitHubRepoId,
   fromRawGitHubWorkflowId
 } from '../types/toFromRawGitHubIds.js'
-import { fromRawAccountType } from '../types/fromRawGitHub.js'
+import { fromRawAccountType, fromRawGithubWorkflowRunEvent } from '../types/fromRawGitHub.js'
 import { crawlOneWorkflow } from './crawler/crawlWorkflows.js'
 import { GithubInstallationClient } from '../../outboundInterfaces/githubInstallationClient.js'
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { getWorkflowFromRefData } from './userScopeReferenceData.js'
 import { throwFunction } from '../../../multipleContexts/errors.js'
 import {
+  FullGitHubWorkflowRunEvent,
   GitHubRepoSummary,
   GitHubUserId,
   GitHubWorkflowKey,
+  GitHubWorkflowRunEvent,
   GitHubWorkflowSummary
 } from '../../types/GitHubTypes.js'
 
@@ -96,7 +93,7 @@ export function fromRawRunEvents(
   return rawRunEvents.map((run) => fromRawGithubWorkflowRunEvent(workflowForRawRunEvent(run), run))
 }
 
-async function saveEvents(appState: AppState, eventsToKeep: GithubWorkflowRunEvent[]) {
+async function saveEvents(appState: AppState, eventsToKeep: GitHubWorkflowRunEvent[]) {
   // TODO - option here for optimization - load existing runEvents for repo (e.g. in time period) and pre-filter unchanged
   return (
     await Promise.all(
@@ -106,17 +103,17 @@ async function saveEvents(appState: AppState, eventsToKeep: GithubWorkflowRunEve
         })
       })
     )
-  ).filter((x): x is GithubWorkflowRunEvent => x !== undefined)
+  ).filter((x): x is GitHubWorkflowRunEvent => x !== undefined)
 }
 
 export async function getRelatedMemberIdsForRunEvent(
   appState: AppState,
-  runEvent: GithubWorkflowRunEvent
+  runEvent: GitHubWorkflowRunEvent
 ): Promise<GitHubUserId[]> {
   return getUserIdsForAccount(appState, runEvent.accountId)
 }
 
-export function runCompleted(event: GithubWorkflowRunEvent) {
+export function runCompleted(event: GitHubWorkflowRunEvent) {
   return event.conclusion !== undefined
 }
 
@@ -124,11 +121,11 @@ export function runCompleted(event: GithubWorkflowRunEvent) {
 // notification code
 export type WorkflowRunStatus = '✅' | '❌' | '⏳'
 
-export function runBasicStatus(event: GithubWorkflowRunEvent): WorkflowRunStatus {
+export function runBasicStatus(event: GitHubWorkflowRunEvent): WorkflowRunStatus {
   return runCompleted(event) ? (event.conclusion === 'success' ? '✅' : '❌') : '⏳'
 }
 
-export function friendlyStatus(event: GithubWorkflowRunEvent) {
+export function friendlyStatus(event: GitHubWorkflowRunEvent) {
   if (runCompleted(event)) {
     const { conclusion } = event
     if (conclusion === 'success') return 'succeeded'
@@ -140,14 +137,14 @@ export function friendlyStatus(event: GithubWorkflowRunEvent) {
   return status ?? 'in progress'
 }
 
-export function elapsedTimeMs(event: GithubWorkflowRunEvent) {
+export function elapsedTimeMs(event: GitHubWorkflowRunEvent) {
   return isoDifferenceMs(event.runEventCreatedAt, event.runEventUpdatedAt)
 }
 
 export function toFullWorkflowRunEvent(
   refData: UserScopeReferenceData,
-  event: GithubWorkflowRunEvent
-): FullGithubWorkflowRunEvent {
+  event: GitHubWorkflowRunEvent
+): FullGitHubWorkflowRunEvent {
   const workflowFromRefData = getWorkflowFromRefData(refData, event)
   if (!workflowFromRefData) throw new Error(`No workflow in ref data for ${JSON.stringify(event)}`)
   return {
@@ -158,11 +155,11 @@ export function toFullWorkflowRunEvent(
 
 export function toFullWorkflowRunEvents(
   refData: UserScopeReferenceData,
-  events: GithubWorkflowRunEvent[]
-): FullGithubWorkflowRunEvent[] {
+  events: GitHubWorkflowRunEvent[]
+): FullGitHubWorkflowRunEvent[] {
   return events.map((e) => toFullWorkflowRunEvent(refData, e))
 }
 
-export function workflowRunEventUpdatedTimestamp(runEvent: GithubWorkflowRunEvent) {
+export function workflowRunEventUpdatedTimestamp(runEvent: GitHubWorkflowRunEvent) {
   return new Date(runEvent.runEventUpdatedAt).getTime()
 }

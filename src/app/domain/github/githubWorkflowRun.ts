@@ -1,5 +1,4 @@
 import { AppState } from '../../environment/AppState.js'
-import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
 import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport.js'
 import { putGithubWorkflowRunfNoKeyExistsOrNewerThanExisting } from '../entityStore/entities/GithubWorkflowRunEntity.js'
 import { saveLatestRunPerWorkflow } from './githubLatestWorkflowRunEvents.js'
@@ -8,20 +7,21 @@ import { workflowRunEventUpdatedTimestamp } from './githubWorkflowRunEvent.js'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
 import { logger } from '../../util/logging.js'
+import { GitHubWorkflowRunEvent } from '../../types/GitHubTypes.js'
 
 // A workflow run is the same as the most recent workflow run event for a given run ID
 export async function saveRuns(
   appState: AppState,
-  events: GithubWorkflowRunEvent[],
+  events: GitHubWorkflowRunEvent[],
   publishNotifications: boolean
 ) {
-  async function saveRun(runEvent: GithubWorkflowRunEvent) {
+  async function saveRun(runEvent: GitHubWorkflowRunEvent) {
     return await executeAndCatchConditionalCheckFailed(async () => {
       return await putGithubWorkflowRunfNoKeyExistsOrNewerThanExisting(appState.entityStore, runEvent)
     })
   }
 
-  const runs: GithubWorkflowRunEvent[] = []
+  const runs: GitHubWorkflowRunEvent[] = []
 
   // We only want to notify for the most recent event per run, so sort events by most recent first
   // Do this sequentially since if we have multiple events for same
@@ -39,7 +39,7 @@ export async function saveRuns(
   if (runs.length === 0) return
   logger.info(`Found ${runs.length} new / updated runs`)
 
-  const latestRunsPerWorkflow: GithubWorkflowRunEvent[] = []
+  const latestRunsPerWorkflow: GitHubWorkflowRunEvent[] = []
   // TODO - need to think about concurrent runs. E.g. if two runs are in progress, one completes, the status is still "in progress"
   // runs is sorted newest first, because of earlier logic in this function
   // Only want to store most recent run per workflows

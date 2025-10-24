@@ -1,7 +1,3 @@
-import {
-  FullGithubWorkflowRunEvent,
-  GithubWorkflowRunEvent
-} from '../../domain/types/GithubWorkflowRunEvent.js'
 import { a, td, tr } from '../hiccough/hiccoughElements.js'
 import { Clock, displayDateTime, durationAsStringFromMs } from '../../util/dateAndTime.js'
 import { githubAnchor } from './genericComponents.js'
@@ -13,6 +9,7 @@ import {
 } from '../../domain/github/githubWorkflowRunEvent.js'
 import { userCell } from './userComponents.js'
 import { removeNullAndUndefined } from '../../util/collections.js'
+import { FullGitHubWorkflowRunEvent, GitHubWorkflowRunEvent } from '../../types/GitHubTypes.js'
 
 export type WorkflowRowOptions = {
   showDescription?: boolean
@@ -27,7 +24,7 @@ const runStatusRowClass: Record<WorkflowRunStatus, string> = {
   '⏳': 'table-warning'
 }
 
-export function workflowRow(clock: Clock, event: FullGithubWorkflowRunEvent, options: WorkflowRowOptions) {
+export function workflowRow(clock: Clock, event: FullGitHubWorkflowRunEvent, options: WorkflowRowOptions) {
   const { showDescription, showRepo, showWorkflow, showElapsed } = {
     showDescription: false,
     showRepo: false,
@@ -57,25 +54,25 @@ export function workflowRow(clock: Clock, event: FullGithubWorkflowRunEvent, opt
   return tr({ class: rowClass }, ...cells)
 }
 
-function description(status: WorkflowRunStatus, event: GithubWorkflowRunEvent) {
+function description(status: WorkflowRunStatus, event: GitHubWorkflowRunEvent) {
   if (status === '✅') return 'Successful Run'
   if (status === '❌') return `Failed Run${descriptionOrMessageSuffix(status, event)}`
   return `In Progress Run${descriptionOrMessageSuffix(status, event)}`
 }
 
-function statusMessage(status: WorkflowRunStatus, event: GithubWorkflowRunEvent) {
+function statusMessage(status: WorkflowRunStatus, event: GitHubWorkflowRunEvent) {
   if (status === '✅') return 'Success'
   if (status === '❌') return `Failure${descriptionOrMessageSuffix(status, event)}`
   return `In Progress${descriptionOrMessageSuffix(status, event)}`
 }
 
-function descriptionOrMessageSuffix(status: WorkflowRunStatus, event: GithubWorkflowRunEvent) {
+function descriptionOrMessageSuffix(status: WorkflowRunStatus, event: GitHubWorkflowRunEvent) {
   if (status === '✅') return ''
   if (status === '❌') return event.conclusion === 'failure' ? '' : ` (${event.conclusion})`
   return event.status === 'in_progress' ? '' : ` (${event.status})`
 }
 
-function workflowCell(event: FullGithubWorkflowRunEvent) {
+function workflowCell(event: FullGitHubWorkflowRunEvent) {
   return td(
     a(
       `/workflow?accountId=${event.accountId}&repoId=${event.repoId}&workflowId=${event.workflowId}`,

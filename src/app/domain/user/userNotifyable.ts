@@ -3,14 +3,18 @@ import { logger } from '../../util/logging.js'
 import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings.js'
 
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
-import { GithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
-import { GitHubRepoKey, GitHubUserId, GitHubWorkflowSummary } from '../../types/GitHubTypes.js'
+import {
+  GitHubRepoKey,
+  GitHubUserId,
+  GitHubWorkflowRunEvent,
+  GitHubWorkflowSummary
+} from '../../types/GitHubTypes.js'
 
 export async function filterWorkflowNotifyEnabled(
   appState: AppState,
   refData: UserScopeReferenceData,
   userIds: GitHubUserId[],
-  workflowRun: GithubWorkflowRunEvent
+  workflowRun: GitHubWorkflowRunEvent
 ): Promise<GitHubUserId[]> {
   const enabledUserIds: GitHubUserId[] = []
   for (const userId of userIds) {

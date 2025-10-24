@@ -2,7 +2,6 @@ import { AppState } from '../../environment/AppState.js'
 import { logger } from '../../util/logging.js'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
 import { publishToSubscriptionsForUsers } from './webPushPublisher.js'
-import { GithubWorkflowRunEvent, isGithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
 import {
   friendlyStatus,
   getRelatedMemberIdsForRunEvent,
@@ -15,12 +14,14 @@ import { filterRepoNotifyEnabled, filterWorkflowNotifyEnabled } from '../user/us
 import { loadUserScopeReferenceData } from '../github/userScopeReferenceData.js'
 import { isGithubPush } from '../types/GithubPush.js'
 import { getRelatedMemberIdsForPush } from '../github/githubPush.js'
+import { GitHubWorkflowRunEvent } from '../../types/GitHubTypes.js'
+import { isGitHubWorkflowRunEvent } from '../../types/GitHubTypeChecks.js'
 
 // TOEventually - these are going to create a lot of queries for subscription lookup for large organizations
 // May be better to have one table / index for this.
 
 export async function handleNewWorkflowRunEvent(appState: AppState, eventDetail: unknown) {
-  if (!isCicadaEventBridgeDetail(eventDetail) || !isGithubWorkflowRunEvent(eventDetail.data)) {
+  if (!isCicadaEventBridgeDetail(eventDetail) || !isGitHubWorkflowRunEvent(eventDetail.data)) {
     logger.error(
       `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_WORKFLOW_RUN_EVENT} was not of expected format`,
       { eventDetail }
@@ -43,7 +44,7 @@ export async function handleNewWorkflowRunEvent(appState: AppState, eventDetail:
 }
 
 export function generateRunEventNotification(
-  workflowRunEvent: GithubWorkflowRunEvent
+  workflowRunEvent: GitHubWorkflowRunEvent
 ): CicadaWebNotification {
   const titleIcon = runBasicStatus(workflowRunEvent)
   const bodyStatus = friendlyStatus(workflowRunEvent)

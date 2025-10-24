@@ -19,6 +19,7 @@ import {
   GitHubUserTokenSchema,
   GitHubWorkflowIdSchema,
   GitHubWorkflowKeySchema,
+  GitHubWorkflowRunEventSchema,
   GitHubWorkflowRunIdSchema,
   GitHubWorkflowSchema,
   GitHubWorkflowSummarySchema
@@ -45,6 +46,7 @@ import {
   GitHubWorkflow,
   GitHubWorkflowId,
   GitHubWorkflowKey,
+  GitHubWorkflowRunEvent,
   GitHubWorkflowRunId,
   GitHubWorkflowSummary
 } from './GitHubTypes.js'
@@ -141,4 +143,8 @@ export function isGitHubRepo(x: unknown): x is GitHubRepo {
 
 export function isGitHubWorkflow(x: unknown): x is GitHubWorkflow {
   return GitHubWorkflowSchema.safeParse(x).success
+}
+
+export function isGitHubWorkflowRunEvent(x: unknown): x is GitHubWorkflowRunEvent {
+  return GitHubWorkflowRunEventSchema.safeParse(x).success
 }

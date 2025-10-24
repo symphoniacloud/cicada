@@ -21,6 +21,7 @@ import {
   GitHubUserTokenSchema,
   GitHubWorkflowIdSchema,
   GitHubWorkflowKeySchema,
+  GitHubWorkflowRunEventSchema,
   GitHubWorkflowRunIdSchema,
   GitHubWorkflowSchema,
   GitHubWorkflowSummarySchema
@@ -71,3 +72,7 @@ export type GitHubUserToken = z.infer<typeof GitHubUserTokenSchema>
 export type GitHubRepo = z.infer<typeof GitHubRepoSchema>
 
 export type GitHubWorkflow = z.infer<typeof GitHubWorkflowSchema>
+
+export type GitHubWorkflowRunEvent = z.infer<typeof GitHubWorkflowRunEventSchema>
+
+export interface FullGitHubWorkflowRunEvent extends GitHubWorkflowRunEvent, GitHubWorkflow {}

@@ -1,11 +1,10 @@
 import { mergeOrderedLists } from '../../util/collections.js'
-import { FullGithubWorkflowRunEvent } from '../types/GithubWorkflowRunEvent.js'
 import { GithubPush } from '../types/GithubPush.js'
 import { AppState } from '../../environment/AppState.js'
 import { queryRunsAndPushesForRepo } from '../entityStore/entities/GithubWorkflowRunEntity.js'
 import { toFullWorkflowRunEvent } from './githubWorkflowRunEvent.js'
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
-import { GitHubRepoKey } from '../../types/GitHubTypes.js'
+import { FullGitHubWorkflowRunEvent, GitHubRepoKey } from '../../types/GitHubTypes.js'
 
 // GithubActivity is a domain concept that is only read, not written, since it's
 // only used when runs and pushes are read from the database at the same time.
@@ -14,7 +13,7 @@ export type GithubActivity = FullGithubWorkflowRunEventActivity | GithubPushActi
 
 export interface FullGithubWorkflowRunEventActivity {
   activityType: 'fullWorkflowRunEvent'
-  event: FullGithubWorkflowRunEvent
+  event: FullGitHubWorkflowRunEvent
 }
 
 export interface GithubPushActivity {
@@ -43,7 +42,7 @@ export async function getRecentActivityForRepo(
   )
 }
 
-function fullWorkflowRunEventsToActivities(events: FullGithubWorkflowRunEvent[]): GithubActivity[] {
+function fullWorkflowRunEventsToActivities(events: FullGitHubWorkflowRunEvent[]): GithubActivity[] {
   return events.map((event): GithubActivity => ({ activityType: 'fullWorkflowRunEvent', event }))
 }
 

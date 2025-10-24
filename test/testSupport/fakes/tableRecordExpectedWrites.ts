@@ -5,7 +5,6 @@ import {
   buildPut
 } from './dynamoDB/fakeDynamoDBInterfaceExpectations.js'
 import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
-import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
 import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription.js'
 
 import {
@@ -15,7 +14,8 @@ import {
   GitHubRepo,
   GitHubUser,
   GitHubUserId,
-  GitHubWorkflow
+  GitHubWorkflow,
+  GitHubWorkflowRunEvent
 } from '../../../src/app/types/GitHubTypes.js'
 
 export function expectedPutGithubInstallation(installation: GitHubInstallation) {
@@ -73,7 +73,7 @@ export function expectedPutGithubWorkflow(workflow: GitHubWorkflow) {
   })
 }
 
-export function expectedPutGithubWorkflowRunEvent(event: GithubWorkflowRunEvent) {
+export function expectedPutGithubWorkflowRunEvent(event: GitHubWorkflowRunEvent) {
   return buildPut(
     'fakeGithubRepoActivityTable',
     'githubWorkflowRunEvent',
@@ -90,7 +90,7 @@ export function expectedPutGithubWorkflowRunEvent(event: GithubWorkflowRunEvent)
   )
 }
 
-export function expectedPutGithubWorkflowRun(event: GithubWorkflowRunEvent) {
+export function expectedPutGithubWorkflowRun(event: GitHubWorkflowRunEvent) {
   return buildPut(
     'fakeGithubRepoActivityTable',
     'githubWorkflowRun',
@@ -113,7 +113,7 @@ export function expectedPutGithubWorkflowRun(event: GithubWorkflowRunEvent) {
   )
 }
 
-export function expectedPutLatestGithubWorkflowRunEvent(event: GithubWorkflowRunEvent) {
+export function expectedPutLatestGithubWorkflowRunEvent(event: GitHubWorkflowRunEvent) {
   return buildPut(
     'fakeGithubLatestWorkflowRunsTable',
     'githubLatestWorkflowRunEvent',
