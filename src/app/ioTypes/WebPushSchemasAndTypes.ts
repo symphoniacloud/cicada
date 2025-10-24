@@ -22,7 +22,3 @@ export const WebPushSubscriptionSchema = z.object({
 export type PushSubscription = z.infer<typeof PushSubscriptionSchema>
 
 export type WebPushSubscription = z.infer<typeof WebPushSubscriptionSchema>
-
-export function isWebPushSubscription(x: unknown): x is WebPushSubscription {
-  return WebPushSubscriptionSchema.safeParse(x).success
-}

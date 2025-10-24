@@ -7,20 +7,24 @@ import {
   getRelatedMemberIdsForRunEvent,
   runBasicStatus
 } from '../github/githubWorkflowRunEvent.js'
-import { isCicadaEventBridgeDetail } from '../../outboundInterfaces/eventBridgeBus.js'
 import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper.js'
 import { filterRepoNotifyEnabled, filterWorkflowNotifyEnabled } from '../user/userNotifyable.js'
 
 import { loadUserScopeReferenceData } from '../github/userScopeReferenceData.js'
 import { getRelatedMemberIdsForPush } from '../github/githubPush.js'
 import { GitHubWorkflowRunEvent } from '../../ioTypes/GitHubTypes.js'
-import { isGitHubPush, isGitHubWorkflowRunEvent } from '../../ioTypes/GitHubTypeChecks.js'
+import {
+  CicadaEventBridgeGitHubPushSchema,
+  CicadaEventBridgeGitHubWorkflowRunEventSchema
+} from '../../ioTypes/EventBridgeTypes.js'
 
 // TOEventually - these are going to create a lot of queries for subscription lookup for large organizations
 // May be better to have one table / index for this.
 
 export async function handleNewWorkflowRunEvent(appState: AppState, eventDetail: unknown) {
-  if (!isCicadaEventBridgeDetail(eventDetail) || !isGitHubWorkflowRunEvent(eventDetail.data)) {
+  const eventBridgePushParse = CicadaEventBridgeGitHubWorkflowRunEventSchema.safeParse(eventDetail)
+
+  if (!eventBridgePushParse.success) {
     logger.error(
       `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_WORKFLOW_RUN_EVENT} was not of expected format`,
       { eventDetail }
@@ -28,7 +32,7 @@ export async function handleNewWorkflowRunEvent(appState: AppState, eventDetail:
     return
   }
 
-  const workflowRunEvent = eventDetail.data
+  const workflowRunEvent = eventBridgePushParse.data.data
   const userIds = await getRelatedMemberIdsForRunEvent(appState, workflowRunEvent)
   if (userIds.length === 0) return
   // TODO - this is a hack to avoid terrible performance - see todo in filterWorkflowNotifyEnabled
@@ -57,7 +61,8 @@ export function generateRunEventNotification(
 }
 
 export async function handleNewPush(appState: AppState, eventDetail: unknown) {
-  if (!isCicadaEventBridgeDetail(eventDetail) || !isGitHubPush(eventDetail.data)) {
+  const eventBridgePushParse = CicadaEventBridgeGitHubPushSchema.safeParse(eventDetail)
+  if (!eventBridgePushParse.success) {
     logger.error(
       `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_PUSH} was not of expected format`,
       { commit: eventDetail }
@@ -65,7 +70,7 @@ export async function handleNewPush(appState: AppState, eventDetail: unknown) {
     return
   }
 
-  const push = eventDetail.data
+  const push = eventBridgePushParse.data.data
   const userIds = await getRelatedMemberIdsForPush(appState, push)
   if (userIds.length === 0) return
   // TODO - this is a hack to avoid terrible performance - see todo in filterWorkflowNotifyEnabled
