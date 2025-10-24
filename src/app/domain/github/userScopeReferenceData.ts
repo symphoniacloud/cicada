@@ -1,9 +1,4 @@
 import { AppState } from '../../environment/AppState.js'
-import {
-  GithubAccountStructure,
-  GithubRepoStructure,
-  UserScopeReferenceData
-} from '../types/UserScopeReferenceData.js'
 import { getUnarchivedRepositoriesForAccount, narrowToRepoSummary, repoKeysEqual } from './githubRepo.js'
 import { getActiveWorkflowsForAccount } from './githubWorkflow.js'
 import { getPublicAccountsForInstallationAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
@@ -20,6 +15,11 @@ import {
   GitHubWorkflow,
   GitHubWorkflowKey
 } from '../../ioTypes/GitHubTypes.js'
+import {
+  GithubAccountStructure,
+  GithubRepoStructure,
+  UserScopeReferenceData
+} from '../types/internalTypes.js'
 
 export async function loadUserScopeReferenceData(
   appState: AppState,

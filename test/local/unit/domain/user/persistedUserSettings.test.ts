@@ -4,13 +4,13 @@ import {
   repoUpdater,
   workflowUpdater
 } from '../../../../../src/app/domain/user/persistedUserSettings.js'
-import { PersistedUserSettings } from '../../../../../src/app/domain/types/UserSettings.js'
 import {
   fromRawGitHubAccountId,
   fromRawGitHubRepoId,
   fromRawGithubUserId,
   fromRawGitHubWorkflowId
 } from '../../../../../src/app/domain/types/toFromRawGitHubIds.js'
+import { PersistedUserSettings } from '../../../../../src/app/ioTypes/UserSettingsSchemasAndTypes.js'
 
 function emptySettings(rawUserId: number): PersistedUserSettings {
   return {

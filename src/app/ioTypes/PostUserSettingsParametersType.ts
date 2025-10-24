@@ -1,10 +1,10 @@
 import * as z from 'zod'
 import { GitHubAccountIdSchema, GitHubRepoIdSchema, GitHubWorkflowIdSchema } from './GitHubSchemas.js'
 
-// TODO - readonly here and elsewhere
-
-// TODO - move this and remove from UserSettings.ts
+// TODO - Should these be here?
 export const UserSettingSchema = z.literal(['visible', 'notify'])
+
+export type UserSetting = z.infer<typeof UserSettingSchema>
 
 export const PostUserSettingsParametersSchema = z.object({
   accountId: GitHubAccountIdSchema,

@@ -15,7 +15,6 @@ import {
 import { fromRawAccountType, fromRawGithubWorkflowRunEvent } from '../types/fromRawGitHub.js'
 import { crawlOneWorkflow } from './crawler/crawlWorkflows.js'
 import { GithubInstallationClient } from '../../outboundInterfaces/githubInstallationClient.js'
-import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { getWorkflowFromRefData } from './userScopeReferenceData.js'
 import { throwFunction } from '../../../multipleContexts/errors.js'
 import {
@@ -25,7 +24,7 @@ import {
   GitHubWorkflowRunEvent,
   GitHubWorkflowSummary
 } from '../../ioTypes/GitHubTypes.js'
-import { FullGitHubWorkflowRunEvent } from '../types/internalTypes.js'
+import { FullGitHubWorkflowRunEvent, UserScopeReferenceData } from '../types/internalTypes.js'
 
 export async function processRawRunEvent(
   appState: AppState,
