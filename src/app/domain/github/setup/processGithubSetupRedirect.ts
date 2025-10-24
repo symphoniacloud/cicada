@@ -10,11 +10,12 @@ import {
   SsmParamName
 } from '../../../../multipleContexts/ssmParams.js'
 import { logger } from '../../../util/logging.js'
-import { fromRawAccountType, ORGANIZATION_ACCOUNT_TYPE } from '../../types/GithubAccountType.js'
+import { fromRawAccountType } from '../../types/GithubAccountType.js'
 import { a, p } from '../../../web/hiccough/hiccoughElements.js'
 import { fromRawGithubAppId } from '../../types/toFromRawGitHubIds.js'
 
 import { GitHubAppId } from '../../../types/GitHubTypes.js'
+import { ORGANIZATION_ACCOUNT_TYPE } from '../../../types/schemas/GitHubSchemas.js'
 
 export const setupRedirectRoute: Route<APIGatewayProxyEvent, GithubSetupAppState> = {
   path: '/github/setup/redirect',

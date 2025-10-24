@@ -32,13 +32,17 @@ export function parseWorkflowKeyFromQueryString(
 export function parsePartialRepoKeyFromQueryString(
   event: CicadaAuthorizedAPIEvent
 ): Result<Partial<GitHubRepoKey>, APIGatewayProxyResult> {
-  return parsePartialQueryStringWithSchema(event, GitHubRepoKeySchema, 'parsePartialRepoCoordinates')
+  return parsePartialQueryStringWithSchema(event, GitHubRepoKeySchema.unwrap(), 'parsePartialRepoCoordinates')
 }
 
 export function parsePartialWorkflowKeyFromQueryString(
   event: CicadaAuthorizedAPIEvent
 ): Result<Partial<GitHubWorkflowKey>, APIGatewayProxyResult> {
-  return parsePartialQueryStringWithSchema(event, GitHubWorkflowKeySchema, 'parsePartialWorkflowCoordinates')
+  return parsePartialQueryStringWithSchema(
+    event,
+    GitHubWorkflowKeySchema.unwrap(),
+    'parsePartialWorkflowCoordinates'
+  )
 }
 
 function parseQueryStringWithSchema<T extends z.ZodTypeAny>(

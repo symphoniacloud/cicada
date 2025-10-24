@@ -4,10 +4,7 @@ import {
   GithubRepoStructure,
   UserScopeReferenceData
 } from '../../../src/app/domain/types/UserScopeReferenceData.js'
-import {
-  GithubAccountType,
-  ORGANIZATION_ACCOUNT_TYPE
-} from '../../../src/app/domain/types/GithubAccountType.js'
+import { GithubAccountType } from '../../../src/app/domain/types/GithubAccountType.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 import {
   fromRawGitHubAccountId,
@@ -15,6 +12,7 @@ import {
   fromRawGithubUserId,
   fromRawGitHubWorkflowId
 } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
+import { ORGANIZATION_ACCOUNT_TYPE } from '../../../src/app/types/schemas/GitHubSchemas.js'
 
 export interface BuildAccountSummaryOptions {
   simpleAccountId?: number
