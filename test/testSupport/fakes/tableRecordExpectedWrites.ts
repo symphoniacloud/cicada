@@ -4,13 +4,13 @@ import {
   buildDelete,
   buildPut
 } from './dynamoDB/fakeDynamoDBInterfaceExpectations.js'
-import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription.js'
 
 import {
   GitHubAccountId,
   GitHubAccountMembership,
   GitHubInstallation,
+  GitHubPush,
   GitHubRepo,
   GitHubUser,
   GitHubUserId,
@@ -25,7 +25,7 @@ export function expectedPutGithubInstallation(installation: GitHubInstallation) 
   })
 }
 
-export function expectedPutGithubPush(push: GithubPush) {
+export function expectedPutGithubPush(push: GitHubPush) {
   return buildPut(
     'fakeGithubRepoActivityTable',
     'githubPush',
@@ -42,7 +42,7 @@ export function expectedPutGithubPush(push: GithubPush) {
   )
 }
 
-export function expectedPutLatestGithubPush(push: GithubPush) {
+export function expectedPutLatestGithubPush(push: GitHubPush) {
   return buildPut(
     'fakeGithubLatestPushesPerRefTable',
     'githubLatestPushPerRef',

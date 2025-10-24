@@ -1,7 +1,6 @@
 import { Clock } from '../../../util/dateAndTime.js'
 import { fragmentViewResult } from '../../viewResultWrappers.js'
 import { standardTable } from '../../domainComponents/genericComponents.js'
-import { GithubPush } from '../../../domain/types/GithubPush.js'
 import { pushRow, PushRowOptions } from '../../domainComponents/pushComponents.js'
 import { activityIsFullWorkflowRunActivity } from '../../../domain/github/githubActivity.js'
 import { HiccoughElement } from '../../hiccough/hiccoughElement.js'
@@ -12,7 +11,7 @@ import {
   VisiblePushes,
   VisibleFullWorkflowRunEvents
 } from '../../../domain/user/userVisible.js'
-import { FullGitHubWorkflowRunEvent } from '../../../types/GitHubTypes.js'
+import { FullGitHubWorkflowRunEvent, GitHubPush } from '../../../types/GitHubTypes.js'
 
 export type WorkflowRunEventTableType = 'homeStatus' | 'accountStatus' | 'repoStatus' | 'workflowActivity'
 export type GithubPushTableType = 'homeActivity' | 'accountActivity'
@@ -107,6 +106,6 @@ const pushRowConfig: Record<PushRowMode, PushRowOptions> = {
   repoActivity: { showDescription: true, showRepo: false }
 }
 
-export function pushRowForMode(mode: PushRowMode, clock: Clock, push: GithubPush) {
+export function pushRowForMode(mode: PushRowMode, clock: Clock, push: GitHubPush) {
   return pushRow(clock, push, pushRowConfig[mode])
 }

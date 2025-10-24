@@ -7,10 +7,10 @@ import {
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { domainObjectsFromMultipleEventEntityResponse } from '../entityStoreOperationSupport.js'
 import { GithubPushEntity } from './GithubPushEntity.js'
-import { GithubPush } from '../../types/GithubPush.js'
 
 import {
   GitHubAccountKey,
+  GitHubPush,
   GitHubRepoId,
   GitHubRepoKey,
   GitHubWorkflowRunEvent
@@ -81,7 +81,7 @@ export async function queryRunsAndPushesForRepo(
   repoKey: GitHubRepoKey
 ): Promise<{
   runs: GitHubWorkflowRunEvent[]
-  pushes: GithubPush[]
+  pushes: GitHubPush[]
 }> {
   const result = await entityStore
     // Workflow Run *events* (GithubWorkflowRunEventEntity) will also be returned by the DynamoDB query,

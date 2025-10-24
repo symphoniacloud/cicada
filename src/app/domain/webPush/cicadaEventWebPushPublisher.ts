@@ -12,10 +12,9 @@ import { CicadaWebNotification } from '../../outboundInterfaces/webPushWrapper.j
 import { filterRepoNotifyEnabled, filterWorkflowNotifyEnabled } from '../user/userNotifyable.js'
 
 import { loadUserScopeReferenceData } from '../github/userScopeReferenceData.js'
-import { isGithubPush } from '../types/GithubPush.js'
 import { getRelatedMemberIdsForPush } from '../github/githubPush.js'
 import { GitHubWorkflowRunEvent } from '../../types/GitHubTypes.js'
-import { isGitHubWorkflowRunEvent } from '../../types/GitHubTypeChecks.js'
+import { isGitHubPush, isGitHubWorkflowRunEvent } from '../../types/GitHubTypeChecks.js'
 
 // TOEventually - these are going to create a lot of queries for subscription lookup for large organizations
 // May be better to have one table / index for this.
@@ -58,7 +57,7 @@ export function generateRunEventNotification(
 }
 
 export async function handleNewPush(appState: AppState, eventDetail: unknown) {
-  if (!isCicadaEventBridgeDetail(eventDetail) || !isGithubPush(eventDetail.data)) {
+  if (!isCicadaEventBridgeDetail(eventDetail) || !isGitHubPush(eventDetail.data)) {
     logger.error(
       `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_PUSH} was not of expected format`,
       { commit: eventDetail }

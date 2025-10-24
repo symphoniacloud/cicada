@@ -1,5 +1,4 @@
 import { AppState } from '../../environment/AppState.js'
-import { GithubPush } from '../types/GithubPush.js'
 import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport.js'
 import {
   putPushIfNoKeyExistsOrNewerThanExisting,
@@ -7,9 +6,9 @@ import {
 } from '../entityStore/entities/GithubLatestPushPerRefEntity.js'
 import { dateTimeAddDays } from '../../util/dateAndTime.js'
 
-import { GitHubAccountId } from '../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubPush } from '../../types/GitHubTypes.js'
 
-export async function saveLatestPushes(appState: AppState, newPushes: GithubPush[]) {
+export async function saveLatestPushes(appState: AppState, newPushes: GitHubPush[]) {
   for (const newPush of newPushes) {
     await executeAndCatchConditionalCheckFailed(async () => {
       await putPushIfNoKeyExistsOrNewerThanExisting(appState.entityStore, newPush)
@@ -18,7 +17,7 @@ export async function saveLatestPushes(appState: AppState, newPushes: GithubPush
 }
 
 export async function recentActiveBranchesForAccounts(appState: AppState, accountIds: GitHubAccountId[]) {
-  const branches: GithubPush[] = []
+  const branches: GitHubPush[] = []
   for (const accountId of accountIds) {
     branches.push(...(await recentActiveBranches(appState, accountId)))
   }

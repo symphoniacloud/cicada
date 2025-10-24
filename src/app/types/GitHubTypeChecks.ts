@@ -8,6 +8,7 @@ import {
   GitHubInstallationIdSchema,
   GitHubInstallationSchema,
   GitHubPublicAccountSchema,
+  GithubPushSchema,
   GitHubRepoIdSchema,
   GitHubRepoKeySchema,
   GitHubRepoSchema,
@@ -34,6 +35,7 @@ import {
   GitHubInstallation,
   GitHubInstallationId,
   GitHubPublicAccount,
+  GitHubPush,
   GitHubRepo,
   GitHubRepoId,
   GitHubRepoKey,
@@ -147,4 +149,8 @@ export function isGitHubWorkflow(x: unknown): x is GitHubWorkflow {
 
 export function isGitHubWorkflowRunEvent(x: unknown): x is GitHubWorkflowRunEvent {
   return GitHubWorkflowRunEventSchema.safeParse(x).success
+}
+
+export function isGitHubPush(x: unknown): x is GitHubPush {
+  return GithubPushSchema.safeParse(x).success
 }

@@ -3,6 +3,7 @@ import {
   GitHubAccountType,
   GitHubInstallation,
   GitHubPublicAccount,
+  GitHubPush,
   GitHubRepo,
   GitHubRepoSummary,
   GitHubUser,
@@ -26,6 +27,13 @@ import { RawGithubRepo } from './rawGithub/RawGithubRepo.js'
 import { RawGithubWorkflow } from './rawGithub/RawGithubWorkflow.js'
 import { RawGithubWorkflowRunEvent } from './rawGithub/RawGithubWorkflowRunEvent.js'
 import { narrowToWorkflowSummary } from '../github/githubWorkflow.js'
+import {
+  RawGithubAPIPushEventEvent,
+  RawGithubAPIPushEventEventCommit
+} from './rawGithub/RawGithubAPIPushEventEvent.js'
+import { isRawGithubWebhookPush, RawGithubWebhookPushCommit } from './rawGithub/RawGithubWebhookPush.js'
+import { timestampToIso } from '../../util/dateAndTime.js'
+import { logger } from '../../util/logging.js'
 
 // TODO - can use zod parsing for this
 
@@ -151,5 +159,87 @@ export function fromRawGithubWorkflowRunEvent(
           }
         }
       : {})
+  }
+}
+export function fromRawGithubWebhookPush(raw: unknown): GitHubPush | undefined {
+  if (!isRawGithubWebhookPush(raw)) {
+    return undefined
+  }
+
+  return {
+    accountId: fromRawGitHubAccountId(raw.repository.owner.id),
+    accountName: raw.repository.owner.name,
+    accountType: fromRawAccountType(raw.repository.owner.type),
+    repoId: fromRawGitHubRepoId(raw.repository.id),
+    repoName: raw.repository.name,
+    repoUrl: raw.repository.html_url,
+    actor: {
+      userId: fromRawGithubUserId(raw.sender.id),
+      userName: raw.sender.login,
+      avatarUrl: raw.sender.avatar_url
+    },
+    // Use the datetime of the **LAST** commit for the date of this event
+    dateTime: timestampToIso(raw.commits[raw.commits.length - 1].timestamp),
+    ref: raw.ref,
+    before: raw.before,
+    commits: [
+      // Explicitly include first element here to satisfy type
+      fromRawGithubWebhookPushCommit(raw.commits[0]),
+      ...raw.commits.slice(1).map(fromRawGithubWebhookPushCommit)
+    ]
+  }
+}
+
+function fromRawGithubWebhookPushCommit(commit: RawGithubWebhookPushCommit) {
+  return {
+    sha: commit.id,
+    message: commit.message,
+    distinct: commit.distinct,
+    author: {
+      name: commit.author.name,
+      email: commit.author.email
+    }
+  }
+}
+
+export function fromRawGithubPushEventEvent(
+  { accountId, accountName, repoName, repoId, accountType }: GitHubRepoSummary,
+  raw: RawGithubAPIPushEventEvent
+): GitHubPush | undefined {
+  if (raw.payload.commits.length < 1) {
+    logger.warn('RawGithubPushEventEvent with empty payload.commits array', { raw })
+    return undefined
+  }
+
+  return {
+    accountId,
+    accountName,
+    accountType,
+    repoId,
+    repoName,
+    actor: {
+      userId: fromRawGithubUserId(raw.actor.id),
+      userName: raw.actor.login,
+      avatarUrl: raw.actor.avatar_url
+    },
+    dateTime: raw.created_at,
+    ref: raw.payload.ref,
+    before: raw.payload.before,
+    commits: [
+      fromRawGithubPushEventEventCommit(raw.payload.commits[0]),
+      ...raw.payload.commits.slice(1).map(fromRawGithubPushEventEventCommit)
+    ]
+  }
+}
+
+function fromRawGithubPushEventEventCommit(commit: RawGithubAPIPushEventEventCommit) {
+  return {
+    sha: commit.sha,
+    message: commit.message,
+    distinct: commit.distinct,
+    author: {
+      name: commit.author.name,
+      email: commit.author.email
+    }
   }
 }

@@ -1,42 +1,42 @@
 import { GITHUB_LATEST_PUSH_PER_REF } from '../entityTypes.js'
 import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-entity-store'
-import { GithubPush, isGithubPush } from '../../types/GithubPush.js'
 import { rangeWhereSkGreaterThan } from '@symphoniacloud/dynamodb-entity-store'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
-import { GitHubAccountId } from '../../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubPush } from '../../../types/GitHubTypes.js'
+import { isGitHubPush } from '../../../types/GitHubTypeChecks.js'
 
 const GithubLatestPushPerRefEntity: CicadaEntity<
-  GithubPush,
-  Pick<GithubPush, 'accountId'>,
-  Pick<GithubPush, 'repoId' | 'ref'>
+  GitHubPush,
+  Pick<GitHubPush, 'accountId'>,
+  Pick<GitHubPush, 'repoId' | 'ref'>
 > = {
   type: GITHUB_LATEST_PUSH_PER_REF,
-  parse: typePredicateParser(isGithubPush, GITHUB_LATEST_PUSH_PER_REF),
-  pk(source: Pick<GithubPush, 'accountId'>) {
+  parse: typePredicateParser(isGitHubPush, GITHUB_LATEST_PUSH_PER_REF),
+  pk(source: Pick<GitHubPush, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   },
-  sk(source: Pick<GithubPush, 'repoId' | 'ref'>) {
+  sk(source: Pick<GitHubPush, 'repoId' | 'ref'>) {
     return `REPO#${source.repoId}#REF#${source.ref}`
   },
   gsis: {
     gsi1: {
-      pk(source: Pick<GithubPush, 'accountId'>) {
+      pk(source: Pick<GitHubPush, 'accountId'>) {
         return `ACCOUNT#${source.accountId}`
       },
-      sk(source: Pick<GithubPush, 'dateTime'>) {
+      sk(source: Pick<GitHubPush, 'dateTime'>) {
         return generateGsiSK(source)
       }
     }
   }
 }
 
-function generateGsiSK({ dateTime }: Pick<GithubPush, 'dateTime'>) {
+function generateGsiSK({ dateTime }: Pick<GitHubPush, 'dateTime'>) {
   return `DATETIME#${dateTime}`
 }
 
 export async function putPushIfNoKeyExistsOrNewerThanExisting(
   entityStore: AllEntitiesStore,
-  push: GithubPush
+  push: GitHubPush
 ) {
   await store(entityStore).put(push, {
     conditionExpression: 'attribute_not_exists(PK) OR #dateTime < :newDateTime',

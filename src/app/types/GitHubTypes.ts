@@ -10,6 +10,7 @@ import {
   GitHubInstallationIdSchema,
   GitHubInstallationSchema,
   GitHubPublicAccountSchema,
+  GithubPushSchema,
   GitHubRepoIdSchema,
   GitHubRepoKeySchema,
   GitHubRepoSchema,
@@ -75,4 +76,7 @@ export type GitHubWorkflow = z.infer<typeof GitHubWorkflowSchema>
 
 export type GitHubWorkflowRunEvent = z.infer<typeof GitHubWorkflowRunEventSchema>
 
-export interface FullGitHubWorkflowRunEvent extends GitHubWorkflowRunEvent, GitHubWorkflow {}
+export type GitHubPush = z.infer<typeof GithubPushSchema>
+
+// TODO - not an io'ed type, so move elsewhere?
+export type FullGitHubWorkflowRunEvent = GitHubWorkflowRunEvent & GitHubWorkflow

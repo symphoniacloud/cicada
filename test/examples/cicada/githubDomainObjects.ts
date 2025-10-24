@@ -1,4 +1,3 @@
-import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import {
   fromRawGitHubAccountId,
   fromRawGithubInstallationId,
@@ -13,6 +12,7 @@ import {
   GitHubAccountMembership,
   GitHubAccountSummary,
   GitHubInstallation,
+  GitHubPush,
   GitHubRepo,
   GitHubRepoSummary,
   GitHubUser,
@@ -360,7 +360,7 @@ export const fullTestOrgTestRepoOneWorkflowRunThree: FullGitHubWorkflowRunEvent 
   ...testOrgTestRepoOneWorkflowRunThree
 }
 
-export const testPersonalTestRepoPush: GithubPush = {
+export const testPersonalTestRepoPush: GitHubPush = {
   actor: {
     avatarUrl: 'https://avatars.githubusercontent.com/u/162360409?',
     userId: fromRawGithubUserId(162360409),
@@ -387,7 +387,7 @@ export const testPersonalTestRepoPush: GithubPush = {
   repoName: 'personal-test-repo'
 }
 
-export const testOrgTestRepoOnePush: GithubPush = {
+export const testOrgTestRepoOnePush: GitHubPush = {
   actor: {
     avatarUrl: 'https://avatars.githubusercontent.com/u/49635?',
     userId: fromRawGithubUserId(49635),
@@ -414,7 +414,7 @@ export const testOrgTestRepoOnePush: GithubPush = {
   repoName: 'org-test-repo-one'
 }
 
-export const testOrgTestRepoOnePushFC94: GithubPush = {
+export const testOrgTestRepoOnePushFC94: GitHubPush = {
   actor: {
     avatarUrl: 'https://avatars.githubusercontent.com/u/49635?v=4',
     userId: fromRawGithubUserId(49635),
