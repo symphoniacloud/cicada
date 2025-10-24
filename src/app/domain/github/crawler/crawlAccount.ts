@@ -6,13 +6,13 @@ import {
   publishGithubInstallationClientMetrics
 } from '../../../outboundInterfaces/githubInstallationClient.js'
 import { crawlAccountContents } from './crawlAccountContents.js'
-import { GithubPublicAccount, isGithubPublicAccount } from '../../types/GithubPublicAccount.js'
 import {
   getPublicAccount,
   getPublicAccountsForInstallationAccount
 } from '../../entityStore/entities/GithubPublicAccountEntity.js'
 import { getAllInstallations } from '../../entityStore/entities/GithubInstallationEntity.js'
-import { GitHubAccountId, GitHubInstallation } from '../../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubInstallation, GitHubPublicAccount } from '../../../types/GitHubTypes.js'
+import { isGitHubPublicAccount } from '../../../types/GitHubTypeChecks.js'
 
 export async function crawlInstallationAccount(
   appState: AppState,
@@ -60,12 +60,12 @@ export async function crawlPublicAccounts(appState: AppState, lookbackHours: num
 export async function crawlAccount(
   appState: AppState,
   githubClient: GithubInstallationClient,
-  account: GithubPublicAccount | GitHubInstallation,
+  account: GitHubPublicAccount | GitHubInstallation,
   lookbackHours: number
 ) {
   logger.info(`Crawling Account ${account.accountName}`)
   // TODO - crawl users but not memberships for public accounts
-  if (!isGithubPublicAccount(account)) {
+  if (!isGitHubPublicAccount(account)) {
     await crawlUsers(appState, account, githubClient)
   }
   publishGithubInstallationClientMetrics(githubClient)

@@ -1,4 +1,9 @@
-import { GitHubAccountType, GitHubInstallation } from '../../types/GitHubTypes.js'
+import {
+  GitHubAccountId,
+  GitHubAccountType,
+  GitHubInstallation,
+  GitHubPublicAccount
+} from '../../types/GitHubTypes.js'
 import { isGithubAccountType } from '../../types/GitHubTypeChecks.js'
 import { RawGithubInstallation } from './rawGithub/RawGithubInstallation.js'
 import {
@@ -6,6 +11,7 @@ import {
   fromRawGithubAppId,
   fromRawGithubInstallationId
 } from './toFromRawGitHubIds.js'
+import { RawGithubUser } from './rawGithub/RawGithubUser.js'
 
 // TODO - can use zod parsing for this
 
@@ -30,5 +36,17 @@ export function fromRawGithubInstallation(raw: RawGithubInstallation): GitHubIns
     accountName: raw.account.login,
     accountId: fromRawGitHubAccountId(raw.account.id),
     accountType: fromRawAccountType(raw.target_type)
+  }
+}
+
+export function publicAccountFromRawGithubUser(
+  user: RawGithubUser,
+  installationAccountId: GitHubAccountId
+): GitHubPublicAccount {
+  return {
+    accountId: fromRawGitHubAccountId(user.id),
+    accountType: fromRawAccountType(user.type),
+    accountName: user.login,
+    installationAccountId
   }
 }
