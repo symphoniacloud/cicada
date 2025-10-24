@@ -4,8 +4,8 @@ import { latestCommitInPush } from '../../github/githubPush.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkflowRunEntity.js'
 
-import { GitHubAccountId, GitHubPush } from '../../../types/GitHubTypes.js'
-import { isGitHubPush } from '../../../types/GitHubTypeChecks.js'
+import { GitHubAccountId, GitHubPush } from '../../../ioTypes/GitHubTypes.js'
+import { isGitHubPush } from '../../../ioTypes/GitHubTypeChecks.js'
 
 // Exported since also used by GithubWorkflowRunEntity
 export const GithubPushEntity: CicadaEntity<

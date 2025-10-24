@@ -19,7 +19,7 @@ import {
   GitHubUserId,
   GitHubWorkflow,
   GitHubWorkflowKey
-} from '../../types/GitHubTypes.js'
+} from '../../ioTypes/GitHubTypes.js'
 
 export async function loadUserScopeReferenceData(
   appState: AppState,

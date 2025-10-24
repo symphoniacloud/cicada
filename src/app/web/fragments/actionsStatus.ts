@@ -12,7 +12,7 @@ import {
 } from '../../domain/user/userVisible.js'
 import { fragmentPath } from '../routingCommon.js'
 import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData.js'
-import { GitHubAccountId, GitHubRepoKey } from '../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubRepoKey } from '../../ioTypes/GitHubTypes.js'
 
 export const actionsStatusFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('actionsStatus'),

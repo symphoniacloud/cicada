@@ -1,6 +1,6 @@
 import { a, td } from '../hiccough/hiccoughElements.js'
 import { githubAnchor } from './genericComponents.js'
-import { GitHubRepoSummary } from '../../types/GitHubTypes.js'
+import { GitHubRepoSummary } from '../../ioTypes/GitHubTypes.js'
 
 export function repoCell({
   accountId,

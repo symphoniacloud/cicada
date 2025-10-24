@@ -8,7 +8,7 @@ import {
   GitHubUserId,
   GitHubWorkflowRunEvent,
   GitHubWorkflowSummary
-} from '../../types/GitHubTypes.js'
+} from '../../ioTypes/GitHubTypes.js'
 
 export async function filterWorkflowNotifyEnabled(
   appState: AppState,

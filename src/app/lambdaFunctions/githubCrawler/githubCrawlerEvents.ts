@@ -5,8 +5,8 @@ import {
   isCrawlableResource
 } from '../../../multipleContexts/githubCrawler.js'
 import { isNotNullObject } from '../../util/types.js'
-import { isGitHubAccountId, isGithubInstallation } from '../../types/GitHubTypeChecks.js'
-import { GitHubAccountId, GitHubInstallation } from '../../types/GitHubTypes.js'
+import { isGitHubAccountId, isGithubInstallation } from '../../ioTypes/GitHubTypeChecks.js'
+import { GitHubAccountId, GitHubInstallation } from '../../ioTypes/GitHubTypes.js'
 
 export type CrawlEvent = { resourceType: CrawlableResource }
 

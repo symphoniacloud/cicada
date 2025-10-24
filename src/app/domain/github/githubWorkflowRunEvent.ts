@@ -19,13 +19,13 @@ import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { getWorkflowFromRefData } from './userScopeReferenceData.js'
 import { throwFunction } from '../../../multipleContexts/errors.js'
 import {
-  FullGitHubWorkflowRunEvent,
   GitHubRepoSummary,
   GitHubUserId,
   GitHubWorkflowKey,
   GitHubWorkflowRunEvent,
   GitHubWorkflowSummary
-} from '../../types/GitHubTypes.js'
+} from '../../ioTypes/GitHubTypes.js'
+import { FullGitHubWorkflowRunEvent } from '../types/internalTypes.js'
 
 export async function processRawRunEvent(
   appState: AppState,

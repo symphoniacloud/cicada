@@ -4,7 +4,7 @@ import { latestCommitInPush } from '../../domain/github/githubPush.js'
 import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents.js'
 import { userCell } from './userComponents.js'
 import { githubAnchor } from './genericComponents.js'
-import { GitHubPush, GitHubRepoSummary } from '../../types/GitHubTypes.js'
+import { GitHubPush, GitHubRepoSummary } from '../../ioTypes/GitHubTypes.js'
 
 export type PushRowOptions = {
   showDescription: boolean

@@ -1,13 +1,13 @@
 import { AppState } from '../../environment/AppState.js'
 import { logger } from '../../util/logging.js'
-import { isWebPushSubscription, WebPushSubscription } from '../types/WebPushSubscription.js'
 import { emptySuccess, failedWith } from '../../util/structuredResult.js'
 import {
   deleteWebPushSubscription,
   putWebPushSubscription
 } from '../entityStore/entities/WebPushSubscriptionEntity.js'
 
-import { GitHubUserId } from '../../types/GitHubTypes.js'
+import { GitHubUserId } from '../../ioTypes/GitHubTypes.js'
+import { isWebPushSubscription, WebPushSubscription } from '../../ioTypes/WebPushSchemasAndTypes.js'
 
 export async function registerSubscription(
   appState: AppState,

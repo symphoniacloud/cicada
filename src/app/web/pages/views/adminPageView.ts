@@ -4,8 +4,8 @@ import { colAuto } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
 import { standardTable } from '../../domainComponents/genericComponents.js'
 import { adminAddPublicAccountPageRoute } from '../adminAddPublicAccountPage.js'
 import { accountCell } from '../../domainComponents/accountComponents.js'
-import { ORGANIZATION_ACCOUNT_TYPE } from '../../../types/schemas/GitHubSchemas.js'
-import { GitHubAccountSummary } from '../../../types/GitHubTypes.js'
+import { ORGANIZATION_ACCOUNT_TYPE } from '../../../ioTypes/GitHubSchemas.js'
+import { GitHubAccountSummary } from '../../../ioTypes/GitHubTypes.js'
 
 export function createAdminPageResponse(publicAccounts: GitHubAccountSummary[]) {
   return pageViewResponse(

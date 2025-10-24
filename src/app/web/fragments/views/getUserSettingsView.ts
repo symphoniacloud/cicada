@@ -15,7 +15,7 @@ import {
   GitHubRepoKey,
   GitHubWorkflowId,
   GitHubWorkflowKey
-} from '../../../types/GitHubTypes.js'
+} from '../../../ioTypes/GitHubTypes.js'
 
 export function createGetUserSettingsResponse(
   settings: DisplayableUserSettings,

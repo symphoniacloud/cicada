@@ -6,7 +6,7 @@ import { getInstalledAccountIdForUser } from './githubMembership.js'
 import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity.js'
 import { putPublicAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
 
-import { GitHubPublicAccount, GitHubUserId } from '../../types/GitHubTypes.js'
+import { GitHubPublicAccount, GitHubUserId } from '../../ioTypes/GitHubTypes.js'
 import { publicAccountFromRawGithubUser } from '../types/fromRawGitHub.js'
 
 export async function savePublicAccountWithName(

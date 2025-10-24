@@ -6,8 +6,8 @@ import {
 } from '@symphoniacloud/dynamodb-entity-store'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkflowRunEntity.js'
-import { GitHubWorkflowKey, GitHubWorkflowRunEvent } from '../../../types/GitHubTypes.js'
-import { isGitHubWorkflowRunEvent } from '../../../types/GitHubTypeChecks.js'
+import { GitHubWorkflowKey, GitHubWorkflowRunEvent } from '../../../ioTypes/GitHubTypes.js'
+import { isGitHubWorkflowRunEvent } from '../../../ioTypes/GitHubTypeChecks.js'
 
 // We will eventually get several of these per actual run - e.g. started, completed, etc
 // Multiple events per run might have same ID but we differentiate by updated_time and status (this allows for same second multiple events)

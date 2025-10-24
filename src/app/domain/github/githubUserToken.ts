@@ -2,7 +2,7 @@ import { AppState } from '../../environment/AppState.js'
 import { getGithubUserToken, putGithubUserToken } from '../entityStore/entities/GithubUserTokenEntity.js'
 import { secondsTimestampInFutureHours, timestampSecondsIsInPast } from '../../util/dateAndTime.js'
 import { failedWithResult, Result, successWith } from '../../util/structuredResult.js'
-import { GitHubUserToken } from '../../types/GitHubTypes.js'
+import { GitHubUserToken } from '../../ioTypes/GitHubTypes.js'
 
 const EXPIRE_CACHED_GITHUB_TOKENS_HOURS = 1
 

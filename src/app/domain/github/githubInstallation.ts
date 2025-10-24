@@ -6,7 +6,7 @@ import {
 import { logger } from '../../util/logging.js'
 import deepEqual from 'deep-equal'
 import { RawGithubInstallation } from '../types/rawGithub/RawGithubInstallation.js'
-import { GitHubInstallation } from '../../types/GitHubTypes.js'
+import { GitHubInstallation } from '../../ioTypes/GitHubTypes.js'
 import { fromRawGithubInstallation } from '../types/fromRawGitHub.js'
 
 export async function processRawInstallation(appState: AppState, rawInstallation: RawGithubInstallation) {

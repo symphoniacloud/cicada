@@ -9,13 +9,13 @@ import {
   fromRawGithubUserId,
   fromRawGitHubWorkflowId
 } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
-import { ORGANIZATION_ACCOUNT_TYPE } from '../../../src/app/types/schemas/GitHubSchemas.js'
+import { ORGANIZATION_ACCOUNT_TYPE } from '../../../src/app/ioTypes/GitHubSchemas.js'
 import {
   GitHubAccountSummary,
   GitHubAccountType,
   GitHubRepoSummary,
   GitHubWorkflow
-} from '../../../src/app/types/GitHubTypes.js'
+} from '../../../src/app/ioTypes/GitHubTypes.js'
 
 export interface BuildAccountSummaryOptions {
   simpleAccountId?: number

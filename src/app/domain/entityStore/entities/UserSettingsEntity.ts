@@ -3,7 +3,7 @@ import { USER_SETTINGS } from '../entityTypes.js'
 import { isUserSettings, PersistedUserSettings } from '../../types/UserSettings.js'
 import { cicadaEntityFromPkOnlyEntity } from '../entityStoreEntitySupport.js'
 
-import { GitHubUserId } from '../../../types/GitHubTypes.js'
+import { GitHubUserId } from '../../../ioTypes/GitHubTypes.js'
 
 const UserSettingsEntity = cicadaEntityFromPkOnlyEntity({
   type: USER_SETTINGS,

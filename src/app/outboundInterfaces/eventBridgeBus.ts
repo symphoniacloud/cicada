@@ -10,7 +10,7 @@ import {
   GitHubInstallation,
   GitHubPush,
   GitHubWorkflowRunEvent
-} from '../types/GitHubTypes.js'
+} from '../ioTypes/GitHubTypes.js'
 
 export type CicadaEventBridgeData =
   | GitHubPush

@@ -26,7 +26,7 @@ import {
   GitHubWorkflowRunIdSchema,
   GitHubWorkflowSchema,
   GitHubWorkflowSummarySchema
-} from './schemas/GitHubSchemas.js'
+} from './GitHubSchemas.js'
 
 export type GitHubAccountId = z.infer<typeof GitHubAccountIdSchema>
 
@@ -77,6 +77,3 @@ export type GitHubWorkflow = z.infer<typeof GitHubWorkflowSchema>
 export type GitHubWorkflowRunEvent = z.infer<typeof GitHubWorkflowRunEventSchema>
 
 export type GitHubPush = z.infer<typeof GithubPushSchema>
-
-// TODO - not an io'ed type, so move elsewhere?
-export type FullGitHubWorkflowRunEvent = GitHubWorkflowRunEvent & GitHubWorkflow

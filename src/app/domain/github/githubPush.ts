@@ -7,7 +7,7 @@ import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
 import { saveLatestPushes } from './githubLatestPushesPerRef.js'
 import { getUserIdsForAccount } from './githubMembership.js'
 
-import { GitHubPush, GitHubUserId } from '../../types/GitHubTypes.js'
+import { GitHubPush, GitHubUserId } from '../../ioTypes/GitHubTypes.js'
 
 export async function processPushes(appState: AppState, pushes: GitHubPush[], publishNotifications: boolean) {
   if (pushes.length > 0) {

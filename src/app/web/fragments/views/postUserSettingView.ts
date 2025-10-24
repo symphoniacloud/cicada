@@ -5,7 +5,7 @@ import {
   DisplayableGithubRepoSettings,
   DisplayableGithubWorkflowSettings
 } from '../../../domain/types/UserSettings.js'
-import { GitHubAccountId, GitHubRepoKey, GitHubWorkflowKey } from '../../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubRepoKey, GitHubWorkflowKey } from '../../../ioTypes/GitHubTypes.js'
 
 export function createUpdateUserAccountSettingResponse(
   accountId: GitHubAccountId,

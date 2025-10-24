@@ -10,7 +10,7 @@ import { RawGithubUser } from '../domain/types/rawGithub/RawGithubUser.js'
 
 import { toRawGithubAppId } from '../domain/types/toFromRawGitHubIds.js'
 
-import { GitHubInstallationId } from '../types/GitHubTypes.js'
+import { GitHubInstallationId } from '../ioTypes/GitHubTypes.js'
 
 export interface GithubClient {
   clientForInstallation(installationId: GitHubInstallationId): GithubInstallationClient

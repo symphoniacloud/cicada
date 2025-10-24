@@ -11,7 +11,8 @@ import {
   VisiblePushes,
   VisibleFullWorkflowRunEvents
 } from '../../../domain/user/userVisible.js'
-import { FullGitHubWorkflowRunEvent, GitHubPush } from '../../../types/GitHubTypes.js'
+import { GitHubPush } from '../../../ioTypes/GitHubTypes.js'
+import { FullGitHubWorkflowRunEvent } from '../../../domain/types/internalTypes.js'
 
 export type WorkflowRunEventTableType = 'homeStatus' | 'accountStatus' | 'repoStatus' | 'workflowActivity'
 export type GithubPushTableType = 'homeActivity' | 'accountActivity'

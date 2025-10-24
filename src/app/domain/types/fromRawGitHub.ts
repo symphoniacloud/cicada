@@ -10,8 +10,8 @@ import {
   GitHubWorkflow,
   GitHubWorkflowRunEvent,
   GitHubWorkflowSummary
-} from '../../types/GitHubTypes.js'
-import { isGithubAccountType } from '../../types/GitHubTypeChecks.js'
+} from '../../ioTypes/GitHubTypes.js'
+import { isGithubAccountType } from '../../ioTypes/GitHubTypeChecks.js'
 import { RawGithubInstallation } from './rawGithub/RawGithubInstallation.js'
 import {
   fromRawGitHubAccountId,
