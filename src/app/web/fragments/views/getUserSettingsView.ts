@@ -1,11 +1,5 @@
 import { fragmentViewResult } from '../../viewResultWrappers.js'
 import { b, div, h4, input, label } from '../../hiccough/hiccoughElements.js'
-import {
-  DisplayableGithubAccountSettings,
-  DisplayableGithubRepoSettings,
-  DisplayableGithubWorkflowSettings,
-  DisplayableUserSettings
-} from '../../../domain/types/UserSettings.js'
 import { HiccoughElement } from '../../hiccough/hiccoughElement.js'
 import { colSm, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
 import {
@@ -16,6 +10,12 @@ import {
   GitHubWorkflowKey
 } from '../../../ioTypes/GitHubTypes.js'
 import { PersistedVisibleAndNotifyConfigurable } from '../../../ioTypes/UserSettingsSchemasAndTypes.js'
+import {
+  DisplayableGithubAccountSettings,
+  DisplayableGithubRepoSettings,
+  DisplayableGithubWorkflowSettings,
+  DisplayableUserSettings
+} from '../../../domain/types/internalTypes.js'
 
 export function createGetUserSettingsResponse(
   settings: DisplayableUserSettings,

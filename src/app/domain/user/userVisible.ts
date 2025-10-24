@@ -1,7 +1,6 @@
 import { AppState } from '../../environment/AppState.js'
 import { latestWorkflowRunEventsPerWorkflowForAccounts } from '../github/githubLatestWorkflowRunEvents.js'
 import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings.js'
-import { CalculatedUserSettings } from '../types/UserSettings.js'
 import { recentActiveBranchesForAccounts } from '../github/githubLatestPushesPerRef.js'
 import { getRecentActivityForRepo, GithubActivity } from '../github/githubActivity.js'
 import {
@@ -28,7 +27,11 @@ import {
   GitHubWorkflowKey,
   GitHubWorkflowRunEvent
 } from '../../ioTypes/GitHubTypes.js'
-import { FullGitHubWorkflowRunEvent, UserScopeReferenceData } from '../types/internalTypes.js'
+import {
+  CalculatedUserSettings,
+  FullGitHubWorkflowRunEvent,
+  UserScopeReferenceData
+} from '../types/internalTypes.js'
 
 interface UserVisibleObjects<T> {
   allEvents: T[]
