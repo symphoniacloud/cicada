@@ -1,10 +1,11 @@
-import { GithubRepoSummary, GithubWorkflowSummary, isGithubWorkflowSummary } from './GithubSummaries.js'
 import { isStringOrUndefined } from '../../util/types.js'
 import { RawGithubWorkflow } from './rawGithub/RawGithubWorkflow.js'
 
 import { fromRawGitHubWorkflowId } from './toFromRawGitHubIds.js'
+import { GitHubRepoSummary, GitHubWorkflowSummary } from '../../types/GitHubTypes.js'
+import { isGitHubWorkflowSummary } from '../../types/GitHubTypeChecks.js'
 
-export interface GithubWorkflow extends GithubWorkflowSummary {
+export interface GithubWorkflow extends GitHubWorkflowSummary {
   workflowPath: string
   workflowState: string
   workflowUrl: string
@@ -16,7 +17,7 @@ export interface GithubWorkflow extends GithubWorkflowSummary {
 
 export function isGithubWorkflow(x: unknown): x is GithubWorkflow {
   return (
-    isGithubWorkflowSummary(x) &&
+    isGitHubWorkflowSummary(x) &&
     (!('path' in x) || isStringOrUndefined(x.path)) &&
     (!('state' in x) || isStringOrUndefined(x.state)) &&
     (!('url' in x) || isStringOrUndefined(x.url)) &&
@@ -29,7 +30,7 @@ export function isGithubWorkflow(x: unknown): x is GithubWorkflow {
 
 // We store more on a Workflow than we get from the Github API, so workflows can only
 // be stored in the context of a repo
-export function fromRawGithubWorkflow(repo: GithubRepoSummary, raw: RawGithubWorkflow): GithubWorkflow {
+export function fromRawGithubWorkflow(repo: GitHubRepoSummary, raw: RawGithubWorkflow): GithubWorkflow {
   return {
     accountId: repo.accountId,
     accountName: repo.accountName,

@@ -6,14 +6,15 @@ import {
 import { fromRawGithubPushEventEvent, GithubPush } from '../../types/GithubPush.js'
 import { processPushes } from '../githubPush.js'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
-import { GithubRepoSummary } from '../../types/GithubSummaries.js'
+
+import { GitHubRepoSummary } from '../../../types/GitHubTypes.js'
 
 // TOEventually - only get all pushes back to lookback in crawl configuration, however GitHub doesn't keep
 // them around for very long
 export async function crawlPushes(
   appState: AppState,
   // the owner ID on repo isn't sufficient when we are crawling public repos from other accounts
-  repo: GithubRepoSummary,
+  repo: GitHubRepoSummary,
   githubClient: GithubInstallationClient
 ) {
   const allEventsForRepo = await githubClient.listMostRecentEventsForRepo(repo.accountName, repo.repoName)

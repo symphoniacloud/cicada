@@ -1,8 +1,9 @@
 import { a, td } from '../hiccough/hiccoughElements.js'
 import { githubAnchor } from './genericComponents.js'
-import { GithubAccountSummary } from '../../domain/types/GithubSummaries.js'
 
-export function accountCell(account: GithubAccountSummary) {
+import { GitHubAccountSummary } from '../../types/GitHubTypes.js'
+
+export function accountCell(account: GitHubAccountSummary) {
   return td(
     a(`/account?id=${account.accountId}`, account.accountName),
     '&nbsp;',
@@ -10,6 +11,6 @@ export function accountCell(account: GithubAccountSummary) {
   )
 }
 
-export function accountGithubAnchor(account: GithubAccountSummary) {
+export function accountGithubAnchor(account: GitHubAccountSummary) {
   return githubAnchor(`https://github.com/${account.accountName}`)
 }

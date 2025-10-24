@@ -15,7 +15,6 @@ import {
   GithubRepoStructure,
   UserScopeReferenceData
 } from '../types/UserScopeReferenceData.js'
-import { GithubWorkflowSummary } from '../types/GithubSummaries.js'
 import { AppState } from '../../environment/AppState.js'
 import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings.js'
 import {
@@ -24,7 +23,12 @@ import {
   getWorkflowFromRepo
 } from '../github/userScopeReferenceData.js'
 import { logger } from '../../util/logging.js'
-import { GitHubAccountId, GitHubRepoId, GitHubWorkflowId } from '../../types/GitHubTypes.js'
+import {
+  GitHubAccountId,
+  GitHubRepoId,
+  GitHubWorkflowId,
+  GitHubWorkflowSummary
+} from '../../types/GitHubTypes.js'
 
 export async function loadCalculatedAndDisplayableUserSettingsOrUseDefaults(
   appState: AppState,
@@ -112,7 +116,7 @@ export function toDisplayableRepoSettings(
 
 export function toDisplayableWorkflowSettings(
   workflowSettings: CalculatedGithubWorkflowSettings,
-  workflow: GithubWorkflowSummary
+  workflow: GitHubWorkflowSummary
 ) {
   return {
     name: workflow.workflowName,

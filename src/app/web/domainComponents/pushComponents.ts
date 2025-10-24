@@ -4,8 +4,8 @@ import { td, tr } from '../hiccough/hiccoughElements.js'
 import { latestCommitInPush } from '../../domain/github/githubPush.js'
 import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents.js'
 import { userCell } from './userComponents.js'
-import { GithubRepoSummary } from '../../domain/types/GithubSummaries.js'
 import { githubAnchor } from './genericComponents.js'
+import { GitHubRepoSummary } from '../../types/GitHubTypes.js'
 
 export type PushRowOptions = {
   showDescription: boolean
@@ -30,7 +30,7 @@ function repoCellForPush(push: GithubPush) {
   return repoCell({ ...push, repoHtmlUrl: githubRepoUrl(push) })
 }
 
-function branchCell(push: GithubRepoSummary & Pick<GithubPush, 'ref'>) {
+function branchCell(push: GitHubRepoSummary & Pick<GithubPush, 'ref'>) {
   const branchName = push.ref.split('/')[2]
   return td(branchName, `&nbsp;`, githubAnchor(`${githubRepoUrl(push)}/tree/${branchName}`))
 }

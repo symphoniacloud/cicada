@@ -11,7 +11,6 @@ import { RawGithubWorkflowRunEvent } from '../types/rawGithub/RawGithubWorkflowR
 import { getUserIdsForAccount } from './githubMembership.js'
 import { saveRuns } from './githubWorkflowRun.js'
 import { isoDifferenceMs } from '../../util/dateAndTime.js'
-import { GithubRepoSummary, GithubWorkflowSummary } from '../types/GithubSummaries.js'
 import { getWorkflow } from '../entityStore/entities/GithubWorkflowEntity.js'
 import {
   fromRawGitHubAccountId,
@@ -24,7 +23,12 @@ import { GithubInstallationClient } from '../../outboundInterfaces/githubInstall
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { getWorkflowFromRefData } from './userScopeReferenceData.js'
 import { throwFunction } from '../../../multipleContexts/errors.js'
-import { GitHubUserId, GitHubWorkflowKey } from '../../types/GitHubTypes.js'
+import {
+  GitHubRepoSummary,
+  GitHubUserId,
+  GitHubWorkflowKey,
+  GitHubWorkflowSummary
+} from '../../types/GitHubTypes.js'
 
 export async function processRawRunEvent(
   appState: AppState,
@@ -54,7 +58,7 @@ async function readOrLookupWorkflow(
   const loadedWorkflow = await getWorkflow(appState.entityStore, workflowKey)
   if (loadedWorkflow) return loadedWorkflow
 
-  const repoSummary: GithubRepoSummary = {
+  const repoSummary: GitHubRepoSummary = {
     ...workflowKey,
     accountName: rawRunEvent.repository.owner.login,
     accountType: fromRawAccountType(rawRunEvent.repository.owner.type),
@@ -65,7 +69,7 @@ async function readOrLookupWorkflow(
 
 export async function processRawRunEvents(
   appState: AppState,
-  workflows: GithubWorkflowSummary[],
+  workflows: GitHubWorkflowSummary[],
   rawRunEvents: RawGithubWorkflowRunEvent[],
   publishNotifications: boolean
 ) {
@@ -79,7 +83,7 @@ export async function processRawRunEvents(
 }
 
 export function fromRawRunEvents(
-  workflows: GithubWorkflowSummary[],
+  workflows: GitHubWorkflowSummary[],
   rawRunEvents: RawGithubWorkflowRunEvent[]
 ) {
   function workflowForRawRunEvent(run: RawGithubWorkflowRunEvent) {

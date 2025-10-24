@@ -8,8 +8,8 @@ import { crawlPushes } from './crawlPushes.js'
 import { crawlWorkflows } from './crawlWorkflows.js'
 import { logger } from '../../../util/logging.js'
 import { dateTimeAddHours } from '../../../util/dateAndTime.js'
-import { GithubRepoSummary, GithubWorkflowSummary } from '../../types/GithubSummaries.js'
 import { processRawRunEvents } from '../githubWorkflowRunEvent.js'
+import { GitHubRepoSummary, GitHubWorkflowSummary } from '../../../types/GitHubTypes.js'
 
 export async function crawlAccountContents(
   appState: AppState,
@@ -38,7 +38,7 @@ export async function crawlAccountContents(
 export async function crawlRepoContents(
   appState: AppState,
   githubClient: GithubInstallationClient,
-  repo: GithubRepoSummary,
+  repo: GitHubRepoSummary,
   startTime: string
 ) {
   logger.info(`Crawling repo contents of ${repo.accountName}/${repo.repoName}`)
@@ -51,7 +51,7 @@ export async function crawlRepoContents(
 async function crawlRunEvents(
   appState: AppState,
   githubClient: GithubInstallationClient,
-  workflows: GithubWorkflowSummary[],
+  workflows: GitHubWorkflowSummary[],
   startTime: string
 ) {
   if (workflows.length === 0) {

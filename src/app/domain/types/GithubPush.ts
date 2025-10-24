@@ -7,12 +7,13 @@ import {
 import { fromRawAccountType } from './GithubAccountType.js'
 import { NonEmptyArray } from '../../util/collections.js'
 import { timestampToIso } from '../../util/dateAndTime.js'
-import { GithubRepoSummary, GithubUserSummary, isGithubRepoSummary } from './GithubSummaries.js'
 import { fromRawGitHubAccountId, fromRawGitHubRepoId, fromRawGithubUserId } from './toFromRawGitHubIds.js'
+import { GitHubRepoSummary, GitHubUserSummary } from '../../types/GitHubTypes.js'
+import { isGitHubRepoSummary } from '../../types/GitHubTypeChecks.js'
 
 // There's no consistent ID between pushes sourced from Webhooks vs Events, so use combination
 // of owner, repo, ref, and first commit SHA to create a key
-export interface GithubPush extends GithubRepoSummary {
+export interface GithubPush extends GitHubRepoSummary {
   // Repo URL only available from Webhook Push, not API Push
   repoUrl?: string
   actor: GithubPushActor
@@ -23,7 +24,7 @@ export interface GithubPush extends GithubRepoSummary {
   commits: NonEmptyArray<GithubPushCommit>
 }
 
-export interface GithubPushActor extends GithubUserSummary {
+export interface GithubPushActor extends GitHubUserSummary {
   avatarUrl: string
 }
 
@@ -39,7 +40,7 @@ export interface GithubPushCommit {
 
 // TODO - tighten this up
 export function isGithubPush(x: unknown): x is GithubPush {
-  if (!isGithubRepoSummary(x)) return false
+  if (!isGitHubRepoSummary(x)) return false
 
   const candidate = x as GithubPush
   return (
@@ -98,7 +99,7 @@ function fromRawGithubWebhookPushCommit(commit: RawGithubWebhookPushCommit) {
 }
 
 export function fromRawGithubPushEventEvent(
-  { accountId, accountName, repoName, repoId, accountType }: GithubRepoSummary,
+  { accountId, accountName, repoName, repoId, accountType }: GitHubRepoSummary,
   raw: RawGithubAPIPushEventEvent
 ): GithubPush | undefined {
   if (raw.payload.commits.length < 1) {

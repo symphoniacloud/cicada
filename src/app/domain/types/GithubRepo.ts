@@ -1,9 +1,10 @@
 import { RawGithubRepo } from './rawGithub/RawGithubRepo.js'
 import { fromRawAccountType } from './GithubAccountType.js'
-import { GithubRepoSummary, isGithubRepoSummary } from './GithubSummaries.js'
 import { fromRawGitHubAccountId, fromRawGitHubRepoId } from './toFromRawGitHubIds.js'
+import { GitHubRepoSummary } from '../../types/GitHubTypes.js'
+import { isGitHubRepoSummary } from '../../types/GitHubTypeChecks.js'
 
-export interface GithubRepo extends GithubRepoSummary {
+export interface GithubRepo extends GitHubRepoSummary {
   fullName: string
   private: boolean
   htmlUrl: string
@@ -23,7 +24,7 @@ export interface GithubRepo extends GithubRepoSummary {
 export function isGithubRepo(x: unknown): x is GithubRepo {
   const candidate = x as GithubRepo
   return (
-    isGithubRepoSummary(x) &&
+    isGitHubRepoSummary(x) &&
     candidate.fullName !== undefined &&
     candidate.private !== undefined &&
     candidate.htmlUrl !== undefined &&
