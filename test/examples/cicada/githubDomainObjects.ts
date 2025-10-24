@@ -1,4 +1,3 @@
-import { GithubUser } from '../../../src/app/domain/types/GithubUser.js'
 import { GithubRepo } from '../../../src/app/domain/types/GithubRepo.js'
 import {
   FullGithubWorkflowRunEvent,
@@ -21,6 +20,7 @@ import {
   GitHubAccountSummary,
   GitHubInstallation,
   GitHubRepoSummary,
+  GitHubUser,
   GitHubUserId,
   GitHubWorkflowSummary
 } from '../../../src/app/types/GitHubTypes.js'
@@ -62,7 +62,7 @@ export const testTestUserTokenRecord: GithubUserToken = {
   nextCheckTime: 1800000000
 }
 
-export const testTestUser: GithubUser = {
+export const testTestUser: GitHubUser = {
   avatarUrl: 'https://avatars.githubusercontent.com/u/162360409?v=4',
   htmlUrl: 'https://github.com/cicada-test-user',
   userId: fromRawGithubUserId(162360409),
@@ -70,7 +70,7 @@ export const testTestUser: GithubUser = {
   url: 'https://api.github.com/users/cicada-test-user'
 }
 
-export const testMikeRobertsUser: GithubUser = {
+export const testMikeRobertsUser: GitHubUser = {
   avatarUrl: 'https://avatars.githubusercontent.com/u/49635?v=4',
   htmlUrl: 'https://github.com/mikebroberts',
   userId: fromRawGithubUserId(49635),

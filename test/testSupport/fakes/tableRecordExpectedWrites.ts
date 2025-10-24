@@ -7,7 +7,6 @@ import {
 import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import { GithubRepo } from '../../../src/app/domain/types/GithubRepo.js'
 import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
-import { GithubUser } from '../../../src/app/domain/types/GithubUser.js'
 import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription.js'
 import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 
@@ -15,6 +14,7 @@ import {
   GitHubAccountId,
   GitHubAccountMembership,
   GitHubInstallation,
+  GitHubUser,
   GitHubUserId
 } from '../../../src/app/types/GitHubTypes.js'
 
@@ -148,7 +148,7 @@ export function expectedBatchWriteGithubRepositories(repos: GithubRepo[]) {
   )
 }
 
-export function expectedBatchWriteGithubUsers(users: GithubUser[]) {
+export function expectedBatchWriteGithubUsers(users: GitHubUser[]) {
   return buildBatchWriteForEntity(
     'fakeGithubUsersTable',
     'githubUser',

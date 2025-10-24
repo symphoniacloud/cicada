@@ -2,14 +2,16 @@ import {
   GitHubAccountId,
   GitHubAccountType,
   GitHubInstallation,
-  GitHubPublicAccount
+  GitHubPublicAccount,
+  GitHubUser
 } from '../../types/GitHubTypes.js'
 import { isGithubAccountType } from '../../types/GitHubTypeChecks.js'
 import { RawGithubInstallation } from './rawGithub/RawGithubInstallation.js'
 import {
   fromRawGitHubAccountId,
   fromRawGithubAppId,
-  fromRawGithubInstallationId
+  fromRawGithubInstallationId,
+  fromRawGithubUserId
 } from './toFromRawGitHubIds.js'
 import { RawGithubUser } from './rawGithub/RawGithubUser.js'
 
@@ -48,5 +50,15 @@ export function publicAccountFromRawGithubUser(
     accountType: fromRawAccountType(user.type),
     accountName: user.login,
     installationAccountId
+  }
+}
+
+export function fromRawGithubUser(raw: RawGithubUser): GitHubUser {
+  return {
+    userId: fromRawGithubUserId(raw.id),
+    userName: raw.login,
+    url: raw.url,
+    avatarUrl: raw.avatar_url,
+    htmlUrl: raw.html_url
   }
 }

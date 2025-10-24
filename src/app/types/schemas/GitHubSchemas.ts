@@ -127,3 +127,10 @@ export const GitHubPublicAccountSchema = z
     installationAccountId: GitHubAccountIdSchema
   })
   .readonly()
+
+export const GitHubUserSchema = z.object({
+  ...GitHubUserSummarySchema.unwrap().shape,
+  avatarUrl: z.string(),
+  htmlUrl: z.string(),
+  url: z.string()
+})

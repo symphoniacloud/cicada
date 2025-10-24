@@ -1,12 +1,12 @@
 import { AppState } from '../../environment/AppState.js'
 import { batchPutUsers, getUserById } from '../entityStore/entities/GithubUserEntity.js'
-import { fromRawGithubUser } from '../types/GithubUser.js'
 import { RawGithubUser } from '../types/rawGithub/RawGithubUser.js'
 import { isUserAMemberOfAnyInstalledAccount, setMemberships } from './githubMembership.js'
 import { getTokenRecord, saveOrRefreshGithubUserToken } from './githubUserToken.js'
 import { isFailure } from '../../util/structuredResult.js'
 import { fromRawGithubUserId } from '../types/toFromRawGitHubIds.js'
 import { GitHubInstallation } from '../../types/GitHubTypes.js'
+import { fromRawGithubUser } from '../types/fromRawGitHub.js'
 
 export async function processRawUsers(
   appState: AppState,
