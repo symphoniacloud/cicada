@@ -1,36 +1,5 @@
-import { isNotNullObject } from '../../util/types.js'
 import { GitHubAccountId, GitHubRepoId, GitHubUserKey, GitHubWorkflowId } from '../../ioTypes/GitHubTypes.js'
-import { isGitHubUserKey } from '../../ioTypes/GitHubTypeChecks.js'
-
-export type UserSetting = 'visible' | 'notify'
-
-export interface PersistedUserSettings extends GitHubUserKey {
-  github: {
-    accounts: Record<GitHubAccountId, PersistedGithubAccountSettings>
-  }
-}
-
-export function isUserSettings(x: unknown): x is PersistedUserSettings {
-  // TODO - this needs a lot more. Perhaps with AJV?
-  return isGitHubUserKey(x) && 'github' in x && isNotNullObject(x.github) && 'accounts' in x.github
-}
-
-export interface PersistedVisibleAndNotifyConfigurable {
-  visible?: boolean
-  notify?: boolean
-}
-
-export interface PersistedGithubAccountSettings extends PersistedVisibleAndNotifyConfigurable {
-  repos: Record<GitHubRepoId, PersistedGithubRepoSettings>
-}
-
-export interface PersistedGithubRepoSettings extends PersistedVisibleAndNotifyConfigurable {
-  workflows: Record<GitHubWorkflowId, PersistedGithubWorkflowSettings>
-}
-
-export type PersistedGithubWorkflowSettings = PersistedVisibleAndNotifyConfigurable
-
-// ***
+import { PersistedVisibleAndNotifyConfigurable } from '../../ioTypes/UserSettingsSchemasAndTypes.js'
 
 export interface CalculatedUserSettings extends GitHubUserKey {
   github: {

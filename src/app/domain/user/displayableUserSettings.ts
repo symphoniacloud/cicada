@@ -6,15 +6,9 @@ import {
   DisplayableGithubAccountSettings,
   DisplayableGithubRepoSettings,
   DisplayableGithubWorkflowSettings,
-  DisplayableUserSettings,
-  PersistedUserSettings
+  DisplayableUserSettings
 } from '../types/UserSettings.js'
 import { calculateUserSettings } from './calculatedUserSettings.js'
-import {
-  GithubAccountStructure,
-  GithubRepoStructure,
-  UserScopeReferenceData
-} from '../types/UserScopeReferenceData.js'
 import { AppState } from '../../environment/AppState.js'
 import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings.js'
 import {
@@ -29,6 +23,12 @@ import {
   GitHubWorkflowId,
   GitHubWorkflowSummary
 } from '../../ioTypes/GitHubTypes.js'
+import {
+  GithubAccountStructure,
+  GithubRepoStructure,
+  UserScopeReferenceData
+} from '../types/internalTypes.js'
+import { PersistedUserSettings } from '../../ioTypes/UserSettingsSchemasAndTypes.js'
 
 export async function loadCalculatedAndDisplayableUserSettingsOrUseDefaults(
   appState: AppState,

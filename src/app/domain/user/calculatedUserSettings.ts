@@ -2,20 +2,22 @@ import {
   CalculatedGithubAccountSettings,
   CalculatedGithubRepoSettings,
   CalculatedUserSettings,
-  CalculatedVisibleAndNotifyConfigurable,
-  PersistedGithubAccountSettings,
-  PersistedGithubRepoSettings,
-  PersistedUserSettings,
-  PersistedVisibleAndNotifyConfigurable
+  CalculatedVisibleAndNotifyConfigurable
 } from '../types/UserSettings.js'
+import { objectMap } from '../../util/collections.js'
+import { AppState } from '../../environment/AppState.js'
+import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings.js'
 import {
   GithubAccountStructure,
   GithubRepoStructure,
   UserScopeReferenceData
-} from '../types/UserScopeReferenceData.js'
-import { objectMap } from '../../util/collections.js'
-import { AppState } from '../../environment/AppState.js'
-import { getPersistedUserSettingsOrDefaults } from './persistedUserSettings.js'
+} from '../types/internalTypes.js'
+import {
+  PersistedGithubAccountSettings,
+  PersistedGithubRepoSettings,
+  PersistedUserSettings,
+  PersistedVisibleAndNotifyConfigurable
+} from '../../ioTypes/UserSettingsSchemasAndTypes.js'
 
 const DEFAULT_ACCOUNT_NOTIFY = true
 

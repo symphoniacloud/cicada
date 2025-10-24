@@ -2,13 +2,13 @@ import { AppState } from '../../environment/AppState.js'
 import { logger } from '../../util/logging.js'
 import { loadCalculatedUserSettingsOrUseDefaults } from './calculatedUserSettings.js'
 
-import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import {
   GitHubRepoKey,
   GitHubUserId,
   GitHubWorkflowRunEvent,
   GitHubWorkflowSummary
 } from '../../ioTypes/GitHubTypes.js'
+import { UserScopeReferenceData } from '../types/internalTypes.js'
 
 export async function filterWorkflowNotifyEnabled(
   appState: AppState,

@@ -20,7 +20,6 @@ import {
 } from '../entityStore/entities/GithubWorkflowRunEventEntity.js'
 import { failedWithResult, Result, successWith } from '../../util/structuredResult.js'
 import { OnePageResponse } from '@symphoniacloud/dynamodb-entity-store'
-import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { toFullWorkflowRunEvents } from '../github/githubWorkflowRunEvent.js'
 import {
   GitHubAccountId,
@@ -29,7 +28,7 @@ import {
   GitHubWorkflowKey,
   GitHubWorkflowRunEvent
 } from '../../ioTypes/GitHubTypes.js'
-import { FullGitHubWorkflowRunEvent } from '../types/internalTypes.js'
+import { FullGitHubWorkflowRunEvent, UserScopeReferenceData } from '../types/internalTypes.js'
 
 interface UserVisibleObjects<T> {
   allEvents: T[]

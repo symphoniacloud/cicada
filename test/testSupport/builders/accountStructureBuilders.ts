@@ -1,9 +1,4 @@
 import {
-  GithubAccountStructure,
-  GithubRepoStructure,
-  UserScopeReferenceData
-} from '../../../src/app/domain/types/UserScopeReferenceData.js'
-import {
   fromRawGitHubAccountId,
   fromRawGitHubRepoId,
   fromRawGithubUserId,
@@ -16,6 +11,11 @@ import {
   GitHubRepoSummary,
   GitHubWorkflow
 } from '../../../src/app/ioTypes/GitHubTypes.js'
+import {
+  GithubAccountStructure,
+  GithubRepoStructure,
+  UserScopeReferenceData
+} from '../../../src/app/domain/types/internalTypes.js'
 
 export interface BuildAccountSummaryOptions {
   simpleAccountId?: number

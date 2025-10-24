@@ -4,8 +4,7 @@ import {
   DisplayableGithubAccountSettings,
   DisplayableGithubRepoSettings,
   DisplayableGithubWorkflowSettings,
-  DisplayableUserSettings,
-  PersistedVisibleAndNotifyConfigurable
+  DisplayableUserSettings
 } from '../../../domain/types/UserSettings.js'
 import { HiccoughElement } from '../../hiccough/hiccoughElement.js'
 import { colSm, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
@@ -16,6 +15,7 @@ import {
   GitHubWorkflowId,
   GitHubWorkflowKey
 } from '../../../ioTypes/GitHubTypes.js'
+import { PersistedVisibleAndNotifyConfigurable } from '../../../ioTypes/UserSettingsSchemasAndTypes.js'
 
 export function createGetUserSettingsResponse(
   settings: DisplayableUserSettings,
