@@ -4,8 +4,8 @@ import { td, tr } from '../../hiccough/hiccoughElements.js'
 import { accountCell } from '../../domainComponents/accountComponents.js'
 
 import { UserScopeReferenceData } from '../../../domain/types/UserScopeReferenceData.js'
-import { ORGANIZATION_ACCOUNT_TYPE } from '../../../types/schemas/GitHubSchemas.js'
-import { GitHubAccountSummary } from '../../../types/GitHubTypes.js'
+import { ORGANIZATION_ACCOUNT_TYPE } from '../../../ioTypes/GitHubSchemas.js'
+import { GitHubAccountSummary } from '../../../ioTypes/GitHubTypes.js'
 
 export function createAllAvailableAccountsResponse(refData: UserScopeReferenceData) {
   return fragmentViewResult(...allAvailableAccountsResponse(refData))

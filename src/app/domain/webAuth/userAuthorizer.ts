@@ -4,7 +4,7 @@ import { isTestUserToken, processTestToken } from './userAuthorizerForTests.js'
 import { getUserByTokenUsingTokenCache } from '../github/githubUser.js'
 import { WithHeadersEvent } from '../../inboundInterfaces/lambdaTypes.js'
 
-import { GitHubUserId } from '../../types/GitHubTypes.js'
+import { GitHubUserId } from '../../ioTypes/GitHubTypes.js'
 
 export type AuthorizationResult = SuccessfulAuthorizationResult | undefined
 

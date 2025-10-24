@@ -7,7 +7,7 @@ import { workflowRunEventUpdatedTimestamp } from './githubWorkflowRunEvent.js'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
 import { logger } from '../../util/logging.js'
-import { GitHubWorkflowRunEvent } from '../../types/GitHubTypes.js'
+import { GitHubWorkflowRunEvent } from '../../ioTypes/GitHubTypes.js'
 
 // A workflow run is the same as the most recent workflow run event for a given run ID
 export async function saveRuns(

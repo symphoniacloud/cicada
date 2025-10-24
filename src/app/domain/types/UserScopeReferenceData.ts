@@ -6,7 +6,7 @@ import {
   GitHubUserId,
   GitHubWorkflow,
   GitHubWorkflowId
-} from '../../types/GitHubTypes.js'
+} from '../../ioTypes/GitHubTypes.js'
 
 export interface GithubAccountStructure extends GitHubAccountSummary {
   isMemberAccount: boolean

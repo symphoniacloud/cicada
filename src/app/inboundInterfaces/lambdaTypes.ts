@@ -7,7 +7,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyWithLambdaAuthorizerHandler } from
 
 import { UserScopeReferenceData } from '../domain/types/UserScopeReferenceData.js'
 
-import { GitHubUserId } from '../types/GitHubTypes.js'
+import { GitHubUserId } from '../ioTypes/GitHubTypes.js'
 
 export type WebAuthorizerContext = { username?: string; userId?: GitHubUserId }
 

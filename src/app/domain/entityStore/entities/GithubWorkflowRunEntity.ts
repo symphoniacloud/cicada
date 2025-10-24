@@ -14,8 +14,8 @@ import {
   GitHubRepoId,
   GitHubRepoKey,
   GitHubWorkflowRunEvent
-} from '../../../types/GitHubTypes.js'
-import { isGitHubWorkflowRunEvent } from '../../../types/GitHubTypeChecks.js'
+} from '../../../ioTypes/GitHubTypes.js'
+import { isGitHubWorkflowRunEvent } from '../../../ioTypes/GitHubTypeChecks.js'
 
 // Stores the latest run event per workflow run
 const GithubWorkflowRunEntity: CicadaEntity<

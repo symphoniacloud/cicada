@@ -1,6 +1,6 @@
 import { CicadaWebNotification, WebPushWrapper } from '../../../src/app/outboundInterfaces/webPushWrapper.js'
 import deepEqual from 'deep-equal'
-import type { PushSubscription } from 'web-push'
+import { PushSubscription } from '../../../src/app/ioTypes/WebPushSchemasAndTypes.js'
 
 export class FakeWebPushWrapper implements WebPushWrapper {
   public publishedNotifications: {

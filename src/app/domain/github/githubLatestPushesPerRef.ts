@@ -6,7 +6,7 @@ import {
 } from '../entityStore/entities/GithubLatestPushPerRefEntity.js'
 import { dateTimeAddDays } from '../../util/dateAndTime.js'
 
-import { GitHubAccountId, GitHubPush } from '../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubPush } from '../../ioTypes/GitHubTypes.js'
 
 export async function saveLatestPushes(appState: AppState, newPushes: GitHubPush[]) {
   for (const newPush of newPushes) {

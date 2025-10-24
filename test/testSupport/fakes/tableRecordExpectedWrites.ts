@@ -4,7 +4,6 @@ import {
   buildDelete,
   buildPut
 } from './dynamoDB/fakeDynamoDBInterfaceExpectations.js'
-import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription.js'
 
 import {
   GitHubAccountId,
@@ -16,7 +15,8 @@ import {
   GitHubUserId,
   GitHubWorkflow,
   GitHubWorkflowRunEvent
-} from '../../../src/app/types/GitHubTypes.js'
+} from '../../../src/app/ioTypes/GitHubTypes.js'
+import { WebPushSubscription } from '../../../src/app/ioTypes/WebPushSchemasAndTypes.js'
 
 export function expectedPutGithubInstallation(installation: GitHubInstallation) {
   return buildPut('fakeGithubInstallationsTable', 'githubInstallation', {

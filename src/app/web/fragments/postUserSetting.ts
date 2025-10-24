@@ -32,7 +32,7 @@ import {
 } from '../../domain/github/userScopeReferenceData.js'
 
 import { UserScopeReferenceData } from '../../domain/types/UserScopeReferenceData.js'
-import { GitHubAccountId, GitHubRepoKey, GitHubWorkflowKey } from '../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubRepoKey, GitHubWorkflowKey } from '../../ioTypes/GitHubTypes.js'
 
 export const postUserSettingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('userSetting'),

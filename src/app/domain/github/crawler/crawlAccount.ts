@@ -11,8 +11,8 @@ import {
   getPublicAccountsForInstallationAccount
 } from '../../entityStore/entities/GithubPublicAccountEntity.js'
 import { getAllInstallations } from '../../entityStore/entities/GithubInstallationEntity.js'
-import { GitHubAccountId, GitHubInstallation, GitHubPublicAccount } from '../../../types/GitHubTypes.js'
-import { isGitHubPublicAccount } from '../../../types/GitHubTypeChecks.js'
+import { GitHubAccountId, GitHubInstallation, GitHubPublicAccount } from '../../../ioTypes/GitHubTypes.js'
+import { isGitHubPublicAccount } from '../../../ioTypes/GitHubTypeChecks.js'
 
 export async function crawlInstallationAccount(
   appState: AppState,

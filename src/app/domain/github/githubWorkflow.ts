@@ -7,7 +7,7 @@ import {
   GitHubRepoSummary,
   GitHubWorkflow,
   GitHubWorkflowSummary
-} from '../../types/GitHubTypes.js'
+} from '../../ioTypes/GitHubTypes.js'
 import { fromRawGithubWorkflow } from '../types/fromRawGitHub.js'
 
 export async function processRawWorkflows(

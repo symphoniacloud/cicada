@@ -23,13 +23,13 @@ import { OnePageResponse } from '@symphoniacloud/dynamodb-entity-store'
 import { UserScopeReferenceData } from '../types/UserScopeReferenceData.js'
 import { toFullWorkflowRunEvents } from '../github/githubWorkflowRunEvent.js'
 import {
-  FullGitHubWorkflowRunEvent,
   GitHubAccountId,
   GitHubPush,
   GitHubRepoKey,
   GitHubWorkflowKey,
   GitHubWorkflowRunEvent
-} from '../../types/GitHubTypes.js'
+} from '../../ioTypes/GitHubTypes.js'
+import { FullGitHubWorkflowRunEvent } from '../types/internalTypes.js'
 
 interface UserVisibleObjects<T> {
   allEvents: T[]

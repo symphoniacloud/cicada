@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 
-import { isGitHubAccountId, isGitHubAccountKey } from '../../../../../src/app/types/GitHubTypeChecks.js'
+import { isGitHubAccountId, isGitHubAccountKey } from '../../../../../src/app/ioTypes/GitHubTypeChecks.js'
 
 test('GitHub Account Id type', () => {
   expect(isGitHubAccountId('GHAccount123')).toBeTruthy()

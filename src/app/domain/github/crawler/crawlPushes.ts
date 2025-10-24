@@ -6,7 +6,7 @@ import {
 import { processPushes } from '../githubPush.js'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
 
-import { GitHubPush, GitHubRepoSummary } from '../../../types/GitHubTypes.js'
+import { GitHubPush, GitHubRepoSummary } from '../../../ioTypes/GitHubTypes.js'
 import { fromRawGithubPushEventEvent } from '../../types/fromRawGitHub.js'
 
 // TOEventually - only get all pushes back to lookback in crawl configuration, however GitHub doesn't keep

@@ -3,7 +3,7 @@ import { GithubInstallationClient } from '../../../outboundInterfaces/githubInst
 import { processRawWorkflows } from '../githubWorkflow.js'
 import { fromRawGitHubWorkflowId } from '../../types/toFromRawGitHubIds.js'
 
-import { GitHubRepoSummary, GitHubWorkflowId } from '../../../types/GitHubTypes.js'
+import { GitHubRepoSummary, GitHubWorkflowId } from '../../../ioTypes/GitHubTypes.js'
 
 export async function crawlOneWorkflow(
   appState: AppState,

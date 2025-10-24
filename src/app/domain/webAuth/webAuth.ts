@@ -2,8 +2,8 @@
 
 import { CicadaAPIAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
 import { logger } from '../../util/logging.js'
-import { isGitHubUserId } from '../../types/GitHubTypeChecks.js'
-import { GitHubUserId } from '../../types/GitHubTypes.js'
+import { isGitHubUserId } from '../../ioTypes/GitHubTypeChecks.js'
+import { GitHubUserId } from '../../ioTypes/GitHubTypes.js'
 
 export function userIdFromEvent(event: CicadaAPIAuthorizedAPIEvent): GitHubUserId {
   const userId = event.requestContext.authorizer.userId

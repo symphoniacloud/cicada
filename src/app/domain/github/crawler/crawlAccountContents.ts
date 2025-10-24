@@ -1,7 +1,7 @@
 import { AppState } from '../../../environment/AppState.js'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
 import { processRawRepositories } from '../githubRepo.js'
-import { ORGANIZATION_ACCOUNT_TYPE } from '../../../types/schemas/GitHubSchemas.js'
+import { ORGANIZATION_ACCOUNT_TYPE } from '../../../ioTypes/GitHubSchemas.js'
 import { crawlPushes } from './crawlPushes.js'
 import { crawlWorkflows } from './crawlWorkflows.js'
 import { logger } from '../../../util/logging.js'
@@ -12,8 +12,8 @@ import {
   GitHubPublicAccount,
   GitHubRepoSummary,
   GitHubWorkflowSummary
-} from '../../../types/GitHubTypes.js'
-import { isGitHubPublicAccount } from '../../../types/GitHubTypeChecks.js'
+} from '../../../ioTypes/GitHubTypes.js'
+import { isGitHubPublicAccount } from '../../../ioTypes/GitHubTypeChecks.js'
 
 export async function crawlAccountContents(
   appState: AppState,

@@ -7,7 +7,6 @@ import {
   fromRawGithubWorkflowRunId
 } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
 import {
-  FullGitHubWorkflowRunEvent,
   GitHubAccountKey,
   GitHubAccountMembership,
   GitHubAccountSummary,
@@ -21,7 +20,8 @@ import {
   GitHubWorkflow,
   GitHubWorkflowRunEvent,
   GitHubWorkflowSummary
-} from '../../../src/app/types/GitHubTypes.js'
+} from '../../../src/app/ioTypes/GitHubTypes.js'
+import { FullGitHubWorkflowRunEvent } from '../../../src/app/domain/types/internalTypes.js'
 
 export const cicadaTestUserAccountKey: GitHubAccountKey = {
   accountId: fromRawGitHubAccountId(162360409)

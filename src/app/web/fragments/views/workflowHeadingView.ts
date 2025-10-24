@@ -1,7 +1,7 @@
 import { fragmentViewResult } from '../../viewResultWrappers.js'
 import { h3, p } from '../../hiccough/hiccoughElements.js'
 
-import { GitHubWorkflowRunEvent } from '../../../types/GitHubTypes.js'
+import { GitHubWorkflowRunEvent } from '../../../ioTypes/GitHubTypes.js'
 
 export function createWorkflowHeadingResponse(run?: GitHubWorkflowRunEvent) {
   return fragmentViewResult(workflowHeadingElement(run))

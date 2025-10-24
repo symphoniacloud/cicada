@@ -22,13 +22,13 @@ import {
 } from '../../../src/app/domain/entityStore/entityTypes.js'
 import { throwFunction } from '../../../src/multipleContexts/errors.js'
 import { testTestUserPushSubscription } from '../../examples/cicada/webPushDomainObjects.js'
-import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription.js'
 import { FakeDynamoDBInterfaceStubber, MetaDataProvider } from './dynamoDB/fakeDynamoDBInterfaceStubber.js'
 import { fakeTableNames } from './fakeCicadaConfig.js'
 
 import { fromRawGithubUserId } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
 
-import { GitHubUserId } from '../../../src/app/types/GitHubTypes.js'
+import { GitHubUserId } from '../../../src/app/ioTypes/GitHubTypes.js'
+import { WebPushSubscription } from '../../../src/app/ioTypes/WebPushSchemasAndTypes.js'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const metaDataProvider: MetaDataProvider = (_tableName: string) => {

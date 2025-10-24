@@ -9,7 +9,7 @@ import { MetricUnit } from '@aws-lambda-powertools/metrics'
 import { failedWith, Result, successWith } from '../util/structuredResult.js'
 import { RawGithubWorkflow } from '../domain/types/rawGithub/RawGithubWorkflow.js'
 import { toRawGithubAppId, toRawGithubInstallationId } from '../domain/types/toFromRawGitHubIds.js'
-import { GitHubAppId, GitHubInstallationId } from '../types/GitHubTypes.js'
+import { GitHubAppId, GitHubInstallationId } from '../ioTypes/GitHubTypes.js'
 
 export interface GithubInstallationClient {
   listWorkflowRunsForRepo(

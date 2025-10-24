@@ -9,7 +9,8 @@ import {
 } from '../../domain/github/githubWorkflowRunEvent.js'
 import { userCell } from './userComponents.js'
 import { removeNullAndUndefined } from '../../util/collections.js'
-import { FullGitHubWorkflowRunEvent, GitHubWorkflowRunEvent } from '../../types/GitHubTypes.js'
+import { GitHubWorkflowRunEvent } from '../../ioTypes/GitHubTypes.js'
+import { FullGitHubWorkflowRunEvent } from '../../domain/types/internalTypes.js'
 
 export type WorkflowRowOptions = {
   showDescription?: boolean

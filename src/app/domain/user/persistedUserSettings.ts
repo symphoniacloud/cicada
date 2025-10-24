@@ -8,7 +8,7 @@ import {
 } from '../types/UserSettings.js'
 import { getUserSettings, saveUserSettings } from '../entityStore/entities/UserSettingsEntity.js'
 import { getOrSetNewAndReturn } from '../../util/collections.js'
-import { GitHubAccountId, GitHubRepoKey, GitHubUserId, GitHubWorkflowKey } from '../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubRepoKey, GitHubUserId, GitHubWorkflowKey } from '../../ioTypes/GitHubTypes.js'
 
 export async function getPersistedUserSettingsOrDefaults(
   appState: AppState,

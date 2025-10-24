@@ -2,7 +2,7 @@ import { AppState } from '../../environment/AppState.js'
 import { RawGithubRepo } from '../types/rawGithub/RawGithubRepo.js'
 import { getRepositories, putRepositories } from '../entityStore/entities/GithubRepositoryEntity.js'
 import { accountKeysEqual, narrowToAccountSummary } from './githubAccount.js'
-import { GitHubAccountId, GitHubRepoKey, GitHubRepoSummary } from '../../types/GitHubTypes.js'
+import { GitHubAccountId, GitHubRepoKey, GitHubRepoSummary } from '../../ioTypes/GitHubTypes.js'
 import { fromRawGithubRepo } from '../types/fromRawGitHub.js'
 
 export function repoKeysEqual(r1: GitHubRepoKey, r2: GitHubRepoKey) {

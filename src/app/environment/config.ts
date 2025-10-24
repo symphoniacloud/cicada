@@ -3,8 +3,8 @@ import { SSM_PARAM_NAMES, SsmParamName, ssmTableNamePath } from '../../multipleC
 import { throwFunction } from '../../multipleContexts/errors.js'
 import { CICADA_TABLE_IDS, CicadaTableId } from '../../multipleContexts/dynamoDBTables.js'
 import { SSMGetParametersByNameOptions } from '@aws-lambda-powertools/parameters/ssm/types'
-import { isGitHubAppId } from '../types/GitHubTypeChecks.js'
-import { GitHubAppId } from '../types/GitHubTypes.js'
+import { isGitHubAppId } from '../ioTypes/GitHubTypeChecks.js'
+import { GitHubAppId } from '../ioTypes/GitHubTypes.js'
 
 // Some of these are async because implementations may cache values retrieved from external services
 export interface CicadaConfig {

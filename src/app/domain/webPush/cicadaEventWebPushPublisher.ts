@@ -13,8 +13,8 @@ import { filterRepoNotifyEnabled, filterWorkflowNotifyEnabled } from '../user/us
 
 import { loadUserScopeReferenceData } from '../github/userScopeReferenceData.js'
 import { getRelatedMemberIdsForPush } from '../github/githubPush.js'
-import { GitHubWorkflowRunEvent } from '../../types/GitHubTypes.js'
-import { isGitHubPush, isGitHubWorkflowRunEvent } from '../../types/GitHubTypeChecks.js'
+import { GitHubWorkflowRunEvent } from '../../ioTypes/GitHubTypes.js'
+import { isGitHubPush, isGitHubWorkflowRunEvent } from '../../ioTypes/GitHubTypeChecks.js'
 
 // TOEventually - these are going to create a lot of queries for subscription lookup for large organizations
 // May be better to have one table / index for this.

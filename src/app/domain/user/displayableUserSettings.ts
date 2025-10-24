@@ -28,7 +28,7 @@ import {
   GitHubRepoId,
   GitHubWorkflowId,
   GitHubWorkflowSummary
-} from '../../types/GitHubTypes.js'
+} from '../../ioTypes/GitHubTypes.js'
 
 export async function loadCalculatedAndDisplayableUserSettingsOrUseDefaults(
   appState: AppState,

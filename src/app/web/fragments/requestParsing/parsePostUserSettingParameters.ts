@@ -6,7 +6,7 @@ import { APIGatewayProxyResult } from 'aws-lambda'
 import {
   PostUserSettingsParameters,
   PostUserSettingsParametersSchema
-} from '../../../types/PostUserSettingsParametersType.js'
+} from '../../../ioTypes/PostUserSettingsParametersType.js'
 
 export function parsePostUserSettingParameters(
   event: CicadaAuthorizedAPIEvent

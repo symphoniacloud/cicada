@@ -7,8 +7,8 @@ import {
 import { sortBy } from '../../../util/collections.js'
 import { workflowRunEventUpdatedTimestamp } from '../../github/githubWorkflowRunEvent.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
-import { GitHubAccountId, GitHubRepoKey, GitHubWorkflowRunEvent } from '../../../types/GitHubTypes.js'
-import { isGitHubWorkflowRunEvent } from '../../../types/GitHubTypeChecks.js'
+import { GitHubAccountId, GitHubRepoKey, GitHubWorkflowRunEvent } from '../../../ioTypes/GitHubTypes.js'
+import { isGitHubWorkflowRunEvent } from '../../../ioTypes/GitHubTypeChecks.js'
 
 const GithubLatestWorkflowRunEventEntity: CicadaEntity<
   GitHubWorkflowRunEvent,

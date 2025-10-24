@@ -5,7 +5,7 @@ import { isUserAMemberOfAnyInstalledAccount, setMemberships } from './githubMemb
 import { getTokenRecord, saveOrRefreshGithubUserToken } from './githubUserToken.js'
 import { isFailure } from '../../util/structuredResult.js'
 import { fromRawGithubUserId } from '../types/toFromRawGitHubIds.js'
-import { GitHubInstallation } from '../../types/GitHubTypes.js'
+import { GitHubInstallation } from '../../ioTypes/GitHubTypes.js'
 import { fromRawGithubUser } from '../types/fromRawGitHub.js'
 
 export async function processRawUsers(
