@@ -140,3 +140,21 @@ export const GitHubUserTokenSchema = z.object({
   token: z.string(),
   nextCheckTime: z.int().positive()
 })
+
+export const GitHubRepoSchema = z.object({
+  ...GitHubRepoSummarySchema.unwrap().shape,
+  fullName: z.string(),
+  private: z.boolean(),
+  htmlUrl: z.string(),
+  description: z.string(),
+  fork: z.boolean(),
+  url: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  pushedAt: z.string(),
+  homepage: z.string(),
+  archived: z.boolean(),
+  disabled: z.boolean(),
+  visibility: z.string(),
+  defaultBranch: z.string()
+})

@@ -1,4 +1,3 @@
-import { GithubRepo } from '../../../src/app/domain/types/GithubRepo.js'
 import {
   FullGithubWorkflowRunEvent,
   GithubWorkflowRunEvent
@@ -18,6 +17,7 @@ import {
   GitHubAccountMembership,
   GitHubAccountSummary,
   GitHubInstallation,
+  GitHubRepo,
   GitHubRepoSummary,
   GitHubUser,
   GitHubUserId,
@@ -106,7 +106,7 @@ export const personalTestRepoSummary: GitHubRepoSummary = {
   accountType: 'user'
 }
 
-export const testPersonalTestRepo: GithubRepo = {
+export const testPersonalTestRepo: GitHubRepo = {
   ...personalTestRepoSummary,
   archived: false,
   createdAt: '2024-03-05T17:56:33Z',
@@ -136,7 +136,7 @@ export const orgTestRepoTwoSummary: GitHubRepoSummary = {
   repoName: 'org-test-repo-two'
 }
 
-export const testOrgTestRepoOne: GithubRepo = {
+export const testOrgTestRepoOne: GitHubRepo = {
   ...orgTestRepoOneSummary,
   archived: false,
   createdAt: '2024-03-06T16:59:02Z',
@@ -154,7 +154,7 @@ export const testOrgTestRepoOne: GithubRepo = {
   visibility: 'private'
 }
 
-export const testOrgTestRepoTwo: GithubRepo = {
+export const testOrgTestRepoTwo: GitHubRepo = {
   ...orgTestRepoTwoSummary,
   archived: false,
   createdAt: '2024-03-06T17:01:02Z',
