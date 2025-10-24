@@ -22,6 +22,7 @@ import {
   GitHubWorkflowIdSchema,
   GitHubWorkflowKeySchema,
   GitHubWorkflowRunIdSchema,
+  GitHubWorkflowSchema,
   GitHubWorkflowSummarySchema
 } from './schemas/GitHubSchemas.js'
 
@@ -68,3 +69,5 @@ export type GitHubUser = z.infer<typeof GitHubUserSchema>
 export type GitHubUserToken = z.infer<typeof GitHubUserTokenSchema>
 
 export type GitHubRepo = z.infer<typeof GitHubRepoSchema>
+
+export type GitHubWorkflow = z.infer<typeof GitHubWorkflowSchema>

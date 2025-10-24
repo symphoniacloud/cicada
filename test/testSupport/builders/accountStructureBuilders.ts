@@ -3,7 +3,6 @@ import {
   GithubRepoStructure,
   UserScopeReferenceData
 } from '../../../src/app/domain/types/UserScopeReferenceData.js'
-import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 import {
   fromRawGitHubAccountId,
   fromRawGitHubRepoId,
@@ -14,7 +13,8 @@ import { ORGANIZATION_ACCOUNT_TYPE } from '../../../src/app/types/schemas/GitHub
 import {
   GitHubAccountSummary,
   GitHubAccountType,
-  GitHubRepoSummary
+  GitHubRepoSummary,
+  GitHubWorkflow
 } from '../../../src/app/types/GitHubTypes.js'
 
 export interface BuildAccountSummaryOptions {
@@ -56,7 +56,7 @@ export interface BuildWorkflowOptions extends BuildRepoSummaryOptions {
   updatedAt?: string
 }
 
-export function buildWorkflow(options?: BuildWorkflowOptions): GithubWorkflow {
+export function buildWorkflow(options?: BuildWorkflowOptions): GitHubWorkflow {
   return {
     ...buildRepoSummmary(options),
     workflowId: fromRawGitHubWorkflowId(options?.simpleWorkflowId ?? '789'),
@@ -85,7 +85,7 @@ export function buildAccountStructure(options?: BuildAccountStructureOptions): G
 }
 
 export interface BuildRepoStructureOptions extends BuildRepoSummaryOptions {
-  workflows?: GithubWorkflow[]
+  workflows?: GitHubWorkflow[]
 }
 
 export function buildRepoStructure(options?: BuildRepoStructureOptions): GithubRepoStructure {

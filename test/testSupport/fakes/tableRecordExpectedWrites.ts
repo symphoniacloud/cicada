@@ -7,7 +7,6 @@ import {
 import { GithubPush } from '../../../src/app/domain/types/GithubPush.js'
 import { GithubWorkflowRunEvent } from '../../../src/app/domain/types/GithubWorkflowRunEvent.js'
 import { WebPushSubscription } from '../../../src/app/domain/types/WebPushSubscription.js'
-import { GithubWorkflow } from '../../../src/app/domain/types/GithubWorkflow.js'
 
 import {
   GitHubAccountId,
@@ -15,7 +14,8 @@ import {
   GitHubInstallation,
   GitHubRepo,
   GitHubUser,
-  GitHubUserId
+  GitHubUserId,
+  GitHubWorkflow
 } from '../../../src/app/types/GitHubTypes.js'
 
 export function expectedPutGithubInstallation(installation: GitHubInstallation) {
@@ -65,7 +65,7 @@ export function expectedPutLatestGithubPush(push: GithubPush) {
   )
 }
 
-export function expectedPutGithubWorkflow(workflow: GithubWorkflow) {
+export function expectedPutGithubWorkflow(workflow: GitHubWorkflow) {
   return buildPut('fakeGithubWorkflowTable', 'githubWorkflow', {
     PK: `ACCOUNT#${workflow.accountId}`,
     SK: `REPO#${workflow.repoId}#WORKFLOW#${workflow.workflowId}`,

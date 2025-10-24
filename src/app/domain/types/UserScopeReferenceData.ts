@@ -1,10 +1,10 @@
-import { GithubWorkflow } from './GithubWorkflow.js'
 import {
   GitHubAccountId,
   GitHubAccountSummary,
   GitHubRepoId,
   GitHubRepoSummary,
   GitHubUserId,
+  GitHubWorkflow,
   GitHubWorkflowId
 } from '../../types/GitHubTypes.js'
 
@@ -14,7 +14,7 @@ export interface GithubAccountStructure extends GitHubAccountSummary {
 }
 
 export interface GithubRepoStructure extends GitHubRepoSummary {
-  workflows: Record<GitHubWorkflowId, GithubWorkflow>
+  workflows: Record<GitHubWorkflowId, GitHubWorkflow>
 }
 
 export interface UserScopeReferenceData {

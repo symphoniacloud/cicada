@@ -1,9 +1,14 @@
 import { AppState } from '../../environment/AppState.js'
 import { RawGithubWorkflow } from '../types/rawGithub/RawGithubWorkflow.js'
-import { fromRawGithubWorkflow, GithubWorkflow } from '../types/GithubWorkflow.js'
 import { getWorkflowsForAccount, putWorkflows } from '../entityStore/entities/GithubWorkflowEntity.js'
 import { narrowToRepoSummary } from './githubRepo.js'
-import { GitHubAccountId, GitHubRepoSummary, GitHubWorkflowSummary } from '../../types/GitHubTypes.js'
+import {
+  GitHubAccountId,
+  GitHubRepoSummary,
+  GitHubWorkflow,
+  GitHubWorkflowSummary
+} from '../../types/GitHubTypes.js'
+import { fromRawGithubWorkflow } from '../types/fromRawGitHub.js'
 
 export async function processRawWorkflows(
   appState: AppState,
@@ -27,10 +32,10 @@ export function narrowToWorkflowSummary<T extends GitHubWorkflowSummary>(x: T): 
 export async function getActiveWorkflowsForAccount(
   appState: AppState,
   accountId: GitHubAccountId
-): Promise<GithubWorkflow[]> {
+): Promise<GitHubWorkflow[]> {
   return (await getWorkflowsForAccount(appState.entityStore, accountId)).filter(isActiveWorkflow)
 }
 
-export async function isActiveWorkflow(wf: GithubWorkflow) {
+export async function isActiveWorkflow(wf: GitHubWorkflow) {
   return wf.workflowState === 'active'
 }

@@ -2,7 +2,7 @@ import { AllEntitiesStore, typePredicateParser } from '@symphoniacloud/dynamodb-
 import { GITHUB_REPOSITORY } from '../entityTypes.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { GitHubAccountId, GitHubRepo } from '../../../types/GitHubTypes.js'
-import { isGithubRepo } from '../../../types/GitHubTypeChecks.js'
+import { isGitHubRepo } from '../../../types/GitHubTypeChecks.js'
 
 const GithubRepositoryEntity: CicadaEntity<
   GitHubRepo,
@@ -10,7 +10,7 @@ const GithubRepositoryEntity: CicadaEntity<
   Pick<GitHubRepo, 'repoId'>
 > = {
   type: GITHUB_REPOSITORY,
-  parse: typePredicateParser(isGithubRepo, GITHUB_REPOSITORY),
+  parse: typePredicateParser(isGitHubRepo, GITHUB_REPOSITORY),
   pk(source: Pick<GitHubRepo, 'accountId'>) {
     return `ACCOUNT#${source.accountId}`
   },
