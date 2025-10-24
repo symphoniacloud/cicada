@@ -3,6 +3,7 @@ import {
   GitHubAccountKeySchema,
   GitHubAccountMembershipSchema,
   GitHubAccountSummarySchema,
+  GitHubAccountTypeSchema,
   GitHubAppIdSchema,
   GitHubInstallationIdSchema,
   GitHubRepoIdSchema,
@@ -21,6 +22,7 @@ import {
   GitHubAccountKey,
   GitHubAccountMembership,
   GitHubAccountSummary,
+  GitHubAccountType,
   GitHubAppId,
   GitHubInstallationId,
   GitHubRepoId,
@@ -82,6 +84,10 @@ export function isGitHubUserKey(x: unknown): x is GitHubUserKey {
 
 export function isGitHubOrganizationMembership(x: unknown): x is GitHubAccountMembership {
   return GitHubAccountMembershipSchema.safeParse(x).success
+}
+
+export function isGithubAccountType(x: unknown): x is GitHubAccountType {
+  return GitHubAccountTypeSchema.safeParse(x).success
 }
 
 export function isGitHubAccountSummary(x: unknown): x is GitHubAccountSummary {

@@ -1,5 +1,5 @@
 import { RawGithubInstallation } from './rawGithub/RawGithubInstallation.js'
-import { fromRawAccountType } from './GithubAccountType.js'
+import { fromRawAccountType } from './fromRawGitHub.js'
 import { isString } from '../../util/types.js'
 import {
   fromRawGitHubAccountId,

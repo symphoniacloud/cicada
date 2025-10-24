@@ -73,6 +73,7 @@ export const GitHubUserKeySchema = z
 
 export const ORGANIZATION_ACCOUNT_TYPE = 'organization'
 export const USER_ACCOUNT_TYPE = 'user'
+
 export const GitHubAccountTypeSchema = z.literal([ORGANIZATION_ACCOUNT_TYPE, USER_ACCOUNT_TYPE])
 
 export const GitHubAccountSummarySchema = z.object({

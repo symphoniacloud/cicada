@@ -4,7 +4,7 @@ import {
   RawGithubAPIPushEventEvent,
   RawGithubAPIPushEventEventCommit
 } from './rawGithub/RawGithubAPIPushEventEvent.js'
-import { fromRawAccountType } from './GithubAccountType.js'
+import { fromRawAccountType } from './fromRawGitHub.js'
 import { NonEmptyArray } from '../../util/collections.js'
 import { timestampToIso } from '../../util/dateAndTime.js'
 import { fromRawGitHubAccountId, fromRawGitHubRepoId, fromRawGithubUserId } from './toFromRawGitHubIds.js'

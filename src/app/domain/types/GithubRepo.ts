@@ -1,5 +1,5 @@
 import { RawGithubRepo } from './rawGithub/RawGithubRepo.js'
-import { fromRawAccountType } from './GithubAccountType.js'
+import { fromRawAccountType } from './fromRawGitHub.js'
 import { fromRawGitHubAccountId, fromRawGitHubRepoId } from './toFromRawGitHubIds.js'
 import { GitHubRepoSummary } from '../../types/GitHubTypes.js'
 import { isGitHubRepoSummary } from '../../types/GitHubTypeChecks.js'
