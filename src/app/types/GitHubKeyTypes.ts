@@ -2,11 +2,9 @@ import * as z from 'zod'
 import {
   GitHubAccountIdSchema,
   GitHubRepoIdSchema,
-  GitHubUserId,
-  GitHubWorkflowIdSchema,
-  isGitHubUserId
+  GitHubUserIdSchema,
+  GitHubWorkflowIdSchema
 } from './GitHubIdTypes.js'
-import { isNotNullObject } from '../util/types.js'
 
 // -- Account
 export const GitHubAccountKeySchema = z.object({
@@ -43,10 +41,14 @@ export function isGitHubWorkflowKey(x: unknown): x is GitHubWorkflowKey {
   return GitHubWorkflowKeySchema.safeParse(x).success
 }
 
-export interface GitHubUserKey {
-  userId: GitHubUserId
-}
+// -- User
 
-export function isGithubUserKey(x: unknown): x is GitHubUserKey {
-  return isNotNullObject(x) && 'userId' in x && isGitHubUserId(x.userId)
+export const GitHubUserKeySchema = z.object({
+  userId: GitHubUserIdSchema
+})
+
+export type GitHubUserKey = z.infer<typeof GitHubUserKeySchema>
+
+export function isGitHubUserKey(x: unknown): x is GitHubUserKey {
+  return GitHubUserKeySchema.safeParse(x).success
 }
