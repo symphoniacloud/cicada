@@ -1,5 +1,4 @@
 import {
-  GitHubAccountIdSchema,
   GitHubAccountKeySchema,
   GitHubAccountTypeSchema,
   GitHubAppIdSchema,
@@ -11,7 +10,6 @@ import {
   GitHubWorkflowRunIdSchema
 } from './GitHubSchemas.js'
 import {
-  GitHubAccountId,
   GitHubAccountKey,
   GitHubAccountType,
   GitHubAppId,
@@ -24,10 +22,6 @@ import {
 } from './GitHubTypes.js'
 
 // TODO These may be able to mostly go away if we start just using safe parse more
-
-export function isGitHubAccountId(x: unknown): x is GitHubAccountId {
-  return GitHubAccountIdSchema.safeParse(x).success
-}
 
 export function isGitHubRepoId(x: unknown): x is GitHubRepoId {
   return GitHubRepoIdSchema.safeParse(x).success
