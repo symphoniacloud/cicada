@@ -18,7 +18,7 @@ test('webhook test', async () => {
   const deliveryId = `fake-integration-${randomUUID()}`
   const rawBody = JSON.stringify(push)
   const sigHeader = createSignatureHeader(rawBody, (await appState.config.github()).webhookSecret)
-  const testAccountId = fromRawGitHubAccountId(`${push.organization.id}`)
+  const testAccountId = fromRawGitHubAccountId(push.organization.id)
   // Delete previous activity
   await deletePushesForAccount(appState, testAccountId)
 

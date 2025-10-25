@@ -26,7 +26,7 @@ import {
   GitHubWorkflowRunId
 } from '../../ioTypes/GitHubTypes.js'
 
-export function fromRawGitHubAccountId(x: string | number): GitHubAccountId {
+export function fromRawGitHubAccountId(x: number): GitHubAccountId {
   // TODO - can we use a zod function here?
   return GitHubAccountIdSchema.parse(`${GITHUB_ACCOUNT_ID_PREFIX}${x}`)
 }
