@@ -5,10 +5,10 @@ import {
   GITHUB_REPO_ID_PREFIX,
   GITHUB_USER_ID_PREFIX,
   GITHUB_WORKFLOW_ID_PREFIX,
-  GITHUB_WORKFLOW_RUN_ID_PREFIX
+  GITHUB_WORKFLOW_RUN_ID_PREFIX,
+  GitHubAccountIdSchema
 } from '../../ioTypes/GitHubSchemas.js'
 import {
-  isGitHubAccountId,
   isGitHubAppId,
   isGitHubInstallationId,
   isGitHubRepoId,
@@ -26,12 +26,9 @@ import {
   GitHubWorkflowRunId
 } from '../../ioTypes/GitHubTypes.js'
 
-export function fromRawGitHubAccountId(x: unknown): GitHubAccountId {
-  const cicadaGitHubAccountId = `${GITHUB_ACCOUNT_ID_PREFIX}${x}`
-  if (!isGitHubAccountId(cicadaGitHubAccountId)) {
-    throw new Error(`Invalid raw github account id: ${x}`)
-  }
-  return cicadaGitHubAccountId
+export function fromRawGitHubAccountId(x: string | number): GitHubAccountId {
+  // TODO - can we use a zod function here?
+  return GitHubAccountIdSchema.parse(`${GITHUB_ACCOUNT_ID_PREFIX}${x}`)
 }
 
 export function fromRawGitHubRepoId(x: unknown): GitHubRepoId {
