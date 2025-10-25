@@ -4,7 +4,6 @@ import {
   GitHubAccountTypeSchema,
   GitHubAppIdSchema,
   GitHubInstallationIdSchema,
-  GitHubInstallationSchema,
   GitHubPublicAccountSchema,
   GitHubRepoIdSchema,
   GitHubUserIdSchema,
@@ -16,7 +15,6 @@ import {
   GitHubAccountKey,
   GitHubAccountType,
   GitHubAppId,
-  GitHubInstallation,
   GitHubInstallationId,
   GitHubPublicAccount,
   GitHubRepoId,
@@ -61,10 +59,6 @@ export function isGitHubAccountKey(x: unknown): x is GitHubAccountKey {
 
 export function isGithubAccountType(x: unknown): x is GitHubAccountType {
   return GitHubAccountTypeSchema.safeParse(x).success
-}
-
-export function isGithubInstallation(x: unknown): x is GitHubInstallation {
-  return GitHubInstallationSchema.safeParse(x).success
 }
 
 export function isGitHubPublicAccount(x: unknown): x is GitHubPublicAccount {
