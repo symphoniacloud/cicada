@@ -25,6 +25,7 @@
     "@types/aws-lambda": "8.x",
     "@types/deep-equal": "1.x",
     "@types/node": "22.x",
+    "@types/web-push": "3.x",
     "aws-cdk": "2.x",
     "aws-cdk-lib": "2.x",
     "constructs": "10.x",
