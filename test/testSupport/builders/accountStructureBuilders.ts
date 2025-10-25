@@ -25,7 +25,7 @@ export interface BuildAccountSummaryOptions {
 
 export function buildAccountSummary(options?: BuildAccountSummaryOptions): GitHubAccountSummary {
   return {
-    accountId: fromRawGitHubAccountId(options?.simpleAccountId ?? '123'),
+    accountId: fromRawGitHubAccountId(options?.simpleAccountId ?? 123),
     accountName: options?.accountName ?? '',
     accountType: options?.accountType ?? ORGANIZATION_ACCOUNT_TYPE
   }
