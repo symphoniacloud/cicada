@@ -1,10 +1,8 @@
 import { Octokit } from '@octokit/rest'
 import { createAppAuth } from '@octokit/auth-app'
 import { createRealGithubInstallationClient, GithubInstallationClient } from './githubInstallationClient.js'
-import { RawGithubInstallation } from '../domain/types/rawGithub/RawGithubInstallation.js'
 import { GithubConfig } from '../environment/config.js'
-import { OAuthAppAuthentication } from '@octokit/auth-oauth-user'
-import { createOAuthUserAuth } from '@octokit/auth-oauth-user'
+import { createOAuthUserAuth, OAuthAppAuthentication } from '@octokit/auth-oauth-user'
 import { logger } from '../util/logging.js'
 import { RawGithubUser } from '../domain/types/rawGithub/RawGithubUser.js'
 
@@ -15,7 +13,7 @@ import { GitHubInstallationId } from '../ioTypes/GitHubTypes.js'
 export interface GithubClient {
   clientForInstallation(installationId: GitHubInstallationId): GithubInstallationClient
 
-  listInstallations(): Promise<RawGithubInstallation[]>
+  listInstallations(): Promise<unknown[]>
 
   createOAuthUserAuth(code: string): Promise<OAuthAppAuthentication>
 
@@ -55,9 +53,7 @@ export function createRealGithubClient({
 
       return perInstallation[installationId]
     },
-    async listInstallations(): Promise<RawGithubInstallation[]> {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+    async listInstallations(): Promise<unknown[]> {
       return await octokit.paginate(octokit.apps.listInstallations)
     },
     // See https://github.com/octokit/auth-oauth-user.js#createoauthuserauthoptions-or-new-octokit-auth-

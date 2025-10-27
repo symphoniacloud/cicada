@@ -8,8 +8,6 @@ import { FakeGithubInstallationClient } from './fakeGithubInstallationClient.js'
 
 import { GitHubInstallationId } from '../../../src/app/ioTypes/GitHubTypes.js'
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 export class FakeGithubClient implements GithubClient {
   public fakeClientsForInstallation = arrayStubResponse<GitHubInstallationId, FakeGithubInstallationClient>()
   public stubInstallations: RawGithubInstallation[] = []
@@ -20,7 +18,7 @@ export class FakeGithubClient implements GithubClient {
     return this.fakeClientsForInstallation.getResponseOrThrow(installationId)
   }
 
-  async listInstallations(): Promise<RawGithubInstallation[]> {
+  async listInstallations(): Promise<unknown[]> {
     return this.stubInstallations
   }
 
