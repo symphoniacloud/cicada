@@ -8,12 +8,13 @@ import { TransformedGithubInstallationSchema } from '../../types/rawGithub/RawGi
 export async function crawlInstallations(appState: AppState): Promise<GitHubInstallation[]> {
   logger.info(`Crawling Installations`)
 
-  const installationsFromGitHub = await appState.githubClient.listInstallations()
+  const fromGitHub = await appState.githubClient.listInstallations()
+  const parsed = fromGitHub.map(parseRawGithub)
   return removeNullAndUndefined(
-    await Promise.all(
-      installationsFromGitHub
-        .map((rawI) => TransformedGithubInstallationSchema.parse(rawI))
-        .map(async (installation) => processInstallation(appState, installation))
-    )
+    await Promise.all(parsed.map(async (installation) => processInstallation(appState, installation)))
   )
+}
+
+function parseRawGithub(x: unknown): GitHubInstallation {
+  return TransformedGithubInstallationSchema.parse(x)
 }
