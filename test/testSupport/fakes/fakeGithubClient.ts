@@ -1,6 +1,5 @@
 import { GithubClient } from '../../../src/app/outboundInterfaces/githubClient.js'
 import { GithubInstallationClient } from '../../../src/app/outboundInterfaces/githubInstallationClient.js'
-import { RawGithubInstallation } from '../../../src/app/domain/types/rawGithub/RawGithubInstallation.js'
 import { OAuthAppAuthentication } from '@octokit/auth-oauth-user'
 import { arrayStubResponse } from './fakeSupport.js'
 import { RawGithubUser } from '../../../src/app/domain/types/rawGithub/RawGithubUser.js'
@@ -10,7 +9,7 @@ import { GitHubInstallationId } from '../../../src/app/ioTypes/GitHubTypes.js'
 
 export class FakeGithubClient implements GithubClient {
   public fakeClientsForInstallation = arrayStubResponse<GitHubInstallationId, FakeGithubInstallationClient>()
-  public stubInstallations: RawGithubInstallation[] = []
+  public stubInstallations: unknown[] = []
   public stubOAuthUserAuths = arrayStubResponse<string, OAuthAppAuthentication>()
   public stubGithubUsers = arrayStubResponse<string, RawGithubUser>()
 
