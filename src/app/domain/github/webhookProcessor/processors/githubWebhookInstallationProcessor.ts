@@ -1,10 +1,10 @@
-import { TransformedGithubInstallationSchema } from '../../../types/rawGithub/RawGithubInstallation.js'
 import { AppState } from '../../../../environment/AppState.js'
 import { WebhookProcessor } from '../WebhookProcessor.js'
 import { processInstallation } from '../../githubInstallation.js'
 import { sendToEventBridge } from '../../../../outboundInterfaces/eventBridgeBus.js'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../../../multipleContexts/eventBridge.js'
 import { logger } from '../../../../util/logging.js'
+import { TransformedGithubInstallationSchema } from '../../mappings/FromRawGitHubMappings.js'
 
 export const githubWebhookInstallationProcessor: WebhookProcessor = async (
   appState: AppState,

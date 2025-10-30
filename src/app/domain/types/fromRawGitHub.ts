@@ -12,7 +12,6 @@ import {
   GitHubWorkflowSummary
 } from '../../ioTypes/GitHubTypes.js'
 import { isGithubAccountType } from '../../ioTypes/GitHubTypeChecks.js'
-import { RawGithubInstallation } from './rawGithub/RawGithubInstallation.js'
 import {
   fromRawGitHubAccountId,
   fromRawGithubAppId,
@@ -34,6 +33,7 @@ import {
 import { isRawGithubWebhookPush, RawGithubWebhookPushCommit } from './rawGithub/RawGithubWebhookPush.js'
 import { timestampToIso } from '../../util/dateAndTime.js'
 import { logger } from '../../util/logging.js'
+import { RawGithubInstallation } from '../../ioTypes/RawGitHubTypes.js'
 
 // TODO - can use zod parsing for this
 

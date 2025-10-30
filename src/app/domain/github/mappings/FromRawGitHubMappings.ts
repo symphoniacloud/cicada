@@ -1,25 +1,10 @@
-import { z } from 'zod'
+import { RawGithubInstallationSchema } from '../../../ioTypes/RawGitHubSchemas.js'
+import { GitHubInstallation } from '../../../ioTypes/GitHubTypes.js'
 import {
   fromRawGitHubAccountId,
   fromRawGithubAppId,
   fromRawGithubInstallationId
-} from '../toFromRawGitHubIds.js'
-import { GitHubInstallation } from '../../../ioTypes/GitHubTypes.js'
-
-export const RawGithubTargetTypeSchema = z.literal(['User', 'Organization'])
-
-export const RawGithubInstallationSchema = z.object({
-  id: z.number(),
-  account: z.object({
-    login: z.string(),
-    id: z.number()
-  }),
-  target_type: RawGithubTargetTypeSchema,
-  app_id: z.number(),
-  app_slug: z.string()
-})
-
-export type RawGithubInstallation = z.infer<typeof RawGithubInstallationSchema>
+} from '../../types/toFromRawGitHubIds.js'
 
 export const TransformedGithubInstallationSchema = RawGithubInstallationSchema.transform(
   (raw): GitHubInstallation => {
