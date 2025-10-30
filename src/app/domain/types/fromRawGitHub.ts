@@ -21,9 +21,6 @@ import {
   fromRawGitHubWorkflowId,
   fromRawGithubWorkflowRunId
 } from './toFromRawGitHubIds.js'
-import { RawGithubUser } from './rawGithub/RawGithubUser.js'
-import { RawGithubRepo } from './rawGithub/RawGithubRepo.js'
-import { RawGithubWorkflow } from './rawGithub/RawGithubWorkflow.js'
 import { RawGithubWorkflowRunEvent } from './rawGithub/RawGithubWorkflowRunEvent.js'
 import { narrowToWorkflowSummary } from '../github/githubWorkflow.js'
 import {
@@ -33,7 +30,12 @@ import {
 import { isRawGithubWebhookPush, RawGithubWebhookPushCommit } from './rawGithub/RawGithubWebhookPush.js'
 import { timestampToIso } from '../../util/dateAndTime.js'
 import { logger } from '../../util/logging.js'
-import { RawGithubInstallation } from '../../ioTypes/RawGitHubTypes.js'
+import {
+  RawGithubInstallation,
+  RawGithubRepo,
+  RawGithubUser,
+  RawGithubWorkflow
+} from '../../ioTypes/RawGitHubTypes.js'
 
 // TODO - can use zod parsing for this
 

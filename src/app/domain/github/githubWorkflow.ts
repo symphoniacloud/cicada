@@ -1,5 +1,4 @@
 import { AppState } from '../../environment/AppState.js'
-import { RawGithubWorkflow } from '../types/rawGithub/RawGithubWorkflow.js'
 import { getWorkflowsForAccount, putWorkflows } from '../entityStore/entities/GithubWorkflowEntity.js'
 import { narrowToRepoSummary } from './githubRepo.js'
 import {
@@ -9,6 +8,7 @@ import {
   GitHubWorkflowSummary
 } from '../../ioTypes/GitHubTypes.js'
 import { fromRawGithubWorkflow } from '../types/fromRawGitHub.js'
+import { RawGithubWorkflow } from '../../ioTypes/RawGitHubTypes.js'
 
 export async function processRawWorkflows(
   appState: AppState,

@@ -1,15 +1,13 @@
 import { Octokit } from '@octokit/rest'
 import { createAppAuth } from '@octokit/auth-app'
 import { RawGithubWorkflowRunEvent } from '../domain/types/rawGithub/RawGithubWorkflowRunEvent.js'
-import { RawGithubRepo } from '../domain/types/rawGithub/RawGithubRepo.js'
-import { RawGithubUser } from '../domain/types/rawGithub/RawGithubUser.js'
 import { RawGithubEvent } from '../domain/types/rawGithub/RawGithubEvent.js'
 import { metrics } from '../util/metrics.js'
 import { MetricUnit } from '@aws-lambda-powertools/metrics'
 import { failedWith, Result, successWith } from '../util/structuredResult.js'
-import { RawGithubWorkflow } from '../domain/types/rawGithub/RawGithubWorkflow.js'
 import { toRawGithubAppId, toRawGithubInstallationId } from '../domain/types/toFromRawGitHubIds.js'
 import { GitHubAppId, GitHubInstallationId } from '../ioTypes/GitHubTypes.js'
+import { RawGithubRepo, RawGithubUser, RawGithubWorkflow } from '../ioTypes/RawGitHubTypes.js'
 
 export interface GithubInstallationClient {
   listWorkflowRunsForRepo(
