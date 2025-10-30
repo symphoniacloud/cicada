@@ -4,11 +4,11 @@ import { createRealGithubInstallationClient, GithubInstallationClient } from './
 import { GithubConfig } from '../environment/config.js'
 import { createOAuthUserAuth, OAuthAppAuthentication } from '@octokit/auth-oauth-user'
 import { logger } from '../util/logging.js'
-import { RawGithubUser } from '../domain/types/rawGithub/RawGithubUser.js'
 
 import { toRawGithubAppId } from '../domain/types/toFromRawGitHubIds.js'
 
 import { GitHubInstallationId } from '../ioTypes/GitHubTypes.js'
+import { RawGithubUser } from '../ioTypes/RawGitHubTypes.js'
 
 export interface GithubClient {
   clientForInstallation(installationId: GitHubInstallationId): GithubInstallationClient
