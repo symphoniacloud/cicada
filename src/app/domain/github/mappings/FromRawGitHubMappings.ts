@@ -1,12 +1,18 @@
-import { RawGithubInstallationSchema } from '../../../ioTypes/RawGitHubSchemas.js'
+import { RawGithubInstallationSchema, RawGithubTargetTypeSchema } from '../../../ioTypes/RawGitHubSchemas.js'
 import { GitHubInstallation } from '../../../ioTypes/GitHubTypes.js'
 import {
   fromRawGitHubAccountId,
   fromRawGithubAppId,
   fromRawGithubInstallationId
 } from '../../types/toFromRawGitHubIds.js'
+import { GitHubAccountTypeSchema } from '../../../ioTypes/GitHubSchemas.js'
+import { RawGitHubTargetType } from '../../../ioTypes/RawGitHubTypes.js'
 
-export const TransformedGithubInstallationSchema = RawGithubInstallationSchema.transform(
+export const GithubAccountTypeFromUnparsedRaw = RawGithubTargetTypeSchema.transform(
+  (x: RawGitHubTargetType) => x.toLowerCase()
+).pipe(GitHubAccountTypeSchema)
+
+export const GithubInstallationFromUnparsedRaw = RawGithubInstallationSchema.transform(
   (raw): GitHubInstallation => {
     return {
       installationId: fromRawGithubInstallationId(raw.id),
@@ -14,7 +20,7 @@ export const TransformedGithubInstallationSchema = RawGithubInstallationSchema.t
       appSlug: raw.app_slug,
       accountName: raw.account.login,
       accountId: fromRawGitHubAccountId(raw.account.id),
-      accountType: raw.target_type === 'User' ? 'user' : 'organization'
+      accountType: GithubAccountTypeFromUnparsedRaw.parse(raw.target_type)
     }
   }
 )

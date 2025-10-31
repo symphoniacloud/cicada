@@ -10,12 +10,12 @@ import {
   SsmParamName
 } from '../../../../multipleContexts/ssmParams.js'
 import { logger } from '../../../util/logging.js'
-import { fromRawAccountType } from '../../types/fromRawGitHub.js'
 import { a, p } from '../../../web/hiccough/hiccoughElements.js'
 import { fromRawGithubAppId } from '../../types/toFromRawGitHubIds.js'
 
 import { GitHubAppId } from '../../../ioTypes/GitHubTypes.js'
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../../ioTypes/GitHubSchemas.js'
+import { GithubAccountTypeFromUnparsedRaw } from '../mappings/FromRawGitHubMappings.js'
 
 export const setupRedirectRoute: Route<APIGatewayProxyEvent, GithubSetupAppState> = {
   path: '/github/setup/redirect',
@@ -87,7 +87,7 @@ export async function callGithubToFinishAppCreation(code: string): Promise<{
     //   https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-github-app-from-a-manifest
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    accountType: fromRawAccountType(result.data.owner.type)
+    accountType: GithubAccountTypeFromUnparsedRaw.parse(result.data.owner.type)
   }
 }
 
