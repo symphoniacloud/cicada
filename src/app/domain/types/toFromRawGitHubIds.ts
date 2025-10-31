@@ -6,16 +6,14 @@ import {
   GITHUB_USER_ID_PREFIX,
   GITHUB_WORKFLOW_ID_PREFIX,
   GITHUB_WORKFLOW_RUN_ID_PREFIX,
-  GitHubAccountIdSchema
+  GitHubAccountIdSchema,
+  GitHubAppIdSchema,
+  GitHubInstallationIdSchema,
+  GitHubRepoIdSchema,
+  GitHubUserIdSchema,
+  GitHubWorkflowIdSchema,
+  GitHubWorkflowRunIdSchema
 } from '../../ioTypes/GitHubSchemas.js'
-import {
-  isGitHubAppId,
-  isGitHubInstallationId,
-  isGitHubRepoId,
-  isGitHubUserId,
-  isGitHubWorkflowId,
-  isGitHubWorkflowRunId
-} from '../../ioTypes/GitHubTypeChecks.js'
 import {
   GitHubAccountId,
   GitHubAppId,
@@ -27,59 +25,41 @@ import {
 } from '../../ioTypes/GitHubTypes.js'
 
 export function fromRawGitHubAccountId(x: number): GitHubAccountId {
-  // TODO - can we use a zod function here?
   return GitHubAccountIdSchema.parse(`${GITHUB_ACCOUNT_ID_PREFIX}${x}`)
 }
 
-export function fromRawGitHubRepoId(x: unknown): GitHubRepoId {
-  const cicadaGitHubRepoId = `${GITHUB_REPO_ID_PREFIX}${x}`
-  if (!isGitHubRepoId(cicadaGitHubRepoId)) throw new Error(`Invalid raw github repo id: ${x}`)
-  return cicadaGitHubRepoId
+// Above equivalent to the below, not sure which I prefer yet
+// const RawToCicadaGitHubAccountId = z
+//   .number()
+//   .transform((raw) => `${GITHUB_ACCOUNT_ID_PREFIX}${raw}`)
+//   .pipe(GitHubAccountIdSchema)
+
+export function fromRawGitHubRepoId(x: number): GitHubRepoId {
+  return GitHubRepoIdSchema.parse(`${GITHUB_REPO_ID_PREFIX}${x}`)
 }
 
-export function fromRawGitHubWorkflowId(x: unknown): GitHubWorkflowId {
-  const cicadaGitHubWorkflowId = `${GITHUB_WORKFLOW_ID_PREFIX}${x}`
-  if (!isGitHubWorkflowId(cicadaGitHubWorkflowId)) throw new Error(`Invalid raw github workflow id: ${x}`)
-  return cicadaGitHubWorkflowId
+export function fromRawGitHubWorkflowId(x: number): GitHubWorkflowId {
+  return GitHubWorkflowIdSchema.parse(`${GITHUB_WORKFLOW_ID_PREFIX}${x}`)
 }
 
-export function fromRawGithubUserId(x: unknown): GitHubUserId {
-  const cicadaGithubUserId = `${GITHUB_USER_ID_PREFIX}${x}`
-  if (!isGitHubUserId(cicadaGithubUserId)) {
-    throw new Error(`Invalid raw github user id: ${x}`)
-  } else {
-    return cicadaGithubUserId
-  }
+export function fromRawGithubUserId(x: number): GitHubUserId {
+  return GitHubUserIdSchema.parse(`${GITHUB_USER_ID_PREFIX}${x}`)
 }
 
-export function fromRawGithubWorkflowRunId(x: unknown): GitHubWorkflowRunId {
-  const cicadaRunId = `${GITHUB_WORKFLOW_RUN_ID_PREFIX}${x}`
-  if (!isGitHubWorkflowRunId(cicadaRunId)) {
-    throw new Error(`Invalid raw github workflow run id: ${x}`)
-  }
-  return cicadaRunId
+export function fromRawGithubWorkflowRunId(x: number): GitHubWorkflowRunId {
+  return GitHubWorkflowRunIdSchema.parse(`${GITHUB_WORKFLOW_RUN_ID_PREFIX}${x}`)
 }
 
-export function fromRawGithubAppId(x: unknown): GitHubAppId {
-  const cicadaGithubAppId = `${GITHUB_APP_ID_PREFIX}${x}`
-  if (!isGitHubAppId(cicadaGithubAppId)) {
-    throw new Error(`Invalid raw github app id: ${x}`)
-  } else {
-    return cicadaGithubAppId
-  }
+export function fromRawGithubAppId(x: number): GitHubAppId {
+  return GitHubAppIdSchema.parse(`${GITHUB_APP_ID_PREFIX}${x}`)
+}
+
+export function fromRawGithubInstallationId(x: number): GitHubInstallationId {
+  return GitHubInstallationIdSchema.parse(`${GITHUB_INSTALLATION_ID_PREFIX}${x}`)
 }
 
 export function toRawGithubAppId(appId: GitHubAppId) {
   return appId.slice(GITHUB_APP_ID_PREFIX.length)
-}
-
-export function fromRawGithubInstallationId(x: unknown): GitHubInstallationId {
-  const cicadaGithubInstallationId = `${GITHUB_INSTALLATION_ID_PREFIX}${x}`
-  if (!isGitHubInstallationId(cicadaGithubInstallationId)) {
-    throw new Error(`Invalid raw github installation id: ${x}`)
-  } else {
-    return cicadaGithubInstallationId
-  }
 }
 
 export function toRawGithubInstallationId(installationId: GitHubInstallationId) {

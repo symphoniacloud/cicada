@@ -1,22 +1,25 @@
 import { expect, test } from 'vitest'
-import { isGitHubAppId, isGitHubInstallationId } from '../../../../../src/app/ioTypes/GitHubTypeChecks.js'
+import {
+  GitHubAppIdSchema,
+  GitHubInstallationIdSchema
+} from '../../../../../src/app/ioTypes/GitHubSchemas.js'
 
 test('isGithubAppId', () => {
-  expect(isGitHubAppId('GHApp123')).toBeTruthy()
+  expect(GitHubAppIdSchema.safeParse('GHApp123').success).toBeTruthy()
 
-  expect(isGitHubAppId(undefined)).toBeFalsy()
-  expect(isGitHubAppId(123)).toBeFalsy()
-  expect(isGitHubAppId('123')).toBeFalsy()
-  expect(isGitHubAppId('GHApp')).toBeFalsy()
-  expect(isGitHubAppId('GHAppfoo')).toBeFalsy()
+  expect(GitHubAppIdSchema.safeParse(undefined).success).toBeFalsy()
+  expect(GitHubAppIdSchema.safeParse(123).success).toBeFalsy()
+  expect(GitHubAppIdSchema.safeParse('123').success).toBeFalsy()
+  expect(GitHubAppIdSchema.safeParse('GHApp').success).toBeFalsy()
+  expect(GitHubAppIdSchema.safeParse('GHAppfoo').success).toBeFalsy()
 })
 
 test('isGithubInstallationId', () => {
-  expect(isGitHubInstallationId('GHInstallation123')).toBeTruthy()
+  expect(GitHubInstallationIdSchema.safeParse('GHInstallation123').success).toBeTruthy()
 
-  expect(isGitHubInstallationId(undefined)).toBeFalsy()
-  expect(isGitHubInstallationId(123)).toBeFalsy()
-  expect(isGitHubInstallationId('123')).toBeFalsy()
-  expect(isGitHubInstallationId('GHInstallation')).toBeFalsy()
-  expect(isGitHubInstallationId('GHInstallationfoo')).toBeFalsy()
+  expect(GitHubInstallationIdSchema.safeParse(undefined).success).toBeFalsy()
+  expect(GitHubInstallationIdSchema.safeParse(123).success).toBeFalsy()
+  expect(GitHubInstallationIdSchema.safeParse('123').success).toBeFalsy()
+  expect(GitHubInstallationIdSchema.safeParse('GHInstallation').success).toBeFalsy()
+  expect(GitHubInstallationIdSchema.safeParse('GHInstallationfoo').success).toBeFalsy()
 })

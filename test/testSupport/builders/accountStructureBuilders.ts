@@ -36,10 +36,10 @@ export interface BuildRepoSummaryOptions extends BuildAccountSummaryOptions {
   repoName?: string
 }
 
-export function buildRepoSummmary(options?: BuildRepoSummaryOptions): GitHubRepoSummary {
+export function buildRepoSummary(options?: BuildRepoSummaryOptions): GitHubRepoSummary {
   return {
     ...buildAccountSummary(options),
-    repoId: fromRawGitHubRepoId(options?.simpleRepoId ?? '456'),
+    repoId: fromRawGitHubRepoId(options?.simpleRepoId ?? 456),
     repoName: options?.repoName ?? ''
   }
 }
@@ -58,8 +58,8 @@ export interface BuildWorkflowOptions extends BuildRepoSummaryOptions {
 
 export function buildWorkflow(options?: BuildWorkflowOptions): GitHubWorkflow {
   return {
-    ...buildRepoSummmary(options),
-    workflowId: fromRawGitHubWorkflowId(options?.simpleWorkflowId ?? '789'),
+    ...buildRepoSummary(options),
+    workflowId: fromRawGitHubWorkflowId(options?.simpleWorkflowId ?? 789),
     workflowName: options?.workflowName ?? '',
     workflowPath: options?.path ?? '',
     workflowState: options?.state ?? '',
@@ -78,7 +78,7 @@ export interface BuildAccountStructureOptions extends BuildAccountSummaryOptions
 
 export function buildAccountStructure(options?: BuildAccountStructureOptions): GithubAccountStructure {
   return {
-    ...buildRepoSummmary(options),
+    ...buildRepoSummary(options),
     isMemberAccount: options?.isMemberAccount === undefined ? true : options.isMemberAccount,
     repos: Object.fromEntries((options?.repos ?? []).map((repo) => [repo.repoId, repo]))
   }
@@ -90,7 +90,7 @@ export interface BuildRepoStructureOptions extends BuildRepoSummaryOptions {
 
 export function buildRepoStructure(options?: BuildRepoStructureOptions): GithubRepoStructure {
   return {
-    ...buildRepoSummmary(options),
+    ...buildRepoSummary(options),
     workflows: Object.fromEntries((options?.workflows ?? [buildWorkflow()]).map((wf) => [wf.workflowId, wf]))
   }
 }
@@ -102,7 +102,7 @@ export interface BuildUserScopedRefDataOptions extends BuildAccountStructureOpti
 
 export function buildUserScopedRefData(options?: BuildUserScopedRefDataOptions): UserScopeReferenceData {
   return {
-    userId: fromRawGithubUserId(options?.simpleUserId ?? '111'),
+    userId: fromRawGithubUserId(options?.simpleUserId ?? 111),
     memberAccount: buildAccountStructure(options),
     publicAccounts: Object.fromEntries((options?.publicAccounts ?? []).map((acc) => [acc.accountId, acc]))
   }
