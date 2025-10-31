@@ -1,7 +1,5 @@
 import {
   GitHubAccountId,
-  GitHubAccountType,
-  GitHubInstallation,
   GitHubPublicAccount,
   GitHubPush,
   GitHubRepo,
@@ -13,8 +11,6 @@ import {
 } from '../../ioTypes/GitHubTypes.js'
 import {
   fromRawGitHubAccountId,
-  fromRawGithubAppId,
-  fromRawGithubInstallationId,
   fromRawGitHubRepoId,
   fromRawGithubUserId,
   fromRawGitHubWorkflowId,
@@ -29,28 +25,8 @@ import {
 import { isRawGithubWebhookPush, RawGithubWebhookPushCommit } from './rawGithub/RawGithubWebhookPush.js'
 import { timestampToIso } from '../../util/dateAndTime.js'
 import { logger } from '../../util/logging.js'
-import {
-  RawGithubInstallation,
-  RawGithubRepo,
-  RawGithubUser,
-  RawGithubWorkflow
-} from '../../ioTypes/RawGitHubTypes.js'
-import { GitHubAccountTypeSchema } from '../../ioTypes/GitHubSchemas.js'
-
-export function fromRawAccountType(accountType: string): GitHubAccountType {
-  return GitHubAccountTypeSchema.parse(accountType.toLowerCase())
-}
-
-export function fromRawGithubInstallation(raw: RawGithubInstallation): GitHubInstallation {
-  return {
-    installationId: fromRawGithubInstallationId(raw.id),
-    appId: fromRawGithubAppId(raw.app_id),
-    appSlug: raw.app_slug,
-    accountName: raw.account.login,
-    accountId: fromRawGitHubAccountId(raw.account.id),
-    accountType: fromRawAccountType(raw.target_type)
-  }
-}
+import { RawGithubRepo, RawGithubUser, RawGithubWorkflow } from '../../ioTypes/RawGitHubTypes.js'
+import { GithubAccountTypeFromUnparsedRaw } from '../github/mappings/FromRawGitHubMappings.js'
 
 export function publicAccountFromRawGithubUser(
   user: RawGithubUser,
@@ -58,7 +34,7 @@ export function publicAccountFromRawGithubUser(
 ): GitHubPublicAccount {
   return {
     accountId: fromRawGitHubAccountId(user.id),
-    accountType: fromRawAccountType(user.type),
+    accountType: GithubAccountTypeFromUnparsedRaw.parse(user.type),
     accountName: user.login,
     installationAccountId
   }
@@ -78,7 +54,7 @@ export function fromRawGithubRepo(raw: RawGithubRepo): GitHubRepo {
   return {
     accountId: fromRawGitHubAccountId(raw.owner.id),
     accountName: raw.owner.login,
-    accountType: fromRawAccountType(raw.owner.type),
+    accountType: GithubAccountTypeFromUnparsedRaw.parse(raw.owner.type),
     repoId: fromRawGitHubRepoId(raw.id),
     repoName: raw.name,
     fullName: raw.full_name,
@@ -160,7 +136,7 @@ export function fromRawGithubWebhookPush(raw: unknown): GitHubPush | undefined {
   return {
     accountId: fromRawGitHubAccountId(raw.repository.owner.id),
     accountName: raw.repository.owner.name,
-    accountType: fromRawAccountType(raw.repository.owner.type),
+    accountType: GithubAccountTypeFromUnparsedRaw.parse(raw.repository.owner.type),
     repoId: fromRawGitHubRepoId(raw.repository.id),
     repoName: raw.repository.name,
     repoUrl: raw.repository.html_url,

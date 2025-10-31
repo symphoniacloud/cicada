@@ -4,7 +4,7 @@ import { removeNullAndUndefined } from '../../../util/collections.js'
 import { logger } from '../../../util/logging.js'
 import { GitHubInstallation } from '../../../ioTypes/GitHubTypes.js'
 
-import { TransformedGithubInstallationSchema } from '../mappings/FromRawGitHubMappings.js'
+import { GithubInstallationFromUnparsedRaw } from '../mappings/FromRawGitHubMappings.js'
 
 export async function crawlInstallations(appState: AppState): Promise<GitHubInstallation[]> {
   logger.info(`Crawling Installations`)
@@ -17,5 +17,5 @@ export async function crawlInstallations(appState: AppState): Promise<GitHubInst
 }
 
 function parseRawGithub(x: unknown): GitHubInstallation {
-  return TransformedGithubInstallationSchema.parse(x)
+  return GithubInstallationFromUnparsedRaw.parse(x)
 }
