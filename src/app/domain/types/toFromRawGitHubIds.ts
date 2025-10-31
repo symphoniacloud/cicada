@@ -1,12 +1,10 @@
 import {
-  GITHUB_ACCOUNT_ID_PREFIX,
   GITHUB_APP_ID_PREFIX,
   GITHUB_INSTALLATION_ID_PREFIX,
   GITHUB_REPO_ID_PREFIX,
   GITHUB_USER_ID_PREFIX,
   GITHUB_WORKFLOW_ID_PREFIX,
   GITHUB_WORKFLOW_RUN_ID_PREFIX,
-  GitHubAccountIdSchema,
   GitHubAppIdSchema,
   GitHubInstallationIdSchema,
   GitHubRepoIdSchema,
@@ -15,7 +13,6 @@ import {
   GitHubWorkflowRunIdSchema
 } from '../../ioTypes/GitHubSchemas.js'
 import {
-  GitHubAccountId,
   GitHubAppId,
   GitHubInstallationId,
   GitHubRepoId,
@@ -23,16 +20,6 @@ import {
   GitHubWorkflowId,
   GitHubWorkflowRunId
 } from '../../ioTypes/GitHubTypes.js'
-
-export function fromRawGitHubAccountId(x: number): GitHubAccountId {
-  return GitHubAccountIdSchema.parse(`${GITHUB_ACCOUNT_ID_PREFIX}${x}`)
-}
-
-// Above equivalent to the below, not sure which I prefer yet
-// const RawToCicadaGitHubAccountId = z
-//   .number()
-//   .transform((raw) => `${GITHUB_ACCOUNT_ID_PREFIX}${raw}`)
-//   .pipe(GitHubAccountIdSchema)
 
 export function fromRawGitHubRepoId(x: number): GitHubRepoId {
   return GitHubRepoIdSchema.parse(`${GITHUB_REPO_ID_PREFIX}${x}`)

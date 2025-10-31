@@ -10,7 +10,6 @@ import {
   GitHubWorkflowSummary
 } from '../../ioTypes/GitHubTypes.js'
 import {
-  fromRawGitHubAccountId,
   fromRawGitHubRepoId,
   fromRawGithubUserId,
   fromRawGitHubWorkflowId,
@@ -26,14 +25,17 @@ import { isRawGithubWebhookPush, RawGithubWebhookPushCommit } from './rawGithub/
 import { timestampToIso } from '../../util/dateAndTime.js'
 import { logger } from '../../util/logging.js'
 import { RawGithubRepo, RawGithubUser, RawGithubWorkflow } from '../../ioTypes/RawGitHubTypes.js'
-import { GithubAccountTypeFromUnparsedRaw } from '../github/mappings/FromRawGitHubMappings.js'
+import {
+  GitHubAccountIdFromUnparsedRaw,
+  GithubAccountTypeFromUnparsedRaw
+} from '../github/mappings/FromRawGitHubMappings.js'
 
 export function publicAccountFromRawGithubUser(
   user: RawGithubUser,
   installationAccountId: GitHubAccountId
 ): GitHubPublicAccount {
   return {
-    accountId: fromRawGitHubAccountId(user.id),
+    accountId: GitHubAccountIdFromUnparsedRaw.parse(user.id),
     accountType: GithubAccountTypeFromUnparsedRaw.parse(user.type),
     accountName: user.login,
     installationAccountId
@@ -52,7 +54,7 @@ export function fromRawGithubUser(raw: RawGithubUser): GitHubUser {
 
 export function fromRawGithubRepo(raw: RawGithubRepo): GitHubRepo {
   return {
-    accountId: fromRawGitHubAccountId(raw.owner.id),
+    accountId: GitHubAccountIdFromUnparsedRaw.parse(raw.owner.id),
     accountName: raw.owner.login,
     accountType: GithubAccountTypeFromUnparsedRaw.parse(raw.owner.type),
     repoId: fromRawGitHubRepoId(raw.id),
@@ -134,7 +136,7 @@ export function fromRawGithubWebhookPush(raw: unknown): GitHubPush | undefined {
   }
 
   return {
-    accountId: fromRawGitHubAccountId(raw.repository.owner.id),
+    accountId: GitHubAccountIdFromUnparsedRaw.parse(raw.repository.owner.id),
     accountName: raw.repository.owner.name,
     accountType: GithubAccountTypeFromUnparsedRaw.parse(raw.repository.owner.type),
     repoId: fromRawGitHubRepoId(raw.repository.id),
