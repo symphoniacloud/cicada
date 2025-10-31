@@ -1,25 +1,45 @@
-import { RawGithubInstallationSchema, RawGithubTargetTypeSchema } from '../../../ioTypes/RawGitHubSchemas.js'
+import {
+  RawGitHubAccountIdSchema,
+  RawGitHubAppIdSchema,
+  RawGitHubInstallationIdSchema,
+  RawGithubInstallationSchema,
+  RawGithubTargetTypeSchema
+} from '../../../ioTypes/RawGitHubSchemas.js'
 import { GitHubInstallation } from '../../../ioTypes/GitHubTypes.js'
 import {
-  fromRawGitHubAccountId,
-  fromRawGithubAppId,
-  fromRawGithubInstallationId
-} from '../../types/toFromRawGitHubIds.js'
-import { GitHubAccountTypeSchema } from '../../../ioTypes/GitHubSchemas.js'
-import { RawGitHubTargetType } from '../../../ioTypes/RawGitHubTypes.js'
+  GITHUB_ACCOUNT_ID_PREFIX,
+  GITHUB_APP_ID_PREFIX,
+  GITHUB_INSTALLATION_ID_PREFIX,
+  GitHubAccountIdSchema,
+  GitHubAccountTypeSchema,
+  GitHubAppIdSchema,
+  GitHubInstallationIdSchema
+} from '../../../ioTypes/GitHubSchemas.js'
 
-export const GithubAccountTypeFromUnparsedRaw = RawGithubTargetTypeSchema.transform(
-  (x: RawGitHubTargetType) => x.toLowerCase()
+export const GitHubAppIdFromUnparsedRaw = RawGitHubAppIdSchema.transform(
+  (raw) => `${GITHUB_APP_ID_PREFIX}${raw}`
+).pipe(GitHubAppIdSchema)
+
+export const GitHubAccountIdFromUnparsedRaw = RawGitHubAccountIdSchema.transform(
+  (raw) => `${GITHUB_ACCOUNT_ID_PREFIX}${raw}`
+).pipe(GitHubAccountIdSchema)
+
+export const GitHubInstallationIdFromUnparsedRaw = RawGitHubInstallationIdSchema.transform(
+  (raw) => `${GITHUB_INSTALLATION_ID_PREFIX}${raw}`
+).pipe(GitHubInstallationIdSchema)
+
+export const GithubAccountTypeFromUnparsedRaw = RawGithubTargetTypeSchema.transform((x) =>
+  x.toLowerCase()
 ).pipe(GitHubAccountTypeSchema)
 
 export const GithubInstallationFromUnparsedRaw = RawGithubInstallationSchema.transform(
   (raw): GitHubInstallation => {
     return {
-      installationId: fromRawGithubInstallationId(raw.id),
-      appId: fromRawGithubAppId(raw.app_id),
+      installationId: GitHubInstallationIdFromUnparsedRaw.parse(raw.id),
+      appId: GitHubAppIdFromUnparsedRaw.parse(raw.app_id),
       appSlug: raw.app_slug,
       accountName: raw.account.login,
-      accountId: fromRawGitHubAccountId(raw.account.id),
+      accountId: GitHubAccountIdFromUnparsedRaw.parse(raw.account.id),
       accountType: GithubAccountTypeFromUnparsedRaw.parse(raw.target_type)
     }
   }

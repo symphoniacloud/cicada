@@ -1,15 +1,19 @@
 import { z } from 'zod'
 
+export const RawGitHubAppIdSchema = z.number()
+export const RawGitHubInstallationIdSchema = z.number()
+export const RawGitHubAccountIdSchema = z.number()
+
 export const RawGithubTargetTypeSchema = z.literal(['User', 'Organization'])
 
 export const RawGithubInstallationSchema = z.object({
-  id: z.number(),
+  id: RawGitHubInstallationIdSchema,
   account: z.object({
     login: z.string(),
-    id: z.number()
+    id: RawGitHubAccountIdSchema
   }),
   target_type: RawGithubTargetTypeSchema,
-  app_id: z.number(),
+  app_id: RawGitHubAppIdSchema,
   app_slug: z.string()
 })
 
@@ -28,7 +32,7 @@ export const RawGithubRepoSchema = z.object({
   full_name: z.string(),
   private: z.boolean(),
   owner: z.object({
-    id: z.number(),
+    id: RawGitHubAccountIdSchema,
     login: z.string(),
     type: z.string()
   }),
