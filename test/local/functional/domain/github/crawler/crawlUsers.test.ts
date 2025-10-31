@@ -2,10 +2,10 @@ import { test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
 import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient.js'
 import {
-  testMikeRobertsUser,
-  testMikeRobertsUserMembershipOfOrg,
   cicadaTestOrgInstallation,
   cicadaTestUserInstallation,
+  testMikeRobertsUser,
+  testMikeRobertsUserMembershipOfOrg,
   testTestUser,
   testTestUserMembershipOfOrg,
   testTestUserMembershipOfPersonalInstallation
@@ -25,10 +25,8 @@ import {
   expectedBatchWriteGithubUsers
 } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 import { successWith } from '../../../../../../src/app/util/structuredResult.js'
-import {
-  fromRawGitHubAccountId,
-  fromRawGithubUserId
-} from '../../../../../../src/app/domain/types/toFromRawGitHubIds.js'
+import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/toFromRawGitHubIds.js'
+import { GitHubAccountIdFromUnparsedRaw } from '../../../../../../src/app/domain/github/mappings/FromRawGitHubMappings.js'
 
 test('user-crawler-for-personal-account-installation', async () => {
   // A
@@ -75,7 +73,7 @@ test('user-crawler-for-org-installation', async () => {
   expectBatchWrites(appState, 2).toEqual(
     expectedBatchDeleteGithubMemberships([
       {
-        accountId: fromRawGitHubAccountId(162483619),
+        accountId: GitHubAccountIdFromUnparsedRaw.parse(162483619),
         userId: fromRawGithubUserId(9786)
       }
     ])

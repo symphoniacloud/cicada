@@ -1,5 +1,4 @@
 import {
-  fromRawGitHubAccountId,
   fromRawGitHubRepoId,
   fromRawGithubUserId,
   fromRawGitHubWorkflowId
@@ -16,6 +15,7 @@ import {
   GithubRepoStructure,
   UserScopeReferenceData
 } from '../../../src/app/domain/types/internalTypes.js'
+import { GitHubAccountIdFromUnparsedRaw } from '../../../src/app/domain/github/mappings/FromRawGitHubMappings.js'
 
 export interface BuildAccountSummaryOptions {
   simpleAccountId?: number
@@ -25,7 +25,7 @@ export interface BuildAccountSummaryOptions {
 
 export function buildAccountSummary(options?: BuildAccountSummaryOptions): GitHubAccountSummary {
   return {
-    accountId: fromRawGitHubAccountId(options?.simpleAccountId ?? 123),
+    accountId: GitHubAccountIdFromUnparsedRaw.parse(options?.simpleAccountId ?? 123),
     accountName: options?.accountName ?? '',
     accountType: options?.accountType ?? ORGANIZATION_ACCOUNT_TYPE
   }

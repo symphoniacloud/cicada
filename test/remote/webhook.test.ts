@@ -7,8 +7,7 @@ import { realS3 } from '../../src/app/outboundInterfaces/s3Wrapper.js'
 import { deletePushesForAccount, getPushesForAccount } from './integrationTestSupport/githubActivity.js'
 import { sleep } from './integrationTestSupport/utils.js'
 import { createSignatureHeader } from '../../src/app/domain/github/webhookProcessor/githubWebhookProcessor.js'
-
-import { fromRawGitHubAccountId } from '../../src/app/domain/types/toFromRawGitHubIds.js'
+import { GitHubAccountIdFromUnparsedRaw } from '../../src/app/domain/github/mappings/FromRawGitHubMappings.js'
 
 // GitHub Webhook - these are directly stored in S3, and then async processing occurs
 test('webhook test', async () => {
@@ -18,7 +17,7 @@ test('webhook test', async () => {
   const deliveryId = `fake-integration-${randomUUID()}`
   const rawBody = JSON.stringify(push)
   const sigHeader = createSignatureHeader(rawBody, (await appState.config.github()).webhookSecret)
-  const testAccountId = fromRawGitHubAccountId(push.organization.id)
+  const testAccountId = GitHubAccountIdFromUnparsedRaw.parse(push.organization.id)
   // Delete previous activity
   await deletePushesForAccount(appState, testAccountId)
 
