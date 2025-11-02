@@ -23,13 +23,13 @@ export interface GithubInstallationClient {
 
   listPublicRepositoriesForUser(accountName: string): Promise<RawGithubRepo[]>
 
-  listOrganizationMembers(org: string): Promise<RawGithubUser[]>
+  listOrganizationMembers(org: string): Promise<unknown[]>
 
   listWorkflowsForRepo(account: string, repo: string): Promise<RawGithubWorkflow[]>
 
   listMostRecentEventsForRepo(account: string, repo: string): Promise<RawGithubEvent[]>
 
-  getUser(username: string): Promise<Result<RawGithubUser>>
+  getUser(username: string): Promise<Result<unknown>>
 
   meta(): GithubInstallationClientMeta
 }

@@ -1,10 +1,7 @@
 import {
-  GitHubAccountId,
-  GitHubPublicAccount,
   GitHubPush,
   GitHubRepo,
   GitHubRepoSummary,
-  GitHubUser,
   GitHubWorkflow,
   GitHubWorkflowRunEvent,
   GitHubWorkflowSummary
@@ -24,30 +21,8 @@ import {
 import { isRawGithubWebhookPush, RawGithubWebhookPushCommit } from './rawGithub/RawGithubWebhookPush.js'
 import { timestampToIso } from '../../util/dateAndTime.js'
 import { logger } from '../../util/logging.js'
-import { RawGithubRepo, RawGithubUser, RawGithubWorkflow } from '../../ioTypes/RawGitHubTypes.js'
+import { RawGithubRepo, RawGithubWorkflow } from '../../ioTypes/RawGitHubTypes.js'
 import { gitHubAccountIdFromRaw, gitHubAccountTypeFromRaw } from '../github/mappings/FromRawGitHubMappings.js'
-
-export function publicAccountFromRawGithubUser(
-  user: RawGithubUser,
-  installationAccountId: GitHubAccountId
-): GitHubPublicAccount {
-  return {
-    accountId: gitHubAccountIdFromRaw(user.id),
-    accountType: gitHubAccountTypeFromRaw(user.type),
-    accountName: user.login,
-    installationAccountId
-  }
-}
-
-export function fromRawGithubUser(raw: RawGithubUser): GitHubUser {
-  return {
-    userId: fromRawGithubUserId(raw.id),
-    userName: raw.login,
-    url: raw.url,
-    avatarUrl: raw.avatar_url,
-    htmlUrl: raw.html_url
-  }
-}
 
 export function fromRawGithubRepo(raw: RawGithubRepo): GitHubRepo {
   return {

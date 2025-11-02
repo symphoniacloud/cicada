@@ -3,7 +3,9 @@ import {
   GitHubAccountType,
   GitHubAppId,
   GitHubInstallation,
-  GitHubInstallationId
+  GitHubInstallationId,
+  GitHubPublicAccount,
+  GitHubUser
 } from '../../../ioTypes/GitHubTypes.js'
 import {
   GITHUB_ACCOUNT_ID_PREFIX,
@@ -19,8 +21,10 @@ import {
   RawGitHubAppId,
   RawGithubInstallation,
   RawGitHubInstallationId,
-  RawGitHubTargetType
+  RawGitHubTargetType,
+  RawGithubUser
 } from '../../../ioTypes/RawGitHubTypes.js'
+import { fromRawGithubUserId } from '../../types/toFromRawGitHubIds.js'
 
 export function gitHubAppIdFromRaw(raw: RawGitHubAppId): GitHubAppId {
   return GitHubAppIdSchema.parse(`${GITHUB_APP_ID_PREFIX}${raw}`)
@@ -46,5 +50,27 @@ export function gitHubInstallationFromRaw(raw: RawGithubInstallation): GitHubIns
     accountName: raw.account.login,
     accountId: gitHubAccountIdFromRaw(raw.account.id),
     accountType: gitHubAccountTypeFromRaw(raw.target_type)
+  }
+}
+
+export function fromRawGithubUser(raw: RawGithubUser): GitHubUser {
+  return {
+    userId: fromRawGithubUserId(raw.id),
+    userName: raw.login,
+    url: raw.url,
+    avatarUrl: raw.avatar_url,
+    htmlUrl: raw.html_url
+  }
+}
+
+export function publicAccountFromRawGithubUser(
+  user: RawGithubUser,
+  installationAccountId: GitHubAccountId
+): GitHubPublicAccount {
+  return {
+    accountId: gitHubAccountIdFromRaw(user.id),
+    accountType: gitHubAccountTypeFromRaw(user.type),
+    accountName: user.login,
+    installationAccountId
   }
 }

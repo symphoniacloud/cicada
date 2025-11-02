@@ -11,12 +11,12 @@ export async function crawlInstallations(appState: AppState): Promise<GitHubInst
   logger.info(`Crawling Installations`)
 
   const fromGitHub = await appState.githubClient.listInstallations()
+  const installations = fromGitHub.map((raw) =>
+    gitHubInstallationFromRaw(RawGithubInstallationSchema.parse(raw))
+  )
   const processed = await Promise.all(
-    fromGitHub.map(async (raw) => {
-      return await processInstallation(
-        appState,
-        gitHubInstallationFromRaw(RawGithubInstallationSchema.parse(raw))
-      )
+    installations.map(async (installation) => {
+      return await processInstallation(appState, installation)
     })
   )
   return removeNullAndUndefined(processed)
