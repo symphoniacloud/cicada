@@ -13,9 +13,9 @@ import { logger } from '../../../util/logging.js'
 import { a, p } from '../../../web/hiccough/hiccoughElements.js'
 import { fromRawGithubAppId } from '../../types/toFromRawGitHubIds.js'
 
-import { GitHubAppId } from '../../../ioTypes/GitHubTypes.js'
+import { GitHubAccountType, GitHubAppId } from '../../../ioTypes/GitHubTypes.js'
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../../ioTypes/GitHubSchemas.js'
-import { GithubAccountTypeFromUnparsedRaw } from '../mappings/FromRawGitHubMappings.js'
+import { gitHubAccountTypeFromRaw } from '../mappings/FromRawGitHubMappings.js'
 
 export const setupRedirectRoute: Route<APIGatewayProxyEvent, GithubSetupAppState> = {
   path: '/github/setup/redirect',
@@ -57,6 +57,8 @@ async function processRedirect(appState: GithubSetupAppState, event: APIGatewayP
   )
 }
 
+// TODO - this needs unit testing since may have broken in zod refactoring
+// TODO - use stronger types throughout here
 export async function callGithubToFinishAppCreation(code: string): Promise<{
   appId: GitHubAppId
   appName: string
@@ -65,11 +67,22 @@ export async function callGithubToFinishAppCreation(code: string): Promise<{
   privateKey: string
   webhookSecret: string
   accountName: string
-  accountType: string
+  accountType: GitHubAccountType
 }> {
   const result = await new Octokit().apps.createFromManifest({ code })
   if (!result.data.webhook_secret) throw new Error("GitHub didn't return webhook secret")
   if (!result.data.owner) throw new Error("GitHub didn't return owner")
+
+  // TODO - Octokit API changed, to say this no longer available, but it is according to
+  //   https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-github-app-from-a-manifest
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const rawAccountName = result.data.owner.login
+  // TODO - Octokit API changed, to say this no longer available, but it is according to
+  //   https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-github-app-from-a-manifest
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const rawAccountType = result.data.owner.type
 
   return {
     appId: fromRawGithubAppId(result.data.id),
@@ -78,16 +91,8 @@ export async function callGithubToFinishAppCreation(code: string): Promise<{
     clientSecret: result.data.client_secret,
     privateKey: result.data.pem,
     webhookSecret: result.data.webhook_secret,
-    // TODO - Octokit API changed, to say this no longer available, but it is according to
-    //   https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-github-app-from-a-manifest
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    accountName: result.data.owner.login,
-    // TODO - Octokit API changed, to say this no longer available, but it is according to
-    //   https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-github-app-from-a-manifest
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    accountType: GithubAccountTypeFromUnparsedRaw.parse(result.data.owner.type)
+    accountName: rawAccountName,
+    accountType: gitHubAccountTypeFromRaw(rawAccountType)
   }
 }
 

@@ -3,9 +3,9 @@ import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
 import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient.js'
 import {
   cicadaTestOrgInstallation,
+  cicadaTestUserInstallation,
   testOrgTestRepoOne,
   testOrgTestRepoTwo,
-  cicadaTestUserInstallation,
   testPersonalTestRepo
 } from '../../../../../examples/cicada/githubDomainObjects.js'
 import example_personal_account_repo from '../../../../../examples/github/personal-account/api/repo.json' with { type: 'json' }
@@ -16,12 +16,15 @@ import {
   expectBatchWritesLength
 } from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
 import { expectedBatchWriteGithubRepositories } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
+import { RawGithubRepoSchema } from '../../../../../../src/app/ioTypes/RawGitHubSchemas.js'
 
 test('repository-crawler-for-personal-account-installation', async () => {
   // A
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
-  githubInstallationClient.stubInstallationRepositories = [example_personal_account_repo]
+  githubInstallationClient.stubInstallationRepositories = [
+    RawGithubRepoSchema.parse(example_personal_account_repo)
+  ]
   githubInstallationClient.stubWorkflowsForRepo.addResponse(
     {
       owner: 'cicada-test-user',
@@ -57,7 +60,10 @@ test('repository-crawler-for-org-installation', async () => {
   // A
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
-  githubInstallationClient.stubOrganizationRepositories.addResponse('cicada-test-org', example_org_repos)
+  githubInstallationClient.stubOrganizationRepositories.addResponse(
+    'cicada-test-org',
+    example_org_repos.map((x) => RawGithubRepoSchema.parse(x))
+  )
   githubInstallationClient.stubWorkflowsForRepo.addResponse(
     {
       owner: 'cicada-test-org',

@@ -37,7 +37,7 @@ test('oauthCallback', async () => {
     id: 162360409,
     avatar_url: '',
     html_url: '',
-    type: '',
+    type: 'User',
     url: ''
   })
   stubGetUser(appState)

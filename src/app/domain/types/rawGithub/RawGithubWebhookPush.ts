@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { logger } from '../../../util/logging.js'
+import { RawGithubTargetTypeSchema } from '../../../ioTypes/RawGitHubSchemas.js'
 
 export const RawGithubWebhookPushCommitSchema = z.object({
   id: z.string(),
@@ -25,7 +26,7 @@ export const RawGithubWebhookPushSchema = z.object({
     owner: z.object({
       name: z.string(),
       id: z.number(),
-      type: z.string()
+      type: RawGithubTargetTypeSchema
     })
   }),
   sender: z.object({
@@ -44,8 +45,4 @@ export function isRawGithubWebhookPush(x: unknown): x is RawGithubWebhookPush {
     logger.error('Unexpected structure for RawGithubWebhookPush', { event: x, error: result.error })
   }
   return result.success
-}
-
-export function isRawGithubWebhookPushCommit(x: unknown): x is RawGithubWebhookPushCommit {
-  return RawGithubWebhookPushCommitSchema.safeParse(x).success
 }

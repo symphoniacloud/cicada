@@ -25,18 +25,15 @@ import { isRawGithubWebhookPush, RawGithubWebhookPushCommit } from './rawGithub/
 import { timestampToIso } from '../../util/dateAndTime.js'
 import { logger } from '../../util/logging.js'
 import { RawGithubRepo, RawGithubUser, RawGithubWorkflow } from '../../ioTypes/RawGitHubTypes.js'
-import {
-  GitHubAccountIdFromUnparsedRaw,
-  GithubAccountTypeFromUnparsedRaw
-} from '../github/mappings/FromRawGitHubMappings.js'
+import { gitHubAccountIdFromRaw, gitHubAccountTypeFromRaw } from '../github/mappings/FromRawGitHubMappings.js'
 
 export function publicAccountFromRawGithubUser(
   user: RawGithubUser,
   installationAccountId: GitHubAccountId
 ): GitHubPublicAccount {
   return {
-    accountId: GitHubAccountIdFromUnparsedRaw.parse(user.id),
-    accountType: GithubAccountTypeFromUnparsedRaw.parse(user.type),
+    accountId: gitHubAccountIdFromRaw(user.id),
+    accountType: gitHubAccountTypeFromRaw(user.type),
     accountName: user.login,
     installationAccountId
   }
@@ -54,9 +51,9 @@ export function fromRawGithubUser(raw: RawGithubUser): GitHubUser {
 
 export function fromRawGithubRepo(raw: RawGithubRepo): GitHubRepo {
   return {
-    accountId: GitHubAccountIdFromUnparsedRaw.parse(raw.owner.id),
+    accountId: gitHubAccountIdFromRaw(raw.owner.id),
     accountName: raw.owner.login,
-    accountType: GithubAccountTypeFromUnparsedRaw.parse(raw.owner.type),
+    accountType: gitHubAccountTypeFromRaw(raw.owner.type),
     repoId: fromRawGitHubRepoId(raw.id),
     repoName: raw.name,
     fullName: raw.full_name,
@@ -136,9 +133,9 @@ export function fromRawGithubWebhookPush(raw: unknown): GitHubPush | undefined {
   }
 
   return {
-    accountId: GitHubAccountIdFromUnparsedRaw.parse(raw.repository.owner.id),
+    accountId: gitHubAccountIdFromRaw(raw.repository.owner.id),
     accountName: raw.repository.owner.name,
-    accountType: GithubAccountTypeFromUnparsedRaw.parse(raw.repository.owner.type),
+    accountType: gitHubAccountTypeFromRaw(raw.repository.owner.type),
     repoId: fromRawGitHubRepoId(raw.repository.id),
     repoName: raw.repository.name,
     repoUrl: raw.repository.html_url,

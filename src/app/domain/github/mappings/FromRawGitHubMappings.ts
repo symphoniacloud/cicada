@@ -1,11 +1,10 @@
 import {
-  RawGitHubAccountIdSchema,
-  RawGitHubAppIdSchema,
-  RawGitHubInstallationIdSchema,
-  RawGithubInstallationSchema,
-  RawGithubTargetTypeSchema
-} from '../../../ioTypes/RawGitHubSchemas.js'
-import { GitHubInstallation } from '../../../ioTypes/GitHubTypes.js'
+  GitHubAccountId,
+  GitHubAccountType,
+  GitHubAppId,
+  GitHubInstallation,
+  GitHubInstallationId
+} from '../../../ioTypes/GitHubTypes.js'
 import {
   GITHUB_ACCOUNT_ID_PREFIX,
   GITHUB_APP_ID_PREFIX,
@@ -15,32 +14,37 @@ import {
   GitHubAppIdSchema,
   GitHubInstallationIdSchema
 } from '../../../ioTypes/GitHubSchemas.js'
+import {
+  RawGitHubAccountId,
+  RawGitHubAppId,
+  RawGithubInstallation,
+  RawGitHubInstallationId,
+  RawGitHubTargetType
+} from '../../../ioTypes/RawGitHubTypes.js'
 
-export const GitHubAppIdFromUnparsedRaw = RawGitHubAppIdSchema.transform(
-  (raw) => `${GITHUB_APP_ID_PREFIX}${raw}`
-).pipe(GitHubAppIdSchema)
+export function gitHubAppIdFromRaw(raw: RawGitHubAppId): GitHubAppId {
+  return GitHubAppIdSchema.parse(`${GITHUB_APP_ID_PREFIX}${raw}`)
+}
 
-export const GitHubAccountIdFromUnparsedRaw = RawGitHubAccountIdSchema.transform(
-  (raw) => `${GITHUB_ACCOUNT_ID_PREFIX}${raw}`
-).pipe(GitHubAccountIdSchema)
+export function gitHubAccountIdFromRaw(raw: RawGitHubAccountId): GitHubAccountId {
+  return GitHubAccountIdSchema.parse(`${GITHUB_ACCOUNT_ID_PREFIX}${raw}`)
+}
 
-export const GitHubInstallationIdFromUnparsedRaw = RawGitHubInstallationIdSchema.transform(
-  (raw) => `${GITHUB_INSTALLATION_ID_PREFIX}${raw}`
-).pipe(GitHubInstallationIdSchema)
+export function gitHubInstallationIdFromRaw(raw: RawGitHubInstallationId): GitHubInstallationId {
+  return GitHubInstallationIdSchema.parse(`${GITHUB_INSTALLATION_ID_PREFIX}${raw}`)
+}
 
-export const GithubAccountTypeFromUnparsedRaw = RawGithubTargetTypeSchema.transform((x) =>
-  x.toLowerCase()
-).pipe(GitHubAccountTypeSchema)
+export function gitHubAccountTypeFromRaw(raw: RawGitHubTargetType): GitHubAccountType {
+  return GitHubAccountTypeSchema.parse(raw.toLowerCase())
+}
 
-export const GithubInstallationFromUnparsedRaw = RawGithubInstallationSchema.transform(
-  (raw): GitHubInstallation => {
-    return {
-      installationId: GitHubInstallationIdFromUnparsedRaw.parse(raw.id),
-      appId: GitHubAppIdFromUnparsedRaw.parse(raw.app_id),
-      appSlug: raw.app_slug,
-      accountName: raw.account.login,
-      accountId: GitHubAccountIdFromUnparsedRaw.parse(raw.account.id),
-      accountType: GithubAccountTypeFromUnparsedRaw.parse(raw.target_type)
-    }
+export function gitHubInstallationFromRaw(raw: RawGithubInstallation): GitHubInstallation {
+  return {
+    installationId: gitHubInstallationIdFromRaw(raw.id),
+    appId: gitHubAppIdFromRaw(raw.app_id),
+    appSlug: raw.app_slug,
+    accountName: raw.account.login,
+    accountId: gitHubAccountIdFromRaw(raw.account.id),
+    accountType: gitHubAccountTypeFromRaw(raw.target_type)
   }
-)
+}

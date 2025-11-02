@@ -7,6 +7,7 @@ import { fromRawGithubUserId } from '../types/toFromRawGitHubIds.js'
 import { GitHubInstallation } from '../../ioTypes/GitHubTypes.js'
 import { fromRawGithubUser } from '../types/fromRawGitHub.js'
 import { RawGithubUser } from '../../ioTypes/RawGitHubTypes.js'
+import { RawGithubUserSchema } from '../../ioTypes/RawGitHubSchemas.js'
 
 export async function processRawUsers(
   appState: AppState,
@@ -41,10 +42,10 @@ export async function getUserByTokenUsingTokenCache(appState: AppState, token: s
 
 // Used when a user logs in via GitHub, or during API GW authorization when local cached token has expired
 export async function getUserByTokenWithGithubCheck(appState: AppState, token: string) {
-  const rawGithubUser = await appState.githubClient.getGithubUser(token)
-  if (!rawGithubUser) return undefined
+  const rawUser = await appState.githubClient.getGithubUser(token)
+  const parsedUser = RawGithubUserSchema.parse(rawUser)
 
-  const cicadaUser = await getUserById(appState.entityStore, fromRawGithubUserId(rawGithubUser.id))
+  const cicadaUser = await getUserById(appState.entityStore, fromRawGithubUserId(parsedUser.id))
   if (cicadaUser)
     await saveOrRefreshGithubUserToken(appState, {
       token,

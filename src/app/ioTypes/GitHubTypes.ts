@@ -28,6 +28,8 @@ import {
   GitHubWorkflowSummarySchema
 } from './GitHubSchemas.js'
 
+export type GitHubAppId = z.infer<typeof GitHubAppIdSchema>
+
 export type GitHubAccountId = z.infer<typeof GitHubAccountIdSchema>
 
 export type GitHubRepoId = z.infer<typeof GitHubRepoIdSchema>
@@ -37,8 +39,6 @@ export type GitHubWorkflowId = z.infer<typeof GitHubWorkflowIdSchema>
 export type GitHubUserId = z.infer<typeof GitHubUserIdSchema>
 
 export type GitHubWorkflowRunId = z.infer<typeof GitHubWorkflowRunIdSchema>
-
-export type GitHubAppId = z.infer<typeof GitHubAppIdSchema>
 
 export type GitHubInstallationId = z.infer<typeof GitHubInstallationIdSchema>
 

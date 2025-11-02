@@ -6,6 +6,7 @@
 
 import { z } from 'zod'
 import { logger } from '../../../util/logging.js'
+import { RawGithubTargetTypeSchema } from '../../../ioTypes/RawGitHubSchemas.js'
 
 export const RawGithubWorkflowRunEventSchema = z.object({
   id: z.number(),
@@ -41,7 +42,7 @@ export const RawGithubWorkflowRunEventSchema = z.object({
     owner: z.object({
       id: z.number(),
       login: z.string(),
-      type: z.string()
+      type: RawGithubTargetTypeSchema
     })
   }),
   // "workflow" is in webhook event but not API event

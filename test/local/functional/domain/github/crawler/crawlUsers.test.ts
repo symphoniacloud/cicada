@@ -26,7 +26,8 @@ import {
 } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 import { successWith } from '../../../../../../src/app/util/structuredResult.js'
 import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/toFromRawGitHubIds.js'
-import { GitHubAccountIdFromUnparsedRaw } from '../../../../../../src/app/domain/github/mappings/FromRawGitHubMappings.js'
+import { gitHubAccountIdFromRaw } from '../../../../../../src/app/domain/github/mappings/FromRawGitHubMappings.js'
+import { RawGithubUserSchema } from '../../../../../../src/app/ioTypes/RawGitHubSchemas.js'
 
 test('user-crawler-for-personal-account-installation', async () => {
   // A
@@ -34,7 +35,7 @@ test('user-crawler-for-personal-account-installation', async () => {
   const githubInstallationClient = new FakeGithubInstallationClient()
   githubInstallationClient.stubUsers.addResponse(
     'cicada-test-user',
-    successWith(example_personal_account_user)
+    successWith(RawGithubUserSchema.parse(example_personal_account_user))
   )
 
   // A
@@ -52,7 +53,10 @@ test('user-crawler-for-org-installation', async () => {
   // A
   const appState = new FakeAppState()
   const githubInstallationClient = new FakeGithubInstallationClient()
-  githubInstallationClient.stubOrganizationMembers.addResponse('cicada-test-org', example_org_users)
+  githubInstallationClient.stubOrganizationMembers.addResponse(
+    'cicada-test-org',
+    example_org_users.map((x) => RawGithubUserSchema.parse(x))
+  )
 
   stubQueryAccountMembershipsByAccount(appState, [
     testTestUserMembershipOfOrg,
@@ -73,7 +77,7 @@ test('user-crawler-for-org-installation', async () => {
   expectBatchWrites(appState, 2).toEqual(
     expectedBatchDeleteGithubMemberships([
       {
-        accountId: GitHubAccountIdFromUnparsedRaw.parse(162483619),
+        accountId: gitHubAccountIdFromRaw(162483619),
         userId: fromRawGithubUserId(9786)
       }
     ])

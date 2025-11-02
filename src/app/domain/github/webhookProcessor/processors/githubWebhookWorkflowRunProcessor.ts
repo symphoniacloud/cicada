@@ -4,7 +4,7 @@ import { logger } from '../../../../util/logging.js'
 import { isRawGithubWorkflowRunEvent } from '../../../types/rawGithub/RawGithubWorkflowRunEvent.js'
 import { processRawRunEvent } from '../../githubWorkflowRunEvent.js'
 import { getInstallationOrUndefined } from '../../../entityStore/entities/GithubInstallationEntity.js'
-import { GitHubAccountIdFromUnparsedRaw } from '../../mappings/FromRawGitHubMappings.js'
+import { gitHubAccountIdFromRaw } from '../../mappings/FromRawGitHubMappings.js'
 
 export const githubWebhookWorkflowRunProcessor: WebhookProcessor = async (
   appState: AppState,
@@ -18,7 +18,7 @@ export const githubWebhookWorkflowRunProcessor: WebhookProcessor = async (
 
   const installation = await getInstallationOrUndefined(
     appState.entityStore,
-    GitHubAccountIdFromUnparsedRaw.parse(parsed.repository.owner.id)
+    gitHubAccountIdFromRaw(parsed.repository.owner.id)
   )
   if (!installation) {
     logger.warn('Received Run event but no known installation for run event owner', { parsed })
