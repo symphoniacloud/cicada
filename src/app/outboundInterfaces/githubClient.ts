@@ -8,7 +8,6 @@ import { logger } from '../util/logging.js'
 import { toRawGithubAppId } from '../domain/types/toFromRawGitHubIds.js'
 
 import { GitHubInstallationId } from '../ioTypes/GitHubTypes.js'
-import { RawGithubUser } from '../ioTypes/RawGitHubTypes.js'
 
 export interface GithubClient {
   clientForInstallation(installationId: GitHubInstallationId): GithubInstallationClient
@@ -17,7 +16,7 @@ export interface GithubClient {
 
   createOAuthUserAuth(code: string): Promise<OAuthAppAuthentication>
 
-  getGithubUser(token: string): Promise<RawGithubUser | undefined>
+  getGithubUser(token: string): Promise<unknown>
 }
 
 export function createRealGithubClient({

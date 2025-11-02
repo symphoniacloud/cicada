@@ -19,13 +19,19 @@ import {
   expectedPutLatestGithubWorkflowRunEvent
 } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 import { processRawRunEvents } from '../../../../../../src/app/domain/github/githubWorkflowRunEvent.js'
+import { RawGithubWorkflowRunEventSchema } from '../../../../../../src/app/domain/types/rawGithub/RawGithubWorkflowRunEvent.js'
 
 test('repo-crawler-for-personal-account-installation', async () => {
   // A
   const appState = new FakeAppState()
 
   // A
-  await processRawRunEvents(appState, [personalTestRepoWorkflow], [example_personal_workflow_run], false)
+  await processRawRunEvents(
+    appState,
+    [personalTestRepoWorkflow],
+    [RawGithubWorkflowRunEventSchema.parse(example_personal_workflow_run)],
+    false
+  )
 
   // A
   expectPutsLength(appState).toEqual(3)
@@ -42,7 +48,7 @@ test('repo-crawler-for-org-installation', async () => {
   await processRawRunEvents(
     appState,
     [testOrgTestWorkflowOneFromJsonSummary],
-    [example_org_workflow_run],
+    [RawGithubWorkflowRunEventSchema.parse(example_org_workflow_run)],
     false
   )
 

@@ -23,7 +23,7 @@ export const RawGithubUserSchema = z.object({
   avatar_url: z.string(),
   url: z.string(),
   html_url: z.string(),
-  type: z.string()
+  type: RawGithubTargetTypeSchema
 })
 
 export const RawGithubRepoSchema = z.object({
@@ -34,7 +34,7 @@ export const RawGithubRepoSchema = z.object({
   owner: z.object({
     id: RawGitHubAccountIdSchema,
     login: z.string(),
-    type: z.string()
+    type: RawGithubTargetTypeSchema
   }),
   html_url: z.string(),
   description: z.string().nullable(),
