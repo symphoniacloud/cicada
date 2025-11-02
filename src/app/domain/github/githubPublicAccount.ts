@@ -7,7 +7,8 @@ import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallati
 import { putPublicAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
 
 import { GitHubPublicAccount, GitHubUserId } from '../../ioTypes/GitHubTypes.js'
-import { publicAccountFromRawGithubUser } from '../types/fromRawGitHub.js'
+import { publicAccountFromRawGithubUser } from './mappings/FromRawGitHubMappings.js'
+import { RawGithubUserSchema } from '../../ioTypes/RawGitHubSchemas.js'
 
 export async function savePublicAccountWithName(
   appState: AppState,
@@ -18,14 +19,16 @@ export async function savePublicAccountWithName(
   // have them choose which one to add the public account for
   const installationAccountId = await getInstalledAccountIdForUser(appState, adminUserId)
   const githubAppInstallation = await getInstallationOrThrow(appState.entityStore, installationAccountId)
-  const githubUserResult = await appState.githubClient
+  const unparsedGithubUserResult = await appState.githubClient
     .clientForInstallation(githubAppInstallation.installationId)
     .getUser(accountName)
 
-  if (!isSuccess(githubUserResult)) {
-    return githubUserResult
+  if (!isSuccess(unparsedGithubUserResult)) {
+    // Return error result
+    return unparsedGithubUserResult
   }
-  const publicAccount = publicAccountFromRawGithubUser(githubUserResult.result, installationAccountId)
+  const rawGithubUser = RawGithubUserSchema.parse(unparsedGithubUserResult.result)
+  const publicAccount = publicAccountFromRawGithubUser(rawGithubUser, installationAccountId)
   await putPublicAccount(appState.entityStore, publicAccount)
 
   // Trigger crawling public account
