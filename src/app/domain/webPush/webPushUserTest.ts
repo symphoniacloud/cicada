@@ -1,9 +1,9 @@
 import { AppState } from '../../environment/AppState.js'
 import { logger } from '../../util/logging.js'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
 import { publishToSubscriptionsForUser } from './webPushPublisher.js'
 import { isCicadaEventBridgeDetail } from '../../outboundInterfaces/eventBridgeBus.js'
 import { GitHubUserSummarySchema } from '../../ioTypes/GitHubSchemas.js'
+import { EVENTBRIDGE_DETAIL_TYPE_WEB_PUSH_TEST } from '../../../multipleContexts/eventBridgeSchemas.js'
 
 export async function handleWebPushTest(appState: AppState, eventDetail: unknown) {
   // TODO - move zod throughout EventBridge event parsing
@@ -12,7 +12,7 @@ export async function handleWebPushTest(appState: AppState, eventDetail: unknown
     !GitHubUserSummarySchema.safeParse(eventDetail.data).success
   ) {
     logger.error(
-      `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPES.WEB_PUSH_TEST} was not of expected format`,
+      `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPE_WEB_PUSH_TEST} was not of expected format`,
       { eventDetail }
     )
     return

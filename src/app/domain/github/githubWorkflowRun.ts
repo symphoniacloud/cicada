@@ -5,9 +5,9 @@ import { saveLatestRunPerWorkflow } from './githubLatestWorkflowRunEvents.js'
 import { sortBy } from '../../util/collections.js'
 import { workflowRunEventUpdatedTimestamp } from './githubWorkflowRunEvent.js'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
 import { logger } from '../../util/logging.js'
 import { GitHubWorkflowRunEvent } from '../../ioTypes/GitHubTypes.js'
+import { EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_WORKFLOW_RUN_EVENT } from '../../../multipleContexts/eventBridgeSchemas.js'
 
 // A workflow run is the same as the most recent workflow run event for a given run ID
 export async function saveRuns(
@@ -57,6 +57,6 @@ export async function saveRuns(
     // As far as notifications are concerned we only for now care about in_progress
     // If we ever get more complete notifications configuration then 'queued' might be one we can allow people to opt-in to
     if (run.status !== 'queued')
-      await sendToEventBridge(appState, EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_WORKFLOW_RUN_EVENT, run)
+      await sendToEventBridge(appState, EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_WORKFLOW_RUN_EVENT, run)
   }
 }

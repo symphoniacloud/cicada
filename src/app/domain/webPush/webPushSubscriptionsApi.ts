@@ -2,7 +2,6 @@ import { AppState } from '../../environment/AppState.js'
 import { deregisterSubscription, registerSubscription } from './webPushSubscriptions.js'
 import { jsonOkResult } from '../../inboundInterfaces/httpResponses.js'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
 import { CicadaAPIAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
 import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
 import { authenticateApiPath } from '../../web/routingCommon.js'
@@ -13,6 +12,7 @@ import {
 import { APIEventSchema } from '../../ioTypes/zodUtil.js'
 import { githubUserSummaryFromEvent, userIdFromApiEvent } from '../webAuth/webAuth.js'
 import { parseAPIEventWithSchema } from '../../inboundInterfaces/httpRequests.js'
+import { EVENTBRIDGE_DETAIL_TYPE_WEB_PUSH_TEST } from '../../../multipleContexts/eventBridgeSchemas.js'
 
 export const webPushSubscribeRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
   path: authenticateApiPath('webPushSubscribe'),
@@ -67,7 +67,7 @@ export async function handleWebPushTest(appState: AppState, event: CicadaAPIAuth
 
   await sendToEventBridge(
     appState,
-    EVENTBRIDGE_DETAIL_TYPES.WEB_PUSH_TEST,
+    EVENTBRIDGE_DETAIL_TYPE_WEB_PUSH_TEST,
     githubUserSummaryFromEvent(parseResult.result)
   )
   return jsonOkResult({ message: 'Web Push Test OK' })

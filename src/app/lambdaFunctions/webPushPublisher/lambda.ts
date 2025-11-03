@@ -3,10 +3,10 @@ import { lambdaStartup } from '../../environment/lambdaStartup.js'
 import middy from '@middy/core'
 import { powertoolsMiddlewares } from '../../middleware/standardMiddleware.js'
 import { EventBridgeHandler } from 'aws-lambda'
-import { EventBridgeDetailType } from '../../../multipleContexts/eventBridge.js'
 import { processEventBridgeWebPushEvent } from '../../domain/webPush/webPushEventBridgeEventProcessor.js'
 import { logger } from '../../util/logging.js'
 import { isFailure } from '../../util/structuredResult.js'
+import { EventBridgeDetailType } from '../../../multipleContexts/eventBridgeSchemas.js'
 
 let appState: AppState
 

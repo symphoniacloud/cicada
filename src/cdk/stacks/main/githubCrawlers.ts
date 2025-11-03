@@ -6,8 +6,11 @@ import { LambdaInvoke } from 'aws-cdk-lib/aws-stepfunctions-tasks'
 import { CRAWLABLE_RESOURCES } from '../../../multipleContexts/githubCrawler.js'
 import { Rule, Schedule } from 'aws-cdk-lib/aws-events'
 import { SfnStateMachine } from 'aws-cdk-lib/aws-events-targets'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
 import { Duration } from 'aws-cdk-lib'
+import {
+  EVENTBRIDGE_DETAIL_TYPE_INSTALLATION_UPDATED,
+  EVENTBRIDGE_DETAIL_TYPE_PUBLIC_ACCOUNT_UPDATED
+} from '../../../multipleContexts/eventBridgeSchemas.js'
 
 export function defineGithubCrawlers(scope: Construct, props: MainStackProps) {
   const crawlerFunction = defineGithubCrawlerFunction(scope, props)
@@ -121,7 +124,7 @@ function defineOnInstallationUpdatedProcessor(
     description: `Run Installation Crawler when installation updated`,
     eventPattern: {
       source: [props.appName],
-      detailType: [EVENTBRIDGE_DETAIL_TYPES.INSTALLATION_UPDATED]
+      detailType: [EVENTBRIDGE_DETAIL_TYPE_INSTALLATION_UPDATED]
     },
     targets: [
       // Use a State Machine here even though just calling a Lambda Function so that later
@@ -156,7 +159,7 @@ function defineOnPublicAccountUpdatedProcessor(
     description: `Run Public Account Crawler when public account updated`,
     eventPattern: {
       source: [props.appName],
-      detailType: [EVENTBRIDGE_DETAIL_TYPES.PUBLIC_ACCOUNT_UPDATED]
+      detailType: [EVENTBRIDGE_DETAIL_TYPE_PUBLIC_ACCOUNT_UPDATED]
     },
     targets: [
       // Use a State Machine here even though just calling a Lambda Function so that later
