@@ -14,6 +14,7 @@ import {
   GitHubWorkflowSummary
 } from '../../../ioTypes/GitHubTypes.js'
 import { isGitHubPublicAccount } from '../../../ioTypes/GitHubTypeChecks.js'
+import { RawGithubRepoSchema } from '../../../ioTypes/RawGitHubSchemas.js'
 
 export async function crawlAccountContents(
   appState: AppState,
@@ -22,7 +23,7 @@ export async function crawlAccountContents(
   lookbackHours: number
 ) {
   logger.info(`Crawling account contents of ${account.accountName}`)
-  const rawRepos =
+  const unparsedRawRepos =
     account.accountType === ORGANIZATION_ACCOUNT_TYPE
       ? await githubClient.listOrganizationRepositories(account.accountName)
       : isGitHubPublicAccount(account)
@@ -34,6 +35,7 @@ export async function crawlAccountContents(
   // Their "best practice" doc says don't do it, but their rate limit doc says it's supported
   // Only really need to care if things start getting slow
   const startTime = `${dateTimeAddHours(appState.clock.now(), -1 * lookbackHours).toISOString()}`
+  const rawRepos = unparsedRawRepos.map((x) => RawGithubRepoSchema.parse(x))
   for (const repo of await processRawRepositories(appState, rawRepos)) {
     await crawlRepoContents(appState, githubClient, repo, startTime)
   }

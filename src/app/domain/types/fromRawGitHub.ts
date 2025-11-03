@@ -1,17 +1,16 @@
 import {
   GitHubPush,
-  GitHubRepo,
   GitHubRepoSummary,
   GitHubWorkflow,
   GitHubWorkflowRunEvent,
   GitHubWorkflowSummary
 } from '../../ioTypes/GitHubTypes.js'
 import {
+  fromRawGitHubAccountId,
   fromRawGitHubRepoId,
   fromRawGithubUserId,
   fromRawGitHubWorkflowId,
-  fromRawGithubWorkflowRunId,
-  fromRawGitHubAccountId
+  fromRawGithubWorkflowRunId
 } from '../github/mappings/toFromRawGitHubIds.js'
 import { RawGithubWorkflowRunEvent } from './rawGithub/RawGithubWorkflowRunEvent.js'
 import { narrowToWorkflowSummary } from '../github/githubWorkflow.js'
@@ -22,32 +21,8 @@ import {
 import { isRawGithubWebhookPush, RawGithubWebhookPushCommit } from './rawGithub/RawGithubWebhookPush.js'
 import { timestampToIso } from '../../util/dateAndTime.js'
 import { logger } from '../../util/logging.js'
-import { RawGithubRepo, RawGithubWorkflow } from '../../ioTypes/RawGitHubTypes.js'
+import { RawGithubWorkflow } from '../../ioTypes/RawGitHubTypes.js'
 import { gitHubAccountTypeFromRaw } from '../github/mappings/FromRawGitHubMappings.js'
-
-export function fromRawGithubRepo(raw: RawGithubRepo): GitHubRepo {
-  return {
-    accountId: fromRawGitHubAccountId(raw.owner.id),
-    accountName: raw.owner.login,
-    accountType: gitHubAccountTypeFromRaw(raw.owner.type),
-    repoId: fromRawGitHubRepoId(raw.id),
-    repoName: raw.name,
-    fullName: raw.full_name,
-    private: raw.private,
-    htmlUrl: raw.html_url,
-    description: raw.description ?? '',
-    fork: raw.fork,
-    url: raw.url,
-    createdAt: raw.created_at,
-    updatedAt: raw.updated_at,
-    pushedAt: raw.pushed_at,
-    homepage: raw.homepage ?? '',
-    archived: raw.archived,
-    disabled: raw.disabled,
-    visibility: raw.visibility,
-    defaultBranch: raw.default_branch
-  }
-}
 
 // We store more on a Workflow than we get from the Github API, so workflows can only
 // be stored in the context of a repo
