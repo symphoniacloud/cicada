@@ -24,10 +24,6 @@ export interface CicadaEventBridgeDetail {
   data: CicadaEventBridgeData
 }
 
-export function isCicadaEventBridgeDetail(x: unknown): x is CicadaEventBridgeDetail {
-  return (x as CicadaEventBridgeDetail).data !== undefined
-}
-
 export async function sendToEventBridge(
   withEventBridgeBus: Pick<AppState, 'eventBridgeBus'>,
   detailType: EventBridgeDetailType,
