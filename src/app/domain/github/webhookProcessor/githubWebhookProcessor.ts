@@ -5,25 +5,13 @@ import { githubWebhookInstallationProcessor } from './processors/githubWebhookIn
 import { IGNORE_WEBHOOK_EVENT_PROCESSOR, WebhookProcessor } from './WebhookProcessor.js'
 import { githubWebhookRepoPushProcessor } from './processors/githubWebhookRepoPushProcessor.js'
 import { githubWebhookWorkflowRunProcessor } from './processors/githubWebhookWorkflowRunProcessor.js'
-import { EventBridgeEvent } from 'aws-lambda'
 
 import { StoredGitHubWebhookEvent, WebhookType } from '../../../ioTypes/GitHubWebhookSchemas.js'
 import { emptySuccess, failedWith, isFailure } from '../../../util/structuredResult.js'
-
-export interface S3EventDetail {
-  bucket: {
-    name: string
-  }
-  object: {
-    key: string
-  }
-}
+import { z } from 'zod'
 
 // TODO - validate actual EventBridgeEvent structure
-export async function processGitHubWebhookFromS3Event(
-  appState: AppState,
-  event: EventBridgeEvent<string, S3EventDetail>
-) {
+export async function processGitHubWebhookFromS3Event(appState: AppState, event: unknown) {
   try {
     const result = await processGitHubWebhookFromS3EventAndThrow(appState, event)
     if (isFailure(result)) {
@@ -44,14 +32,24 @@ const processors: Record<WebhookType, WebhookProcessor> = {
   workflow_job: IGNORE_WEBHOOK_EVENT_PROCESSOR
 }
 
-async function processGitHubWebhookFromS3EventAndThrow(
-  appState: AppState,
-  event: EventBridgeEvent<string, S3EventDetail>
-) {
+// Using this rather than Powertools version to avoid testing impact, for now
+const onlyBucketAndKeySchema = z.object({
+  detail: z.object({
+    bucket: z.object({
+      name: z.string()
+    }),
+    object: z.object({
+      key: z.string()
+    })
+  })
+})
+
+async function processGitHubWebhookFromS3EventAndThrow(appState: AppState, event: unknown) {
+  const parsedEvent = onlyBucketAndKeySchema.parse(event)
   const webhookSecret = (await appState.config.github()).webhookSecret
 
-  const bucketName = event.detail.bucket.name
-  const bucketKey = event.detail.object.key
+  const bucketName = parsedEvent.detail.bucket.name
+  const bucketKey = parsedEvent.detail.object.key
   const rawContent = await appState.s3.getObjectAsString(bucketName, bucketKey)
   const parsedContent = StoredGitHubWebhookEvent.safeParse(rawContent)
   if (!parsedContent.success) {

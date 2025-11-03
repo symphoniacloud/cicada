@@ -15,7 +15,6 @@ import { publishToSubscriptionsForUser } from './webPushPublisher.js'
 export async function processEventBridgeWebPushEvent(appState: AppState, event: unknown) {
   const parsedResult = WebPushEventBridgeEventSchema.safeParse(event)
   if (!parsedResult.success) {
-    console.log(event)
     logger.error('Error parsing event for web push from EventBridge', { parsedResult })
     return
   }

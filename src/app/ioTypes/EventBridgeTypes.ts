@@ -1,6 +1,6 @@
 import * as z from 'zod'
 import { GithubPushSchema, GitHubUserSummarySchema, GitHubWorkflowRunEventSchema } from './GitHubSchemas.js'
-import { EventBridgeSchema } from '@aws-lambda-powertools/parser/schemas/eventbridge'
+import { EventBridgeSchema } from '@aws-lambda-powertools/parser/schemas'
 import {
   GithubNewPushDetailTypeSchema,
   GithubNewWorkflowRunEventDetailTypeSchema,
@@ -45,10 +45,6 @@ export const WebPushEventBridgeEventSchema = z.discriminatedUnion('detail-type',
   GithubNewWorkflowEventBridgeEventSchema,
   WebPushTestEventBridgeEventSchema
 ])
-
-export type CicadaGitHubWorkflowRunEventDetail = z.infer<
-  typeof CicadaGitHubWorkflowRunEventEventBridgeDetailSchema
->
 
 export type CicadaGitHubPushEventBridgeDetail = z.infer<typeof CicadaGitHubPushEventBridgeDetailSchema>
 export type CicadaGitHubWorkflowRunEventEventBridgeDetail = z.infer<
