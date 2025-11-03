@@ -66,12 +66,13 @@ export const RawGithubWorkflowSchema = z.object({
   badge_url: z.string()
 })
 
-export const RawGithubEventSchema = z.object({
+// This is loose because we want to do a secondary parse later
+export const RawGithubEventSchema = z.looseObject({
   id: z.string(),
   type: z.string().nullable()
 })
 
-export const RawGithubAPIPushEventEventCommitSchema = z.object({
+export const RawGithubPushFromApiCommitSchema = z.object({
   sha: z.string(),
   message: z.string(),
   distinct: z.boolean(),
@@ -82,7 +83,8 @@ export const RawGithubAPIPushEventEventCommitSchema = z.object({
 })
 
 // Commented fields not currently captured
-export const RawGithubAPIPushEventEventSchema = RawGithubEventSchema.extend({
+export const RawGithubPushFromApiSchema = z.object({
+  ...RawGithubEventSchema.shape,
   type: z.literal('PushEvent'),
   actor: z.object({
     id: z.number(),
@@ -97,7 +99,7 @@ export const RawGithubAPIPushEventEventSchema = RawGithubEventSchema.extend({
   payload: z.object({
     ref: z.string(),
     before: z.string(),
-    commits: z.array(RawGithubAPIPushEventEventCommitSchema)
+    commits: z.array(RawGithubPushFromApiCommitSchema).min(1)
     // repository_id: number
     // push_id: number
     // size: number
@@ -111,7 +113,8 @@ export const RawGithubAPIPushEventEventSchema = RawGithubEventSchema.extend({
   //   avatar_url: string
   // }
 })
-export const RawGithubWebhookPushCommitSchema = z.object({
+
+export const RawGithubPushFromWebhookCommitSchema = z.object({
   id: z.string(),
   message: z.string(),
   distinct: z.boolean(),
@@ -122,7 +125,8 @@ export const RawGithubWebhookPushCommitSchema = z.object({
   }),
   timestamp: z.string()
 })
-export const RawGithubWebhookPushSchema = z.object({
+
+export const RawGithubPushFromWebhookSchema = z.object({
   ref: z.string(),
   before: z.string(),
   repository: z.object({
@@ -140,7 +144,7 @@ export const RawGithubWebhookPushSchema = z.object({
     login: z.string(),
     avatar_url: z.string()
   }),
-  commits: z.array(RawGithubWebhookPushCommitSchema).nonempty()
+  commits: z.array(RawGithubPushFromWebhookCommitSchema).nonempty()
 })
 
 // This type is defined partly by the Octokit function actions.listWorkflowRunsForRepo,

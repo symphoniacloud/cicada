@@ -5,7 +5,7 @@ import { MetricUnit } from '@aws-lambda-powertools/metrics'
 import { failedWith, Result, successWith } from '../util/structuredResult.js'
 import { toRawGithubAppId, toRawGithubInstallationId } from '../domain/github/mappings/toFromRawGitHubIds.js'
 import { GitHubAppId, GitHubInstallationId } from '../ioTypes/GitHubTypes.js'
-import { RawGithubEvent, RawGithubWorkflowRunEvent } from '../ioTypes/RawGitHubTypes.js'
+import { RawGithubWorkflowRunEvent } from '../ioTypes/RawGitHubTypes.js'
 
 export interface GithubInstallationClient {
   listWorkflowRunsForRepo(
@@ -25,7 +25,7 @@ export interface GithubInstallationClient {
 
   listWorkflowsForRepo(account: string, repo: string): Promise<unknown[]>
 
-  listMostRecentEventsForRepo(account: string, repo: string): Promise<RawGithubEvent[]>
+  listMostRecentEventsForRepo(account: string, repo: string): Promise<unknown[]>
 
   getUser(username: string): Promise<Result<unknown>>
 
@@ -132,7 +132,7 @@ export function createRealGithubInstallationClient(
     },
     // For now, hard code page size to 10
     // GitHub doesn't retain these for long - so anything older than a few days won't be returned
-    async listMostRecentEventsForRepo(account: string, repo: string): Promise<RawGithubEvent[]> {
+    async listMostRecentEventsForRepo(account: string, repo: string) {
       return processOctokitResponse(
         await octokit.activity.listRepoEvents({ owner: account, repo, per_page: 10 })
       )
