@@ -65,3 +65,133 @@ export const RawGithubWorkflowSchema = z.object({
   html_url: z.string(),
   badge_url: z.string()
 })
+
+export const RawGithubEventSchema = z.object({
+  id: z.string(),
+  type: z.string().nullable()
+})
+
+export const RawGithubAPIPushEventEventCommitSchema = z.object({
+  sha: z.string(),
+  message: z.string(),
+  distinct: z.boolean(),
+  author: z.object({
+    email: z.string(),
+    name: z.string()
+  })
+})
+
+// Commented fields not currently captured
+export const RawGithubAPIPushEventEventSchema = RawGithubEventSchema.extend({
+  type: z.literal('PushEvent'),
+  actor: z.object({
+    id: z.number(),
+    login: z.string(),
+    avatar_url: z.string()
+  }),
+  repo: z.object({
+    id: z.number(),
+    name: z.string()
+  }),
+  created_at: z.string(),
+  payload: z.object({
+    ref: z.string(),
+    before: z.string(),
+    commits: z.array(RawGithubAPIPushEventEventCommitSchema)
+    // repository_id: number
+    // push_id: number
+    // size: number
+    // distinct_size: number
+    // head: string
+  })
+  // public: boolean
+  // org?: {
+  //   id: number
+  //   login: string
+  //   avatar_url: string
+  // }
+})
+export const RawGithubWebhookPushCommitSchema = z.object({
+  id: z.string(),
+  message: z.string(),
+  distinct: z.boolean(),
+  author: z.object({
+    email: z.string(),
+    name: z.string(),
+    username: z.string()
+  }),
+  timestamp: z.string()
+})
+export const RawGithubWebhookPushSchema = z.object({
+  ref: z.string(),
+  before: z.string(),
+  repository: z.object({
+    id: z.number(),
+    name: z.string(),
+    html_url: z.string(),
+    owner: z.object({
+      name: z.string(),
+      id: z.number(),
+      type: RawGithubTargetTypeSchema
+    })
+  }),
+  sender: z.object({
+    id: z.number(),
+    login: z.string(),
+    avatar_url: z.string()
+  }),
+  commits: z.array(RawGithubWebhookPushCommitSchema).nonempty()
+})
+
+// This type is defined partly by the Octokit function actions.listWorkflowRunsForRepo,
+// hence things here like fields that are possibly both undefined or null
+// For now at least we use the same type here to represent runs events returned via the API **and** sent
+// via webhook - that means some fields are missing here that exist in the API events, but not in webhook events
+// This is a subset, but we can't infer full type using typescript
+export const RawGithubWorkflowRunEventSchema = z.object({
+  id: z.number(),
+  name: z.string().nullable().optional(),
+  node_id: z.string(),
+  head_branch: z.string().nullable(),
+  head_sha: z.string(),
+  path: z.string(),
+  display_title: z.string(),
+  run_number: z.number(),
+  event: z.string(),
+  status: z.string().nullable(),
+  conclusion: z.string().nullable(),
+  workflow_id: z.number(),
+  html_url: z.string(),
+  created_at: z.string(),
+  updated_at: z.string(),
+  run_attempt: z.number().optional(),
+  run_started_at: z.string().optional(),
+  actor: z
+    .object({
+      login: z.string(),
+      id: z.number(),
+      avatar_url: z.string(),
+      html_url: z.string()
+    })
+    .optional(),
+  repository: z.object({
+    id: z.number(),
+    node_id: z.string(),
+    name: z.string(),
+    html_url: z.string(),
+    owner: z.object({
+      id: z.number(),
+      login: z.string(),
+      type: RawGithubTargetTypeSchema
+    })
+  }),
+  // "workflow" is in webhook event but not API event
+  workflow: z
+    .object({
+      id: z.number(),
+      name: z.string(),
+      html_url: z.string(),
+      badge_url: z.string()
+    })
+    .optional()
+})

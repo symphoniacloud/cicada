@@ -1,13 +1,13 @@
 import { AppState } from '../../../environment/AppState.js'
-import {
-  hasTypeForPushEvent,
-  isRawGithubPushEventEvent
-} from '../../types/rawGithub/RawGithubAPIPushEventEvent.js'
 import { processPushes } from '../githubPush.js'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
 
 import { GitHubPush, GitHubRepoSummary } from '../../../ioTypes/GitHubTypes.js'
 import { fromRawGithubPushEventEvent } from '../../types/fromRawGitHub.js'
+import { isNotNullObject } from '../../../util/types.js'
+import { RawGithubAPIPushEventEvent } from '../../../ioTypes/RawGitHubTypes.js'
+import { RawGithubAPIPushEventEventSchema } from '../../../ioTypes/RawGitHubSchemas.js'
+import { logger } from '../../../util/logging.js'
 
 // TOEventually - only get all pushes back to lookback in crawl configuration, however GitHub doesn't keep
 // them around for very long
@@ -32,4 +32,17 @@ export async function crawlPushes(
     .filter((x: GitHubPush | undefined): x is GitHubPush => x !== undefined)
 
   await processPushes(appState, pushes, false)
+}
+
+// TODO - think about using zod differently / adding schemas
+export function hasTypeForPushEvent(x: unknown): x is { type: 'PushEvent' } {
+  return isNotNullObject(x) && 'type' in x && x.type === 'PushEvent'
+}
+
+export function isRawGithubPushEventEvent(x: unknown): x is RawGithubAPIPushEventEvent {
+  const result = RawGithubAPIPushEventEventSchema.safeParse(x)
+  if (!result.success) {
+    logger.error('Unexpected structure for RawGithubAPIPushEventEvent', { event: x, error: result.error })
+  }
+  return result.success
 }

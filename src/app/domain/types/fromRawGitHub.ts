@@ -10,16 +10,18 @@ import {
   fromRawGithubUserId,
   fromRawGithubWorkflowRunId
 } from '../github/mappings/toFromRawGitHubIds.js'
-import { RawGithubWorkflowRunEvent } from './rawGithub/RawGithubWorkflowRunEvent.js'
 import { narrowToWorkflowSummary } from '../github/githubWorkflow.js'
-import {
-  RawGithubAPIPushEventEvent,
-  RawGithubAPIPushEventEventCommit
-} from './rawGithub/RawGithubAPIPushEventEvent.js'
-import { isRawGithubWebhookPush, RawGithubWebhookPushCommit } from './rawGithub/RawGithubWebhookPush.js'
 import { timestampToIso } from '../../util/dateAndTime.js'
 import { logger } from '../../util/logging.js'
 import { gitHubAccountTypeFromRaw } from '../github/mappings/FromRawGitHubMappings.js'
+import {
+  RawGithubAPIPushEventEvent,
+  RawGithubAPIPushEventEventCommit,
+  RawGithubWebhookPush,
+  RawGithubWebhookPushCommit,
+  RawGithubWorkflowRunEvent
+} from '../../ioTypes/RawGitHubTypes.js'
+import { RawGithubWebhookPushSchema } from '../../ioTypes/RawGitHubSchemas.js'
 
 // TOEventually - consider dateTimes, e.g. for Pushes we get localized times
 export function fromRawGithubWorkflowRunEvent(
@@ -54,6 +56,16 @@ export function fromRawGithubWorkflowRunEvent(
       : {})
   }
 }
+
+// TODO - move or remove this
+export function isRawGithubWebhookPush(x: unknown): x is RawGithubWebhookPush {
+  const result = RawGithubWebhookPushSchema.safeParse(x)
+  if (!result.success) {
+    logger.error('Unexpected structure for RawGithubWebhookPush', { event: x, error: result.error })
+  }
+  return result.success
+}
+
 export function fromRawGithubWebhookPush(raw: unknown): GitHubPush | undefined {
   if (!isRawGithubWebhookPush(raw)) {
     return undefined

@@ -1,11 +1,12 @@
 import { WebhookProcessor } from '../WebhookProcessor.js'
 import { AppState } from '../../../../environment/AppState.js'
 import { logger } from '../../../../util/logging.js'
-import { isRawGithubWorkflowRunEvent } from '../../../types/rawGithub/RawGithubWorkflowRunEvent.js'
 import { processRawRunEvent } from '../../githubWorkflowRunEvent.js'
 import { getInstallationOrUndefined } from '../../../entityStore/entities/GithubInstallationEntity.js'
 
 import { fromRawGitHubAccountId } from '../../mappings/toFromRawGitHubIds.js'
+import { RawGithubWorkflowRunEvent } from '../../../../ioTypes/RawGitHubTypes.js'
+import { RawGithubWorkflowRunEventSchema } from '../../../../ioTypes/RawGitHubSchemas.js'
 
 export const githubWebhookWorkflowRunProcessor: WebhookProcessor = async (
   appState: AppState,
@@ -28,6 +29,15 @@ export const githubWebhookWorkflowRunProcessor: WebhookProcessor = async (
   const githubClient = appState.githubClient.clientForInstallation(installation.installationId)
 
   await processRawRunEvent(appState, parsed, githubClient, true)
+}
+
+// TODO - use zod for parsing above?
+export function isRawGithubWorkflowRunEvent(x: unknown): x is RawGithubWorkflowRunEvent {
+  const result = RawGithubWorkflowRunEventSchema.safeParse(x)
+  if (!result.success) {
+    logger.error('Unexpected structure for RawGithubWorkflowRunEvent', { event: x, error: result.error })
+  }
+  return result.success
 }
 
 function parse(body: string) {

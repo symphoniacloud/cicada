@@ -19,7 +19,8 @@ import {
   expectedPutLatestGithubWorkflowRunEvent
 } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 import { processRawRunEvents } from '../../../../../../src/app/domain/github/githubWorkflowRunEvent.js'
-import { RawGithubWorkflowRunEventSchema } from '../../../../../../src/app/domain/types/rawGithub/RawGithubWorkflowRunEvent.js'
+
+import { RawGithubWorkflowRunEventSchema } from '../../../../../../src/app/ioTypes/RawGitHubSchemas.js'
 
 test('repo-crawler-for-personal-account-installation', async () => {
   // A

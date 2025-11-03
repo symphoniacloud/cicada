@@ -2,7 +2,6 @@ import { AppState } from '../../environment/AppState.js'
 import { logger } from '../../util/logging.js'
 import { putWorkflowRunEventIfKeyDoesntExist } from '../entityStore/entities/GithubWorkflowRunEventEntity.js'
 import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport.js'
-import { RawGithubWorkflowRunEvent } from '../types/rawGithub/RawGithubWorkflowRunEvent.js'
 import { getUserIdsForAccount } from './githubMembership.js'
 import { saveRuns } from './githubWorkflowRun.js'
 import { isoDifferenceMs } from '../../util/dateAndTime.js'
@@ -26,6 +25,7 @@ import {
 } from '../../ioTypes/GitHubTypes.js'
 import { FullGitHubWorkflowRunEvent, UserScopeReferenceData } from '../types/internalTypes.js'
 import { gitHubAccountTypeFromRaw } from './mappings/FromRawGitHubMappings.js'
+import { RawGithubWorkflowRunEvent } from '../../ioTypes/RawGitHubTypes.js'
 
 export async function processRawRunEvent(
   appState: AppState,

@@ -1,12 +1,16 @@
-import { RawGithubEvent } from '../../../src/app/domain/types/rawGithub/RawGithubEvent.js'
-import { RawGithubWorkflowRunEvent } from '../../../src/app/domain/types/rawGithub/RawGithubWorkflowRunEvent.js'
 import {
   GithubInstallationClient,
   GithubInstallationClientMeta
 } from '../../../src/app/outboundInterfaces/githubInstallationClient.js'
 import { arrayStubResponse } from './fakeSupport.js'
 import { Result } from '../../../src/app/util/structuredResult.js'
-import { RawGithubRepo, RawGithubUser, RawGithubWorkflow } from '../../../src/app/ioTypes/RawGitHubTypes.js'
+import {
+  RawGithubEvent,
+  RawGithubRepo,
+  RawGithubUser,
+  RawGithubWorkflow,
+  RawGithubWorkflowRunEvent
+} from '../../../src/app/ioTypes/RawGitHubTypes.js'
 
 export class FakeGithubInstallationClient implements GithubInstallationClient {
   public stubOrganizationRepositories = arrayStubResponse<string, RawGithubRepo[]>()
