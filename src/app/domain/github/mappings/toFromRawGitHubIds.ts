@@ -28,7 +28,8 @@ import {
   RawGitHubAppId,
   RawGitHubInstallationId,
   RawGitHubRepoId,
-  RawGitHubUserId
+  RawGitHubUserId,
+  RawGitHubWorkflowId
 } from '../../../ioTypes/RawGitHubTypes.js'
 import { RawGitHubAppIdSchema, RawGitHubInstallationIdSchema } from '../../../ioTypes/RawGitHubSchemas.js'
 
@@ -60,7 +61,7 @@ export function fromRawGitHubRepoId(x: RawGitHubRepoId): GitHubRepoId {
   return GitHubRepoIdSchema.parse(`${GITHUB_REPO_ID_PREFIX}${x}`)
 }
 
-export function fromRawGitHubWorkflowId(x: number): GitHubWorkflowId {
+export function fromRawGitHubWorkflowId(x: RawGitHubWorkflowId): GitHubWorkflowId {
   return GitHubWorkflowIdSchema.parse(`${GITHUB_WORKFLOW_ID_PREFIX}${x}`)
 }
 

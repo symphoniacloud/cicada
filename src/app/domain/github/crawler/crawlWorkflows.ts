@@ -2,8 +2,8 @@ import { AppState } from '../../../environment/AppState.js'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
 import { processRawWorkflows } from '../githubWorkflow.js'
 import { fromRawGitHubWorkflowId } from '../mappings/toFromRawGitHubIds.js'
-
 import { GitHubRepoSummary, GitHubWorkflowId } from '../../../ioTypes/GitHubTypes.js'
+import { RawGithubWorkflowSchema } from '../../../ioTypes/RawGitHubSchemas.js'
 
 export async function crawlOneWorkflow(
   appState: AppState,
@@ -26,5 +26,6 @@ export async function crawlWorkflows(
 }
 
 async function lookupWorkflowsForRepo(githubClient: GithubInstallationClient, repo: GitHubRepoSummary) {
-  return await githubClient.listWorkflowsForRepo(repo.accountName, repo.repoName)
+  const unparsed = await githubClient.listWorkflowsForRepo(repo.accountName, repo.repoName)
+  return unparsed.map((x) => RawGithubWorkflowSchema.parse(x))
 }

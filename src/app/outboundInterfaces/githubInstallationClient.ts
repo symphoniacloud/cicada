@@ -7,7 +7,6 @@ import { MetricUnit } from '@aws-lambda-powertools/metrics'
 import { failedWith, Result, successWith } from '../util/structuredResult.js'
 import { toRawGithubAppId, toRawGithubInstallationId } from '../domain/github/mappings/toFromRawGitHubIds.js'
 import { GitHubAppId, GitHubInstallationId } from '../ioTypes/GitHubTypes.js'
-import { RawGithubWorkflow } from '../ioTypes/RawGitHubTypes.js'
 
 export interface GithubInstallationClient {
   listWorkflowRunsForRepo(
@@ -25,7 +24,7 @@ export interface GithubInstallationClient {
 
   listOrganizationMembers(org: string): Promise<unknown[]>
 
-  listWorkflowsForRepo(account: string, repo: string): Promise<RawGithubWorkflow[]>
+  listWorkflowsForRepo(account: string, repo: string): Promise<unknown[]>
 
   listMostRecentEventsForRepo(account: string, repo: string): Promise<RawGithubEvent[]>
 
@@ -114,22 +113,22 @@ export function createRealGithubInstallationClient(
       )
     },
     // TOMaybe - consider other options here, e.g. type, sort
-    async listOrganizationRepositories(org: string): Promise<unknown[]> {
+    async listOrganizationRepositories(org: string) {
       return processOctokitIterator(octokit.paginate.iterator(octokit.repos.listForOrg, { org }))
     },
-    async listInstallationRepositories(): Promise<unknown[]> {
+    async listInstallationRepositories() {
       return processOctokitIterator(
         octokit.paginate.iterator(octokit.apps.listReposAccessibleToInstallation, {})
       )
     },
-    async listPublicRepositoriesForUser(accountName: string): Promise<unknown[]> {
+    async listPublicRepositoriesForUser(accountName: string) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       return processOctokitIterator(
         octokit.paginate.iterator(octokit.repos.listForUser, { username: accountName })
       )
     },
-    async listOrganizationMembers(org: string): Promise<unknown[]> {
+    async listOrganizationMembers(org: string) {
       return processOctokitIterator(octokit.paginate.iterator(octokit.orgs.listMembers, { org }))
     },
     // For now, hard code page size to 10
@@ -139,7 +138,7 @@ export function createRealGithubInstallationClient(
         await octokit.activity.listRepoEvents({ owner: account, repo, per_page: 10 })
       )
     },
-    async getUser(username: string): Promise<Result<unknown>> {
+    async getUser(username: string) {
       try {
         const octokitResponse = processOctokitResponse(await octokit.users.getByUsername({ username }))
         return successWith(octokitResponse)

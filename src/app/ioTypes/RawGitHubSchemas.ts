@@ -5,6 +5,7 @@ export const RawGitHubInstallationIdSchema = z.number()
 export const RawGitHubAccountIdSchema = z.number()
 export const RawGitHubUserIdSchema = z.number()
 export const RawGitHubRepoIdSchema = z.number()
+export const RawGitHubWorkflowIdSchema = z.number()
 
 export const RawGithubTargetTypeSchema = z.literal(['User', 'Organization'])
 
@@ -53,7 +54,7 @@ export const RawGithubRepoSchema = z.object({
 })
 
 export const RawGithubWorkflowSchema = z.object({
-  id: z.number(),
+  id: RawGitHubWorkflowIdSchema,
   node_id: z.string(),
   name: z.string(),
   path: z.string(),

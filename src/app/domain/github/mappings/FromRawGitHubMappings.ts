@@ -4,21 +4,25 @@ import {
   GitHubInstallation,
   GitHubPublicAccount,
   GitHubRepo,
-  GitHubUser
+  GitHubRepoSummary,
+  GitHubUser,
+  GitHubWorkflow
 } from '../../../ioTypes/GitHubTypes.js'
 import { GitHubAccountTypeSchema } from '../../../ioTypes/GitHubSchemas.js'
 import {
   RawGithubInstallation,
   RawGithubRepo,
   RawGitHubTargetType,
-  RawGithubUser
+  RawGithubUser,
+  RawGithubWorkflow
 } from '../../../ioTypes/RawGitHubTypes.js'
 import {
   fromRawGitHubAccountId,
   fromRawGithubAppId,
   fromRawGithubInstallationId,
   fromRawGitHubRepoId,
-  fromRawGithubUserId
+  fromRawGithubUserId,
+  fromRawGitHubWorkflowId
 } from './toFromRawGitHubIds.js'
 
 export function gitHubAccountTypeFromRaw(raw: RawGitHubTargetType): GitHubAccountType {
@@ -79,5 +83,26 @@ export function fromRawGithubRepo(raw: RawGithubRepo): GitHubRepo {
     disabled: raw.disabled,
     visibility: raw.visibility,
     defaultBranch: raw.default_branch
+  }
+}
+
+// We store more on a Workflow than we get from the Github API, so workflows can only
+// be stored in the context of a repo
+export function fromRawGithubWorkflow(repo: GitHubRepoSummary, raw: RawGithubWorkflow): GitHubWorkflow {
+  return {
+    accountId: repo.accountId,
+    accountName: repo.accountName,
+    accountType: repo.accountType,
+    repoId: repo.repoId,
+    repoName: repo.repoName,
+    workflowId: fromRawGitHubWorkflowId(raw.id),
+    workflowName: raw.name,
+    workflowPath: raw.path,
+    workflowState: raw.state,
+    workflowUrl: raw.url,
+    workflowHtmlUrl: raw.html_url,
+    workflowBadgeUrl: raw.badge_url,
+    workflowCreatedAt: raw.created_at,
+    workflowUpdatedAt: raw.updated_at
   }
 }
