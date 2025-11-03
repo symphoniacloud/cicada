@@ -7,7 +7,11 @@ import { getUserIdsForAccount } from './githubMembership.js'
 import { saveRuns } from './githubWorkflowRun.js'
 import { isoDifferenceMs } from '../../util/dateAndTime.js'
 import { getWorkflow } from '../entityStore/entities/GithubWorkflowEntity.js'
-import { fromRawGitHubRepoId, fromRawGitHubWorkflowId } from '../types/toFromRawGitHubIds.js'
+import {
+  fromRawGitHubRepoId,
+  fromRawGitHubWorkflowId,
+  fromRawGitHubAccountId
+} from './mappings/toFromRawGitHubIds.js'
 import { fromRawGithubWorkflowRunEvent } from '../types/fromRawGitHub.js'
 import { crawlOneWorkflow } from './crawler/crawlWorkflows.js'
 import { GithubInstallationClient } from '../../outboundInterfaces/githubInstallationClient.js'
@@ -21,7 +25,7 @@ import {
   GitHubWorkflowSummary
 } from '../../ioTypes/GitHubTypes.js'
 import { FullGitHubWorkflowRunEvent, UserScopeReferenceData } from '../types/internalTypes.js'
-import { gitHubAccountIdFromRaw, gitHubAccountTypeFromRaw } from './mappings/FromRawGitHubMappings.js'
+import { gitHubAccountTypeFromRaw } from './mappings/FromRawGitHubMappings.js'
 
 export async function processRawRunEvent(
   appState: AppState,
@@ -44,7 +48,7 @@ async function readOrLookupWorkflow(
   installationClient: GithubInstallationClient
 ) {
   const workflowKey: GitHubWorkflowKey = {
-    accountId: gitHubAccountIdFromRaw(rawRunEvent.repository.owner.id),
+    accountId: fromRawGitHubAccountId(rawRunEvent.repository.owner.id),
     repoId: fromRawGitHubRepoId(rawRunEvent.repository.id),
     workflowId: fromRawGitHubWorkflowId(rawRunEvent.workflow_id)
   }

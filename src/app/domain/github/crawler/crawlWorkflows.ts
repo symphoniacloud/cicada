@@ -1,7 +1,7 @@
 import { AppState } from '../../../environment/AppState.js'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
 import { processRawWorkflows } from '../githubWorkflow.js'
-import { fromRawGitHubWorkflowId } from '../../types/toFromRawGitHubIds.js'
+import { fromRawGitHubWorkflowId } from '../mappings/toFromRawGitHubIds.js'
 
 import { GitHubRepoSummary, GitHubWorkflowId } from '../../../ioTypes/GitHubTypes.js'
 

@@ -11,7 +11,7 @@ import {
   buildRepoStructure,
   buildWorkflow
 } from '../../../../testSupport/builders/accountStructureBuilders.js'
-import { fromRawGithubUserId } from '../../../../../src/app/domain/types/toFromRawGitHubIds.js'
+import { fromRawGithubUserId } from '../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 
 test('toDisplayableWorkflowSettings', () => {
   const workflow = buildWorkflow({ workflowName: 'workflow1' })

@@ -3,6 +3,8 @@ import { z } from 'zod'
 export const RawGitHubAppIdSchema = z.number()
 export const RawGitHubInstallationIdSchema = z.number()
 export const RawGitHubAccountIdSchema = z.number()
+export const RawGitHubUserIdSchema = z.number()
+export const RawGitHubRepoIdSchema = z.number()
 
 export const RawGithubTargetTypeSchema = z.literal(['User', 'Organization'])
 
@@ -19,7 +21,7 @@ export const RawGithubInstallationSchema = z.object({
 
 export const RawGithubUserSchema = z.object({
   login: z.string(),
-  id: z.number(),
+  id: RawGitHubUserIdSchema,
   avatar_url: z.string(),
   url: z.string(),
   html_url: z.string(),
@@ -27,7 +29,7 @@ export const RawGithubUserSchema = z.object({
 })
 
 export const RawGithubRepoSchema = z.object({
-  id: z.number(),
+  id: RawGitHubRepoIdSchema,
   name: z.string(),
   full_name: z.string(),
   private: z.boolean(),

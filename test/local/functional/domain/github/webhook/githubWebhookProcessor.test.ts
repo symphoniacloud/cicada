@@ -24,7 +24,7 @@ import {
 } from '../../../../../testSupport/fakes/tableRecordReadStubs.js'
 import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient.js'
 
-import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/types/toFromRawGitHubIds.js'
+import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 
 test('run-event', async () => {
   // Arrange

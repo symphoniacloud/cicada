@@ -5,7 +5,7 @@ import { RawGithubEvent } from '../domain/types/rawGithub/RawGithubEvent.js'
 import { metrics } from '../util/metrics.js'
 import { MetricUnit } from '@aws-lambda-powertools/metrics'
 import { failedWith, Result, successWith } from '../util/structuredResult.js'
-import { toRawGithubAppId, toRawGithubInstallationId } from '../domain/types/toFromRawGitHubIds.js'
+import { toRawGithubAppId, toRawGithubInstallationId } from '../domain/github/mappings/toFromRawGitHubIds.js'
 import { GitHubAppId, GitHubInstallationId } from '../ioTypes/GitHubTypes.js'
 import { RawGithubRepo, RawGithubUser, RawGithubWorkflow } from '../ioTypes/RawGitHubTypes.js'
 

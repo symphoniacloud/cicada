@@ -25,7 +25,7 @@ import { testTestUserPushSubscription } from '../../examples/cicada/webPushDomai
 import { FakeDynamoDBInterfaceStubber, MetaDataProvider } from './dynamoDB/fakeDynamoDBInterfaceStubber.js'
 import { fakeTableNames } from './fakeCicadaConfig.js'
 
-import { fromRawGithubUserId } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
+import { fromRawGithubUserId } from '../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 
 import { GitHubUserId } from '../../../src/app/ioTypes/GitHubTypes.js'
 import { WebPushSubscription } from '../../../src/app/ioTypes/WebPushSchemasAndTypes.js'

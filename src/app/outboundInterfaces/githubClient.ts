@@ -5,7 +5,7 @@ import { GithubConfig } from '../environment/config.js'
 import { createOAuthUserAuth, OAuthAppAuthentication } from '@octokit/auth-oauth-user'
 import { logger } from '../util/logging.js'
 
-import { toRawGithubAppId } from '../domain/types/toFromRawGitHubIds.js'
+import { toRawGithubAppId } from '../domain/github/mappings/toFromRawGitHubIds.js'
 
 import { GitHubInstallationId } from '../ioTypes/GitHubTypes.js'
 

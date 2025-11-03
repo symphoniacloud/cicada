@@ -11,7 +11,7 @@ import {
 } from '../../../../multipleContexts/ssmParams.js'
 import { logger } from '../../../util/logging.js'
 import { a, p } from '../../../web/hiccough/hiccoughElements.js'
-import { fromRawGithubAppId } from '../../types/toFromRawGitHubIds.js'
+import { fromRawGithubAppId } from '../mappings/toFromRawGitHubIds.js'
 
 import { GitHubAccountType, GitHubAppId } from '../../../ioTypes/GitHubTypes.js'
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../../ioTypes/GitHubSchemas.js'

@@ -10,8 +10,9 @@ import {
   fromRawGitHubRepoId,
   fromRawGithubUserId,
   fromRawGitHubWorkflowId,
-  fromRawGithubWorkflowRunId
-} from './toFromRawGitHubIds.js'
+  fromRawGithubWorkflowRunId,
+  fromRawGitHubAccountId
+} from '../github/mappings/toFromRawGitHubIds.js'
 import { RawGithubWorkflowRunEvent } from './rawGithub/RawGithubWorkflowRunEvent.js'
 import { narrowToWorkflowSummary } from '../github/githubWorkflow.js'
 import {
@@ -22,11 +23,11 @@ import { isRawGithubWebhookPush, RawGithubWebhookPushCommit } from './rawGithub/
 import { timestampToIso } from '../../util/dateAndTime.js'
 import { logger } from '../../util/logging.js'
 import { RawGithubRepo, RawGithubWorkflow } from '../../ioTypes/RawGitHubTypes.js'
-import { gitHubAccountIdFromRaw, gitHubAccountTypeFromRaw } from '../github/mappings/FromRawGitHubMappings.js'
+import { gitHubAccountTypeFromRaw } from '../github/mappings/FromRawGitHubMappings.js'
 
 export function fromRawGithubRepo(raw: RawGithubRepo): GitHubRepo {
   return {
-    accountId: gitHubAccountIdFromRaw(raw.owner.id),
+    accountId: fromRawGitHubAccountId(raw.owner.id),
     accountName: raw.owner.login,
     accountType: gitHubAccountTypeFromRaw(raw.owner.type),
     repoId: fromRawGitHubRepoId(raw.id),
@@ -108,7 +109,7 @@ export function fromRawGithubWebhookPush(raw: unknown): GitHubPush | undefined {
   }
 
   return {
-    accountId: gitHubAccountIdFromRaw(raw.repository.owner.id),
+    accountId: fromRawGitHubAccountId(raw.repository.owner.id),
     accountName: raw.repository.owner.name,
     accountType: gitHubAccountTypeFromRaw(raw.repository.owner.type),
     repoId: fromRawGitHubRepoId(raw.repository.id),
