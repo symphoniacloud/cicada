@@ -9,6 +9,7 @@ export function modifyControls(document, appName, webHostname, webhookCode, call
     callback_urls: [`https://${webHostname}/github/auth/callback`],
     setup_url: `https://${webHostname}`,
     public: false,
+    // If changing here, also change WebhookTypeSchema
     default_events: ['meta', 'organization', 'push', 'repository', 'workflow_job', 'workflow_run'],
     default_permissions: {
       actions: 'read',

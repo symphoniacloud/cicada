@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { JSONFromStringSchema } from './zodUtil.js'
 
 export const RawGitHubAppIdSchema = z.number()
 export const RawGitHubInstallationIdSchema = z.number()
@@ -196,30 +195,3 @@ export const RawGithubWorkflowRunEventSchema = z.object({
     })
     .optional()
 })
-
-export const GitHubWebhookInstallationSchema = JSONFromStringSchema.pipe(
-  z.object({
-    installation: RawGithubInstallationSchema
-  })
-)
-
-export const GitHubWebhookPushSchema = JSONFromStringSchema.pipe(RawGithubWebhookPushSchema)
-
-export const GitHubWebhookWorkflowRunEventSchema = JSONFromStringSchema.pipe(
-  z.object({
-    // Would be nice to type this better
-    action: z.string(),
-    workflow_run: RawGithubWorkflowRunEventSchema
-  })
-)
-
-export const WebhookTypeSchema = z.literal(['installation', 'push', 'workflow_run'])
-
-export const GitHubWebhookStoredRunEvent = JSONFromStringSchema.pipe(
-  z.object({
-    'X-Hub-Signature-256': z.string().min(1),
-    // TODO - this will cause warnings for now for unprocessed events
-    'X-GitHub-Event': WebhookTypeSchema,
-    body: z.string().min(1)
-  })
-)

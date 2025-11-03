@@ -4,7 +4,7 @@ import { processInstallation } from '../../githubInstallation.js'
 import { sendToEventBridge } from '../../../../outboundInterfaces/eventBridgeBus.js'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../../../multipleContexts/eventBridge.js'
 import { gitHubInstallationFromRaw } from '../../mappings/FromRawGitHubMappings.js'
-import { GitHubWebhookInstallationSchema } from '../../../../ioTypes/RawGitHubSchemas.js'
+import { GitHubWebhookInstallationSchema } from '../../../../ioTypes/GitHubWebhookSchemas.js'
 
 export const githubWebhookInstallationProcessor: WebhookProcessor = async (
   appState: AppState,

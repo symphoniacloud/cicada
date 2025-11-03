@@ -7,7 +7,7 @@ import {
 } from '../../../../../examples/cicada/githubDomainObjects.js'
 import {
   createSignatureHeader,
-  processWebhookFromS3Event
+  processGitHubWebhookFromS3Event
 } from '../../../../../../src/app/domain/github/webhookProcessor/githubWebhookProcessor.js'
 import {
   expectPut,
@@ -47,7 +47,7 @@ test('run-event', async () => {
   stubGetWorkflow(appState, testOrgTestWorkflowOneFromJson)
 
   // Act
-  await processWebhookFromS3Event(appState, {
+  await processGitHubWebhookFromS3Event(appState, {
     detail: {
       bucket: {
         name: 'fake-bucket'
