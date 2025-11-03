@@ -4,24 +4,14 @@ import {
   GitHubWorkflowRunEvent,
   GitHubWorkflowSummary
 } from '../../ioTypes/GitHubTypes.js'
-import {
-  fromRawGitHubAccountId,
-  fromRawGitHubRepoId,
-  fromRawGithubUserId,
-  fromRawGithubWorkflowRunId
-} from '../github/mappings/toFromRawGitHubIds.js'
+import { fromRawGithubUserId, fromRawGithubWorkflowRunId } from '../github/mappings/toFromRawGitHubIds.js'
 import { narrowToWorkflowSummary } from '../github/githubWorkflow.js'
-import { timestampToIso } from '../../util/dateAndTime.js'
 import { logger } from '../../util/logging.js'
-import { gitHubAccountTypeFromRaw } from '../github/mappings/FromRawGitHubMappings.js'
 import {
   RawGithubAPIPushEventEvent,
   RawGithubAPIPushEventEventCommit,
-  RawGithubWebhookPush,
-  RawGithubWebhookPushCommit,
   RawGithubWorkflowRunEvent
 } from '../../ioTypes/RawGitHubTypes.js'
-import { RawGithubWebhookPushSchema } from '../../ioTypes/RawGitHubSchemas.js'
 
 // TOEventually - consider dateTimes, e.g. for Pushes we get localized times
 export function fromRawGithubWorkflowRunEvent(
@@ -54,56 +44,6 @@ export function fromRawGithubWorkflowRunEvent(
           }
         }
       : {})
-  }
-}
-
-// TODO - move or remove this
-export function isRawGithubWebhookPush(x: unknown): x is RawGithubWebhookPush {
-  const result = RawGithubWebhookPushSchema.safeParse(x)
-  if (!result.success) {
-    logger.error('Unexpected structure for RawGithubWebhookPush', { event: x, error: result.error })
-  }
-  return result.success
-}
-
-export function fromRawGithubWebhookPush(raw: unknown): GitHubPush | undefined {
-  if (!isRawGithubWebhookPush(raw)) {
-    return undefined
-  }
-
-  return {
-    accountId: fromRawGitHubAccountId(raw.repository.owner.id),
-    accountName: raw.repository.owner.name,
-    accountType: gitHubAccountTypeFromRaw(raw.repository.owner.type),
-    repoId: fromRawGitHubRepoId(raw.repository.id),
-    repoName: raw.repository.name,
-    repoUrl: raw.repository.html_url,
-    actor: {
-      userId: fromRawGithubUserId(raw.sender.id),
-      userName: raw.sender.login,
-      avatarUrl: raw.sender.avatar_url
-    },
-    // Use the datetime of the **LAST** commit for the date of this event
-    dateTime: timestampToIso(raw.commits[raw.commits.length - 1].timestamp),
-    ref: raw.ref,
-    before: raw.before,
-    commits: [
-      // Explicitly include first element here to satisfy type
-      fromRawGithubWebhookPushCommit(raw.commits[0]),
-      ...raw.commits.slice(1).map(fromRawGithubWebhookPushCommit)
-    ]
-  }
-}
-
-function fromRawGithubWebhookPushCommit(commit: RawGithubWebhookPushCommit) {
-  return {
-    sha: commit.id,
-    message: commit.message,
-    distinct: commit.distinct,
-    author: {
-      name: commit.author.name,
-      email: commit.author.email
-    }
   }
 }
 

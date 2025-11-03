@@ -1,7 +1,6 @@
 import { AppState } from '../../../environment/AppState.js'
 import {
   INSTALLATION_WEBHOOK_TYPE,
-  isWebhookType,
   PUSH_WEBHOOK_TYPE,
   WebhookType,
   WORKFLOW_RUN_WEBHOOK_TYPE
@@ -13,6 +12,7 @@ import { WebhookProcessor } from './WebhookProcessor.js'
 import { githubWebhookRepoPushProcessor } from './processors/githubWebhookRepoPushProcessor.js'
 import { githubWebhookWorkflowRunProcessor } from './processors/githubWebhookWorkflowRunProcessor.js'
 import { EventBridgeEvent } from 'aws-lambda'
+import { GitHubWebhookStoredRunEvent } from '../../../ioTypes/RawGitHubSchemas.js'
 
 export interface S3EventDetail {
   bucket: {
@@ -23,25 +23,16 @@ export interface S3EventDetail {
   }
 }
 
+// TODO - validate actual EventBridgeEvent structure
 export async function processWebhookFromS3Event(
   appState: AppState,
   event: EventBridgeEvent<string, S3EventDetail>
 ) {
   try {
-    await processWebhook(
-      appState,
-      await appState.s3.getObjectAsString(event.detail.bucket.name, event.detail.object.key)
-    )
+    await processWebhookFromS3EventAndThrow(appState, event)
   } catch (e) {
     logger.error(`Error attempting to process webhook event from s3: ${JSON.stringify(event)}`, e as Error)
   }
-}
-
-export async function processWebhook(appState: AppState, rawContent: string) {
-  const parsed = parseGithubWebhookContent(rawContent, (await appState.config.github()).webhookSecret)
-  if (!parsed) return
-  await processors[parsed.eventType](appState, parsed.rawBody)
-  logger.info('Finished processing webhook event')
 }
 
 const processors: Record<WebhookType, WebhookProcessor> = {
@@ -50,52 +41,30 @@ const processors: Record<WebhookType, WebhookProcessor> = {
   [WORKFLOW_RUN_WEBHOOK_TYPE]: githubWebhookWorkflowRunProcessor
 }
 
-function parseGithubWebhookContent(rawContent: string, webhookSecret: string) {
-  const content = getContentFields(rawContent)
-  if (!content) return
+async function processWebhookFromS3EventAndThrow(
+  appState: AppState,
+  event: EventBridgeEvent<string, S3EventDetail>
+) {
+  const webhookSecret = (await appState.config.github()).webhookSecret
 
-  const { sigHeader, eventType, rawBody } = content
+  const rawContent = await appState.s3.getObjectAsString(event.detail.bucket.name, event.detail.object.key)
+  const parsedContent = GitHubWebhookStoredRunEvent.safeParse(rawContent)
+  if (!parsedContent.success) {
+    logger.warn(`Unable to parse webhook content from S3`)
+    return
+  }
 
-  if (!validateWebhook(sigHeader, rawBody, webhookSecret)) {
+  const rawBody = parsedContent.data.body
+  if (!validateWebhookSignature(parsedContent.data['X-Hub-Signature-256'], rawBody, webhookSecret)) {
     logger.warn('Invalid signature - not processing webhook')
     return
   }
-  logger.debug('Webhook validation successful')
 
-  if (!isWebhookType(eventType)) {
-    logger.info(`Ignoring event of type ${eventType}`)
-    return
-  }
-  logger.debug(`Identified event of type ${eventType}`)
-
-  return { rawBody, eventType }
+  await processors[parsedContent.data['X-GitHub-Event']](appState, rawBody)
+  logger.info('Finished processing webhook event')
 }
 
-function getContentFields(content: string) {
-  const s3ObjectContent = JSON.parse(content)
-
-  const sigHeader = s3ObjectContent['X-Hub-Signature-256']
-  if (!sigHeader || sigHeader.length === 0) {
-    logger.warn('No X-Hub-Signature-256 field - aborting')
-    return
-  }
-
-  const eventType = s3ObjectContent['X-GitHub-Event']
-  if (!eventType || eventType.length === 0) {
-    logger.warn('No X-GitHub-Event field - aborting')
-    return
-  }
-
-  const rawBody = s3ObjectContent.body ?? ''
-  if (!rawBody || rawBody.length === 0) {
-    logger.warn('No body field - aborting')
-    return
-  }
-
-  return { sigHeader, eventType, rawBody }
-}
-
-export function validateWebhook(sigHeader: string, rawBody: string, webhookSecret: string) {
+export function validateWebhookSignature(sigHeader: string, rawBody: string, webhookSecret: string) {
   return crypto.timingSafeEqual(
     Buffer.from(createSignatureHeader(rawBody, webhookSecret), 'ascii'),
     Buffer.from(sigHeader, 'ascii')
