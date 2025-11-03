@@ -1,10 +1,6 @@
 import { AppState } from '../../environment/AppState.js'
 import { deregisterSubscription, registerSubscription } from './webPushSubscriptions.js'
-import {
-  jsonOkResult,
-  responseWithStatusCode,
-  withJSONContentType
-} from '../../inboundInterfaces/httpResponses.js'
+import { jsonOkResult } from '../../inboundInterfaces/httpResponses.js'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
 import { CicadaAPIAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
@@ -14,12 +10,9 @@ import {
   WebPushSubscribeRequestSchema,
   WebPushUnsubscribeRequestSchema
 } from '../../ioTypes/WebPushSchemasAndTypes.js'
-import { logger } from '../../util/logging.js'
 import { APIEventSchema } from '../../ioTypes/zodUtil.js'
 import { githubUserSummaryFromEvent, userIdFromApiEvent } from '../webAuth/webAuth.js'
-import { failedWithResult, Result, successWith } from '../../util/structuredResult.js'
-import { z } from 'zod'
-import { APIGatewayProxyResult } from 'aws-lambda'
+import { parseAPIEventWithSchema } from '../../inboundInterfaces/httpRequests.js'
 
 export const webPushSubscribeRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
   path: authenticateApiPath('webPushSubscribe'),
@@ -40,7 +33,7 @@ export const webPushTestRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
 }
 
 export async function handleWebPushSubscribe(appState: AppState, event: CicadaAPIAuthorizedAPIEvent) {
-  const parseResult = parseEventWithSchema(event, WebPushSubscribeRequestSchema)
+  const parseResult = parseAPIEventWithSchema(event, WebPushSubscribeRequestSchema)
   if (!parseResult.isSuccessResult) {
     return parseResult.failureResult
   }
@@ -53,7 +46,7 @@ export async function handleWebPushSubscribe(appState: AppState, event: CicadaAP
 }
 
 export async function handleWebPushUnsubscribe(appState: AppState, event: CicadaAPIAuthorizedAPIEvent) {
-  const parseResult = parseEventWithSchema(event, WebPushUnsubscribeRequestSchema)
+  const parseResult = parseAPIEventWithSchema(event, WebPushUnsubscribeRequestSchema)
   if (!parseResult.isSuccessResult) {
     return parseResult.failureResult
   }
@@ -67,7 +60,7 @@ export async function handleWebPushUnsubscribe(appState: AppState, event: Cicada
 }
 
 export async function handleWebPushTest(appState: AppState, event: CicadaAPIAuthorizedAPIEvent) {
-  const parseResult = parseEventWithSchema(event, APIEventSchema)
+  const parseResult = parseAPIEventWithSchema(event, APIEventSchema)
   if (!parseResult.isSuccessResult) {
     return parseResult.failureResult
   }
@@ -78,19 +71,4 @@ export async function handleWebPushTest(appState: AppState, event: CicadaAPIAuth
     githubUserSummaryFromEvent(parseResult.result)
   )
   return jsonOkResult({ message: 'Web Push Test OK' })
-}
-
-function parseEventWithSchema<TSchema extends z.ZodType>(
-  event: CicadaAPIAuthorizedAPIEvent,
-  schema: TSchema
-): Result<z.infer<TSchema>, APIGatewayProxyResult> {
-  const parseResult = schema.safeParse(event)
-  if (!parseResult.success) {
-    logger.warn('Request parsing failed', { parseResult })
-    return failedWithResult(
-      'Parse failure',
-      withJSONContentType(responseWithStatusCode(400, { message: 'Invalid request' }))
-    )
-  }
-  return successWith(parseResult.data)
 }
