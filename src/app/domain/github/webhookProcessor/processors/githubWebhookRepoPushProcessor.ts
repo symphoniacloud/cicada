@@ -1,9 +1,8 @@
 import { WebhookProcessor } from '../WebhookProcessor.js'
 import { AppState } from '../../../../environment/AppState.js'
-import { isRawGithubWebhookPush } from '../../../types/rawGithub/RawGithubWebhookPush.js'
 import { processPushes } from '../../githubPush.js'
 import { logger } from '../../../../util/logging.js'
-import { fromRawGithubWebhookPush } from '../../../types/fromRawGitHub.js'
+import { fromRawGithubWebhookPush, isRawGithubWebhookPush } from '../../../types/fromRawGitHub.js'
 
 export const githubWebhookRepoPushProcessor: WebhookProcessor = async (
   appState: AppState,
