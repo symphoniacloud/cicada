@@ -4,7 +4,7 @@ import middy from '@middy/core'
 import { powertoolsMiddlewares } from '../../middleware/standardMiddleware.js'
 import { EventBridgeHandler } from 'aws-lambda'
 import {
-  processWebhookFromS3Event,
+  processGitHubWebhookFromS3Event,
   S3EventDetail
 } from '../../domain/github/webhookProcessor/githubWebhookProcessor.js'
 import { logger } from '../../util/logging.js'
@@ -24,7 +24,7 @@ export const baseHandler: EventBridgeHandler<string, S3EventDetail, unknown> = a
 
     appState = startup.result
   }
-  await processWebhookFromS3Event(appState, event)
+  await processGitHubWebhookFromS3Event(appState, event)
 }
 
 // Entry point - usage is defined by CDK
