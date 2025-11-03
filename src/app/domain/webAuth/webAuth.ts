@@ -1,5 +1,3 @@
-// If token valid then username will be available here
-
 import { CicadaAPIAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
 import { GitHubUserId } from '../../ioTypes/GitHubTypes.js'
 import { GitHubUserIdSchema } from '../../ioTypes/GitHubSchemas.js'

@@ -118,7 +118,8 @@ test('newPushTest', async () => {
     resources: [],
     detail: {
       data: {
-        userId: fromRawGithubUserId(162360409)
+        userId: fromRawGithubUserId(162360409),
+        userName: 'cicada-test-user'
       }
     }
   })

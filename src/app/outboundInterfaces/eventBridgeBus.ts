@@ -3,19 +3,19 @@ import { logger } from '../util/logging.js'
 import { EventBridgeDetailType } from '../../multipleContexts/eventBridge.js'
 import { tracer } from '../util/tracing.js'
 import { AppState } from '../environment/AppState.js'
-import { WebPushTestEvent } from '../domain/webPush/WebPushTestEvent.js'
 
 import {
   GitHubAccountId,
   GitHubInstallation,
   GitHubPush,
+  GitHubUserSummary,
   GitHubWorkflowRunEvent
 } from '../ioTypes/GitHubTypes.js'
 
 export type CicadaEventBridgeData =
   | GitHubPush
   | GitHubWorkflowRunEvent
-  | WebPushTestEvent
+  | GitHubUserSummary // Used for web push
   | GitHubInstallation
   | { installation: GitHubInstallation; publicAccountId: GitHubAccountId }
 

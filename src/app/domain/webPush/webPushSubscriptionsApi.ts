@@ -7,12 +7,16 @@ import {
 } from '../../inboundInterfaces/httpResponses.js'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
 import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
-import { userIdFromEvent, usernameFromEvent } from '../webAuth/webAuth.js'
-import { usernameFieldMissingFromContextResponse } from '../../inboundInterfaces/standardHttpResponses.js'
 import { CicadaAPIAuthorizedAPIEvent } from '../../inboundInterfaces/lambdaTypes.js'
-import { isSuccess } from '../../util/structuredResult.js'
 import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
 import { authenticateApiPath } from '../../web/routingCommon.js'
+import {
+  WebPushSubscribeRequestSchema,
+  WebPushUnsubscribeRequestSchema
+} from '../../ioTypes/WebPushSchemasAndTypes.js'
+import { logger } from '../../util/logging.js'
+import { githubUserSummaryFromEvent } from '../../inboundInterfaces/eventContext.js'
+import { APIEventSchema } from '../../ioTypes/zodUtil.js'
 
 export const webPushSubscribeRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
   path: authenticateApiPath('webPushSubscribe'),
@@ -33,30 +37,45 @@ export const webPushTestRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
 }
 
 export async function handleWebPushSubscribe(appState: AppState, event: CicadaAPIAuthorizedAPIEvent) {
-  const username = usernameFromEvent(event),
-    userId = userIdFromEvent(event)
-  if (!username) return usernameFieldMissingFromContextResponse()
+  const parseResult = WebPushSubscribeRequestSchema.safeParse(event)
+  if (!parseResult.success) {
+    logger.warn('WebPush subscribe failed', { parseResult })
+    return withJSONContentType(responseWithStatusCode(400, { message: 'Invalid request' }))
+  }
 
-  const response = await registerSubscription(appState, userId, username, event.body ?? '')
-  return isSuccess(response)
-    ? jsonOkResult({ message: 'successfully subscribed' })
-    : withJSONContentType(responseWithStatusCode(400, { message: response.reason }))
+  await registerSubscription(appState, {
+    ...githubUserSummaryFromEvent(parseResult.data),
+    ...parseResult.data.body
+  })
+  return jsonOkResult({ message: 'successfully subscribed' })
 }
 
 export async function handleWebPushUnsubscribe(appState: AppState, event: CicadaAPIAuthorizedAPIEvent) {
-  const userId = userIdFromEvent(event)
+  const parseResult = WebPushUnsubscribeRequestSchema.safeParse(event)
+  if (!parseResult.success) {
+    logger.warn('WebPush unsubscribe failed', { parseResult })
+    return withJSONContentType(responseWithStatusCode(400, { message: 'Invalid request' }))
+  }
 
-  const response = await deregisterSubscription(appState, userId, event.body ?? '')
-  return isSuccess(response)
-    ? jsonOkResult({ message: 'successfully unsubscribed' })
-    : withJSONContentType(responseWithStatusCode(400, { message: response.reason }))
+  await deregisterSubscription(
+    appState,
+    githubUserSummaryFromEvent(parseResult.data).userId,
+    parseResult.data.body.endpoint
+  )
+  return jsonOkResult({ message: 'successfully unsubscribed' })
 }
 
 export async function handleWebPushTest(appState: AppState, event: CicadaAPIAuthorizedAPIEvent) {
-  const userId = userIdFromEvent(event)
+  const parseResult = APIEventSchema.safeParse(event)
+  if (!parseResult.success) {
+    logger.warn('WebPush test failed', { parseResult })
+    return withJSONContentType(responseWithStatusCode(400, { message: 'Invalid request' }))
+  }
 
-  await sendToEventBridge(appState, EVENTBRIDGE_DETAIL_TYPES.WEB_PUSH_TEST, {
-    userId
-  })
+  await sendToEventBridge(
+    appState,
+    EVENTBRIDGE_DETAIL_TYPES.WEB_PUSH_TEST,
+    githubUserSummaryFromEvent(parseResult.data)
+  )
   return jsonOkResult({ message: 'Web Push Test OK' })
 }
