@@ -1,6 +1,5 @@
 import { AppState } from '../../environment/AppState.js'
 import { logger } from '../../util/logging.js'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
 import { publishToSubscriptionsForUsers } from './webPushPublisher.js'
 import {
   friendlyStatus,
@@ -17,6 +16,10 @@ import {
   CicadaEventBridgeGitHubPushSchema,
   CicadaEventBridgeGitHubWorkflowRunEventSchema
 } from '../../ioTypes/EventBridgeTypes.js'
+import {
+  EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_PUSH,
+  EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_WORKFLOW_RUN_EVENT
+} from '../../../multipleContexts/eventBridgeSchemas.js'
 
 // TOEventually - these are going to create a lot of queries for subscription lookup for large organizations
 // May be better to have one table / index for this.
@@ -26,7 +29,7 @@ export async function handleNewWorkflowRunEvent(appState: AppState, eventDetail:
 
   if (!eventBridgePushParse.success) {
     logger.error(
-      `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_WORKFLOW_RUN_EVENT} was not of expected format`,
+      `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_WORKFLOW_RUN_EVENT} was not of expected format`,
       { eventDetail }
     )
     return
@@ -64,7 +67,7 @@ export async function handleNewPush(appState: AppState, eventDetail: unknown) {
   const eventBridgePushParse = CicadaEventBridgeGitHubPushSchema.safeParse(eventDetail)
   if (!eventBridgePushParse.success) {
     logger.error(
-      `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_PUSH} was not of expected format`,
+      `Event detail for detail-type ${EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_PUSH} was not of expected format`,
       { commit: eventDetail }
     )
     return

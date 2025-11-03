@@ -1,13 +1,13 @@
 import { AppState } from '../../environment/AppState.js'
 import { logger } from '../../util/logging.js'
 import { putPushIfNoKeyExists } from '../entityStore/entities/GithubPushEntity.js'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridge.js'
 import { executeAndCatchConditionalCheckFailed } from '../entityStore/entityStoreOperationSupport.js'
 import { sendToEventBridge } from '../../outboundInterfaces/eventBridgeBus.js'
 import { saveLatestPushes } from './githubLatestPushesPerRef.js'
 import { getUserIdsForAccount } from './githubMembership.js'
 
 import { GitHubPush, GitHubUserId } from '../../ioTypes/GitHubTypes.js'
+import { EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_PUSH } from '../../../multipleContexts/eventBridgeSchemas.js'
 
 export async function processPushes(appState: AppState, pushes: GitHubPush[], publishNotifications: boolean) {
   if (pushes.length > 0) {
@@ -21,7 +21,7 @@ export async function processPushes(appState: AppState, pushes: GitHubPush[], pu
   }
   await saveLatestPushes(appState, newPushes)
   for (const newEvent of publishNotifications ? newPushes : []) {
-    await sendToEventBridge(appState, EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_PUSH, newEvent)
+    await sendToEventBridge(appState, EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_PUSH, newEvent)
   }
 }
 

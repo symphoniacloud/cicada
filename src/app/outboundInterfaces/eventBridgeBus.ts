@@ -1,6 +1,5 @@
 import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge'
 import { logger } from '../util/logging.js'
-import { EventBridgeDetailType } from '../../multipleContexts/eventBridge.js'
 import { tracer } from '../util/tracing.js'
 import { AppState } from '../environment/AppState.js'
 
@@ -11,6 +10,7 @@ import {
   GitHubUserSummary,
   GitHubWorkflowRunEvent
 } from '../ioTypes/GitHubTypes.js'
+import { EventBridgeDetailType } from '../../multipleContexts/eventBridgeSchemas.js'
 
 export type CicadaEventBridgeData =
   | GitHubPush

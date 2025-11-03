@@ -6,7 +6,6 @@ import {
   testMikeRobertsPushSubscriptionThree,
   testMikeRobertsPushSubscriptionTwo
 } from '../../../../../examples/cicada/webPushDomainObjects.js'
-import { EVENTBRIDGE_DETAIL_TYPES } from '../../../../../../src/multipleContexts/eventBridge.js'
 import {
   stubGetGithubInstallation,
   stubQueryAccountMembershipsByAccount,
@@ -18,6 +17,10 @@ import {
 } from '../../../../../testSupport/fakes/tableRecordReadStubs.js'
 
 import { fromRawGithubUserId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
+import {
+  EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_WORKFLOW_RUN_EVENT,
+  EVENTBRIDGE_DETAIL_TYPE_WEB_PUSH_TEST
+} from '../../../../../../src/multipleContexts/eventBridgeSchemas.js'
 
 test('newWorkflowRunEvent', async () => {
   const appState = new FakeAppState()
@@ -37,7 +40,7 @@ test('newWorkflowRunEvent', async () => {
   await processEventBridgeWebPushEvent(appState, {
     version: '0',
     id: '136bcba1-4d40-4a7b-d67d-ae2c8839624e',
-    'detail-type': EVENTBRIDGE_DETAIL_TYPES.GITHUB_NEW_WORKFLOW_RUN_EVENT,
+    'detail-type': EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_WORKFLOW_RUN_EVENT,
     source: 'cicada-test-org',
     account: '397589511426',
     time: '2024-03-08T22:35:25Z',
@@ -110,7 +113,7 @@ test('newPushTest', async () => {
   await processEventBridgeWebPushEvent(appState, {
     version: '0',
     id: '136bcba1-4d40-4a7b-d67d-ae2c8839624e',
-    'detail-type': EVENTBRIDGE_DETAIL_TYPES.WEB_PUSH_TEST,
+    'detail-type': EVENTBRIDGE_DETAIL_TYPE_WEB_PUSH_TEST,
     source: 'cicada-test-org',
     account: '397589511426',
     time: '2024-03-08T22:35:25Z',
