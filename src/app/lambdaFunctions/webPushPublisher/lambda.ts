@@ -2,15 +2,14 @@ import { AppState } from '../../environment/AppState.js'
 import { lambdaStartup } from '../../environment/lambdaStartup.js'
 import middy from '@middy/core'
 import { powertoolsMiddlewares } from '../../middleware/standardMiddleware.js'
-import { EventBridgeHandler } from 'aws-lambda'
+import { Handler } from 'aws-lambda'
 import { processEventBridgeWebPushEvent } from '../../domain/webPush/webPushEventBridgeEventProcessor.js'
 import { logger } from '../../util/logging.js'
 import { isFailure } from '../../util/structuredResult.js'
-import { EventBridgeDetailType } from '../../../multipleContexts/eventBridgeSchemas.js'
 
 let appState: AppState
 
-export const baseHandler: EventBridgeHandler<EventBridgeDetailType, unknown, unknown> = async (event) => {
+export const baseHandler: Handler<unknown, unknown> = async (event) => {
   if (!appState) {
     const startup = await lambdaStartup()
     if (isFailure(startup)) {

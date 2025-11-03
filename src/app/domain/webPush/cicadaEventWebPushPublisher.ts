@@ -21,9 +21,8 @@ import {
 
 export async function handleNewWorkflowRunEvent(
   appState: AppState,
-  eventDetail: CicadaGitHubWorkflowRunEventEventBridgeDetail
+  { data: workflowRunEvent }: CicadaGitHubWorkflowRunEventEventBridgeDetail
 ) {
-  const workflowRunEvent = eventDetail.data
   const userIds = await getRelatedMemberIdsForRunEvent(appState, workflowRunEvent)
   if (userIds.length === 0) return
   // TODO - this is a hack to avoid terrible performance - see todo in filterWorkflowNotifyEnabled
@@ -40,13 +39,11 @@ export async function handleNewWorkflowRunEvent(
 export function generateRunEventNotification(
   workflowRunEvent: GitHubWorkflowRunEvent
 ): CicadaWebNotification {
-  const titleIcon = runBasicStatus(workflowRunEvent)
-  const bodyStatus = friendlyStatus(workflowRunEvent)
   const workflowName = workflowRunEvent.workflowName
 
   return {
-    title: `${titleIcon} ${workflowName}`,
-    body: `Workflow ${workflowName} in Repo ${workflowRunEvent.repoName} ${bodyStatus}`,
+    title: `${runBasicStatus(workflowRunEvent)} ${workflowName}`,
+    body: `Workflow ${workflowName} in Repo ${workflowRunEvent.repoName} ${friendlyStatus(workflowRunEvent)}`,
     data: { url: workflowRunEvent.runHtmlUrl }
   }
 }
