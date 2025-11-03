@@ -84,8 +84,9 @@ export function fromRawRunEvents(
   rawRunEvents: RawGithubWorkflowRunEvent[]
 ) {
   function workflowForRawRunEvent(run: RawGithubWorkflowRunEvent) {
+    const workflowIdForRun = fromRawGitHubWorkflowId(run.workflow_id)
     return (
-      workflows.find(({ workflowId }) => workflowId === fromRawGitHubWorkflowId(run.workflow_id)) ??
+      workflows.find(({ workflowId }) => workflowId === workflowIdForRun) ??
       throwFunction(`No workflow found for workflow ID on raw run ${run.id}`)()
     )
   }
