@@ -23,16 +23,18 @@ async function readRawUsers(
   installation: GitHubInstallation,
   githubClient: GithubInstallationClient
 ): Promise<unknown[]> {
-  if (installation.accountType === ORGANIZATION_ACCOUNT_TYPE) {
-    return await githubClient.listOrganizationMembers(installation.accountName)
-  } else if (installation.accountType === USER_ACCOUNT_TYPE) {
-    const getUserResult = await githubClient.getUser(installation.accountName)
-    if (isSuccess(getUserResult)) {
-      return [getUserResult.result]
-    } else {
-      throw new Error(getUserResult.reason)
+  switch (installation.accountType) {
+    case ORGANIZATION_ACCOUNT_TYPE:
+      return await githubClient.listOrganizationMembers(installation.accountName)
+    case USER_ACCOUNT_TYPE: {
+      const getUserResult = await githubClient.getUser(installation.accountName)
+      if (isSuccess(getUserResult)) {
+        return [getUserResult.result]
+      } else {
+        throw new Error(getUserResult.reason)
+      }
     }
-  } else {
-    throw new Error(`Unknown installation account type: ${installation.accountType}`)
+    default:
+      throw new Error(`Unknown installation account type: ${installation.accountType}`)
   }
 }

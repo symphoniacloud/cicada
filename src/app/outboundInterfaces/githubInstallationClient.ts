@@ -5,14 +5,9 @@ import { MetricUnit } from '@aws-lambda-powertools/metrics'
 import { failedWith, Result, successWith } from '../util/structuredResult.js'
 import { toRawGithubAppId, toRawGithubInstallationId } from '../domain/github/mappings/toFromRawGitHubIds.js'
 import { GitHubAppId, GitHubInstallationId } from '../ioTypes/GitHubTypes.js'
-import { RawGithubWorkflowRunEvent } from '../ioTypes/RawGitHubTypes.js'
 
 export interface GithubInstallationClient {
-  listWorkflowRunsForRepo(
-    account: string,
-    repo: string,
-    created?: string
-  ): Promise<RawGithubWorkflowRunEvent[]>
+  listWorkflowRunsForRepo(account: string, repo: string, created?: string): Promise<unknown[]>
 
   listOrganizationRepositories(org: string): Promise<unknown[]>
 

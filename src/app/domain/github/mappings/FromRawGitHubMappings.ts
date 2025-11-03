@@ -7,7 +7,9 @@ import {
   GitHubRepo,
   GitHubRepoSummary,
   GitHubUser,
-  GitHubWorkflow
+  GitHubWorkflow,
+  GitHubWorkflowRunEvent,
+  GitHubWorkflowSummary
 } from '../../../ioTypes/GitHubTypes.js'
 import { GitHubAccountTypeSchema } from '../../../ioTypes/GitHubSchemas.js'
 import {
@@ -19,7 +21,8 @@ import {
   RawGithubRepo,
   RawGitHubTargetType,
   RawGithubUser,
-  RawGithubWorkflow
+  RawGithubWorkflow,
+  RawGithubWorkflowRunEvent
 } from '../../../ioTypes/RawGitHubTypes.js'
 import {
   fromRawGitHubAccountId,
@@ -27,9 +30,11 @@ import {
   fromRawGithubInstallationId,
   fromRawGitHubRepoId,
   fromRawGithubUserId,
-  fromRawGitHubWorkflowId
+  fromRawGitHubWorkflowId,
+  fromRawGithubWorkflowRunId
 } from './toFromRawGitHubIds.js'
 import { timestampToIso } from '../../../util/dateAndTime.js'
+import { narrowToWorkflowSummary } from '../githubWorkflow.js'
 
 export function gitHubAccountTypeFromRaw(raw: RawGitHubTargetType): GitHubAccountType {
   return GitHubAccountTypeSchema.parse(raw.toLowerCase())
@@ -185,5 +190,39 @@ function fromRawGithubPushFromApiCommit(commit: RawGithubPushFromApiCommit) {
   return {
     sha: commit.sha,
     ...fromRawGithubPushCommitCommon(commit)
+  }
+}
+
+// TOEventually - consider dateTimes, e.g. for Pushes we get localized times
+export function fromRawGithubWorkflowRunEvent(
+  workflow: GitHubWorkflowSummary,
+  raw: RawGithubWorkflowRunEvent
+): GitHubWorkflowRunEvent {
+  return {
+    ...narrowToWorkflowSummary(workflow),
+    workflowRunId: fromRawGithubWorkflowRunId(raw.id),
+    repoHtmlUrl: raw.repository.html_url,
+    runNumber: raw.run_number,
+    runAttempt: raw.run_attempt,
+    event: raw.event,
+    displayTitle: raw.display_title,
+    runEventCreatedAt: raw.created_at,
+    runEventUpdatedAt: raw.updated_at,
+    runStartedAt: raw.run_started_at,
+    status: raw.status ?? undefined,
+    conclusion: raw.conclusion ?? undefined,
+    headBranch: raw.head_branch ?? undefined,
+    runHtmlUrl: raw.html_url,
+    headSha: raw.head_sha,
+    ...(raw.actor
+      ? {
+          actor: {
+            userId: fromRawGithubUserId(raw.actor.id),
+            userName: raw.actor.login,
+            avatarUrl: raw.actor.avatar_url,
+            htmlUrl: raw.actor.html_url
+          }
+        }
+      : {})
   }
 }

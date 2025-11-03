@@ -10,10 +10,10 @@ import { RawGithubInstallationSchema } from '../../../ioTypes/RawGitHubSchemas.j
 export async function crawlInstallations(appState: AppState): Promise<GitHubInstallation[]> {
   logger.info(`Crawling Installations`)
 
-  const fromGitHub = await appState.githubClient.listInstallations()
-  const installations = fromGitHub.map((raw) =>
-    gitHubInstallationFromRaw(RawGithubInstallationSchema.parse(raw))
-  )
+  const installations = (await appState.githubClient.listInstallations())
+    .map((x) => RawGithubInstallationSchema.parse(x))
+    .map(gitHubInstallationFromRaw)
+
   const processed = await Promise.all(
     installations.map(async (installation) => {
       return await processInstallation(appState, installation)
