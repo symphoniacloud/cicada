@@ -10,7 +10,7 @@ import {
 } from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
 import { expectedPutGithubInstallation } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 
-import { fromRawGithubAppId } from '../../../../../../src/app/domain/types/toFromRawGitHubIds.js'
+import { fromRawGithubAppId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 
 test('installation-webhook-for-org-account-installation', async () => {
   // A

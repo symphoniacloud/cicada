@@ -5,7 +5,7 @@ import {
   WebPushVapidConfig
 } from '../../../src/app/environment/config.js'
 
-import { fromRawGithubAppId } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
+import { fromRawGithubAppId } from '../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 
 export const defaultFakeWebHostname = 'fake-cicada.example.com'
 

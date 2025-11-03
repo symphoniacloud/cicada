@@ -19,7 +19,7 @@ import {
   expectedPutLatestGithubPush
 } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 
-import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/types/toFromRawGitHubIds.js'
+import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 
 test('repo-crawler-for-personal-account-installation', async () => {
   // A

@@ -25,8 +25,10 @@ import {
   expectedBatchWriteGithubUsers
 } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
 import { successWith } from '../../../../../../src/app/util/structuredResult.js'
-import { fromRawGithubUserId } from '../../../../../../src/app/domain/types/toFromRawGitHubIds.js'
-import { gitHubAccountIdFromRaw } from '../../../../../../src/app/domain/github/mappings/FromRawGitHubMappings.js'
+import {
+  fromRawGithubUserId,
+  fromRawGitHubAccountId
+} from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 import { RawGithubUserSchema } from '../../../../../../src/app/ioTypes/RawGitHubSchemas.js'
 
 test('user-crawler-for-personal-account-installation', async () => {
@@ -77,7 +79,7 @@ test('user-crawler-for-org-installation', async () => {
   expectBatchWrites(appState, 2).toEqual(
     expectedBatchDeleteGithubMemberships([
       {
-        accountId: gitHubAccountIdFromRaw(162483619),
+        accountId: fromRawGitHubAccountId(162483619),
         userId: fromRawGithubUserId(9786)
       }
     ])

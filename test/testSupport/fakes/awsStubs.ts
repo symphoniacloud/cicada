@@ -3,7 +3,7 @@ import { APIGatewayEventRequestContextWithAuthorizer, APIGatewayProxyEvent } fro
 import { APIGatewayRequestAuthorizerEvent } from 'aws-lambda'
 import { CicadaAPIAuthorizedAPIEvent } from '../../../src/app/inboundInterfaces/lambdaTypes.js'
 
-import { fromRawGithubUserId } from '../../../src/app/domain/types/toFromRawGitHubIds.js'
+import { fromRawGithubUserId } from '../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 
 export function createStubApiGatewayProxyEvent(
   overrides: Partial<APIGatewayProxyEvent> = {}
