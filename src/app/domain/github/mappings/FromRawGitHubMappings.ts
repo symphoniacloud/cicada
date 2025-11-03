@@ -12,11 +12,13 @@ import {
 import { GitHubAccountTypeSchema } from '../../../ioTypes/GitHubSchemas.js'
 import {
   RawGithubInstallation,
+  RawGithubPushFromApi,
+  RawGithubPushFromApiCommit,
+  RawGithubPushFromWebhook,
+  RawGithubPushFromWebhookCommit,
   RawGithubRepo,
   RawGitHubTargetType,
   RawGithubUser,
-  RawGithubWebhookPush,
-  RawGithubWebhookPushCommit,
   RawGithubWorkflow
 } from '../../../ioTypes/RawGitHubTypes.js'
 import {
@@ -111,7 +113,7 @@ export function fromRawGithubWorkflow(repo: GitHubRepoSummary, raw: RawGithubWor
   }
 }
 
-export function fromRawGithubWebhookPush(raw: RawGithubWebhookPush): GitHubPush {
+export function fromRawGithubPushFromWebhook(raw: RawGithubPushFromWebhook): GitHubPush {
   return {
     accountId: fromRawGitHubAccountId(raw.repository.owner.id),
     accountName: raw.repository.owner.name,
@@ -130,20 +132,58 @@ export function fromRawGithubWebhookPush(raw: RawGithubWebhookPush): GitHubPush 
     before: raw.before,
     commits: [
       // Explicitly include first element here to satisfy type
-      fromRawGithubWebhookPushCommit(raw.commits[0]),
-      ...raw.commits.slice(1).map(fromRawGithubWebhookPushCommit)
+      fromRawGithubPushFromWebhookCommit(raw.commits[0]),
+      ...raw.commits.slice(1).map(fromRawGithubPushFromWebhookCommit)
     ]
   }
 }
 
-function fromRawGithubWebhookPushCommit(commit: RawGithubWebhookPushCommit) {
+function fromRawGithubPushFromWebhookCommit(commit: RawGithubPushFromWebhookCommit) {
   return {
     sha: commit.id,
+    ...fromRawGithubPushCommitCommon(commit)
+  }
+}
+
+function fromRawGithubPushCommitCommon(commit: RawGithubPushFromApiCommit | RawGithubPushFromWebhookCommit) {
+  return {
     message: commit.message,
     distinct: commit.distinct,
     author: {
       name: commit.author.name,
       email: commit.author.email
     }
+  }
+}
+
+export function fromRawGithubPushFromApi(
+  { accountId, accountName, repoName, repoId, accountType }: GitHubRepoSummary,
+  raw: RawGithubPushFromApi
+): GitHubPush {
+  return {
+    accountId,
+    accountName,
+    accountType,
+    repoId,
+    repoName,
+    actor: {
+      userId: fromRawGithubUserId(raw.actor.id),
+      userName: raw.actor.login,
+      avatarUrl: raw.actor.avatar_url
+    },
+    dateTime: raw.created_at,
+    ref: raw.payload.ref,
+    before: raw.payload.before,
+    commits: [
+      fromRawGithubPushFromApiCommit(raw.payload.commits[0]),
+      ...raw.payload.commits.slice(1).map(fromRawGithubPushFromApiCommit)
+    ]
+  }
+}
+
+function fromRawGithubPushFromApiCommit(commit: RawGithubPushFromApiCommit) {
+  return {
+    sha: commit.sha,
+    ...fromRawGithubPushCommitCommon(commit)
   }
 }

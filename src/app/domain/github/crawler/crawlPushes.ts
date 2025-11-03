@@ -2,15 +2,12 @@ import { AppState } from '../../../environment/AppState.js'
 import { processPushes } from '../githubPush.js'
 import { GithubInstallationClient } from '../../../outboundInterfaces/githubInstallationClient.js'
 
-import { GitHubPush, GitHubRepoSummary } from '../../../ioTypes/GitHubTypes.js'
-import { fromRawGithubPushEventEvent } from '../../types/fromRawGitHub.js'
-import { isNotNullObject } from '../../../util/types.js'
-import { RawGithubAPIPushEventEvent } from '../../../ioTypes/RawGitHubTypes.js'
-import { RawGithubAPIPushEventEventSchema } from '../../../ioTypes/RawGitHubSchemas.js'
-import { logger } from '../../../util/logging.js'
+import { GitHubRepoSummary } from '../../../ioTypes/GitHubTypes.js'
+import { RawGithubEventSchema, RawGithubPushFromApiSchema } from '../../../ioTypes/RawGitHubSchemas.js'
+import { fromRawGithubPushFromApi } from '../mappings/FromRawGitHubMappings.js'
 
-// TOEventually - only get all pushes back to lookback in crawl configuration, however GitHub doesn't keep
-// them around for very long
+// TOEventually - only get all pushes back to lookback in crawl configuration, but GitHub doesn't keep
+// them around for very long anyway
 export async function crawlPushes(
   appState: AppState,
   // the owner ID on repo isn't sufficient when we are crawling public repos from other accounts
@@ -19,30 +16,11 @@ export async function crawlPushes(
 ) {
   const allEventsForRepo = await githubClient.listMostRecentEventsForRepo(repo.accountName, repo.repoName)
 
-  // Check just type field first to filter to what should be push events, then do a full type check
-  // Do this because we log errors on full type check, but don't want to log errors for
-  // non-push events
-  const rawPushes = allEventsForRepo.filter(hasTypeForPushEvent).filter(isRawGithubPushEventEvent)
-  // TODO - this comment was from pre-step-functions version. Is there something that can be improved now
-  //        repo is in context?
-  // For now do translation to internal pushes here since we need context of repo details, which aren't in the raw push
-  // (this isn't required for webhook translation)
-  const pushes = rawPushes
-    .map((push) => fromRawGithubPushEventEvent(repo, push))
-    .filter((x: GitHubPush | undefined): x is GitHubPush => x !== undefined)
+  const pushes = allEventsForRepo
+    .map((x) => RawGithubEventSchema.parse(x))
+    .filter((x) => x.type === 'PushEvent')
+    .map((x) => RawGithubPushFromApiSchema.parse(x))
+    .map((push) => fromRawGithubPushFromApi(repo, push))
 
   await processPushes(appState, pushes, false)
-}
-
-// TODO - think about using zod differently / adding schemas
-export function hasTypeForPushEvent(x: unknown): x is { type: 'PushEvent' } {
-  return isNotNullObject(x) && 'type' in x && x.type === 'PushEvent'
-}
-
-export function isRawGithubPushEventEvent(x: unknown): x is RawGithubAPIPushEventEvent {
-  const result = RawGithubAPIPushEventEventSchema.safeParse(x)
-  if (!result.success) {
-    logger.error('Unexpected structure for RawGithubAPIPushEventEvent', { event: x, error: result.error })
-  }
-  return result.success
 }
