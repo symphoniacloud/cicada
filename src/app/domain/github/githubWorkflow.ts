@@ -7,7 +7,7 @@ import {
   GitHubWorkflow,
   GitHubWorkflowSummary
 } from '../../ioTypes/GitHubTypes.js'
-import { fromRawGithubWorkflow } from '../types/fromRawGitHub.js'
+import { fromRawGithubWorkflow } from './mappings/FromRawGitHubMappings.js'
 import { RawGithubWorkflow } from '../../ioTypes/RawGitHubTypes.js'
 
 export async function processRawWorkflows(

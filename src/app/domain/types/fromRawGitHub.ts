@@ -1,7 +1,6 @@
 import {
   GitHubPush,
   GitHubRepoSummary,
-  GitHubWorkflow,
   GitHubWorkflowRunEvent,
   GitHubWorkflowSummary
 } from '../../ioTypes/GitHubTypes.js'
@@ -9,7 +8,6 @@ import {
   fromRawGitHubAccountId,
   fromRawGitHubRepoId,
   fromRawGithubUserId,
-  fromRawGitHubWorkflowId,
   fromRawGithubWorkflowRunId
 } from '../github/mappings/toFromRawGitHubIds.js'
 import { RawGithubWorkflowRunEvent } from './rawGithub/RawGithubWorkflowRunEvent.js'
@@ -21,29 +19,7 @@ import {
 import { isRawGithubWebhookPush, RawGithubWebhookPushCommit } from './rawGithub/RawGithubWebhookPush.js'
 import { timestampToIso } from '../../util/dateAndTime.js'
 import { logger } from '../../util/logging.js'
-import { RawGithubWorkflow } from '../../ioTypes/RawGitHubTypes.js'
 import { gitHubAccountTypeFromRaw } from '../github/mappings/FromRawGitHubMappings.js'
-
-// We store more on a Workflow than we get from the Github API, so workflows can only
-// be stored in the context of a repo
-export function fromRawGithubWorkflow(repo: GitHubRepoSummary, raw: RawGithubWorkflow): GitHubWorkflow {
-  return {
-    accountId: repo.accountId,
-    accountName: repo.accountName,
-    accountType: repo.accountType,
-    repoId: repo.repoId,
-    repoName: repo.repoName,
-    workflowId: fromRawGitHubWorkflowId(raw.id),
-    workflowName: raw.name,
-    workflowPath: raw.path,
-    workflowState: raw.state,
-    workflowUrl: raw.url,
-    workflowHtmlUrl: raw.html_url,
-    workflowBadgeUrl: raw.badge_url,
-    workflowCreatedAt: raw.created_at,
-    workflowUpdatedAt: raw.updated_at
-  }
-}
 
 // TOEventually - consider dateTimes, e.g. for Pushes we get localized times
 export function fromRawGithubWorkflowRunEvent(
