@@ -13,8 +13,9 @@ import {
   GitHubRepoSummary,
   GitHubWorkflowSummary
 } from '../../../ioTypes/GitHubTypes.js'
-import { isGitHubPublicAccount } from '../../../ioTypes/GitHubTypeChecks.js'
-import { RawGithubRepoSchema } from '../../../ioTypes/RawGitHubSchemas.js'
+import { RawGithubRepoSchema, RawGithubWorkflowRunEventSchema } from '../../../ioTypes/RawGitHubSchemas.js'
+
+import { isGitHubPublicAccount } from '../githubPublicAccount.js'
 
 export async function crawlAccountContents(
   appState: AppState,
@@ -50,11 +51,11 @@ export async function crawlRepoContents(
   logger.info(`Crawling repo contents of ${repo.accountName}/${repo.repoName}`)
 
   const workflows = await crawlWorkflows(appState, githubClient, repo)
-  await crawlRunEvents(appState, githubClient, workflows, startTime)
+  await crawlRunEventsForRepoWorkflows(appState, githubClient, workflows, startTime)
   await crawlPushes(appState, repo, githubClient)
 }
 
-async function crawlRunEvents(
+async function crawlRunEventsForRepoWorkflows(
   appState: AppState,
   githubClient: GithubInstallationClient,
   workflows: GitHubWorkflowSummary[],
@@ -65,10 +66,11 @@ async function crawlRunEvents(
     return
   }
   logger.info(`Crawling run events for ${workflows.length} workflows`)
-  const rawRunEvents = await githubClient.listWorkflowRunsForRepo(
+  const unparsedRunEvents = await githubClient.listWorkflowRunsForRepo(
     workflows[0].accountName,
     workflows[0].repoName,
     `>${startTime}`
   )
+  const rawRunEvents = unparsedRunEvents.map((x) => RawGithubWorkflowRunEventSchema.parse(x))
   await processRawRunEvents(appState, workflows, rawRunEvents, false)
 }

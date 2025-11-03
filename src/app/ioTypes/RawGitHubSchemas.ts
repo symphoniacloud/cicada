@@ -82,7 +82,6 @@ export const RawGithubPushFromApiCommitSchema = z.object({
   })
 })
 
-// Commented fields not currently captured
 export const RawGithubPushFromApiSchema = z.object({
   ...RawGithubEventSchema.shape,
   type: z.literal('PushEvent'),
@@ -99,19 +98,8 @@ export const RawGithubPushFromApiSchema = z.object({
   payload: z.object({
     ref: z.string(),
     before: z.string(),
-    commits: z.array(RawGithubPushFromApiCommitSchema).min(1)
-    // repository_id: number
-    // push_id: number
-    // size: number
-    // distinct_size: number
-    // head: string
+    commits: z.array(RawGithubPushFromApiCommitSchema).nonempty()
   })
-  // public: boolean
-  // org?: {
-  //   id: number
-  //   login: string
-  //   avatar_url: string
-  // }
 })
 
 export const RawGithubPushFromWebhookCommitSchema = z.object({
@@ -147,11 +135,6 @@ export const RawGithubPushFromWebhookSchema = z.object({
   commits: z.array(RawGithubPushFromWebhookCommitSchema).nonempty()
 })
 
-// This type is defined partly by the Octokit function actions.listWorkflowRunsForRepo,
-// hence things here like fields that are possibly both undefined or null
-// For now at least we use the same type here to represent runs events returned via the API **and** sent
-// via webhook - that means some fields are missing here that exist in the API events, but not in webhook events
-// This is a subset, but we can't infer full type using typescript
 export const RawGithubWorkflowRunEventSchema = z.object({
   id: z.number(),
   name: z.string().nullable().optional(),

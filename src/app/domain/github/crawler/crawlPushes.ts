@@ -17,8 +17,10 @@ export async function crawlPushes(
   const allEventsForRepo = await githubClient.listMostRecentEventsForRepo(repo.accountName, repo.repoName)
 
   const pushes = allEventsForRepo
+    // Just do a very simple parse first so we can filter down to Push Events
     .map((x) => RawGithubEventSchema.parse(x))
     .filter((x) => x.type === 'PushEvent')
+    // Now do full parse
     .map((x) => RawGithubPushFromApiSchema.parse(x))
     .map((push) => fromRawGithubPushFromApi(repo, push))
 

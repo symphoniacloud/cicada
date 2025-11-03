@@ -11,7 +11,6 @@ import {
   fromRawGitHubWorkflowId,
   fromRawGitHubAccountId
 } from './mappings/toFromRawGitHubIds.js'
-import { fromRawGithubWorkflowRunEvent } from '../types/fromRawGitHub.js'
 import { crawlOneWorkflow } from './crawler/crawlWorkflows.js'
 import { GithubInstallationClient } from '../../outboundInterfaces/githubInstallationClient.js'
 import { getWorkflowFromRefData } from './userScopeReferenceData.js'
@@ -24,7 +23,7 @@ import {
   GitHubWorkflowSummary
 } from '../../ioTypes/GitHubTypes.js'
 import { FullGitHubWorkflowRunEvent, UserScopeReferenceData } from '../types/internalTypes.js'
-import { gitHubAccountTypeFromRaw } from './mappings/FromRawGitHubMappings.js'
+import { fromRawGithubWorkflowRunEvent, gitHubAccountTypeFromRaw } from './mappings/FromRawGitHubMappings.js'
 import { RawGithubWorkflowRunEvent } from '../../ioTypes/RawGitHubTypes.js'
 
 export async function processRawRunEvent(

@@ -6,7 +6,7 @@ import { getInstalledAccountIdForUser } from './githubMembership.js'
 import { getInstallationOrThrow } from '../entityStore/entities/GithubInstallationEntity.js'
 import { putPublicAccount } from '../entityStore/entities/GithubPublicAccountEntity.js'
 
-import { GitHubPublicAccount, GitHubUserId } from '../../ioTypes/GitHubTypes.js'
+import { GitHubInstallation, GitHubPublicAccount, GitHubUserId } from '../../ioTypes/GitHubTypes.js'
 import { publicAccountFromRawGithubUser } from './mappings/FromRawGitHubMappings.js'
 import { RawGithubUserSchema } from '../../ioTypes/RawGitHubSchemas.js'
 
@@ -38,4 +38,8 @@ export async function savePublicAccountWithName(
   })
 
   return successWith(publicAccount)
+}
+
+export function isGitHubPublicAccount(x: GitHubPublicAccount | GitHubInstallation): x is GitHubPublicAccount {
+  return Object.hasOwn(x, 'installationAccountId')
 }
