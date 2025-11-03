@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { JSONFromStringSchema } from './zodUtil.js'
 
 export const RawGitHubAppIdSchema = z.number()
 export const RawGitHubInstallationIdSchema = z.number()
@@ -195,3 +196,13 @@ export const RawGithubWorkflowRunEventSchema = z.object({
     })
     .optional()
 })
+
+export const GitHubWebhookWorkflowRunEventSchema = z.object({
+  // Would be nice to type this better
+  action: z.string(),
+  workflow_run: RawGithubWorkflowRunEventSchema
+})
+
+export const GitHubWebhookWorkflowRunEventPayloadSchema = JSONFromStringSchema.pipe(
+  GitHubWebhookWorkflowRunEventSchema
+)
