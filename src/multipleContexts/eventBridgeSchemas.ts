@@ -7,23 +7,31 @@ export const EVENTBRIDGE_DETAIL_TYPE_INSTALLATION_UPDATED = 'InstallationUpdated
 export const EVENTBRIDGE_DETAIL_TYPE_PUBLIC_ACCOUNT_UPDATED = 'PublicAccountUpdated'
 export const EVENTBRIDGE_DETAIL_TYPE_GITHUB_REPO_ACTIVITY_TABLE_UPDATED = 'GithubRepoActivityTableUpdated'
 
-export const EVENT_BRIDGE_DETAIL_TYPES = [
-  EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_PUSH,
-  EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_WORKFLOW_RUN_EVENT,
-  EVENTBRIDGE_DETAIL_TYPE_WEB_PUSH_TEST,
-  EVENTBRIDGE_DETAIL_TYPE_INSTALLATION_UPDATED,
-  EVENTBRIDGE_DETAIL_TYPE_PUBLIC_ACCOUNT_UPDATED,
+export const GithubNewPushDetailTypeSchema = z.literal(EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_PUSH)
+export const GithubNewWorkflowRunEventDetailTypeSchema = z.literal(
+  EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_WORKFLOW_RUN_EVENT
+)
+export const WebPushTestDetailTypeSchema = z.literal(EVENTBRIDGE_DETAIL_TYPE_WEB_PUSH_TEST)
+export const InstallationUpdatedDetailTypeSchema = z.literal(EVENTBRIDGE_DETAIL_TYPE_INSTALLATION_UPDATED)
+export const PublicAccountUpdatedDetailTypeSchema = z.literal(EVENTBRIDGE_DETAIL_TYPE_PUBLIC_ACCOUNT_UPDATED)
+export const GithubRepoActivityTableUpdatedDetailTypeSchema = z.literal(
   EVENTBRIDGE_DETAIL_TYPE_GITHUB_REPO_ACTIVITY_TABLE_UPDATED
-] as const
+)
 
-export const WEBPUSH_EVENTBRIDGE_DETAIL_TYPES = [
-  EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_PUSH,
-  EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_WORKFLOW_RUN_EVENT,
-  EVENTBRIDGE_DETAIL_TYPE_WEB_PUSH_TEST
-] as const
+export const EventBridgeDetailTypeSchema = z.union([
+  GithubNewPushDetailTypeSchema,
+  GithubNewWorkflowRunEventDetailTypeSchema,
+  WebPushTestDetailTypeSchema,
+  InstallationUpdatedDetailTypeSchema,
+  PublicAccountUpdatedDetailTypeSchema,
+  GithubRepoActivityTableUpdatedDetailTypeSchema
+])
 
-export const EventBridgeDetailTypeSchema = z.literal(EVENT_BRIDGE_DETAIL_TYPES)
-export const WebpushEventBridgeDetailTypeSchema = z.literal(WEBPUSH_EVENTBRIDGE_DETAIL_TYPES)
+export const WebpushEventBridgeDetailTypeSchema = z.union([
+  GithubNewPushDetailTypeSchema,
+  GithubNewWorkflowRunEventDetailTypeSchema,
+  WebPushTestDetailTypeSchema
+])
 
 export type EventBridgeDetailType = z.infer<typeof EventBridgeDetailTypeSchema>
 export type WebPushEventBridgeDetailType = z.infer<typeof WebpushEventBridgeDetailTypeSchema>

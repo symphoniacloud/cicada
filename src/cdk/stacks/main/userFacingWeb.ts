@@ -7,7 +7,11 @@ import * as targets from 'aws-cdk-lib/aws-events-targets'
 import { IdentitySource, LambdaIntegration, RequestAuthorizer, RestApi } from 'aws-cdk-lib/aws-apigateway'
 import { HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2'
 import { MainStackProps } from './mainStackProps.js'
-import { WEBPUSH_EVENTBRIDGE_DETAIL_TYPES } from '../../../multipleContexts/eventBridgeSchemas.js'
+import {
+  EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_PUSH,
+  EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_WORKFLOW_RUN_EVENT,
+  EVENTBRIDGE_DETAIL_TYPE_WEB_PUSH_TEST
+} from '../../../multipleContexts/eventBridgeSchemas.js'
 
 export interface UserFacingWebEndpointsProps extends MainStackProps {
   readonly restApi: RestApi
@@ -103,7 +107,11 @@ function defineWebPushPublisher(scope: Construct, props: UserFacingWebEndpointsP
     eventPattern: {
       source: [props.appName],
       // Need Array.from here otherwise a type error
-      detailType: Array.from(WEBPUSH_EVENTBRIDGE_DETAIL_TYPES)
+      detailType: Array.from([
+        EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_PUSH,
+        EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_WORKFLOW_RUN_EVENT,
+        EVENTBRIDGE_DETAIL_TYPE_WEB_PUSH_TEST
+      ])
     },
     targets: [new targets.LambdaFunction(lambdaFunction)]
   })
