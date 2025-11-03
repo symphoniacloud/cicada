@@ -3,6 +3,7 @@ import {
   GitHubAccountType,
   GitHubInstallation,
   GitHubPublicAccount,
+  GitHubPush,
   GitHubRepo,
   GitHubRepoSummary,
   GitHubUser,
@@ -14,6 +15,8 @@ import {
   RawGithubRepo,
   RawGitHubTargetType,
   RawGithubUser,
+  RawGithubWebhookPush,
+  RawGithubWebhookPushCommit,
   RawGithubWorkflow
 } from '../../../ioTypes/RawGitHubTypes.js'
 import {
@@ -24,6 +27,7 @@ import {
   fromRawGithubUserId,
   fromRawGitHubWorkflowId
 } from './toFromRawGitHubIds.js'
+import { timestampToIso } from '../../../util/dateAndTime.js'
 
 export function gitHubAccountTypeFromRaw(raw: RawGitHubTargetType): GitHubAccountType {
   return GitHubAccountTypeSchema.parse(raw.toLowerCase())
@@ -40,7 +44,7 @@ export function gitHubInstallationFromRaw(raw: RawGithubInstallation): GitHubIns
   }
 }
 
-export function fromRawGithubUser(raw: RawGithubUser): GitHubUser {
+export function gitHubUserFromRaw(raw: RawGithubUser): GitHubUser {
   return {
     userId: fromRawGithubUserId(raw.id),
     userName: raw.login,
@@ -104,5 +108,42 @@ export function fromRawGithubWorkflow(repo: GitHubRepoSummary, raw: RawGithubWor
     workflowBadgeUrl: raw.badge_url,
     workflowCreatedAt: raw.created_at,
     workflowUpdatedAt: raw.updated_at
+  }
+}
+
+export function fromRawGithubWebhookPush(raw: RawGithubWebhookPush): GitHubPush {
+  return {
+    accountId: fromRawGitHubAccountId(raw.repository.owner.id),
+    accountName: raw.repository.owner.name,
+    accountType: gitHubAccountTypeFromRaw(raw.repository.owner.type),
+    repoId: fromRawGitHubRepoId(raw.repository.id),
+    repoName: raw.repository.name,
+    repoUrl: raw.repository.html_url,
+    actor: {
+      userId: fromRawGithubUserId(raw.sender.id),
+      userName: raw.sender.login,
+      avatarUrl: raw.sender.avatar_url
+    },
+    // Use the datetime of the **LAST** commit for the date of this event
+    dateTime: timestampToIso(raw.commits[raw.commits.length - 1].timestamp),
+    ref: raw.ref,
+    before: raw.before,
+    commits: [
+      // Explicitly include first element here to satisfy type
+      fromRawGithubWebhookPushCommit(raw.commits[0]),
+      ...raw.commits.slice(1).map(fromRawGithubWebhookPushCommit)
+    ]
+  }
+}
+
+function fromRawGithubWebhookPushCommit(commit: RawGithubWebhookPushCommit) {
+  return {
+    sha: commit.id,
+    message: commit.message,
+    distinct: commit.distinct,
+    author: {
+      name: commit.author.name,
+      email: commit.author.email
+    }
   }
 }

@@ -5,13 +5,13 @@ import { processRawRunEvent } from '../../githubWorkflowRunEvent.js'
 import { getInstallationOrUndefined } from '../../../entityStore/entities/GithubInstallationEntity.js'
 
 import { fromRawGitHubAccountId } from '../../mappings/toFromRawGitHubIds.js'
-import { GitHubWebhookWorkflowRunEventPayloadSchema } from '../../../../ioTypes/RawGitHubSchemas.js'
+import { GitHubWebhookWorkflowRunEventSchema } from '../../../../ioTypes/RawGitHubSchemas.js'
 
 export const githubWebhookWorkflowRunProcessor: WebhookProcessor = async (
   appState: AppState,
   body: string
 ): Promise<void> => {
-  const parseResult = GitHubWebhookWorkflowRunEventPayloadSchema.safeParse(body)
+  const parseResult = GitHubWebhookWorkflowRunEventSchema.safeParse(body)
 
   if (!parseResult.success) {
     logger.warn('Unexpected workflow_run format - not processing')

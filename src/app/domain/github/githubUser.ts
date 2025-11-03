@@ -7,14 +7,14 @@ import { fromRawGithubUserId } from './mappings/toFromRawGitHubIds.js'
 import { GitHubInstallation } from '../../ioTypes/GitHubTypes.js'
 import { RawGithubUser } from '../../ioTypes/RawGitHubTypes.js'
 import { RawGithubUserSchema } from '../../ioTypes/RawGitHubSchemas.js'
-import { fromRawGithubUser } from './mappings/FromRawGitHubMappings.js'
+import { gitHubUserFromRaw } from './mappings/FromRawGitHubMappings.js'
 
 export async function processRawUsers(
   appState: AppState,
   rawGithubUsers: RawGithubUser[],
   installation: GitHubInstallation
 ) {
-  const users = rawGithubUsers.map(fromRawGithubUser)
+  const users = rawGithubUsers.map(gitHubUserFromRaw)
   await batchPutUsers(appState.entityStore, users)
   await setMemberships(appState, users, installation.accountId)
 }
