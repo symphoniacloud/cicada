@@ -16,8 +16,6 @@ export const GitHubWebhookPushSchema = JSONFromStringSchema.pipe(RawGithubWebhoo
 
 export const GitHubWebhookWorkflowRunEventSchema = JSONFromStringSchema.pipe(
   z.object({
-    // Would be nice to type this better
-    action: z.string(),
     workflow_run: RawGithubWorkflowRunEventSchema
   })
 )
