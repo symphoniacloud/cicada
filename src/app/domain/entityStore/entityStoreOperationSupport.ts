@@ -4,6 +4,7 @@ import { EntityType } from './entityTypes.js'
 // I use a conditional check on certain operations knowing that they might fail during regular behavior
 // Unfortunately the underlying DynamoDB SDK will always throw an error, so this code catches that error to provide
 // a cleaner experience in code making such operations.
+// TODO - change this to use structured Result
 export async function executeAndCatchConditionalCheckFailed<TReturn>(f: () => Promise<TReturn>) {
   try {
     return await f()

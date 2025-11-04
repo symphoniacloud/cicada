@@ -8,6 +8,7 @@ import { getUserIdsForAccount } from './githubMembership.js'
 
 import { GitHubPush, GitHubUserId } from '../../ioTypes/GitHubTypes.js'
 import { EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_PUSH } from '../../../multipleContexts/eventBridgeSchemas.js'
+import { removeNullAndUndefined } from '../../util/collections.js'
 
 export async function processPushes(appState: AppState, pushes: GitHubPush[], publishNotifications: boolean) {
   if (pushes.length > 0) {
@@ -26,7 +27,8 @@ export async function processPushes(appState: AppState, pushes: GitHubPush[], pu
 }
 
 async function savePushes(appState: AppState, pushes: GitHubPush[]) {
-  return (
+  // Old pushes will be filtered out by the conditional check
+  return removeNullAndUndefined(
     await Promise.all(
       pushes.map(async (push) => {
         return executeAndCatchConditionalCheckFailed(async () => {
@@ -34,7 +36,7 @@ async function savePushes(appState: AppState, pushes: GitHubPush[]) {
         })
       })
     )
-  ).filter((x): x is GitHubPush => x !== undefined)
+  )
 }
 
 export function latestCommitInPush(push: Pick<GitHubPush, 'commits'>) {

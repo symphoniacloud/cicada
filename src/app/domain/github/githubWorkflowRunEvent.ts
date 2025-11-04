@@ -7,9 +7,9 @@ import { saveRuns } from './githubWorkflowRun.js'
 import { isoDifferenceMs } from '../../util/dateAndTime.js'
 import { getWorkflow } from '../entityStore/entities/GithubWorkflowEntity.js'
 import {
+  fromRawGitHubAccountId,
   fromRawGitHubRepoId,
-  fromRawGitHubWorkflowId,
-  fromRawGitHubAccountId
+  fromRawGitHubWorkflowId
 } from './mappings/toFromRawGitHubIds.js'
 import { crawlOneWorkflow } from './crawler/crawlWorkflows.js'
 import { GithubInstallationClient } from '../../outboundInterfaces/githubInstallationClient.js'
@@ -25,6 +25,7 @@ import {
 import { FullGitHubWorkflowRunEvent, UserScopeReferenceData } from '../types/internalTypes.js'
 import { fromRawGithubWorkflowRunEvent, gitHubAccountTypeFromRaw } from './mappings/FromRawGitHubMappings.js'
 import { RawGithubWorkflowRunEvent } from '../../ioTypes/RawGitHubTypes.js'
+import { removeNullAndUndefined } from '../../util/collections.js'
 
 export async function processRawRunEvent(
   appState: AppState,
@@ -94,8 +95,9 @@ export function fromRawRunEvents(
 }
 
 async function saveEvents(appState: AppState, eventsToKeep: GitHubWorkflowRunEvent[]) {
+  // Old run events will be filtered out by the conditional check
   // TODO - option here for optimization - load existing runEvents for repo (e.g. in time period) and pre-filter unchanged
-  return (
+  return removeNullAndUndefined(
     await Promise.all(
       eventsToKeep.map(async (runEvent) => {
         return executeAndCatchConditionalCheckFailed(async () => {
@@ -103,7 +105,7 @@ async function saveEvents(appState: AppState, eventsToKeep: GitHubWorkflowRunEve
         })
       })
     )
-  ).filter((x): x is GitHubWorkflowRunEvent => x !== undefined)
+  )
 }
 
 export async function getRelatedMemberIdsForRunEvent(
