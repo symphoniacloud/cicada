@@ -5,6 +5,7 @@ import { CICADA_TABLE_IDS, CicadaTableId } from '../../multipleContexts/dynamoDB
 import { SSMGetParametersByNameOptions } from '@aws-lambda-powertools/parameters/ssm/types'
 import { GitHubAppId } from '../ioTypes/GitHubTypes.js'
 import { GitHubAppIdSchema } from '../ioTypes/GitHubSchemas.js'
+import { z } from 'zod'
 
 // Some of these are async because implementations may cache values retrieved from external services
 export interface CicadaConfig {
@@ -45,9 +46,8 @@ export function realCicadaConfig(appName: string): CicadaConfig {
   return {
     appName,
     async github() {
-      const appId = GitHubAppIdSchema.parse(await params.getParam(SSM_PARAM_NAMES.GITHUB_APP_ID))
       return {
-        appId: appId,
+        appId: GitHubAppIdSchema.parse(await params.getParam(SSM_PARAM_NAMES.GITHUB_APP_ID)),
         clientId: await params.getParam(SSM_PARAM_NAMES.GITHUB_CLIENT_ID),
         githubCallbackState: await params.getParam(SSM_PARAM_NAMES.GITHUB_CALLBACK_STATE),
         privateKey: await params.getParam(SSM_PARAM_NAMES.GITHUB_PRIVATE_KEY),
@@ -98,11 +98,7 @@ export function paramsForAppName(appName: string) {
       throw new Error(
         `Unexpected error - getParametersByName didn't contain error for ${fullKey} but it didn't appear in result`
       )
-    if (typeof result !== 'string')
-      throw new Error(
-        `Unexpected error - getParametersByName returned non string result for ${fullKey} : ${result}`
-      )
-    return result
+    return z.string().parse(result)
   }
 
   return {
