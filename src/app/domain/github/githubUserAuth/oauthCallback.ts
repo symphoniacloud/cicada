@@ -1,11 +1,13 @@
-import { APIGatewayProxyEvent } from 'aws-lambda'
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { AppState } from '../../../environment/AppState.js'
 import { logger } from '../../../util/logging.js'
 import { redirectResponseWithCookies } from '../../../inboundInterfaces/httpResponses.js'
-import { APIGatewayProxyResult } from 'aws-lambda'
 import { getUserByTokenWithGithubCheck } from '../githubUser.js'
 import { cookies } from './cicadaAuthCookies.js'
 import { createBadRequestResponse } from '../../../web/pages/views/badRequestView.js'
+import { parseQueryStringWithSchema } from '../../../web/htmlRequests.js'
+import { z } from 'zod'
+import { isFailure } from '../../../util/structuredResult.js'
 
 export async function oauthCallback(
   appState: AppState,
@@ -22,21 +24,26 @@ export async function oauthCallback(
 // Github sets two query string parameters when redirecting the user back to Cicada:
 // `code` - a generated short-term value that Cicada can use for getting an actual token
 // `state` - a value which Cicada set during login - used to make sure this part of an actual login process
+const oAuthCallbackQueryStringSchema = z.object({
+  code: z.string(),
+  state: z.string()
+})
+
 async function tryOauthCallback(
   appState: AppState,
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> {
-  const code = event.queryStringParameters?.code
-  const state = event.queryStringParameters?.state
+  const parseResult = parseQueryStringWithSchema(oAuthCallbackQueryStringSchema, event)
 
-  if (!code) {
-    return failedToLoginResult(`Unable to login because there was no code on request`)
+  if (isFailure(parseResult)) {
+    return failedToLoginResult(`Unable to login because request was invalid`)
   }
 
+  const { code, state } = parseResult.result
   const githubConfig = await appState.config.github()
 
   // See comment in login - would be better to generate this per request
-  if (!state || !(state === githubConfig.githubCallbackState)) {
+  if (!(state === githubConfig.githubCallbackState)) {
     return failedToLoginResult(`Unable to login because there was invalid state on request`)
   }
 
