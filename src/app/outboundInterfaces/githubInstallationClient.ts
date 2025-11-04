@@ -2,9 +2,11 @@ import { Octokit } from '@octokit/rest'
 import { createAppAuth } from '@octokit/auth-app'
 import { metrics } from '../util/metrics.js'
 import { MetricUnit } from '@aws-lambda-powertools/metrics'
-import { failedWith, Result, successWith } from '../util/structuredResult.js'
+import { failedWith, isSuccess, Result, successWith } from '../util/structuredResult.js'
 import { toRawGithubAppId, toRawGithubInstallationId } from '../domain/github/mappings/toFromRawGitHubIds.js'
 import { GitHubAppId, GitHubInstallationId } from '../ioTypes/GitHubTypes.js'
+import { z } from 'zod'
+import { safeParseWithSchema } from '../ioTypes/zodUtil.js'
 
 export interface GithubInstallationClient {
   listWorkflowRunsForRepo(account: string, repo: string, created?: string): Promise<unknown[]>
@@ -66,10 +68,14 @@ export function createRealGithubInstallationClient(
   }
 
   function updateRateLimits(headers: OctokitResponseHeaders) {
-    rateLimitData.ratelimit = Number(headers['x-ratelimit-limit'] ?? 0)
-    rateLimitData.ratelimitRemaining = Number(headers['x-ratelimit-remaining'] ?? 0)
-    rateLimitData.ratelimitUsed = Number(headers['x-ratelimit-used'] ?? 0)
-    rateLimitData.ratelimitResetTimestamp = Number(headers['x-ratelimit-reset'] ?? 0)
+    function parse(x: unknown) {
+      const parsed = safeParseWithSchema(z.coerce.number().default(0), x, 0, { logFailures: true })
+      return isSuccess(parsed) ? parsed.result : parsed.failureResult
+    }
+    rateLimitData.ratelimit = parse(headers['x-ratelimit-limit'])
+    rateLimitData.ratelimitRemaining = parse(headers['x-ratelimit-remaining'])
+    rateLimitData.ratelimitUsed = parse(headers['x-ratelimit-used'])
+    rateLimitData.ratelimitResetTimestamp = parse(headers['x-ratelimit-reset'])
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
