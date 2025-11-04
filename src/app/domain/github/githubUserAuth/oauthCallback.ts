@@ -39,16 +39,15 @@ async function tryOauthCallback(
     return failedToLoginResult(`Unable to login because request was invalid`)
   }
 
-  const { code, state } = parseResult.result
   const githubConfig = await appState.config.github()
 
   // See comment in login - would be better to generate this per request
-  if (!(state === githubConfig.githubCallbackState)) {
+  if (!(parseResult.result.state === githubConfig.githubCallbackState)) {
     return failedToLoginResult(`Unable to login because there was invalid state on request`)
   }
 
   // TOEventually - proper error handling here - e.g. what if code was invalid? Does this throw or return undefined?
-  const { token } = await appState.githubClient.createOAuthUserAuth(code)
+  const { token } = await appState.githubClient.createOAuthUserAuth(parseResult.result.code)
 
   const cicadaUser = await getUserByTokenWithGithubCheck(appState, token)
   // User will be undefined if they aren't a user in the database, or have no membership

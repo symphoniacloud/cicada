@@ -16,6 +16,9 @@ import { fromRawGithubAppId } from '../mappings/toFromRawGitHubIds.js'
 import { GitHubAccountType, GitHubAppId } from '../../../ioTypes/GitHubTypes.js'
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../../ioTypes/GitHubSchemas.js'
 import { gitHubAccountTypeFromRaw } from '../mappings/FromRawGitHubMappings.js'
+import { z } from 'zod'
+import { parseQueryStringWithSchema } from '../../../web/htmlRequests.js'
+import { isFailure } from '../../../util/structuredResult.js'
 
 export const setupRedirectRoute: Route<APIGatewayProxyEvent, GithubSetupAppState> = {
   path: '/github/setup/redirect',
@@ -26,17 +29,18 @@ async function setupRedirectHandler(appState: GithubSetupAppState, event: APIGat
   return processRedirect(appState, event)
 }
 
+const oAuthCallbackQueryStringSchema = z.object({
+  code: z.string(),
+  state: z.string()
+})
+
 async function processRedirect(appState: GithubSetupAppState, event: APIGatewayProxyEvent) {
-  const code = event.queryStringParameters?.['code']
-  if (!code) return noCodeResponse
-
-  const state = event.queryStringParameters?.['state']
-  if (!state) return noStateResponse
-
-  if (state !== appState.callbackState) return invalidStateResponse
+  const parseResult = parseQueryStringWithSchema(oAuthCallbackQueryStringSchema, event)
+  if (isFailure(parseResult)) return badParametersResponse
+  if (parseResult.result.state !== appState.callbackState) return invalidStateResponse
 
   // TODO - error handling
-  const appDetails = await callGithubToFinishAppCreation(code)
+  const appDetails = await callGithubToFinishAppCreation(parseResult.result.code)
 
   await saveGithubAppConfiguration(appState.appName, appDetails)
 
@@ -154,11 +158,7 @@ async function writeSSMParameter(
   )
 }
 
-const noCodeResponse = pageViewResponse([p('Unexpected redirect from GitHub - no code on URL')], {
-  loggedIn: false
-})
-
-const noStateResponse = pageViewResponse([p('Unexpected redirect from GitHub - no state on URL')], {
+const badParametersResponse = pageViewResponse([p('Unexpected redirect from GitHub - invalid parameters')], {
   loggedIn: false
 })
 
