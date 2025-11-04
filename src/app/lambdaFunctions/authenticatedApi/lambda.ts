@@ -17,8 +17,8 @@ import { logger } from '../../util/logging.js'
 import { isFailure } from '../../util/structuredResult.js'
 import { Route } from '../../internalHttpRouter/internalHttpRoute.js'
 import { authenticateApiPath } from '../../web/routingCommon.js'
-import { parseAPIEventWithSchema } from '../../inboundInterfaces/httpRequests.js'
 import { APIEventSchema } from '../../ioTypes/zodUtil.js'
+import { parseJSONAPIEventWithSchema } from '../../inboundInterfaces/httpJSONAPIRequests.js'
 
 export const apiHelloRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
   path: authenticateApiPath('hello'),
@@ -52,7 +52,7 @@ export async function handleApiMessage(appState: AppState, event: CicadaAPIAutho
 }
 
 async function handleHello(_: AppState, event: CicadaAPIAuthorizedAPIEvent) {
-  const parseResult = parseAPIEventWithSchema(event, APIEventSchema)
+  const parseResult = parseJSONAPIEventWithSchema(event, APIEventSchema)
   return parseResult.isSuccessResult ? jsonOkResult(parseResult.result) : parseResult.failureResult
 }
 

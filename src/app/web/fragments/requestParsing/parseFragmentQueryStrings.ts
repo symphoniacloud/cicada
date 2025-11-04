@@ -11,57 +11,45 @@ import {
   GitHubWorkflowKeySchema
 } from '../../../ioTypes/GitHubSchemas.js'
 
+import { parseQueryStringWithSchema } from '../../htmlRequests.js'
+
 export function parseAccountKeyFromQueryString(
   event: CicadaAuthorizedAPIEvent
 ): Result<GitHubAccountKey, APIGatewayProxyResult> {
-  return parseQueryStringWithSchema(event, GitHubAccountKeySchema, 'parseAccountCoordinates')
+  return parseQueryStringWithSchema(GitHubAccountKeySchema, event, 'parseAccountCoordinates')
 }
 
 export function parseRepoKeyFromQueryString(
   event: CicadaAuthorizedAPIEvent
 ): Result<GitHubRepoKey, APIGatewayProxyResult> {
-  return parseQueryStringWithSchema(event, GitHubRepoKeySchema, 'parseRepoCoordinates')
+  return parseQueryStringWithSchema(GitHubRepoKeySchema, event, 'parseRepoCoordinates')
 }
 
 export function parseWorkflowKeyFromQueryString(
   event: CicadaAuthorizedAPIEvent
 ): Result<GitHubWorkflowKey, APIGatewayProxyResult> {
-  return parseQueryStringWithSchema(event, GitHubWorkflowKeySchema, 'parseWorkflowCoordinates')
+  return parseQueryStringWithSchema(GitHubWorkflowKeySchema, event, 'parseWorkflowCoordinates')
 }
 
 export function parsePartialRepoKeyFromQueryString(
   event: CicadaAuthorizedAPIEvent
 ): Result<Partial<GitHubRepoKey>, APIGatewayProxyResult> {
-  return parsePartialQueryStringWithSchema(event, GitHubRepoKeySchema.unwrap(), 'parsePartialRepoCoordinates')
+  return parsePartialQueryStringWithSchema(GitHubRepoKeySchema.unwrap(), event, 'parsePartialRepoCoordinates')
 }
 
 export function parsePartialWorkflowKeyFromQueryString(
   event: CicadaAuthorizedAPIEvent
 ): Result<Partial<GitHubWorkflowKey>, APIGatewayProxyResult> {
   return parsePartialQueryStringWithSchema(
-    event,
     GitHubWorkflowKeySchema.unwrap(),
+    event,
     'parsePartialWorkflowCoordinates'
   )
 }
 
-function parseQueryStringWithSchema<T extends z.ZodTypeAny>(
-  event: CicadaAuthorizedAPIEvent,
-  schema: T,
-  errorContext: string
-): Result<z.infer<T>, APIGatewayProxyResult> {
-  const result = schema.safeParse(event.queryStringParameters)
-  if (result.success) {
-    return successWith(result.data)
-  }
-
-  logger.warn(`Invalid request in ${errorContext}`)
-  return failedWithResult('Invalid request', invalidRequestResponse)
-}
-
 function parsePartialQueryStringWithSchema<T extends z.ZodObject<z.ZodRawShape>>(
-  event: CicadaAuthorizedAPIEvent,
   schema: T,
+  event: CicadaAuthorizedAPIEvent,
   errorContext: string
 ): Result<Partial<z.infer<T>>, APIGatewayProxyResult> {
   const params = event.queryStringParameters ?? {}
