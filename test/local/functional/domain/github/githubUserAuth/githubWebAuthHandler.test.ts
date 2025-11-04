@@ -93,7 +93,7 @@ test('failedOauthCallback', async () => {
   <body>
     <div class="container" id="toplevel">
       <h1 class="display-3 mt-4">Cicada</h1>
-      <p>Unable to login because there was no code on request</p>
+      <p>Unable to login because request was invalid</p>
       <hr></hr>
       <p>
         <a href="/">Back to home</a>
