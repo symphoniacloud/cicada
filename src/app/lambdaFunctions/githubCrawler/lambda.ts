@@ -26,13 +26,7 @@ export const baseHandler: Handler<unknown, unknown> = async (event) => {
     appState = startup.result
   }
 
-  const parseResult = CrawlEventSchema.safeParse(event)
-  if (!parseResult.success) {
-    throw new Error(`Invalid crawl event: ${parseResult.error.message}`)
-  }
-
-  const crawlEvent = parseResult.data
-
+  const crawlEvent = CrawlEventSchema.parse(event)
   switch (crawlEvent.resourceType) {
     case 'installations':
       return await crawlInstallations(appState)
@@ -52,7 +46,7 @@ export const baseHandler: Handler<unknown, unknown> = async (event) => {
       )
 
     default:
-      throw new Error(`Unknown crawl event type ${parseResult.data.resourceType}`)
+      throw new Error(`Unknown crawl event type ${JSON.stringify(crawlEvent)}`)
   }
 }
 
