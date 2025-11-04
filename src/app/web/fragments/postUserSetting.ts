@@ -7,8 +7,7 @@ import {
   createUpdateUserWorkflowSettingResponse
 } from './views/postUserSettingView.js'
 import { logger } from '../../util/logging.js'
-import { parsePostUserSettingParameters } from './requestParsing/parsePostUserSettingParameters.js'
-import { isFailure } from '../../util/structuredResult.js'
+import { isFailure, Result } from '../../util/structuredResult.js'
 import { invalidRequestResponse } from '../htmlResponses.js'
 import {
   toDisplayableAccountSettings,
@@ -32,7 +31,13 @@ import {
 
 import { GitHubAccountId, GitHubRepoKey, GitHubWorkflowKey } from '../../ioTypes/GitHubTypes.js'
 import { UserScopeReferenceData } from '../../domain/types/internalTypes.js'
-import { UserSetting } from '../../ioTypes/PostUserSettingsParametersType.js'
+import {
+  PostUserSettingsParameters,
+  PostUserSettingsParametersSchema,
+  UserSetting
+} from '../../ioTypes/PostUserSettingsParametersType.js'
+import { APIGatewayProxyResult } from 'aws-lambda'
+import { parseQueryStringWithSchema } from '../htmlRequests.js'
 
 export const postUserSettingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
   path: fragmentPath('userSetting'),
@@ -41,10 +46,8 @@ export const postUserSettingFragmentRoute: Route<CicadaAuthorizedAPIEvent> = {
 }
 
 export async function updateUserSetting(appState: AppState, event: CicadaAuthorizedAPIEvent) {
-  console.log(event.queryStringParameters)
   const parseResult = parsePostUserSettingParameters(event)
   if (isFailure(parseResult)) return parseResult.failureResult
-
   const { accountId, repoId, workflowId, setting, enabled } = parseResult.result
 
   if (workflowId) {
@@ -71,6 +74,12 @@ export async function updateUserSetting(appState: AppState, event: CicadaAuthori
   }
 
   return processUpdateAccountSetting(appState, event.refData, accountId, setting, enabled)
+}
+
+export function parsePostUserSettingParameters(
+  event: CicadaAuthorizedAPIEvent
+): Result<PostUserSettingsParameters, APIGatewayProxyResult> {
+  return parseQueryStringWithSchema(PostUserSettingsParametersSchema, event, 'parsePostUserSettingParameters')
 }
 
 async function processUpdateAccountSetting(

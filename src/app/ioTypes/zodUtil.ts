@@ -52,7 +52,7 @@ export function safeParseWithSchema<TSchema extends z.ZodType, TFailure>(
   schema: TSchema,
   data: unknown,
   failureResult?: TFailure,
-  options: { logFailures?: boolean; logDetail?: string } = {}
+  options: { logFailures?: boolean; logDetail?: string } = { logFailures: true }
 ): Result<z.output<TSchema>, TFailure> | Result<z.output<TSchema>> {
   const parseResult = schema.safeParse(data)
   if (parseResult.success) {
