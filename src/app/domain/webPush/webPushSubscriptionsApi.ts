@@ -11,8 +11,8 @@ import {
 } from '../../ioTypes/WebPushSchemasAndTypes.js'
 import { APIEventSchema } from '../../ioTypes/zodUtil.js'
 import { githubUserSummaryFromEvent, userIdFromApiEvent } from '../webAuth/webAuth.js'
-import { parseAPIEventWithSchema } from '../../inboundInterfaces/httpRequests.js'
 import { EVENTBRIDGE_DETAIL_TYPE_WEB_PUSH_TEST } from '../../../multipleContexts/eventBridgeSchemas.js'
+import { parseJSONAPIEventWithSchema } from '../../inboundInterfaces/httpJSONAPIRequests.js'
 
 export const webPushSubscribeRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
   path: authenticateApiPath('webPushSubscribe'),
@@ -33,7 +33,7 @@ export const webPushTestRoute: Route<CicadaAPIAuthorizedAPIEvent> = {
 }
 
 export async function handleWebPushSubscribe(appState: AppState, event: CicadaAPIAuthorizedAPIEvent) {
-  const parseResult = parseAPIEventWithSchema(event, WebPushSubscribeRequestSchema)
+  const parseResult = parseJSONAPIEventWithSchema(event, WebPushSubscribeRequestSchema)
   if (!parseResult.isSuccessResult) {
     return parseResult.failureResult
   }
@@ -46,7 +46,7 @@ export async function handleWebPushSubscribe(appState: AppState, event: CicadaAP
 }
 
 export async function handleWebPushUnsubscribe(appState: AppState, event: CicadaAPIAuthorizedAPIEvent) {
-  const parseResult = parseAPIEventWithSchema(event, WebPushUnsubscribeRequestSchema)
+  const parseResult = parseJSONAPIEventWithSchema(event, WebPushUnsubscribeRequestSchema)
   if (!parseResult.isSuccessResult) {
     return parseResult.failureResult
   }
@@ -60,7 +60,7 @@ export async function handleWebPushUnsubscribe(appState: AppState, event: Cicada
 }
 
 export async function handleWebPushTest(appState: AppState, event: CicadaAPIAuthorizedAPIEvent) {
-  const parseResult = parseAPIEventWithSchema(event, APIEventSchema)
+  const parseResult = parseJSONAPIEventWithSchema(event, APIEventSchema)
   if (!parseResult.isSuccessResult) {
     return parseResult.failureResult
   }

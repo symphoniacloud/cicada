@@ -1,7 +1,8 @@
 import { z } from 'zod'
 import { GitHubUserIdSchema } from './GitHubSchemas.js'
 import { parse } from 'node:querystring'
-import { failedWith, Result, successWith } from '../util/structuredResult.js'
+import { failedWith, failedWithResult, Result, successWith } from '../util/structuredResult.js'
+import { logger } from '../util/logging.js'
 
 export const JSONFromStringSchema = z.string().transform((str, ctx) => {
   try {
@@ -30,15 +31,41 @@ export const APIEventSchema = z.object({
 
 export type APIEvent = z.infer<typeof APIEventSchema>
 
+// Overload: with failureResult
+export function safeParseWithSchema<TSchema extends z.ZodType, TFailure>(
+  schema: TSchema,
+  data: unknown,
+  failureResult: TFailure,
+  options?: { logFailures?: boolean; logDetail?: string }
+): Result<z.output<TSchema>, TFailure>
+
+// Overload: without failureResult
 export function safeParseWithSchema<TSchema extends z.ZodType>(
   schema: TSchema,
-  data: unknown
-): Result<z.output<TSchema>> {
-  const parseResult = schema.safeParse(data)
+  data: unknown,
+  failureResult?: undefined,
+  options?: { logFailures?: boolean; logDetail?: string }
+): Result<z.output<TSchema>>
 
-  if (!parseResult.success) {
-    return failedWith(parseResult.error.message)
+// Implementation
+export function safeParseWithSchema<TSchema extends z.ZodType, TFailure>(
+  schema: TSchema,
+  data: unknown,
+  failureResult?: TFailure,
+  options: { logFailures?: boolean; logDetail?: string } = {}
+): Result<z.output<TSchema>, TFailure> | Result<z.output<TSchema>> {
+  const parseResult = schema.safeParse(data)
+  if (parseResult.success) {
+    return successWith(parseResult.data)
   }
 
-  return successWith(parseResult.data)
+  if (options.logFailures || options.logDetail) {
+    logger.warn(`Request parsing failed${options.logDetail ? ` in ${options.logDetail}` : ''}`, {
+      parseResult
+    })
+  }
+
+  return failureResult !== undefined
+    ? failedWithResult('Parsing failed', failureResult)
+    : failedWith(parseResult.error.message)
 }
