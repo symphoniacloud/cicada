@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
-import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes/awsStubs.js'
-import { buildUserScopedRefData } from '../../../../../testSupport/builders/accountStructureBuilders.js'
-import { invalidRequestResponse } from '../../../../../../src/app/web/htmlResponses.js'
-import { parsePostUserSettingParameters } from '../../../../../../src/app/web/fragments/requestParsing/parsePostUserSettingParameters.js'
+import { createStubApiGatewayProxyEvent } from '../../../../testSupport/fakes/awsStubs.js'
+import { buildUserScopedRefData } from '../../../../testSupport/builders/accountStructureBuilders.js'
+import { invalidRequestResponse } from '../../../../../src/app/web/htmlResponses.js'
+import { parsePostUserSettingParameters } from '../../../../../src/app/web/fragments/postUserSetting.js'
 
 test('Successful minimal parse', () => {
   const result = parsePostUserSettingParameters({

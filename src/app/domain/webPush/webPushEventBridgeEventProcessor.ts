@@ -9,16 +9,14 @@ import {
   WebPushEventBridgeEventSchema,
   WebPushTestEventBridgeDetail
 } from '../../ioTypes/EventBridgeTypes.js'
-import { logger } from '../../util/logging.js'
 import { publishToSubscriptionsForUser } from './webPushPublisher.js'
+import { safeParseWithSchema } from '../../ioTypes/zodUtil.js'
+import { isFailure } from '../../util/structuredResult.js'
 
 export async function processEventBridgeWebPushEvent(appState: AppState, event: unknown) {
-  const parsedResult = WebPushEventBridgeEventSchema.safeParse(event)
-  if (!parsedResult.success) {
-    logger.error('Error parsing event for web push from EventBridge', { parsedResult })
-    return
-  }
-  const parsed = parsedResult.data
+  const parsedResult = safeParseWithSchema(WebPushEventBridgeEventSchema, event)
+  if (isFailure(parsedResult)) return
+  const parsed = parsedResult.result
 
   switch (parsed['detail-type']) {
     case EVENTBRIDGE_DETAIL_TYPE_GITHUB_NEW_WORKFLOW_RUN_EVENT:
