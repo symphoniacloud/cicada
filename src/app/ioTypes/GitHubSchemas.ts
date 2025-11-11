@@ -232,7 +232,7 @@ export const GitHubPushCommitSchema = z
   .readonly()
 
 // There's no consistent ID between pushes sourced from Webhooks vs Events, so use combination
-// of owner, repo, ref, and first commit SHA to create a key
+// of owner, repo, ref, and headSha to create a key
 export const GithubPushSchema = z
   .object({
     ...GitHubRepoSummarySchema.unwrap().shape,
@@ -242,6 +242,8 @@ export const GithubPushSchema = z
     dateTime: z.string(),
     ref: z.string(),
     before: z.string(),
-    commits: z.array(GitHubPushCommitSchema).nonempty()
+    headSha: z.string(),
+    // May be empty if no commits on push received from GitHub (which can very occasionally be the case)
+    commits: z.array(GitHubPushCommitSchema)
   })
   .readonly()
