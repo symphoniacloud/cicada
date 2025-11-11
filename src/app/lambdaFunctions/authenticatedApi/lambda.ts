@@ -53,7 +53,9 @@ export async function handleApiMessage(appState: AppState, event: CicadaAPIAutho
 
 async function handleHello(_: AppState, event: CicadaAPIAuthorizedAPIEvent) {
   const parseResult = parseJSONAPIEventWithSchema(event, APIEventSchema)
-  return parseResult.isSuccessResult ? jsonOkResult(parseResult.result) : parseResult.failureResult
+  return parseResult.isSuccessResult
+    ? jsonOkResult(parseResult.result.requestContext.authorizer)
+    : parseResult.failureResult
 }
 
 // Entry point - usage is defined by CDK

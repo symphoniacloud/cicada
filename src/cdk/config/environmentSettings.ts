@@ -13,4 +13,5 @@ export interface EnvironmentSettings {
   readonly logRetention: RetentionDays
   readonly parametersMaxAgeSeconds: number
   readonly storageResourceRemovalPolicy: RemovalPolicy
+  readonly deployDetailedMonitoring: boolean
 }

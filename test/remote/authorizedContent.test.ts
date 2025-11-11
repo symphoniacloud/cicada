@@ -77,7 +77,7 @@ GHUser1234
     }
   })
   expect(apiTestPageResponse.status).toEqual(200)
-  expect(await apiTestPageResponse.text()).toEqual('{"username":"testuser","userId":"GHUser1234"}')
+  expect(await apiTestPageResponse.text()).toEqual('{"userId":"GHUser1234","username":"testuser"}')
 })
 
 afterAll(async () => {
