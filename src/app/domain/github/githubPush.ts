@@ -39,8 +39,8 @@ async function savePushes(appState: AppState, pushes: GitHubPush[]) {
   )
 }
 
-export function latestCommitInPush(push: Pick<GitHubPush, 'commits'>) {
-  return push.commits[push.commits.length - 1]
+export function latestCommitInPush(push: GitHubPush) {
+  return push.commits.length > 0 ? push.commits[push.commits.length - 1] : undefined
 }
 
 export async function getRelatedMemberIdsForPush(

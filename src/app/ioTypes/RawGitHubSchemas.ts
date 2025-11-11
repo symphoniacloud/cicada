@@ -97,8 +97,10 @@ export const RawGithubPushFromApiSchema = z.object({
   created_at: z.string(),
   payload: z.object({
     ref: z.string(),
+    head: z.string(),
     before: z.string(),
-    commits: z.array(RawGithubPushFromApiCommitSchema).nonempty()
+    // GitHub will not give an array at all if no commits
+    commits: z.array(RawGithubPushFromApiCommitSchema).optional()
   })
 })
 
@@ -132,7 +134,8 @@ export const RawGithubPushFromWebhookSchema = z.object({
     login: z.string(),
     avatar_url: z.string()
   }),
-  commits: z.array(RawGithubPushFromWebhookCommitSchema).nonempty()
+  commits: z.array(RawGithubPushFromWebhookCommitSchema).optional(),
+  head_commit: RawGithubPushFromWebhookCommitSchema
 })
 
 export const RawGithubWorkflowRunEventSchema = z.object({

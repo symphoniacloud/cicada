@@ -35,11 +35,11 @@ function branchCell(push: GitHubRepoSummary & Pick<GitHubPush, 'ref'>) {
 }
 
 function commitCellForPush(push: GitHubPush) {
-  // Use the message of the **last** commit
+  // Use the message of the **last** commit. Some pushes don't have any commits
   const commit = latestCommitInPush(push)
   return commitCell({
     ...push,
-    message: commit.message,
-    sha: commit.sha
+    message: commit ? commit.message : '[No commit]',
+    sha: push.headSha
   })
 }

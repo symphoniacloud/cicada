@@ -383,6 +383,7 @@ export const testPersonalTestRepoPush: GitHubPush = {
   accountName: 'cicada-test-user',
   accountType: 'user',
   ref: 'refs/heads/main',
+  headSha: 'dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c',
   repoId: fromRawGitHubRepoId(767679529),
   repoName: 'personal-test-repo'
 }
@@ -410,6 +411,25 @@ export const testOrgTestRepoOnePush: GitHubPush = {
   accountName: 'cicada-test-org',
   accountType: 'organization',
   ref: 'refs/heads/main',
+  headSha: '8c3aa1cb0316ea23abeb2612457edb80868f53c8',
+  repoId: fromRawGitHubRepoId(768206479),
+  repoName: 'org-test-repo-one'
+}
+
+export const testOrgTestRepoOnePushTwo: GitHubPush = {
+  actor: {
+    avatarUrl: 'https://avatars.githubusercontent.com/u/49635?',
+    userId: fromRawGithubUserId(49635),
+    userName: 'mikebroberts'
+  },
+  before: 'c154d038b2f763ce26e0301cef5f0030c8b0e75e',
+  commits: [],
+  dateTime: '2025-11-09T20:48:34Z',
+  accountId: fromRawGitHubAccountId(162483619),
+  accountName: 'cicada-test-org',
+  accountType: 'organization',
+  ref: 'refs/heads/main',
+  headSha: 'a101cadd1f1c116ec5ade7713bc895a505151eda',
   repoId: fromRawGitHubRepoId(768206479),
   repoName: 'org-test-repo-one'
 }
@@ -437,6 +457,7 @@ export const testOrgTestRepoOnePushFC94: GitHubPush = {
   accountName: 'cicada-test-org',
   accountType: 'organization',
   ref: 'refs/heads/main',
+  headSha: 'fc94eb2b6feab026673ee6e740f3dd7fafd7c130',
   repoId: fromRawGitHubRepoId(768206479),
   repoName: 'org-test-repo-one',
   repoUrl: 'https://github.com/cicada-test-org/org-test-repo-one'

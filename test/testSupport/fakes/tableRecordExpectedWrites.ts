@@ -31,7 +31,7 @@ export function expectedPutGithubPush(push: GitHubPush) {
     'githubPush',
     {
       PK: `ACCOUNT#${push.accountId}`,
-      SK: `REPO#${push.repoId}#REF#${push.ref}#PUSH#COMMIT#${push.commits[0].sha}`,
+      SK: `REPO#${push.repoId}#REF#${push.ref}#PUSH#HEADSHA#${push.headSha}`,
       GSI1PK: `ACCOUNT#${push.accountId}`,
       GSI1SK: `REPO#${push.repoId}#DATETIME#${push.dateTime}`,
       ...push

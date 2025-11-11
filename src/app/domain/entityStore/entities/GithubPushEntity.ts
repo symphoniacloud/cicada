@@ -1,6 +1,5 @@
 import { AllEntitiesStore, DynamoDBValues } from '@symphoniacloud/dynamodb-entity-store'
 import { GITHUB_PUSH } from '../entityTypes.js'
-import { latestCommitInPush } from '../../github/githubPush.js'
 import { CicadaEntity } from '../entityStoreEntitySupport.js'
 import { githubActivityEntityGSISk, githubActivityEntityPk } from './GithubWorkflowRunEntity.js'
 
@@ -11,7 +10,7 @@ import { GithubPushSchema } from '../../../ioTypes/GitHubSchemas.js'
 export const GithubPushEntity: CicadaEntity<
   GitHubPush,
   Pick<GitHubPush, 'accountId'>,
-  Pick<GitHubPush, 'repoId' | 'ref' | 'commits'>
+  Pick<GitHubPush, 'repoId' | 'ref' | 'headSha'>
 > = {
   type: GITHUB_PUSH,
   parse: (rawItem: DynamoDBValues) => GithubPushSchema.parse(rawItem),
@@ -19,8 +18,8 @@ export const GithubPushEntity: CicadaEntity<
     return `ACCOUNT#${source.accountId}`
   },
   // Add #PUSH in case in the future we want some other kind of activity per ref
-  sk(source: Pick<GitHubPush, 'repoId' | 'ref' | 'commits'>) {
-    return `REPO#${source.repoId}#REF#${source.ref}#PUSH#COMMIT#${latestCommitInPush(source).sha}`
+  sk(source: Pick<GitHubPush, 'repoId' | 'ref' | 'headSha'>) {
+    return `REPO#${source.repoId}#REF#${source.ref}#PUSH#HEADSHA#${source.headSha}`
   },
   gsis: {
     // Shared format with GithubWorkflowRunEventEntity and GithubPushEntity

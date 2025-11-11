@@ -131,15 +131,12 @@ export function fromRawGithubPushFromWebhook(raw: RawGithubPushFromWebhook): Git
       userName: raw.sender.login,
       avatarUrl: raw.sender.avatar_url
     },
-    // Use the datetime of the **LAST** commit for the date of this event
-    dateTime: timestampToIso(raw.commits[raw.commits.length - 1].timestamp),
+    // TOEventually - check if we always get a head_commit, even if nothing in commits
+    dateTime: timestampToIso(raw.head_commit.timestamp),
     ref: raw.ref,
     before: raw.before,
-    commits: [
-      // Explicitly include first element here to satisfy type
-      fromRawGithubPushFromWebhookCommit(raw.commits[0]),
-      ...raw.commits.slice(1).map(fromRawGithubPushFromWebhookCommit)
-    ]
+    headSha: raw.head_commit.id,
+    commits: (raw.commits ?? []).map(fromRawGithubPushFromWebhookCommit)
   }
 }
 
@@ -179,10 +176,8 @@ export function fromRawGithubPushFromApi(
     dateTime: raw.created_at,
     ref: raw.payload.ref,
     before: raw.payload.before,
-    commits: [
-      fromRawGithubPushFromApiCommit(raw.payload.commits[0]),
-      ...raw.payload.commits.slice(1).map(fromRawGithubPushFromApiCommit)
-    ]
+    headSha: raw.payload.head,
+    commits: (raw.payload.commits ?? []).map(fromRawGithubPushFromApiCommit)
   }
 }
 

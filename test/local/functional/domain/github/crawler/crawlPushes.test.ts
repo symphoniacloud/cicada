@@ -4,11 +4,13 @@ import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/f
 import {
   testOrgTestRepoOne,
   testOrgTestRepoOnePush,
+  testOrgTestRepoOnePushTwo,
   testPersonalTestRepo,
   testPersonalTestRepoPush
 } from '../../../../../examples/cicada/githubDomainObjects.js'
 import example_personal_repo_push from '../../../../../examples/github/personal-account/api/repoPush.json' with { type: 'json' }
 import example_org_repo_push from '../../../../../examples/github/org/api/repoPush.json' with { type: 'json' }
+import example_org_repo_push_two from '../../../../../examples/github/org/api/repoPushTwo.json' with { type: 'json' }
 import { crawlPushes } from '../../../../../../src/app/domain/github/crawler/crawlPushes.js'
 import {
   expectPut,
@@ -65,4 +67,29 @@ test('repo-crawler-for-org-installation', async () => {
   expectPutsLength(appState).toEqual(2)
   expectPut(appState, 0).toEqual(expectedPutGithubPush(testOrgTestRepoOnePush))
   expectPut(appState, 1).toEqual(expectedPutLatestGithubPush(testOrgTestRepoOnePush))
+})
+
+test('crawl-pushes-for-org-with-no-commits', async () => {
+  // A
+  const appState = new FakeAppState()
+  const githubInstallationClient = new FakeGithubInstallationClient()
+  appState.githubClient.fakeClientsForInstallation.addResponse(
+    fromRawGithubInstallationId(48133709),
+    githubInstallationClient
+  )
+  githubInstallationClient.stubMostRecentEventsForRepo.addResponse(
+    {
+      owner: 'cicada-test-org',
+      repo: 'org-test-repo-one'
+    },
+    [example_org_repo_push_two]
+  )
+
+  // A
+  await crawlPushes(appState, testOrgTestRepoOne, githubInstallationClient)
+
+  // A
+  expectPutsLength(appState).toEqual(2)
+  expectPut(appState, 0).toEqual(expectedPutGithubPush(testOrgTestRepoOnePushTwo))
+  expectPut(appState, 1).toEqual(expectedPutLatestGithubPush(testOrgTestRepoOnePushTwo))
 })

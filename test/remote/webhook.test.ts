@@ -92,6 +92,7 @@ test('webhook test', async () => {
           }
         ],
         dateTime: '2024-03-06T21:26:18.000Z',
+        headSha: 'fc94eb2b6feab026673ee6e740f3dd7fafd7c130',
         ref: 'refs/heads/main',
         repoId: 'GHRepo768206479',
         repoName: 'org-test-repo-one',
