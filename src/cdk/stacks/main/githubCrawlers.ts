@@ -18,6 +18,7 @@ export function defineGithubCrawlers(scope: Construct, props: MainStackProps) {
   defineScheduledAllPublicAccountsCrawler(scope, props, crawlerFunction)
   defineOnInstallationUpdatedProcessor(scope, props, crawlerFunction)
   defineOnPublicAccountUpdatedProcessor(scope, props, crawlerFunction)
+  return { functions: [crawlerFunction] }
 }
 
 function defineGithubCrawlerFunction(scope: Construct, props: MainStackProps) {

@@ -18,9 +18,13 @@ export interface UserFacingWebEndpointsProps extends MainStackProps {
 }
 
 export function defineUserFacingWebEndpoints(scope: Construct, props: UserFacingWebEndpointsProps) {
-  defineAuthenticatedWeb(scope, props)
-  defineAuthenticatedApi(scope, props)
-  defineWebPushPublisher(scope, props)
+  return {
+    functions: [
+      defineAuthenticatedWeb(scope, props),
+      ...defineAuthenticatedApi(scope, props),
+      defineWebPushPublisher(scope, props)
+    ]
+  }
 }
 
 function defineAuthorizer(scope: Construct, props: UserFacingWebEndpointsProps) {
@@ -32,12 +36,15 @@ function defineAuthorizer(scope: Construct, props: UserFacingWebEndpointsProps) 
       tablesReadWriteAccess: ['github-user-tokens']
     })
   )
-  return new RequestAuthorizer(scope, 'RestRequestAuthorizer', {
-    handler: lambdaFunction,
-    identitySources: [IdentitySource.header('Cookie')],
-    // TOEventually - enable caching
-    resultsCacheTtl: Duration.seconds(0)
-  })
+  return {
+    function: lambdaFunction,
+    authorizer: new RequestAuthorizer(scope, 'RestRequestAuthorizer', {
+      handler: lambdaFunction,
+      identitySources: [IdentitySource.header('Cookie')],
+      // TOEventually - enable caching
+      resultsCacheTtl: Duration.seconds(0)
+    })
+  }
 }
 
 function defineAuthenticatedWeb(scope: Construct, props: UserFacingWebEndpointsProps) {
@@ -62,25 +69,27 @@ function defineAuthenticatedWeb(scope: Construct, props: UserFacingWebEndpointsP
     .addResource('app')
     .addResource('{proxy+}')
     .addMethod(HttpMethod.ANY, new LambdaIntegration(lambdaFunction))
+  return lambdaFunction
 }
 
 function defineAuthenticatedApi(scope: Construct, props: UserFacingWebEndpointsProps) {
-  const lambdaFunction = new CicadaFunction(
+  const apiFunction = new CicadaFunction(
     scope,
     cicadaFunctionProps(props, 'authenticatedApi', {
       tablesReadWriteAccess: ['web-push-subscriptions']
     })
   )
-  grantLambdaFunctionPermissionToPutEvents(lambdaFunction, props)
+  grantLambdaFunctionPermissionToPutEvents(apiFunction, props)
 
   const resource = props.restApi.root.addResource('apia').addResource('{proxy+}')
-  const authorizer = defineAuthorizer(scope, props)
-  resource.addMethod(HttpMethod.GET, new LambdaIntegration(lambdaFunction), {
+  const { authorizer, function: authorizerFunction } = defineAuthorizer(scope, props)
+  resource.addMethod(HttpMethod.GET, new LambdaIntegration(apiFunction), {
     authorizer
   })
-  resource.addMethod(HttpMethod.POST, new LambdaIntegration(lambdaFunction), {
+  resource.addMethod(HttpMethod.POST, new LambdaIntegration(apiFunction), {
     authorizer
   })
+  return [apiFunction, authorizerFunction]
 }
 
 function defineWebPushPublisher(scope: Construct, props: UserFacingWebEndpointsProps) {
@@ -115,4 +124,5 @@ function defineWebPushPublisher(scope: Construct, props: UserFacingWebEndpointsP
     },
     targets: [new targets.LambdaFunction(lambdaFunction)]
   })
+  return lambdaFunction
 }

@@ -32,13 +32,14 @@ import {
   RawGitHubWorkflowId
 } from '../../../ioTypes/RawGitHubTypes.js'
 import { RawGitHubAppIdSchema, RawGitHubInstallationIdSchema } from '../../../ioTypes/RawGitHubSchemas.js'
+import { z } from 'zod'
 
 export function fromRawGithubAppId(x: RawGitHubAppId): GitHubAppId {
   return GitHubAppIdSchema.parse(`${GITHUB_APP_ID_PREFIX}${x}`)
 }
 
 export function toRawGithubAppId(appId: GitHubAppId) {
-  return RawGitHubAppIdSchema.parse(appId.slice(GITHUB_APP_ID_PREFIX.length))
+  return RawGitHubAppIdSchema.parse(z.coerce.number().parse(appId.slice(GITHUB_APP_ID_PREFIX.length)))
 }
 
 export function fromRawGithubInstallationId(x: RawGitHubInstallationId): GitHubInstallationId {
@@ -46,7 +47,9 @@ export function fromRawGithubInstallationId(x: RawGitHubInstallationId): GitHubI
 }
 
 export function toRawGithubInstallationId(installationId: GitHubInstallationId) {
-  return RawGitHubInstallationIdSchema.parse(installationId.slice(GITHUB_INSTALLATION_ID_PREFIX.length))
+  return RawGitHubInstallationIdSchema.parse(
+    z.coerce.number().parse(installationId.slice(GITHUB_INSTALLATION_ID_PREFIX.length))
+  )
 }
 
 export function fromRawGitHubAccountId(raw: RawGitHubAccountId): GitHubAccountId {

@@ -18,21 +18,21 @@ export class MainStack extends Stack {
 
     const { restApi } = defineWebInfrastructure(this, mainStackProps)
 
-    defineUserFacingWebEndpoints(this, {
+    const webFunctions = defineUserFacingWebEndpoints(this, {
       ...mainStackProps,
       restApi
-    })
+    }).functions
 
-    defineGithubInteraction(this, {
+    const githubFunctions = defineGithubInteraction(this, {
       ...mainStackProps,
       restApi
-    })
+    }).functions
 
-    defineGithubCrawlers(this, mainStackProps)
+    const githubCrawlerFunctions = defineGithubCrawlers(this, mainStackProps).functions
 
     savePreGeneratedConfiguration(this, props)
 
-    defineMonitoring(this, mainStackProps)
+    defineMonitoring(this, mainStackProps, [...webFunctions, ...githubFunctions, ...githubCrawlerFunctions])
   }
 
   // Workaround for horrible CDK nested stack naming

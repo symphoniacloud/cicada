@@ -21,10 +21,11 @@ export interface GithubInteractionProps extends MainStackProps {
 export function defineGithubInteraction(scope: Construct, props: GithubInteractionProps) {
   const githubApiResource = props.restApi.root.addResource('github')
 
-  defineSetup(scope, props, githubApiResource)
-  defineAuth(scope, props, githubApiResource)
+  const setupLambdaFunction = defineSetup(scope, props, githubApiResource)
+  const githubAuthFunction = defineAuth(scope, props, githubApiResource)
   defineWebhook(scope, props, githubApiResource)
-  defineWebhookFunction(scope, props)
+  const webhookFunction = defineWebhookFunction(scope, props)
+  return { functions: [setupLambdaFunction, githubAuthFunction, webhookFunction] }
 }
 
 function defineSetup(scope: Construct, props: GithubInteractionProps, githubApiResource: Resource) {
@@ -41,6 +42,7 @@ function defineSetup(scope: Construct, props: GithubInteractionProps, githubApiR
       actions: ['ssm:PutParameter']
     })
   )
+  return lambdaFunction
 }
 
 function defineAuth(scope: Construct, props: GithubInteractionProps, githubApiResource: Resource) {
@@ -55,6 +57,7 @@ function defineAuth(scope: Construct, props: GithubInteractionProps, githubApiRe
     .addResource('auth')
     .addResource('{proxy+}')
     .addMethod(HttpMethod.GET, new LambdaIntegration(lambdaFunction))
+  return lambdaFunction
 }
 
 const EVENTS_BUCKET_GITHUB_WEBHOOK_KEY_PREFIX = 'githubWebhook/'
@@ -172,4 +175,5 @@ function defineWebhookFunction(scope: Construct, props: GithubInteractionProps) 
     },
     targets: [new targets.LambdaFunction(lambdaFunction)]
   })
+  return lambdaFunction
 }

@@ -24,7 +24,8 @@ export function calculateEnvironmentSettingsWithEnvironmentVariables(
     logLevel: isProd ? 'INFO' : 'DEBUG',
     logRetention: isProd ? RetentionDays.ONE_MONTH : RetentionDays.THREE_DAYS,
     parametersMaxAgeSeconds: isProd ? 300 : 5,
-    storageResourceRemovalPolicy: isProd ? RemovalPolicy.RETAIN : RemovalPolicy.DESTROY
+    storageResourceRemovalPolicy: isProd ? RemovalPolicy.RETAIN : RemovalPolicy.DESTROY,
+    deployDetailedMonitoring: true // TODO - make this configurable
   }
 }
 

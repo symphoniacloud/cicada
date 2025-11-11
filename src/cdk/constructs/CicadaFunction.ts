@@ -29,6 +29,8 @@ export function cicadaFunctionProps(
 }
 
 export class CicadaFunction extends NodejsFunction {
+  public readonly fullFunctionName: string
+
   constructor(scope: Construct, props: CicadaFunctionProps) {
     // Full logical name starts with current scope, so capitalize first character of function name for ID
     super(scope, `${props.functionName[0].toUpperCase()}${props.functionName.substring(1)}Function`, {
@@ -62,6 +64,7 @@ export class CicadaFunction extends NodejsFunction {
         resources: [`arn:aws:ssm:${props.env.region}:${props.env.account}:parameter/${props.appName}/*`]
       })
     )
+    this.fullFunctionName = `${props.appName}-${props.functionName}`
     for (const tableId of props.tablesReadAccess ?? []) {
       props.allTables[tableId].grantReadData(this)
     }
