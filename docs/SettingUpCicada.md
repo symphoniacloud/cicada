@@ -1,5 +1,8 @@
 # Setting up Cicada
 
+> [!WARNING]
+> If you installed Cicada prior to 2025-11-11 you will need to delete your stacks, buckets, tables, and SSM Parameters, and reinstall. If you need help then drop me an email at mike@symphonia.io
+
 Before I get started on how to use Cicada some important...
 
 ## The short version 
