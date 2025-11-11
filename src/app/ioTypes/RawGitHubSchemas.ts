@@ -116,7 +116,7 @@ export const RawGithubPushFromWebhookCommitSchema = z.object({
   timestamp: z.string()
 })
 
-export const RawGithubPushFromWebhookSchema = z.object({
+export const RawGithubPushFromWebhookSchemaWithPossibleNoHead = z.object({
   ref: z.string(),
   before: z.string(),
   repository: z.object({
@@ -135,6 +135,11 @@ export const RawGithubPushFromWebhookSchema = z.object({
     avatar_url: z.string()
   }),
   commits: z.array(RawGithubPushFromWebhookCommitSchema).optional(),
+  head_commit: RawGithubPushFromWebhookCommitSchema.nullish()
+})
+
+export const RawGithubPushFromWebhookSchema = z.object({
+  ...RawGithubPushFromWebhookSchemaWithPossibleNoHead.shape,
   head_commit: RawGithubPushFromWebhookCommitSchema
 })
 

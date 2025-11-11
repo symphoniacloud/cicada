@@ -2,7 +2,7 @@ import { JSONFromStringSchema } from './zodUtil.js'
 import { z } from 'zod'
 import {
   RawGithubInstallationSchema,
-  RawGithubPushFromWebhookSchema,
+  RawGithubPushFromWebhookSchemaWithPossibleNoHead,
   RawGithubWorkflowRunEventSchema
 } from './RawGitHubSchemas.js'
 
@@ -12,7 +12,9 @@ export const GitHubWebhookInstallationSchema = JSONFromStringSchema.pipe(
   })
 )
 
-export const GitHubWebhookPushSchema = JSONFromStringSchema.pipe(RawGithubPushFromWebhookSchema)
+export const GitHubWebhookPushWithPossibleNoHeadSchema = JSONFromStringSchema.pipe(
+  RawGithubPushFromWebhookSchemaWithPossibleNoHead
+)
 
 export const GitHubWebhookWorkflowRunEventSchema = JSONFromStringSchema.pipe(
   z.object({
