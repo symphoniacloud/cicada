@@ -243,7 +243,7 @@ export const GithubPushSchema = z
     ref: z.string(),
     before: z.string(),
     headSha: z.string(),
-    // May be empty if no commits on push received from GitHub (which can very occasionally be the case)
-    commits: z.array(GitHubPushCommitSchema)
+    // Not available from PushEvents on API, but are available from webhook
+    commits: z.array(GitHubPushCommitSchema).optional()
   })
   .readonly()

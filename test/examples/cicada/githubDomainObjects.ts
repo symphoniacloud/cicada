@@ -1,10 +1,10 @@
 import {
+  fromRawGitHubAccountId,
   fromRawGithubInstallationId,
   fromRawGitHubRepoId,
   fromRawGithubUserId,
   fromRawGitHubWorkflowId,
-  fromRawGithubWorkflowRunId,
-  fromRawGitHubAccountId
+  fromRawGithubWorkflowRunId
 } from '../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 import {
   GitHubAccountKey,
@@ -367,17 +367,7 @@ export const testPersonalTestRepoPush: GitHubPush = {
     userName: 'cicada-test-user'
   },
   before: 'd6a1d5f977eb569d382e9cf4c90abf54ff2ce7ec',
-  commits: [
-    {
-      author: {
-        email: '162360409+cicada-test-user@users.noreply.github.com',
-        name: 'cicada-test-user'
-      },
-      distinct: true,
-      message: 'Minimal Github Workflow',
-      sha: 'dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c'
-    }
-  ],
+  commits: [],
   dateTime: '2024-03-05T18:01:12Z',
   accountId: fromRawGitHubAccountId(162360409),
   accountName: 'cicada-test-user',

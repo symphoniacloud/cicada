@@ -15,7 +15,6 @@ import { GitHubAccountTypeSchema } from '../../../ioTypes/GitHubSchemas.js'
 import {
   RawGithubInstallation,
   RawGithubPushFromApi,
-  RawGithubPushFromApiCommit,
   RawGithubPushFromWebhook,
   RawGithubPushFromWebhookCommit,
   RawGithubRepo,
@@ -136,7 +135,7 @@ export function fromRawGithubPushFromWebhook(raw: RawGithubPushFromWebhook): Git
     ref: raw.ref,
     before: raw.before,
     headSha: raw.head_commit.id,
-    commits: (raw.commits ?? []).map(fromRawGithubPushFromWebhookCommit)
+    commits: raw.commits ? raw.commits.map(fromRawGithubPushFromWebhookCommit) : undefined
   }
 }
 
@@ -147,7 +146,7 @@ function fromRawGithubPushFromWebhookCommit(commit: RawGithubPushFromWebhookComm
   }
 }
 
-function fromRawGithubPushCommitCommon(commit: RawGithubPushFromApiCommit | RawGithubPushFromWebhookCommit) {
+function fromRawGithubPushCommitCommon(commit: RawGithubPushFromWebhookCommit) {
   return {
     message: commit.message,
     distinct: commit.distinct,
@@ -177,14 +176,8 @@ export function fromRawGithubPushFromApi(
     ref: raw.payload.ref,
     before: raw.payload.before,
     headSha: raw.payload.head,
-    commits: (raw.payload.commits ?? []).map(fromRawGithubPushFromApiCommit)
-  }
-}
-
-function fromRawGithubPushFromApiCommit(commit: RawGithubPushFromApiCommit) {
-  return {
-    sha: commit.sha,
-    ...fromRawGithubPushCommitCommon(commit)
+    // commits aren't available from Github PushEvent API
+    commits: []
   }
 }
 

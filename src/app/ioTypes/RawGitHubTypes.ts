@@ -4,7 +4,6 @@ import {
   RawGithubEventSchema,
   RawGitHubInstallationIdSchema,
   RawGithubInstallationSchema,
-  RawGithubPushFromApiCommitSchema,
   RawGithubPushFromApiSchema,
   RawGithubPushFromWebhookCommitSchema,
   RawGithubPushFromWebhookSchema,
@@ -32,7 +31,6 @@ export type RawGithubRepo = z.infer<typeof RawGithubRepoSchema>
 export type RawGithubWorkflow = z.infer<typeof RawGithubWorkflowSchema>
 export type RawGithubEvent = z.infer<typeof RawGithubEventSchema>
 export type RawGithubPushFromApi = z.infer<typeof RawGithubPushFromApiSchema>
-export type RawGithubPushFromApiCommit = z.infer<typeof RawGithubPushFromApiCommitSchema>
 export type RawGithubPushFromWebhook = z.infer<typeof RawGithubPushFromWebhookSchema>
 export type RawGithubPushFromWebhookCommit = z.infer<typeof RawGithubPushFromWebhookCommitSchema>
 export type RawGithubWorkflowRunEvent = z.infer<typeof RawGithubWorkflowRunEventSchema>

@@ -72,16 +72,6 @@ export const RawGithubEventSchema = z.looseObject({
   type: z.string().nullable()
 })
 
-export const RawGithubPushFromApiCommitSchema = z.object({
-  sha: z.string(),
-  message: z.string(),
-  distinct: z.boolean(),
-  author: z.object({
-    email: z.string(),
-    name: z.string()
-  })
-})
-
 export const RawGithubPushFromApiSchema = z.object({
   ...RawGithubEventSchema.shape,
   type: z.literal('PushEvent'),
@@ -98,9 +88,10 @@ export const RawGithubPushFromApiSchema = z.object({
   payload: z.object({
     ref: z.string(),
     head: z.string(),
-    before: z.string(),
-    // GitHub will not give an array at all if no commits
-    commits: z.array(RawGithubPushFromApiCommitSchema).optional()
+    before: z.string()
+    // GitHub no longer provides commits as of October 2025
+    // https://github.com/orgs/community/discussions/177111
+    // https://github.blog/changelog/2025-08-08-upcoming-changes-to-github-events-api-payloads/
   })
 })
 

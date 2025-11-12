@@ -39,7 +39,7 @@ function commitCellForPush(push: GitHubPush) {
   const commit = latestCommitInPush(push)
   return commitCell({
     ...push,
-    message: commit ? commit.message : '[No commit]',
+    message: commit ? commit.message : '[Commit message not available]',
     sha: push.headSha
   })
 }

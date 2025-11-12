@@ -21,19 +21,7 @@
     "distinct_size": 1,
     "ref": "refs/heads/main",
     "head": "dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c",
-    "before": "d6a1d5f977eb569d382e9cf4c90abf54ff2ce7ec",
-    "commits": [
-      {
-        "sha": "dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c",
-        "author": {
-          "email": "162360409+cicada-test-user@users.noreply.github.com",
-          "name": "cicada-test-user"
-        },
-        "message": "Minimal Github Workflow",
-        "distinct": true,
-        "url": "https://api.github.com/repos/cicada-test-user/personal-test-repo/commits/dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c"
-      }
-    ]
+    "before": "d6a1d5f977eb569d382e9cf4c90abf54ff2ce7ec"
   },
   "public": false,
   "created_at": "2024-03-05T18:01:12Z"
