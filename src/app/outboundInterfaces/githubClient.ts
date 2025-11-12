@@ -8,6 +8,7 @@ import { logger } from '../util/logging.js'
 import { toRawGithubAppId } from '../domain/github/mappings/toFromRawGitHubIds.js'
 
 import { GitHubInstallationId } from '../ioTypes/GitHubTypes.js'
+import { failedWith, Result, successWith } from '../util/structuredResult.js'
 
 export interface GithubClient {
   clientForInstallation(installationId: GitHubInstallationId): GithubInstallationClient
@@ -16,7 +17,7 @@ export interface GithubClient {
 
   createOAuthUserAuth(code: string): Promise<OAuthAppAuthentication>
 
-  getGithubUser(token: string): Promise<unknown>
+  getGithubUser(token: string): Promise<Result<unknown>>
 }
 
 export function createRealGithubClient({
@@ -82,8 +83,8 @@ export function createRealGithubClient({
         return undefined
       }
 
-      const foo = await getGithubUser()
-      return foo ? foo.data : undefined
+      const response = await getGithubUser()
+      return response ? successWith(response.data) : failedWith('Unable to get GitHub user')
     }
   }
 }

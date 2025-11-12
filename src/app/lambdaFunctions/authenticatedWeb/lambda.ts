@@ -70,24 +70,26 @@ export async function handleWebRequest(appState: AppState, event: APIGatewayProx
   // This Lambda function isn't preceded by the API Gateway authorizer since we want to return HTML on failure
   // Instead we do authorization here, but using the same authorization logic as the API Gateway authorizer
   const authResult = await authorizeUserRequest(appState, event)
-  if (!authResult) {
+  if (isFailure(authResult)) {
     return isFragmentPath(event.path) ? notAuthorizedHTMLResponse : logoutResponse(appState)
   }
+
+  const { userId, username } = authResult.result
 
   // TOEventually - something nicer here. We use this route for remote tests, but in remote tests
   // don't want to load ref data. So for now use this hack
   if (event.path === helloPageRoute.path) {
     return await router(event as CicadaAuthorizedAPIEvent)(appState, {
       refData: {
-        userId: authResult.userId
+        userId
       },
-      username: authResult.username
+      username
     } as CicadaAuthorizedAPIEvent)
   }
 
   // Load reference data here so individual route handlers don't need to
-  const refData = await loadUserScopeReferenceData(appState, authResult.userId)
-  const authorizedEvent: CicadaAuthorizedAPIEvent = { ...event, refData, username: authResult.username }
+  const refData = await loadUserScopeReferenceData(appState, userId)
+  const authorizedEvent: CicadaAuthorizedAPIEvent = { ...event, refData, username }
   return await router(authorizedEvent)(appState, authorizedEvent)
 }
 

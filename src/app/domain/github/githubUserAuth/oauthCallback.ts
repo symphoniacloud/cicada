@@ -49,15 +49,15 @@ async function tryOauthCallback(
   // TOEventually - proper error handling here - e.g. what if code was invalid? Does this throw or return undefined?
   const { token } = await appState.githubClient.createOAuthUserAuth(parseResult.result.code)
 
-  const cicadaUser = await getUserByTokenWithGithubCheck(appState, token)
+  const cicadaUserResult = await getUserByTokenWithGithubCheck(appState, token)
   // User will be undefined if they aren't a user in the database, or have no membership
   // User will *also* be undefined if Github says this token is invalid ... which shouldn't happen
   //   since we just got the token from GitHub.
-  if (!cicadaUser) {
+  if (isFailure(cicadaUserResult)) {
     return failedToLoginResult(`Not a valid user for this Cicada instance`)
   }
 
-  logger.debug(`Valid user: ${cicadaUser.userName}`)
+  logger.debug(`Valid user: ${cicadaUserResult.result.userName}`)
 
   // For now the cookie token Cicada uses is precisely the GitHub user token. In theory Cicada
   // could generate its own tokens and then keep a database table mapping those tokens to users, but

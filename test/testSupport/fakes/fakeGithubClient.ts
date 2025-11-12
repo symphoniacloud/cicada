@@ -6,6 +6,7 @@ import { FakeGithubInstallationClient } from './fakeGithubInstallationClient.js'
 
 import { GitHubInstallationId } from '../../../src/app/ioTypes/GitHubTypes.js'
 import { RawGithubUser } from '../../../src/app/ioTypes/RawGitHubTypes.js'
+import { failedWith, successWith } from '../../../src/app/util/structuredResult.js'
 
 export class FakeGithubClient implements GithubClient {
   public fakeClientsForInstallation = arrayStubResponse<GitHubInstallationId, FakeGithubInstallationClient>()
@@ -26,6 +27,7 @@ export class FakeGithubClient implements GithubClient {
   }
 
   async getGithubUser(token: string) {
-    return this.stubGithubUsers.getResponse(token)
+    const response = this.stubGithubUsers.getResponse(token)
+    return response ? successWith(response) : failedWith('user not available')
   }
 }

@@ -7,6 +7,7 @@ import {
 import { logger } from '../../util/logging.js'
 import { WebAuthorizerContext } from '../../inboundInterfaces/lambdaTypes.js'
 import { authorizeUserRequest } from './userAuthorizer.js'
+import { isSuccess } from '../../util/structuredResult.js'
 
 export async function attemptToAuthorize(
   appState: AppState,
@@ -14,8 +15,8 @@ export async function attemptToAuthorize(
 ): Promise<APIGatewayAuthorizerWithContextResult<WebAuthorizerContext>> {
   const authResult = await authorizeUserRequest(appState, event)
 
-  return authResult
-    ? generateApiGatewayAllowAuthorizerResult(event, authResult)
+  return isSuccess(authResult)
+    ? generateApiGatewayAllowAuthorizerResult(event, authResult.result)
     : generateApiGatewayDenyAuthorizerResult(event)
 }
 

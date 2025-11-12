@@ -5,10 +5,9 @@ import { getUserByTokenUsingTokenCache } from '../github/githubUser.js'
 import { WithHeadersEvent } from '../../inboundInterfaces/lambdaTypes.js'
 
 import { GitHubUserId } from '../../ioTypes/GitHubTypes.js'
+import { failedWith, isFailure, Result, successWith } from '../../util/structuredResult.js'
 
-export type AuthorizationResult = SuccessfulAuthorizationResult | undefined
-
-export type SuccessfulAuthorizationResult = {
+export type AuthorizationResult = {
   username: string
   userId: GitHubUserId
 }
@@ -17,11 +16,11 @@ export type SuccessfulAuthorizationResult = {
 export async function authorizeUserRequest(
   appState: AppState,
   event: WithHeadersEvent
-): Promise<AuthorizationResult> {
+): Promise<Result<AuthorizationResult>> {
   const token = getToken(event)
   if (token === undefined) {
     logger.info('No token found')
-    return token
+    return failedWith('No token found')
   }
 
   // Use a special token for integration tests so that they don't need to cause calls to GitHub
@@ -29,14 +28,15 @@ export async function authorizeUserRequest(
     return await processTestToken(appState, token)
   }
 
-  const cicadaUser = await getUserByTokenUsingTokenCache(appState, token)
-  if (!cicadaUser) return undefined
+  const cicadaUserResult = await getUserByTokenUsingTokenCache(appState, token)
+  if (isFailure(cicadaUserResult)) return cicadaUserResult
 
   // Authorization successful
-  return {
-    userId: cicadaUser.userId,
-    username: cicadaUser.userName
-  }
+  return successWith({
+    userId: cicadaUserResult.result.userId,
+    // Careful - change in case here
+    username: cicadaUserResult.result.userName
+  })
 }
 
 function getToken(event: WithHeadersEvent) {
