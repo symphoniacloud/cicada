@@ -16,7 +16,7 @@ export type CicadaEventBridgeData =
   | GitHubPush
   | GitHubWorkflowRunEvent
   | GitHubUserSummary // Used for web push
-  | GitHubInstallation
+  | { installation: GitHubInstallation; lookbackDays: number }
   | { installation: GitHubInstallation; publicAccountId: GitHubAccountId }
 
 // This exists since eventually would be nice to add metadata (see https://community.aws/posts/eventbridge-schema-registry-best-practices)

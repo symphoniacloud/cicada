@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
 import {
   cicadaTestOrgInstallation,
@@ -25,12 +25,11 @@ test('app-crawler-for-personal-account-installation', async () => {
   appState.githubClient.stubInstallations = [example_personal_account_installation]
 
   // A
-  const result = await crawlInstallations(appState)
+  await crawlInstallations(appState)
 
   // A
   expectPutsLength(appState).toEqual(1)
   expectPut(appState).toEqual(expectedPutGithubInstallation(cicadaTestUserInstallation))
-  expect(result).toEqual([cicadaTestUserInstallation])
 })
 
 test('app-crawler-for-org-installation', async () => {
@@ -43,10 +42,9 @@ test('app-crawler-for-org-installation', async () => {
   appState.githubClient.stubInstallations = [example_org_installation]
 
   // A
-  const result = await crawlInstallations(appState)
+  await crawlInstallations(appState)
 
   // A
   expectPutsLength(appState).toEqual(1)
   expectPut(appState).toEqual(expectedPutGithubInstallation(cicadaTestOrgInstallation))
-  expect(result).toEqual([cicadaTestOrgInstallation])
 })

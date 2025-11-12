@@ -28,8 +28,8 @@ test('installation-webhook-for-org-account-installation', async () => {
   expectPut(appState).toEqual(expectedPutGithubInstallation(cicadaTestOrgInstallation))
   expect(appState.eventBridgeBus.sentEvents.length).toEqual(1)
   expect(appState.eventBridgeBus.sentEvents[0]).toEqual({
-    detailType: 'InstallationUpdated',
+    detailType: 'InstallationRequiresCrawling',
     detail:
-      '{"data":{"installationId":"GHInstallation48133709","appId":"GHApp850768","appSlug":"cicada-test-org","accountName":"cicada-test-org","accountId":"GHAccount162483619","accountType":"organization"}}'
+      '{"data":{"installation":{"installationId":"GHInstallation48133709","appId":"GHApp850768","appSlug":"cicada-test-org","accountName":"cicada-test-org","accountId":"GHAccount162483619","accountType":"organization"},"lookbackDays":30}}'
   })
 })

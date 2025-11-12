@@ -1,28 +1,29 @@
 import { Construct } from 'constructs'
 import { MainStackProps } from './mainStackProps.js'
 import { CicadaFunction, cicadaFunctionProps } from '../../constructs/CicadaFunction.js'
-import { DefinitionBody, JsonPath, Map, StateMachine, TaskInput } from 'aws-cdk-lib/aws-stepfunctions'
+import { DefinitionBody, JsonPath, StateMachine, TaskInput } from 'aws-cdk-lib/aws-stepfunctions'
 import { LambdaInvoke } from 'aws-cdk-lib/aws-stepfunctions-tasks'
 import { CRAWLABLE_RESOURCES } from '../../../multipleContexts/githubCrawler.js'
 import { Rule, Schedule } from 'aws-cdk-lib/aws-events'
 import { SfnStateMachine } from 'aws-cdk-lib/aws-events-targets'
 import { Duration } from 'aws-cdk-lib'
 import {
-  EVENTBRIDGE_DETAIL_TYPE_INSTALLATION_UPDATED,
+  EVENTBRIDGE_DETAIL_TYPE_INSTALLATION_REQUIRES_CRAWLING,
   EVENTBRIDGE_DETAIL_TYPE_PUBLIC_ACCOUNT_UPDATED
 } from '../../../multipleContexts/eventBridgeSchemas.js'
+import { grantLambdaFunctionPermissionToPutEvents } from '../../support/eventbridge.js'
 
 export function defineGithubCrawlers(scope: Construct, props: MainStackProps) {
   const crawlerFunction = defineGithubCrawlerFunction(scope, props)
   defineScheduledAllInstallationsCrawler(scope, props, crawlerFunction)
   defineScheduledAllPublicAccountsCrawler(scope, props, crawlerFunction)
-  defineOnInstallationUpdatedProcessor(scope, props, crawlerFunction)
+  defineOnInstallationRequiresCrawlingProcessor(scope, props, crawlerFunction)
   defineOnPublicAccountUpdatedProcessor(scope, props, crawlerFunction)
   return { functions: [crawlerFunction] }
 }
 
 function defineGithubCrawlerFunction(scope: Construct, props: MainStackProps) {
-  return new CicadaFunction(
+  const lambdaFunction = new CicadaFunction(
     scope,
     cicadaFunctionProps(props, 'githubCrawler', {
       memorySize: 512,
@@ -40,6 +41,8 @@ function defineGithubCrawlerFunction(scope: Construct, props: MainStackProps) {
       ]
     })
   )
+  grantLambdaFunctionPermissionToPutEvents(lambdaFunction, props)
+  return lambdaFunction
 }
 
 // TOEventually - at some point need to find old installations and delete them
@@ -49,37 +52,25 @@ function defineScheduledAllInstallationsCrawler(
   props: MainStackProps,
   crawlerFunction: CicadaFunction
 ) {
-  const crawlInstallations = new LambdaInvoke(scope, 'invokeCrawlerForAllInstallations', {
-    lambdaFunction: crawlerFunction,
-    payload: TaskInput.fromObject({
-      resourceType: CRAWLABLE_RESOURCES.INSTALLATIONS
-    }),
-    outputPath: '$.Payload'
-  })
-
-  // No "max concurrency" specified, so do this in parallel
-  // That's OK because each invocation will use its own Github Installation, and therefore a different auth token
-  const forEachInstallation = new Map(scope, 'invokeCrawlerForInstallation', {})
-  forEachInstallation.itemProcessor(
-    new LambdaInvoke(scope, 'crawlInstallation', {
-      lambdaFunction: crawlerFunction,
-      payload: TaskInput.fromObject({
-        resourceType: CRAWLABLE_RESOURCES.INSTALLATION,
-        installation: JsonPath.entirePayload,
-        lookbackDays: 2
-      })
-    })
-  )
-
   new Rule(scope, 'scheduledAllInstallationsCrawlRule', {
     description: 'Scheduled All Installations Crawl',
     schedule: Schedule.rate(Duration.days(1)),
     targets: [
+      // Use a State Machine here even though just calling a Lambda Function so that later
+      // can think about adding retry logic
       new SfnStateMachine(
         new StateMachine(scope, 'allInstallationsCrawler', {
           stateMachineName: `${props.appName}-all-installations`,
-          comment: 'Crawl all GitHub App Installations and child resources',
-          definitionBody: DefinitionBody.fromChainable(crawlInstallations.next(forEachInstallation)),
+          comment: 'Crawl all GitHub App Installations',
+          definitionBody: DefinitionBody.fromChainable(
+            new LambdaInvoke(scope, 'invokeCrawlerForAllInstallations', {
+              lambdaFunction: crawlerFunction,
+              payload: TaskInput.fromObject({
+                resourceType: CRAWLABLE_RESOURCES.INSTALLATIONS
+              }),
+              outputPath: '$.Payload'
+            })
+          ),
           tracingEnabled: true
         })
       )
@@ -116,31 +107,31 @@ function defineScheduledAllPublicAccountsCrawler(
   })
 }
 
-function defineOnInstallationUpdatedProcessor(
+function defineOnInstallationRequiresCrawlingProcessor(
   scope: Construct,
   props: MainStackProps,
   crawlerFunction: CicadaFunction
 ) {
-  new Rule(scope, 'installationUpdatedStepFunctionRule', {
-    description: `Run Installation Crawler when installation updated`,
+  new Rule(scope, 'installationRequiresCrawlingStepFunctionRule', {
+    description: `Run Installation Crawler`,
     eventPattern: {
       source: [props.appName],
-      detailType: [EVENTBRIDGE_DETAIL_TYPE_INSTALLATION_UPDATED]
+      detailType: [EVENTBRIDGE_DETAIL_TYPE_INSTALLATION_REQUIRES_CRAWLING]
     },
     targets: [
       // Use a State Machine here even though just calling a Lambda Function so that later
       // can think about adding retry logic
       new SfnStateMachine(
-        new StateMachine(scope, 'onInstallationUpdatedProcessor', {
-          stateMachineName: `${props.appName}-on-installation-updated`,
-          comment: 'Crawl installation and child resources when installation updated',
+        new StateMachine(scope, 'onInstallationRequiresCrawling', {
+          stateMachineName: `${props.appName}-on-installation-requires-crawling`,
+          comment: 'Crawl installation and child resources',
           definitionBody: DefinitionBody.fromChainable(
-            new LambdaInvoke(scope, 'invokeCrawlerOnInstallationUpdated', {
+            new LambdaInvoke(scope, 'invokeCrawlerOnInstallationRequiresCrawling', {
               lambdaFunction: crawlerFunction,
               payload: TaskInput.fromObject({
                 resourceType: CRAWLABLE_RESOURCES.INSTALLATION,
-                installation: JsonPath.objectAt('$.detail.data'),
-                lookbackDays: 30
+                installation: JsonPath.objectAt('$.detail.data.installation'),
+                lookbackDays: JsonPath.numberAt('$.detail.data.lookbackDays')
               })
             })
           ),

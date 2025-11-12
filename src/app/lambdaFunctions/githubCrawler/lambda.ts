@@ -29,21 +29,25 @@ export const baseHandler: Handler<unknown, unknown> = async (event) => {
   const crawlEvent = CrawlEventSchema.parse(event)
   switch (crawlEvent.resourceType) {
     case 'installations':
-      return await crawlInstallations(appState)
+      await crawlInstallations(appState)
+      break
 
     case 'installation':
-      return await crawlInstallationAccount(appState, crawlEvent.installation, crawlEvent.lookbackDays)
+      await crawlInstallationAccount(appState, crawlEvent.installation, crawlEvent.lookbackDays)
+      break
 
     case 'publicAccounts':
-      return await crawlPublicAccounts(appState, crawlEvent.lookbackHours)
+      await crawlPublicAccounts(appState, crawlEvent.lookbackHours)
+      break
 
     case 'publicAccount':
-      return await crawlPublicAccount(
+      await crawlPublicAccount(
         appState,
         crawlEvent.installation,
         crawlEvent.publicAccountId,
         crawlEvent.lookbackHours
       )
+      break
 
     default:
       throw new Error(`Unknown crawl event type ${JSON.stringify(crawlEvent)}`)
