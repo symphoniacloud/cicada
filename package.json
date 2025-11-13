@@ -54,7 +54,7 @@
     "@middy/core": "4.x",
     "@octokit/auth-app": "6.x",
     "@octokit/rest": "20.x",
-    "@symphoniacloud/dynamodb-entity-store": "1.x",
+    "@symphoniacloud/dynamodb-entity-store": "2.x",
     "unzipper": "0.x",
     "url-pattern": "1.x",
     "web-push": "3.x",
