@@ -4,16 +4,8 @@ import { testTestUserPushSubscription } from '../../../../../examples/cicada/web
 import { handleApiMessage } from '../../../../../../src/app/lambdaFunctions/authenticatedApi/lambda.js'
 import { createAPIGatewayProxyWithLambdaAuthorizerEvent } from '../../../../../testSupport/fakes/awsStubs.js'
 import { HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2'
-import {
-  expectDelete,
-  expectDeletesLength,
-  expectPut,
-  expectPutsLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
-import {
-  expectedDeleteWebPushSubscription,
-  expectedPutWebPushSubscription
-} from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
+import { buildWebPushSubscription } from '../../../../../testSupport/fakes/itemBuilders.js'
+import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('web push test', async () => {
   const appState = new FakeAppState()
@@ -65,12 +57,21 @@ test('web push subscribe', async () => {
     },
     statusCode: 200
   })
-  expectPutsLength(appState).toEqual(1)
-  expectPut(appState).toEqual(expectedPutWebPushSubscription(testTestUserPushSubscription))
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['web-push-subscriptions'])).toEqual([
+    buildWebPushSubscription(testTestUserPushSubscription)
+  ])
 })
 
 test('web push unsubscribe', async () => {
   const appState = new FakeAppState()
+  appState.dynamoDB.putToTable(
+    fakeTableNames['web-push-subscriptions'],
+    buildWebPushSubscription(testTestUserPushSubscription)
+  )
+  // This should be deleted
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['web-push-subscriptions'])).toEqual([
+    buildWebPushSubscription(testTestUserPushSubscription)
+  ])
 
   const result = await handleApiMessage(
     appState,
@@ -94,6 +95,5 @@ test('web push unsubscribe', async () => {
     },
     statusCode: 200
   })
-  expectDeletesLength(appState).toEqual(1)
-  expectDelete(appState).toEqual(expectedDeleteWebPushSubscription(testTestUserPushSubscription))
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['web-push-subscriptions'])).toEqual([])
 })

@@ -20,7 +20,7 @@ export async function executeAndCatchConditionalCheckFailed<TReturn>(f: () => Pr
   }
 }
 
-// TOMaybe - nicer way of doing this without the type cast?
+// TODO - nicer way of doing this without the type cast?
 export function domainObjectsFromMultipleEventEntityResponse<T>(
   multipleEntityReponse: MultipleEntityCollectionResponse,
   entityType: EntityType

@@ -1,4 +1,4 @@
-import { test } from 'vitest'
+import { expect, test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
 import {
   cicadaTestOrgInstallation,
@@ -7,13 +7,10 @@ import {
 import example_personal_account_installation from '../../../../../examples/github/personal-account/api/installation.json' with { type: 'json' }
 import example_org_installation from '../../../../../examples/github/org/api/installation.json' with { type: 'json' }
 import { crawlInstallations } from '../../../../../../src/app/domain/github/crawler/crawlInstallations.js'
-import {
-  expectPut,
-  expectPutsLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
-import { expectedPutGithubInstallation } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
+import { buildGitHubInstallationItem } from '../../../../../testSupport/fakes/itemBuilders.js'
 
 import { fromRawGithubAppId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
+import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('app-crawler-for-personal-account-installation', async () => {
   // A
@@ -28,8 +25,9 @@ test('app-crawler-for-personal-account-installation', async () => {
   await crawlInstallations(appState)
 
   // A
-  expectPutsLength(appState).toEqual(1)
-  expectPut(appState).toEqual(expectedPutGithubInstallation(cicadaTestUserInstallation))
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-installations'])).toEqual([
+    buildGitHubInstallationItem(cicadaTestUserInstallation)
+  ])
 })
 
 test('app-crawler-for-org-installation', async () => {
@@ -45,6 +43,7 @@ test('app-crawler-for-org-installation', async () => {
   await crawlInstallations(appState)
 
   // A
-  expectPutsLength(appState).toEqual(1)
-  expectPut(appState).toEqual(expectedPutGithubInstallation(cicadaTestOrgInstallation))
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-installations'])).toEqual([
+    buildGitHubInstallationItem(cicadaTestOrgInstallation)
+  ])
 })

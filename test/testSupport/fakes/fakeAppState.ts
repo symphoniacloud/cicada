@@ -3,13 +3,18 @@
 import { AppState } from '../../../src/app/environment/AppState.js'
 import { FakeClock } from './fakeClock.js'
 import { FakeGithubClient } from './fakeGithubClient.js'
-import { FakeDynamoDBInterface } from './dynamoDB/fakeDynamoDBInterface.js'
 import { setupEntityStore } from '../../../src/app/domain/entityStore/initEntityStore.js'
 import { AllEntitiesStore, consoleLogger, EntityStoreLogger } from '@symphoniacloud/dynamodb-entity-store'
 import { FakeCicadaConfig, fakeTableNames } from './fakeCicadaConfig.js'
 import { FakeS3Wrapper } from './fakeS3Wrapper.js'
 import { FakeEventBridgeBus } from './fakeEventBridgeBus.js'
 import { FakeWebPushWrapper } from './fakeWebPushWrapper.js'
+import { FakeDynamoDBInterface } from '@symphoniacloud/dynamodb-entity-store-testutils'
+import {
+  CICADA_TABLE_IDS,
+  CicadaTableId,
+  tableConfigurations
+} from '../../../src/multipleContexts/dynamoDBTables.js'
 
 export class FakeAppState implements AppState {
   public config: FakeCicadaConfig
@@ -25,7 +30,7 @@ export class FakeAppState implements AppState {
     this.config = new FakeCicadaConfig()
     this.clock = new FakeClock()
     this.githubClient = new FakeGithubClient()
-    this.dynamoDB = new FakeDynamoDBInterface()
+    this.dynamoDB = new FakeDynamoDBInterface(fakeTableDefs())
     this.entityStore = setupEntityStore(
       fakeTableNames,
       this.clock,
@@ -35,6 +40,28 @@ export class FakeAppState implements AppState {
     this.eventBridgeBus = new FakeEventBridgeBus()
     this.s3 = new FakeS3Wrapper()
     this.webPushWrapper = new FakeWebPushWrapper()
+  }
+}
+
+function fakeTableDefs() {
+  return Object.fromEntries(CICADA_TABLE_IDS.map((id) => [fakeTableNames[id], fakeTableDefinition(id)]))
+}
+
+function fakeTableDefinition(id: CicadaTableId) {
+  const config = tableConfigurations[id]
+  return {
+    pkName: 'PK',
+    ...(config.hasSortKey ? { skName: 'SK' } : {}),
+    ...(config.hasGSI1
+      ? {
+          gsis: {
+            GSI1: {
+              pkName: 'GSI1PK',
+              skName: 'GSI1SK'
+            }
+          }
+        }
+      : {})
   }
 }
 

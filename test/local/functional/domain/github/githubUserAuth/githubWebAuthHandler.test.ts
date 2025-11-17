@@ -2,7 +2,9 @@ import { expect, test } from 'vitest'
 import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes/awsStubs.js'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
 import { handleGitHubWebAuthRequest } from '../../../../../../src/app/domain/github/githubUserAuth/githubWebAuthHandler.js'
-import { stubGetUser } from '../../../../../testSupport/fakes/tableRecordReadStubs.js'
+import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
+import { buildGitHubUserItem } from '../../../../../testSupport/fakes/itemBuilders.js'
+import { testTestUser } from '../../../../../examples/cicada/githubDomainObjects.js'
 
 test('login', async () => {
   const response = await handleGitHubWebAuthRequest(
@@ -40,7 +42,7 @@ test('oauthCallback', async () => {
     type: 'User',
     url: ''
   })
-  stubGetUser(appState)
+  appState.dynamoDB.putToTable(fakeTableNames['github-users'], buildGitHubUserItem(testTestUser))
 
   // Act
   const response = await handleGitHubWebAuthRequest(

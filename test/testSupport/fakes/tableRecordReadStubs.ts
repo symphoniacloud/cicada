@@ -11,76 +11,52 @@ import {
   testTestUserMembershipOfOrg,
   testTestUserTokenRecord
 } from '../../examples/cicada/githubDomainObjects.js'
-import {
-  GITHUB_ACCOUNT_MEMBERSHIP,
-  GITHUB_LATEST_PUSH_PER_REF,
-  GITHUB_LATEST_WORKFLOW_RUN_EVENT,
-  GITHUB_REPOSITORY,
-  GITHUB_WORKFLOW,
-  GITHUB_WORKFLOW_RUN,
-  WEB_PUSH_SUBSCRIPTION
-} from '../../../src/app/domain/entityStore/entityTypes.js'
 import { throwFunction } from '../../../src/multipleContexts/errors.js'
 import { testTestUserPushSubscription } from '../../examples/cicada/webPushDomainObjects.js'
-import { FakeDynamoDBInterfaceStubber, MetaDataProvider } from './dynamoDB/fakeDynamoDBInterfaceStubber.js'
 import { fakeTableNames } from './fakeCicadaConfig.js'
-
-import { fromRawGithubUserId } from '../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 
 import { GitHubUserId } from '../../../src/app/ioTypes/GitHubTypes.js'
 import { WebPushSubscription } from '../../../src/app/ioTypes/WebPushSchemasAndTypes.js'
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const metaDataProvider: MetaDataProvider = (_tableName: string) => {
-  return {
-    pk: 'PK',
-    sk: 'SK',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    indexName: (_indexId?: string) => 'GSI1',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    indexPk: (_indexId?: string) => 'GSI1PK',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    indexSk: (_indexId?: string) => 'GSI1SK'
-  }
-}
-
-function stubber(appState: FakeAppState) {
-  return new FakeDynamoDBInterfaceStubber(appState.dynamoDB, metaDataProvider)
-}
+import {
+  buildGitHubAccountMembershipItem,
+  buildGitHubInstallationItem,
+  buildGitHubPushItemInLatestPushPerRef,
+  buildGitHubRepoItem,
+  buildGitHubUserItem,
+  buildGitHubUserTokenItem,
+  buildGitHubWorkflowItem,
+  buildGitHubWorkflowRunEventInLatest,
+  buildGitHubWorkflowRunItemInRepoActivity,
+  buildWebPushSubscription
+} from './itemBuilders.js'
 
 export function stubGetGithubInstallation(appState: FakeAppState) {
-  stubber(appState).stubGet.byPk(
+  appState.dynamoDB.putToTable(
     fakeTableNames['github-installations'],
-    'ACCOUNT#GHAccount162483619',
-    cicadaTestOrgInstallation
+    buildGitHubInstallationItem(cicadaTestOrgInstallation)
   )
 }
 
 export function stubGetUserToken(appState: FakeAppState) {
-  stubber(appState).stubGet.byPk(
+  appState.dynamoDB.putToTable(
     fakeTableNames['github-user-tokens'],
-    'USER_TOKEN#validUserToken',
-    testTestUserTokenRecord
+    buildGitHubUserTokenItem(testTestUserTokenRecord)
   )
 }
 
 export function stubGetUser(appState: FakeAppState) {
-  stubber(appState).stubGet.byPk(
-    fakeTableNames['github-users'],
-    `USER#${fromRawGithubUserId(162360409)}`,
-    testTestUser
-  )
+  appState.dynamoDB.putToTable(fakeTableNames['github-users'], buildGitHubUserItem(testTestUser))
 }
 
 export function stubQueryAccountMembershipsByUser(
   appState: FakeAppState,
   userId = testTestUserMembershipOfOrg.userId
 ) {
-  stubber(appState).queryAllPages.ofIndexPyPk(
+  appState.dynamoDB.putToTable(
     fakeTableNames['github-account-memberships'],
-    `USER#${userId}`,
-    [accountMemberships[userId] ?? throwFunction(`Test Setup Error - no account membership for ${userId}`)()],
-    GITHUB_ACCOUNT_MEMBERSHIP
+    buildGitHubAccountMembershipItem(
+      accountMemberships[userId] ?? throwFunction(`Test Setup Error - no account membership for ${userId}`)()
+    )
   )
 }
 
@@ -94,83 +70,49 @@ export function stubQueryAccountMembershipsByAccount(
   appState: FakeAppState,
   memberships = [testTestUserMembershipOfOrg, testMikeRobertsUserMembershipOfOrg]
 ) {
-  stubber(appState).queryAllPages.ofTableByPk(
-    fakeTableNames['github-account-memberships'],
-    'ACCOUNT#GHAccount162483619',
-    memberships,
-    GITHUB_ACCOUNT_MEMBERSHIP
-  )
+  for (const membership of memberships) {
+    appState.dynamoDB.putToTable(
+      fakeTableNames['github-account-memberships'],
+      buildGitHubAccountMembershipItem(membership)
+    )
+  }
 }
 
 export function stubQueryRepositories(appState: FakeAppState) {
-  stubber(appState).queryAllPages.ofTableByPk(
-    fakeTableNames['github-repositories'],
-    'ACCOUNT#GHAccount162483619',
-    [testOrgTestRepoOne],
-    GITHUB_REPOSITORY
-  )
+  appState.dynamoDB.putToTable(fakeTableNames['github-repositories'], buildGitHubRepoItem(testOrgTestRepoOne))
 }
 
 export function stubQueryWorkflows(appState: FakeAppState, workflows = [testOrgTestWorkflowOne]) {
-  stubber(appState).queryAllPages.ofTableByPk(
-    fakeTableNames['github-workflows'],
-    'ACCOUNT#GHAccount162483619',
-    workflows,
-    GITHUB_WORKFLOW
-  )
-}
-
-export function stubGetWorkflow(appState: FakeAppState, workflow = testOrgTestWorkflowOne) {
-  stubber(appState).stubGet.byPkAndSk(
-    fakeTableNames['github-workflows'],
-    `ACCOUNT#${workflow.accountId}`,
-    `REPO#${workflow.repoId}#WORKFLOW#${workflow.workflowId}`,
-    workflow
-  )
+  for (const workflow of workflows) {
+    appState.dynamoDB.putToTable(fakeTableNames['github-workflows'], buildGitHubWorkflowItem(workflow))
+  }
 }
 
 export function stubQueryLatestWorkflowRuns(appState: FakeAppState) {
-  stubber(appState).queryAllPages.ofIndexPyPk(
+  appState.dynamoDB.putToTable(
     fakeTableNames['github-latest-workflow-runs'],
-    'ACCOUNT#GHAccount162483619',
-    [testOrgTestRepoOneWorkflowRunThree],
-    GITHUB_LATEST_WORKFLOW_RUN_EVENT,
-    false
+    buildGitHubWorkflowRunEventInLatest(testOrgTestRepoOneWorkflowRunThree)
   )
 }
 
 export function stubQueryLatestWorkflowRunsForRepo(appState: FakeAppState) {
-  stubber(appState).queryAllPages.ofTableByPkAndSk(
+  appState.dynamoDB.putToTable(
     fakeTableNames['github-latest-workflow-runs'],
-    'begins_with(#sk, :skPrefix)',
-    'ACCOUNT#GHAccount162483619',
-    { ':skPrefix': 'REPO#GHRepo768206479' },
-    [testOrgTestRepoOneWorkflowRunThree],
-    GITHUB_LATEST_WORKFLOW_RUN_EVENT
+    buildGitHubWorkflowRunEventInLatest(testOrgTestRepoOneWorkflowRunThree)
   )
 }
 
 export function stubQueryActivityForRepo(appState: FakeAppState) {
-  stubber(appState).queryOnePage.ofIndexPyPkAndSk(
+  appState.dynamoDB.putToTable(
     fakeTableNames['github-repo-activity'],
-    'begins_with(#sk, :skPrefix)',
-    'ACCOUNT#GHAccount162483619',
-    { ':skPrefix': 'REPO#GHRepo768206479' },
-    [testOrgTestRepoOneWorkflowRunThree],
-    GITHUB_WORKFLOW_RUN,
-    false
+    buildGitHubWorkflowRunItemInRepoActivity(testOrgTestRepoOneWorkflowRunThree)
   )
 }
 
 export function stubQueryLatestPushesPerRef(appState: FakeAppState) {
-  stubber(appState).queryAllPages.ofIndexPyPkAndSk(
+  appState.dynamoDB.putToTable(
     fakeTableNames['github-latest-pushes-per-ref'],
-    '#sk > :sk',
-    'ACCOUNT#GHAccount162483619',
-    { ':sk': 'DATETIME#2024-01-19T19:00:00.000Z' },
-    [testOrgTestRepoOnePush],
-    GITHUB_LATEST_PUSH_PER_REF,
-    false
+    buildGitHubPushItemInLatestPushPerRef(testOrgTestRepoOnePush)
   )
 }
 
@@ -181,10 +123,12 @@ export function stubQueryWebPushSubscription(
     subscriptions?: WebPushSubscription[]
   }
 ) {
-  stubber(appState).queryAllPages.ofTableByPk(
-    fakeTableNames['web-push-subscriptions'],
-    `USER#${options?.userId ?? fromRawGithubUserId(162360409)}`,
-    options?.subscriptions ?? [testTestUserPushSubscription],
-    WEB_PUSH_SUBSCRIPTION
-  )
+  for (const subscription of options?.subscriptions ?? [testTestUserPushSubscription]) {
+    appState.dynamoDB.putToTable(
+      fakeTableNames['web-push-subscriptions'],
+      buildWebPushSubscription({
+        ...subscription
+      })
+    )
+  }
 }

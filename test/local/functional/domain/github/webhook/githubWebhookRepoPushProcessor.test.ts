@@ -6,22 +6,22 @@ import example_push_no_head from '../../../../../examples/github/org/webhook/pus
 import { githubWebhookRepoPushProcessor } from '../../../../../../src/app/domain/github/webhookProcessor/processors/githubWebhookRepoPushProcessor.js'
 import { testOrgTestRepoOnePushFC94 } from '../../../../../examples/cicada/githubDomainObjects.js'
 import {
-  expectPut,
-  expectPutsLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
-import {
-  expectedPutGithubPush,
-  expectedPutLatestGithubPush
-} from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
+  buildGitHubPushItemInLatestPushPerRef,
+  buildGitHubPushItemInRepoActivity
+} from '../../../../../testSupport/fakes/itemBuilders.js'
+import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('push-webhook', async () => {
   const appState = new FakeAppState()
 
   await githubWebhookRepoPushProcessor(appState, JSON.stringify(example_push))
 
-  expectPutsLength(appState).toEqual(2)
-  expectPut(appState, 0).toEqual(expectedPutGithubPush(testOrgTestRepoOnePushFC94))
-  expectPut(appState, 1).toEqual(expectedPutLatestGithubPush(testOrgTestRepoOnePushFC94))
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repo-activity'])).toEqual([
+    buildGitHubPushItemInRepoActivity(testOrgTestRepoOnePushFC94)
+  ])
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-latest-pushes-per-ref'])).toEqual([
+    buildGitHubPushItemInLatestPushPerRef(testOrgTestRepoOnePushFC94)
+  ])
 
   expect(appState.eventBridgeBus.sentEvents.length).toEqual(1)
   expect(appState.eventBridgeBus.sentEvents[0].detailType).toEqual('GithubNewPush')
@@ -36,6 +36,7 @@ test('push-no-head-webhook', async () => {
 
   await githubWebhookRepoPushProcessor(appState, JSON.stringify(example_push_no_head))
 
-  expectPutsLength(appState).toEqual(0)
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repo-activity'])).toEqual([])
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-latest-pushes-per-ref'])).toEqual([])
   expect(appState.eventBridgeBus.sentEvents.length).toEqual(0)
 })

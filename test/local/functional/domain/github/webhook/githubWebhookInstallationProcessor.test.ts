@@ -4,13 +4,10 @@ import { githubWebhookInstallationProcessor } from '../../../../../../src/app/do
 
 import example_installation_created from '../../../../../examples/github/org/webhook/installationCreated.json' with { type: 'json' }
 import { cicadaTestOrgInstallation } from '../../../../../examples/cicada/githubDomainObjects.js'
-import {
-  expectPut,
-  expectPutsLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
-import { expectedPutGithubInstallation } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
+import { buildGitHubInstallationItem } from '../../../../../testSupport/fakes/itemBuilders.js'
 
 import { fromRawGithubAppId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
+import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('installation-webhook-for-org-account-installation', async () => {
   // A
@@ -24,8 +21,9 @@ test('installation-webhook-for-org-account-installation', async () => {
   await githubWebhookInstallationProcessor(appState, JSON.stringify(example_installation_created))
 
   // A
-  expectPutsLength(appState).toEqual(1)
-  expectPut(appState).toEqual(expectedPutGithubInstallation(cicadaTestOrgInstallation))
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-installations'])).toEqual([
+    buildGitHubInstallationItem(cicadaTestOrgInstallation)
+  ])
   expect(appState.eventBridgeBus.sentEvents.length).toEqual(1)
   expect(appState.eventBridgeBus.sentEvents[0]).toEqual({
     detailType: 'InstallationRequiresCrawling',

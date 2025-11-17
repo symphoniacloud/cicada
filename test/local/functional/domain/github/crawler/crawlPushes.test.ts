@@ -1,4 +1,4 @@
-import { test } from 'vitest'
+import { expect, test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
 import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient.js'
 import {
@@ -11,15 +11,12 @@ import example_personal_repo_push from '../../../../../examples/github/personal-
 import example_org_repo_push_two from '../../../../../examples/github/org/api/repoPush.json' with { type: 'json' }
 import { crawlPushes } from '../../../../../../src/app/domain/github/crawler/crawlPushes.js'
 import {
-  expectPut,
-  expectPutsLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
-import {
-  expectedPutGithubPush,
-  expectedPutLatestGithubPush
-} from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
+  buildGitHubPushItemInLatestPushPerRef,
+  buildGitHubPushItemInRepoActivity
+} from '../../../../../testSupport/fakes/itemBuilders.js'
 
 import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
+import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('repo-crawler-for-personal-account-installation', async () => {
   // A
@@ -37,9 +34,12 @@ test('repo-crawler-for-personal-account-installation', async () => {
   await crawlPushes(appState, testPersonalTestRepo, githubInstallationClient)
 
   // A
-  expectPutsLength(appState).toEqual(2)
-  expectPut(appState, 0).toEqual(expectedPutGithubPush(testPersonalTestRepoPush))
-  expectPut(appState, 1).toEqual(expectedPutLatestGithubPush(testPersonalTestRepoPush))
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repo-activity'])).toEqual([
+    buildGitHubPushItemInRepoActivity(testPersonalTestRepoPush)
+  ])
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-latest-pushes-per-ref'])).toEqual([
+    buildGitHubPushItemInLatestPushPerRef(testPersonalTestRepoPush)
+  ])
 })
 
 // As of October 2025 GitHub no longer provides commit summaries on PushEvents
@@ -63,7 +63,10 @@ test('crawl-pushes-for-org-with-no-commits', async () => {
   await crawlPushes(appState, testOrgTestRepoOne, githubInstallationClient)
 
   // A
-  expectPutsLength(appState).toEqual(2)
-  expectPut(appState, 0).toEqual(expectedPutGithubPush(testOrgTestRepoOnePushTwo))
-  expectPut(appState, 1).toEqual(expectedPutLatestGithubPush(testOrgTestRepoOnePushTwo))
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repo-activity'])).toEqual([
+    buildGitHubPushItemInRepoActivity(testOrgTestRepoOnePushTwo)
+  ])
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-latest-pushes-per-ref'])).toEqual([
+    buildGitHubPushItemInLatestPushPerRef(testOrgTestRepoOnePushTwo)
+  ])
 })

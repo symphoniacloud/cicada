@@ -1,4 +1,4 @@
-import { test } from 'vitest'
+import { expect, test } from 'vitest'
 import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
 import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient.js'
 import {
@@ -11,12 +11,9 @@ import {
 import example_personal_account_repo from '../../../../../examples/github/personal-account/api/repo.json' with { type: 'json' }
 import example_org_repos from '../../../../../examples/github/org/api/repos.json' with { type: 'json' }
 import { crawlAccountContents } from '../../../../../../src/app/domain/github/crawler/crawlAccountContents.js'
-import {
-  expectBatchWrites,
-  expectBatchWritesLength
-} from '../../../../../testSupport/fakes/dynamoDB/fakeDynamoDBInterfaceExpectations.js'
-import { expectedBatchWriteGithubRepositories } from '../../../../../testSupport/fakes/tableRecordExpectedWrites.js'
+import { buildGitHubRepoItem } from '../../../../../testSupport/fakes/itemBuilders.js'
 import { RawGithubRepoSchema } from '../../../../../../src/app/ioTypes/RawGitHubSchemas.js'
+import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('repository-crawler-for-personal-account-installation', async () => {
   // A
@@ -52,8 +49,9 @@ test('repository-crawler-for-personal-account-installation', async () => {
   await crawlAccountContents(appState, githubInstallationClient, cicadaTestUserInstallation, 3)
 
   // A
-  expectBatchWritesLength(appState).toEqual(1)
-  expectBatchWrites(appState, 0).toEqual(expectedBatchWriteGithubRepositories([testPersonalTestRepo]))
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repositories'])).toEqual([
+    buildGitHubRepoItem(testPersonalTestRepo)
+  ])
 })
 
 test('repository-crawler-for-org-installation', async () => {
@@ -114,8 +112,8 @@ test('repository-crawler-for-org-installation', async () => {
   await crawlAccountContents(appState, githubInstallationClient, cicadaTestOrgInstallation, 3)
 
   // A
-  expectBatchWritesLength(appState).toEqual(1)
-  expectBatchWrites(appState, 0).toEqual(
-    expectedBatchWriteGithubRepositories([testOrgTestRepoOne, testOrgTestRepoTwo])
-  )
+  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repositories'])).toEqual([
+    buildGitHubRepoItem(testOrgTestRepoOne),
+    buildGitHubRepoItem(testOrgTestRepoTwo)
+  ])
 })
