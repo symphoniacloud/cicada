@@ -13,7 +13,7 @@ import { crawlPushes } from '../../../../../../src/app/domain/github/crawler/cra
 import {
   buildGitHubPushItemInLatestPushPerRef,
   buildGitHubPushItemInRepoActivity
-} from '../../../../../testSupport/fakes/itemBuilders.js'
+} from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
 
 import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'

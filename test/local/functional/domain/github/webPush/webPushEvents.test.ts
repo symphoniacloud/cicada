@@ -3,18 +3,13 @@ import { FakeAppState } from '../../../../../testSupport/fakes/fakeAppState.js'
 import { testOrgTestRepoOneWorkflowRunThree } from '../../../../../examples/cicada/githubDomainObjects.js'
 import { processEventBridgeWebPushEvent } from '../../../../../../src/app/domain/webPush/webPushEventBridgeEventProcessor.js'
 import {
-  testMikeRobertsPushSubscriptionThree,
-  testMikeRobertsPushSubscriptionTwo
-} from '../../../../../examples/cicada/webPushDomainObjects.js'
-import {
-  stubGetGithubInstallation,
-  stubQueryAccountMembershipsByAccount,
-  stubQueryAccountMembershipsByUser,
-  stubQueryLatestWorkflowRuns,
-  stubQueryRepositories,
-  stubQueryWebPushSubscription,
-  stubQueryWorkflows
-} from '../../../../../testSupport/fakes/tableRecordReadStubs.js'
+  populateFakeGitHubAccountMembershipsTable,
+  populateFakeGithubInstallationTable,
+  populateFakeGitHubLatestWorkflowRunsTable,
+  populateFakeGitHubRepositoriesTable,
+  populateFakeGitHubWorkflowsTable,
+  populateFakeWebPushSubscriptionsTable
+} from '../../../../../testSupport/fakes/populateFakeDynamoDBTables.js'
 
 import { fromRawGithubUserId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 import {
@@ -24,18 +19,12 @@ import {
 
 test('newWorkflowRunEvent', async () => {
   const appState = new FakeAppState()
-  stubGetGithubInstallation(appState)
-  stubQueryAccountMembershipsByAccount(appState)
-  stubQueryAccountMembershipsByUser(appState)
-  stubQueryAccountMembershipsByUser(appState, fromRawGithubUserId(49635))
-  stubQueryRepositories(appState)
-  stubQueryWorkflows(appState)
-  stubQueryLatestWorkflowRuns(appState)
-  stubQueryWebPushSubscription(appState)
-  stubQueryWebPushSubscription(appState, {
-    userId: fromRawGithubUserId(49635),
-    subscriptions: [testMikeRobertsPushSubscriptionTwo, testMikeRobertsPushSubscriptionThree]
-  })
+  populateFakeGithubInstallationTable(appState)
+  populateFakeGitHubAccountMembershipsTable(appState)
+  populateFakeGitHubRepositoriesTable(appState)
+  populateFakeGitHubWorkflowsTable(appState)
+  populateFakeGitHubLatestWorkflowRunsTable(appState)
+  populateFakeWebPushSubscriptionsTable(appState)
 
   await processEventBridgeWebPushEvent(appState, {
     version: '0',
@@ -107,8 +96,8 @@ test('newWorkflowRunEvent', async () => {
 test('newPushTest', async () => {
   const appState = new FakeAppState()
 
-  stubQueryAccountMembershipsByUser(appState)
-  stubQueryWebPushSubscription(appState)
+  populateFakeGitHubAccountMembershipsTable(appState)
+  populateFakeWebPushSubscriptionsTable(appState)
 
   await processEventBridgeWebPushEvent(appState, {
     version: '0',

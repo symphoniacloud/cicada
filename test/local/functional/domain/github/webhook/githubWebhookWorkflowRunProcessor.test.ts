@@ -14,7 +14,7 @@ import {
   buildGitHubWorkflowRunEventInLatest,
   buildGitHubWorkflowRunEventItemInRepoActivity,
   buildGitHubWorkflowRunItemInRepoActivity
-} from '../../../../../testSupport/fakes/itemBuilders.js'
+} from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
 import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient.js'
 
 import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'

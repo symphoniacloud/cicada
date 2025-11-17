@@ -8,7 +8,7 @@ import { testOrgTestRepoOnePushFC94 } from '../../../../../examples/cicada/githu
 import {
   buildGitHubPushItemInLatestPushPerRef,
   buildGitHubPushItemInRepoActivity
-} from '../../../../../testSupport/fakes/itemBuilders.js'
+} from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
 import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('push-webhook', async () => {

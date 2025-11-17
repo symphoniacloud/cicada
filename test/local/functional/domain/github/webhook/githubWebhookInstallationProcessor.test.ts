@@ -4,7 +4,7 @@ import { githubWebhookInstallationProcessor } from '../../../../../../src/app/do
 
 import example_installation_created from '../../../../../examples/github/org/webhook/installationCreated.json' with { type: 'json' }
 import { cicadaTestOrgInstallation } from '../../../../../examples/cicada/githubDomainObjects.js'
-import { buildGitHubInstallationItem } from '../../../../../testSupport/fakes/itemBuilders.js'
+import { buildGitHubInstallationItem } from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
 
 import { fromRawGithubAppId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'

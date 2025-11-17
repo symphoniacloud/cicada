@@ -4,7 +4,7 @@ import { testTestUserPushSubscription } from '../../../../../examples/cicada/web
 import { handleApiMessage } from '../../../../../../src/app/lambdaFunctions/authenticatedApi/lambda.js'
 import { createAPIGatewayProxyWithLambdaAuthorizerEvent } from '../../../../../testSupport/fakes/awsStubs.js'
 import { HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2'
-import { buildWebPushSubscription } from '../../../../../testSupport/fakes/itemBuilders.js'
+import { buildWebPushSubscription } from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
 import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('web push test', async () => {

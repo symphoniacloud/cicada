@@ -3,20 +3,20 @@ import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState.js'
 import { handleWebRequest } from '../../../../../src/app/lambdaFunctions/authenticatedWeb/lambda.js'
 import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport/fakes/awsStubs.js'
 import {
-  stubGetGithubInstallation,
-  stubQueryLatestWorkflowRuns,
-  stubQueryRepositories,
-  stubQueryWorkflows,
-  stubSetupUserRecords
-} from '../../../../testSupport/fakes/tableRecordReadStubs.js'
+  populateFakeGithubInstallationTable,
+  populateFakeGitHubLatestWorkflowRunsTable,
+  populateFakeGitHubRepositoriesTable,
+  populateFakeGitHubWorkflowsTable,
+  populateFakeGitHubUserAndAssociatedTables
+} from '../../../../testSupport/fakes/populateFakeDynamoDBTables.js'
 
 test('home-actions-status', async () => {
   const appState = new FakeAppState()
-  stubGetGithubInstallation(appState)
-  stubSetupUserRecords(appState)
-  stubQueryRepositories(appState)
-  stubQueryWorkflows(appState)
-  stubQueryLatestWorkflowRuns(appState)
+  populateFakeGithubInstallationTable(appState)
+  populateFakeGitHubUserAndAssociatedTables(appState)
+  populateFakeGitHubRepositoriesTable(appState)
+  populateFakeGitHubWorkflowsTable(appState)
+  populateFakeGitHubLatestWorkflowRunsTable(appState)
 
   const latestActivity = await handleWebRequest(
     appState,

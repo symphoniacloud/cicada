@@ -13,7 +13,7 @@ import {
   buildGitHubWorkflowRunEventInLatest,
   buildGitHubWorkflowRunEventItemInRepoActivity,
   buildGitHubWorkflowRunItemInRepoActivity
-} from '../../../../../testSupport/fakes/itemBuilders.js'
+} from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
 import { processRawRunEvents } from '../../../../../../src/app/domain/github/githubWorkflowRunEvent.js'
 
 import { RawGithubWorkflowRunEventSchema } from '../../../../../../src/app/ioTypes/RawGitHubSchemas.js'

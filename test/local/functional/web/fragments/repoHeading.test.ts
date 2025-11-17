@@ -3,19 +3,19 @@ import { handleWebRequest } from '../../../../../src/app/lambdaFunctions/authent
 import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport/fakes/awsStubs.js'
 import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState.js'
 import {
-  stubGetGithubInstallation,
-  stubQueryRepositories,
-  stubQueryWorkflows,
-  stubSetupUserRecords
-} from '../../../../testSupport/fakes/tableRecordReadStubs.js'
+  populateFakeGithubInstallationTable,
+  populateFakeGitHubRepositoriesTable,
+  populateFakeGitHubWorkflowsTable,
+  populateFakeGitHubUserAndAssociatedTables
+} from '../../../../testSupport/fakes/populateFakeDynamoDBTables.js'
 
 test('view-repo-heading', async () => {
   const appState = new FakeAppState()
 
-  stubGetGithubInstallation(appState)
-  stubSetupUserRecords(appState)
-  stubQueryRepositories(appState)
-  stubQueryWorkflows(appState)
+  populateFakeGithubInstallationTable(appState)
+  populateFakeGitHubUserAndAssociatedTables(appState)
+  populateFakeGitHubRepositoriesTable(appState)
+  populateFakeGitHubWorkflowsTable(appState)
 
   const viewRepoResponse = await handleWebRequest(
     appState,

@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState.js'
 import { createStubAPIGatewayRequestAuthorizerEvent } from '../../../../testSupport/fakes/awsStubs.js'
 import { attemptToAuthorize } from '../../../../../src/app/domain/webAuth/apiGatewayAuthorizer.js'
-import { stubSetupUserRecords } from '../../../../testSupport/fakes/tableRecordReadStubs.js'
+import { populateFakeGitHubUserAndAssociatedTables } from '../../../../testSupport/fakes/populateFakeDynamoDBTables.js'
 
 test('failed-auth-no-token', async () => {
   const appState = new FakeAppState()
@@ -32,7 +32,7 @@ test('failed-auth-no-token', async () => {
 
 test('successful-auth', async () => {
   const appState = new FakeAppState()
-  stubSetupUserRecords(appState)
+  populateFakeGitHubUserAndAssociatedTables(appState)
 
   const response = await attemptToAuthorize(
     appState,

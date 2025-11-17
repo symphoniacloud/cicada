@@ -3,23 +3,23 @@ import { FakeAppState } from '../../../../testSupport/fakes/fakeAppState.js'
 import { handleWebRequest } from '../../../../../src/app/lambdaFunctions/authenticatedWeb/lambda.js'
 import { createStubApiGatewayProxyEventWithToken } from '../../../../testSupport/fakes/awsStubs.js'
 import {
-  stubGetGithubInstallation,
-  stubQueryLatestPushesPerRef,
-  stubQueryLatestWorkflowRuns,
-  stubQueryRepositories,
-  stubQueryWorkflows,
-  stubSetupUserRecords
-} from '../../../../testSupport/fakes/tableRecordReadStubs.js'
+  populateFakeGithubInstallationTable,
+  populateFakeGitHubLatestPushesPerRefTable,
+  populateFakeGitHubLatestWorkflowRunsTable,
+  populateFakeGitHubRepositoriesTable,
+  populateFakeGitHubWorkflowsTable,
+  populateFakeGitHubUserAndAssociatedTables
+} from '../../../../testSupport/fakes/populateFakeDynamoDBTables.js'
 
 test('home-recent-activity', async () => {
   const appState = new FakeAppState()
-  stubGetGithubInstallation(appState)
-  stubSetupUserRecords(appState)
-  stubQueryLatestPushesPerRef(appState)
-  stubQueryRepositories(appState)
-  stubQueryWorkflows(appState)
+  populateFakeGithubInstallationTable(appState)
+  populateFakeGitHubUserAndAssociatedTables(appState)
+  populateFakeGitHubLatestPushesPerRefTable(appState)
+  populateFakeGitHubRepositoriesTable(appState)
+  populateFakeGitHubWorkflowsTable(appState)
   // Used when loading "all workflows" for user settings lookup. Eventually consider adding a workflows entity
-  stubQueryLatestWorkflowRuns(appState)
+  populateFakeGitHubLatestWorkflowRunsTable(appState)
 
   const recentActivity = await handleWebRequest(
     appState,

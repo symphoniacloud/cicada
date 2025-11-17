@@ -11,7 +11,7 @@ import {
 import example_personal_account_repo from '../../../../../examples/github/personal-account/api/repo.json' with { type: 'json' }
 import example_org_repos from '../../../../../examples/github/org/api/repos.json' with { type: 'json' }
 import { crawlAccountContents } from '../../../../../../src/app/domain/github/crawler/crawlAccountContents.js'
-import { buildGitHubRepoItem } from '../../../../../testSupport/fakes/itemBuilders.js'
+import { buildGitHubRepoItem } from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
 import { RawGithubRepoSchema } from '../../../../../../src/app/ioTypes/RawGitHubSchemas.js'
 import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 

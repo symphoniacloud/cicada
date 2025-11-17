@@ -7,7 +7,7 @@ import {
 import example_personal_account_installation from '../../../../../examples/github/personal-account/api/installation.json' with { type: 'json' }
 import example_org_installation from '../../../../../examples/github/org/api/installation.json' with { type: 'json' }
 import { crawlInstallations } from '../../../../../../src/app/domain/github/crawler/crawlInstallations.js'
-import { buildGitHubInstallationItem } from '../../../../../testSupport/fakes/itemBuilders.js'
+import { buildGitHubInstallationItem } from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
 
 import { fromRawGithubAppId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'

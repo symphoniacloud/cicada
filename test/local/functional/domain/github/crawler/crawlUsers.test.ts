@@ -17,7 +17,7 @@ import { crawlUsers } from '../../../../../../src/app/domain/github/crawler/craw
 import {
   buildGitHubAccountMembershipItem,
   buildGitHubUserItem
-} from '../../../../../testSupport/fakes/itemBuilders.js'
+} from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
 import { successWith } from '../../../../../../src/app/util/structuredResult.js'
 import { fromRawGithubUserId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 import { RawGithubUserSchema } from '../../../../../../src/app/ioTypes/RawGitHubSchemas.js'

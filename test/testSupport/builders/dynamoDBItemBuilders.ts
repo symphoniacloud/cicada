@@ -12,6 +12,8 @@ import { WebPushSubscription } from '../../../src/app/ioTypes/WebPushSchemasAndT
 import { EntityType } from '../../../src/app/domain/entityStore/entityTypes.js'
 import type { NativeAttributeValue } from '@aws-sdk/util-dynamodb'
 
+// This file replicates some the logic in the Entity code, so if changing there you'll need to change here too
+
 export function buildItem(entityType: EntityType, item: Record<string, NativeAttributeValue>) {
   return {
     _et: entityType,
@@ -24,6 +26,30 @@ export function buildGitHubInstallationItem(installation: GitHubInstallation) {
   return buildItem('githubInstallation', {
     PK: `ACCOUNT#${installation.accountId}`,
     ...installation
+  })
+}
+
+export function buildGitHubUserItem(user: GitHubUser) {
+  return buildItem('githubUser', {
+    PK: `USER#${user.userId}`,
+    ...user
+  })
+}
+
+export function buildGitHubUserTokenItem(userToken: GitHubUserToken) {
+  return buildItem('githubUserToken', {
+    PK: `USER_TOKEN#${userToken.token}`,
+    ...userToken
+  })
+}
+
+export function buildGitHubAccountMembershipItem(membership: GitHubAccountMembership) {
+  return buildItem('githubAccountMembership', {
+    PK: `ACCOUNT#${membership.accountId}`,
+    SK: `USER#${membership.userId}`,
+    GSI1PK: `USER#${membership.userId}`,
+    GSI1SK: `ACCOUNT#${membership.accountId}`,
+    ...membership
   })
 }
 
@@ -53,26 +79,6 @@ export function buildGitHubPushItemInRepoActivity(push: GitHubPush) {
   })
 }
 
-export function buildGitHubWorkflowRunEventItemInRepoActivity(event: GitHubWorkflowRunEvent) {
-  return buildItem('githubWorkflowRunEvent', {
-    PK: `ACCOUNT#${event.accountId}`,
-    SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}#WORKFLOW_RUN_EVENT#UPDATED_AT#${event.runEventUpdatedAt}#RUN#${event.workflowRunId}#STATUS#${event.status}`,
-    GSI1PK: `ACCOUNT#${event.accountId}`,
-    GSI1SK: `REPO#${event.repoId}#DATETIME#${event.runEventUpdatedAt}`,
-    ...event
-  })
-}
-
-export function buildGitHubWorkflowRunItemInRepoActivity(event: GitHubWorkflowRunEvent) {
-  return buildItem('githubWorkflowRun', {
-    PK: `ACCOUNT#${event.accountId}`,
-    SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}#WORKFLOW_RUN#RUN#${event.workflowRunId}`,
-    GSI1PK: `ACCOUNT#${event.accountId}`,
-    GSI1SK: `REPO#${event.repoId}#DATETIME#${event.runEventUpdatedAt}`,
-    ...event
-  })
-}
-
 export function buildGitHubPushItemInLatestPushPerRef(push: GitHubPush) {
   return buildItem('githubLatestPushPerRef', {
     PK: `ACCOUNT#${push.accountId}`,
@@ -80,6 +86,16 @@ export function buildGitHubPushItemInLatestPushPerRef(push: GitHubPush) {
     GSI1PK: `ACCOUNT#${push.accountId}`,
     GSI1SK: `DATETIME#${push.dateTime}`,
     ...push
+  })
+}
+
+export function buildGitHubWorkflowRunEventItemInRepoActivity(event: GitHubWorkflowRunEvent) {
+  return buildItem('githubWorkflowRunEvent', {
+    PK: `ACCOUNT#${event.accountId}`,
+    SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}#WORKFLOW_RUN_EVENT#UPDATED_AT#${event.runEventUpdatedAt}#RUN#${event.workflowRunId}#STATUS#${event.status}`,
+    GSI1PK: `ACCOUNT#${event.accountId}`,
+    GSI1SK: `REPO#${event.repoId}#DATETIME#${event.runEventUpdatedAt}`,
+    ...event
   })
 }
 
@@ -93,27 +109,13 @@ export function buildGitHubWorkflowRunEventInLatest(event: GitHubWorkflowRunEven
   })
 }
 
-export function buildGitHubUserItem(user: GitHubUser) {
-  return buildItem('githubUser', {
-    PK: `USER#${user.userId}`,
-    ...user
-  })
-}
-
-export function buildGitHubUserTokenItem(userToken: GitHubUserToken) {
-  return buildItem('githubUserToken', {
-    PK: `USER_TOKEN#${userToken.token}`,
-    ...userToken
-  })
-}
-
-export function buildGitHubAccountMembershipItem(membership: GitHubAccountMembership) {
-  return buildItem('githubAccountMembership', {
-    PK: `ACCOUNT#${membership.accountId}`,
-    SK: `USER#${membership.userId}`,
-    GSI1PK: `USER#${membership.userId}`,
-    GSI1SK: `ACCOUNT#${membership.accountId}`,
-    ...membership
+export function buildGitHubWorkflowRunItemInRepoActivity(event: GitHubWorkflowRunEvent) {
+  return buildItem('githubWorkflowRun', {
+    PK: `ACCOUNT#${event.accountId}`,
+    SK: `REPO#${event.repoId}#WORKFLOW#${event.workflowId}#WORKFLOW_RUN#RUN#${event.workflowRunId}`,
+    GSI1PK: `ACCOUNT#${event.accountId}`,
+    GSI1SK: `REPO#${event.repoId}#DATETIME#${event.runEventUpdatedAt}`,
+    ...event
   })
 }
 
