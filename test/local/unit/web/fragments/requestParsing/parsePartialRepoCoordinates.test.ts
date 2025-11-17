@@ -3,8 +3,10 @@ import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes
 import { buildUserScopedRefData } from '../../../../../testSupport/builders/accountStructureBuilders.js'
 import { invalidRequestResponse } from '../../../../../../src/app/web/htmlResponses.js'
 import { parsePartialRepoKeyFromQueryString } from '../../../../../../src/app/web/fragments/requestParsing/parseFragmentQueryStrings.js'
+import { changeLogLevelToError, changeLogLevelToWarn } from '../../../../../testSupport/logging.js'
 
 test('Fails if invalid account ID', () => {
+  changeLogLevelToError()
   const result = parsePartialRepoKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
@@ -19,9 +21,11 @@ test('Fails if invalid account ID', () => {
   } else {
     expect(result.failureResult).toEqual(invalidRequestResponse)
   }
+  changeLogLevelToWarn()
 })
 
 test('Fails if invalid repo ID', () => {
+  changeLogLevelToError()
   const result = parsePartialRepoKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
@@ -36,6 +40,7 @@ test('Fails if invalid repo ID', () => {
   } else {
     expect(result.failureResult).toEqual(invalidRequestResponse)
   }
+  changeLogLevelToWarn()
 })
 
 test('Success if no Account ID and Repo ID', () => {

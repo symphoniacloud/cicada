@@ -5,6 +5,7 @@ import { handleGitHubWebAuthRequest } from '../../../../../../src/app/domain/git
 import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 import { buildGitHubUserItem } from '../../../../../testSupport/fakes/itemBuilders.js'
 import { testTestUser } from '../../../../../examples/cicada/githubDomainObjects.js'
+import { changeLogLevelToError, changeLogLevelToWarn } from '../../../../../testSupport/logging.js'
 
 test('login', async () => {
   const response = await handleGitHubWebAuthRequest(
@@ -68,6 +69,7 @@ test('oauthCallback', async () => {
 })
 
 test('failedOauthCallback', async () => {
+  changeLogLevelToError()
   const appState = new FakeAppState()
 
   const response = await handleGitHubWebAuthRequest(
@@ -112,6 +114,7 @@ test('failedOauthCallback', async () => {
     </div>
   </body>
 </html>`)
+  changeLogLevelToWarn()
 })
 
 test('logout', async () => {
@@ -133,6 +136,7 @@ test('logout', async () => {
 })
 
 test('invalidPath', async () => {
+  changeLogLevelToError()
   const response = await handleGitHubWebAuthRequest(
     new FakeAppState(),
     createStubApiGatewayProxyEvent({
@@ -142,4 +146,5 @@ test('invalidPath', async () => {
 
   expect(response.statusCode).toEqual(404)
   expect(response.body).toEqual('"Not Found"')
+  changeLogLevelToWarn()
 })

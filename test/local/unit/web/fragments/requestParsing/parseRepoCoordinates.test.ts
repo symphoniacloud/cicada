@@ -3,8 +3,10 @@ import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes
 import { buildUserScopedRefData } from '../../../../../testSupport/builders/accountStructureBuilders.js'
 import { invalidRequestResponse } from '../../../../../../src/app/web/htmlResponses.js'
 import { parseRepoKeyFromQueryString } from '../../../../../../src/app/web/fragments/requestParsing/parseFragmentQueryStrings.js'
+import { changeLogLevelToError, changeLogLevelToWarn } from '../../../../../testSupport/logging.js'
 
 test('Fails if no Account ID and Repo ID', () => {
+  changeLogLevelToError()
   const result = parseRepoKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
@@ -15,6 +17,7 @@ test('Fails if no Account ID and Repo ID', () => {
   } else {
     expect(result.failureResult).toEqual(invalidRequestResponse)
   }
+  changeLogLevelToWarn()
 })
 
 test('Get Account ID and Repo ID', () => {

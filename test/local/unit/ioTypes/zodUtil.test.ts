@@ -1,6 +1,7 @@
-import { expect, test, describe } from 'vitest'
-import { URLEncodedFormSchema, safeParseWithSchema } from '../../../../src/app/ioTypes/zodUtil.js'
+import { describe, expect, test } from 'vitest'
+import { safeParseWithSchema, URLEncodedFormSchema } from '../../../../src/app/ioTypes/zodUtil.js'
 import { z } from 'zod'
+import { changeLogLevelToError, changeLogLevelToWarn } from '../../../testSupport/logging.js'
 
 test('URLEncodedFormSchema: parses simple key-value pair', () => {
   const result = URLEncodedFormSchema.parse('key=value')
@@ -84,6 +85,7 @@ describe('safeParseWithSchema', () => {
   })
 
   test('Failure: returns Zod error message when validation fails', () => {
+    changeLogLevelToError()
     const schema = z.object({ name: z.string(), age: z.number() })
     const data = { name: 'Alice', age: 'not a number' }
 
@@ -96,9 +98,11 @@ describe('safeParseWithSchema', () => {
     // Zod error message should mention the field and type issue
     expect(result.reason).toContain('age')
     expect(result.reason).toContain('number')
+    changeLogLevelToWarn()
   })
 
   test('Failure: returns Zod error message when required field missing', () => {
+    changeLogLevelToError()
     const schema = z.object({ name: z.string(), age: z.number() })
     const data = { name: 'Alice' }
 
@@ -111,9 +115,11 @@ describe('safeParseWithSchema', () => {
     // Zod error message should mention the missing field and undefined
     expect(result.reason).toContain('age')
     expect(result.reason).toContain('undefined')
+    changeLogLevelToWarn()
   })
 
   test('Failure: returns Zod error message when type is completely wrong', () => {
+    changeLogLevelToError()
     const schema = z.object({ name: z.string() })
     const data = 'not an object'
 
@@ -125,6 +131,7 @@ describe('safeParseWithSchema', () => {
 
     // Zod error message should mention object type
     expect(result.reason).toContain('object')
+    changeLogLevelToWarn()
   })
 
   test('Success: works with complex nested schemas', () => {
@@ -163,6 +170,7 @@ describe('safeParseWithSchema', () => {
   })
 
   test('Failure: URLEncodedFormSchema pipe returns Zod error for empty required field', () => {
+    changeLogLevelToError()
     const schema = URLEncodedFormSchema.pipe(z.object({ accountName: z.string().min(1) }))
     const data = 'accountName='
 
@@ -174,5 +182,6 @@ describe('safeParseWithSchema', () => {
 
     // Zod error message should mention the field and constraint
     expect(result.reason).toContain('accountName')
+    changeLogLevelToWarn()
   })
 })

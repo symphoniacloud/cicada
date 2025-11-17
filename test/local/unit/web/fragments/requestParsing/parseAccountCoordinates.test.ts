@@ -3,8 +3,10 @@ import { parseAccountKeyFromQueryString } from '../../../../../../src/app/web/fr
 import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes/awsStubs.js'
 import { buildUserScopedRefData } from '../../../../../testSupport/builders/accountStructureBuilders.js'
 import { invalidRequestResponse } from '../../../../../../src/app/web/htmlResponses.js'
+import { changeLogLevelToError, changeLogLevelToWarn } from '../../../../../testSupport/logging.js'
 
 test('Fails if no Account ID', () => {
+  changeLogLevelToError()
   const result = parseAccountKeyFromQueryString({
     ...createStubApiGatewayProxyEvent(),
     username: '',
@@ -15,6 +17,7 @@ test('Fails if no Account ID', () => {
   } else {
     expect(result.failureResult).toEqual(invalidRequestResponse)
   }
+  changeLogLevelToWarn()
 })
 
 test('Get Account ID', () => {

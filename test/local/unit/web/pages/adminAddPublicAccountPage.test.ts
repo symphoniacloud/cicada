@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
 import { parseAddPublicAccountBody } from '../../../../../src/app/web/pages/adminAddPublicAccountPage.js'
+import { changeLogLevelToError, changeLogLevelToWarn } from '../../../../testSupport/logging.js'
 
 // Note: URL encoding/decoding and null handling are tested in zodUtil.test.ts
 // These tests focus on the business logic: validating accountName is present and non-empty
@@ -17,6 +18,7 @@ test('Success: returns accountName from valid form body', () => {
 })
 
 test('Failure: rejects empty accountName', () => {
+  changeLogLevelToError()
   const result = parseAddPublicAccountBody('accountName=')
 
   if (result.isSuccessResult) {
@@ -25,9 +27,11 @@ test('Failure: rejects empty accountName', () => {
 
   // Zod error should mention the field name
   expect(result.reason).toContain('accountName')
+  changeLogLevelToWarn()
 })
 
 test('Failure: rejects missing accountName field', () => {
+  changeLogLevelToError()
   const result = parseAddPublicAccountBody('otherField=value')
 
   if (result.isSuccessResult) {
@@ -37,4 +41,5 @@ test('Failure: rejects missing accountName field', () => {
   // Zod error should mention the field name and undefined
   expect(result.reason).toContain('accountName')
   expect(result.reason).toContain('undefined')
+  changeLogLevelToWarn()
 })
