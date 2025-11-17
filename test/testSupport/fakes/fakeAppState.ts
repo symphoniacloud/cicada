@@ -9,6 +9,7 @@ import { FakeEventBridgeBus } from './fakeEventBridgeBus.js'
 import { FakeWebPushWrapper } from './fakeWebPushWrapper.js'
 import { FakeCicadaDynamoDB } from './fakeCicadaDynamoDB.js'
 import { CicadaTableId } from '../../../src/multipleContexts/dynamoDBTables.js'
+import { NativeAttributeValue } from '@aws-sdk/lib-dynamodb'
 
 export class FakeAppState implements AppState {
   public config: FakeCicadaConfig
@@ -38,6 +39,10 @@ export class FakeAppState implements AppState {
 
   public getAllFromTable(id: CicadaTableId) {
     return this.dynamoDB.getAllFromTable(fakeTableNames[id])
+  }
+
+  public putToTable(id: CicadaTableId, item: Record<string, NativeAttributeValue>): void {
+    this.dynamoDB.putToTable(fakeTableNames[id], item)
   }
 }
 

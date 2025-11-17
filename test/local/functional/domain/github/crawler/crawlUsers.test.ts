@@ -21,7 +21,6 @@ import {
 import { successWith } from '../../../../../../src/app/util/structuredResult.js'
 import { fromRawGithubUserId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
 import { RawGithubUserSchema } from '../../../../../../src/app/ioTypes/RawGitHubSchemas.js'
-import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('user-crawler-for-personal-account-installation', async () => {
   // A
@@ -51,13 +50,13 @@ test('user-crawler-for-org-installation', async () => {
     example_org_users.map((x) => RawGithubUserSchema.parse(x))
   )
   // Old membership that's still valid
-  appState.dynamoDB.putToTable(
-    fakeTableNames['github-account-memberships'],
+  appState.putToTable(
+    'github-account-memberships',
     buildGitHubAccountMembershipItem(testTestUserMembershipOfOrg)
   )
   // Old membership that will be deleted
-  appState.dynamoDB.putToTable(
-    fakeTableNames['github-account-memberships'],
+  appState.putToTable(
+    'github-account-memberships',
     buildGitHubAccountMembershipItem({ ...testTestUserMembershipOfOrg, userId: fromRawGithubUserId(9786) })
   )
 

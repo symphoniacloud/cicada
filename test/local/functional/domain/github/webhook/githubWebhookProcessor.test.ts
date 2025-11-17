@@ -20,7 +20,6 @@ import {
 import { FakeGithubInstallationClient } from '../../../../../testSupport/fakes/fakeGithubInstallationClient.js'
 
 import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
-import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('run-event', async () => {
   // Arrange
@@ -34,14 +33,8 @@ test('run-event', async () => {
       body: rawBody
     })
   )
-  appState.dynamoDB.putToTable(
-    fakeTableNames['github-installations'],
-    buildGitHubInstallationItem(cicadaTestOrgInstallation)
-  )
-  appState.dynamoDB.putToTable(
-    fakeTableNames['github-workflows'],
-    buildGitHubWorkflowItem(testOrgTestWorkflowOneFromJson)
-  )
+  appState.putToTable('github-installations', buildGitHubInstallationItem(cicadaTestOrgInstallation))
+  appState.putToTable('github-workflows', buildGitHubWorkflowItem(testOrgTestWorkflowOneFromJson))
   const githubInstallationClient = new FakeGithubInstallationClient()
   appState.githubClient.fakeClientsForInstallation.addResponse(
     fromRawGithubInstallationId(48133709),

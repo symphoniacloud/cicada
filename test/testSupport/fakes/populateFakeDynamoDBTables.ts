@@ -15,7 +15,6 @@ import {
   testMikeRobertsPushSubscriptionTwo,
   testTestUserPushSubscription
 } from '../../examples/cicada/webPushDomainObjects.js'
-import { fakeTableNames } from './fakeCicadaConfig.js'
 import {
   buildGitHubAccountMembershipItem,
   buildGitHubInstallationItem,
@@ -30,29 +29,20 @@ import {
 } from '../builders/dynamoDBItemBuilders.js'
 
 export function populateFakeGithubInstallationTable(appState: FakeAppState) {
-  appState.dynamoDB.putToTable(
-    fakeTableNames['github-installations'],
-    buildGitHubInstallationItem(cicadaTestOrgInstallation)
-  )
+  appState.putToTable('github-installations', buildGitHubInstallationItem(cicadaTestOrgInstallation))
 }
 
 export function populateFakeGitHubUserTokensTable(appState: FakeAppState) {
-  appState.dynamoDB.putToTable(
-    fakeTableNames['github-user-tokens'],
-    buildGitHubUserTokenItem(testTestUserTokenRecord)
-  )
+  appState.putToTable('github-user-tokens', buildGitHubUserTokenItem(testTestUserTokenRecord))
 }
 
 export function populateFakeGitHubUsersTable(appState: FakeAppState) {
-  appState.dynamoDB.putToTable(fakeTableNames['github-users'], buildGitHubUserItem(testTestUser))
+  appState.putToTable('github-users', buildGitHubUserItem(testTestUser))
 }
 
 export function populateFakeGitHubAccountMembershipsTable(appState: FakeAppState) {
   for (const membership of [testTestUserMembershipOfOrg, testMikeRobertsUserMembershipOfOrg]) {
-    appState.dynamoDB.putToTable(
-      fakeTableNames['github-account-memberships'],
-      buildGitHubAccountMembershipItem(membership)
-    )
+    appState.putToTable('github-account-memberships', buildGitHubAccountMembershipItem(membership))
   }
 }
 
@@ -63,33 +53,30 @@ export function populateFakeGitHubUserAndAssociatedTables(appState: FakeAppState
 }
 
 export function populateFakeGitHubRepositoriesTable(appState: FakeAppState) {
-  appState.dynamoDB.putToTable(fakeTableNames['github-repositories'], buildGitHubRepoItem(testOrgTestRepoOne))
+  appState.putToTable('github-repositories', buildGitHubRepoItem(testOrgTestRepoOne))
 }
 
 export function populateFakeGitHubWorkflowsTable(appState: FakeAppState) {
-  appState.dynamoDB.putToTable(
-    fakeTableNames['github-workflows'],
-    buildGitHubWorkflowItem(testOrgTestWorkflowOne)
-  )
+  appState.putToTable('github-workflows', buildGitHubWorkflowItem(testOrgTestWorkflowOne))
 }
 
 export function populateFakeGitHubLatestWorkflowRunsTable(appState: FakeAppState) {
-  appState.dynamoDB.putToTable(
-    fakeTableNames['github-latest-workflow-runs'],
+  appState.putToTable(
+    'github-latest-workflow-runs',
     buildGitHubWorkflowRunEventInLatest(testOrgTestRepoOneWorkflowRunThree)
   )
 }
 
 export function populateFakeGitHubRepoActivityTable(appState: FakeAppState) {
-  appState.dynamoDB.putToTable(
-    fakeTableNames['github-repo-activity'],
+  appState.putToTable(
+    'github-repo-activity',
     buildGitHubWorkflowRunItemInRepoActivity(testOrgTestRepoOneWorkflowRunThree)
   )
 }
 
 export function populateFakeGitHubLatestPushesPerRefTable(appState: FakeAppState) {
-  appState.dynamoDB.putToTable(
-    fakeTableNames['github-latest-pushes-per-ref'],
+  appState.putToTable(
+    'github-latest-pushes-per-ref',
     buildGitHubPushItemInLatestPushPerRef(testOrgTestRepoOnePush)
   )
 }
@@ -100,11 +87,6 @@ export function populateFakeWebPushSubscriptionsTable(appState: FakeAppState) {
     testMikeRobertsPushSubscriptionTwo,
     testMikeRobertsPushSubscriptionThree
   ]) {
-    appState.dynamoDB.putToTable(
-      fakeTableNames['web-push-subscriptions'],
-      buildWebPushSubscription({
-        ...subscription
-      })
-    )
+    appState.putToTable('web-push-subscriptions', buildWebPushSubscription({ ...subscription }))
   }
 }

@@ -5,7 +5,6 @@ import { handleApiMessage } from '../../../../../../src/app/lambdaFunctions/auth
 import { createAPIGatewayProxyWithLambdaAuthorizerEvent } from '../../../../../testSupport/fakes/awsStubs.js'
 import { HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2'
 import { buildWebPushSubscription } from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
-import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('web push test', async () => {
   const appState = new FakeAppState()
@@ -64,10 +63,7 @@ test('web push subscribe', async () => {
 
 test('web push unsubscribe', async () => {
   const appState = new FakeAppState()
-  appState.dynamoDB.putToTable(
-    fakeTableNames['web-push-subscriptions'],
-    buildWebPushSubscription(testTestUserPushSubscription)
-  )
+  appState.putToTable('web-push-subscriptions', buildWebPushSubscription(testTestUserPushSubscription))
   // This should be deleted
   expect(appState.getAllFromTable('web-push-subscriptions')).toEqual([
     buildWebPushSubscription(testTestUserPushSubscription)
