@@ -13,7 +13,6 @@ import example_org_repos from '../../../../../examples/github/org/api/repos.json
 import { crawlAccountContents } from '../../../../../../src/app/domain/github/crawler/crawlAccountContents.js'
 import { buildGitHubRepoItem } from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
 import { RawGithubRepoSchema } from '../../../../../../src/app/ioTypes/RawGitHubSchemas.js'
-import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('repository-crawler-for-personal-account-installation', async () => {
   // A
@@ -49,9 +48,7 @@ test('repository-crawler-for-personal-account-installation', async () => {
   await crawlAccountContents(appState, githubInstallationClient, cicadaTestUserInstallation, 3)
 
   // A
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repositories'])).toEqual([
-    buildGitHubRepoItem(testPersonalTestRepo)
-  ])
+  expect(appState.getAllFromTable('github-repositories')).toEqual([buildGitHubRepoItem(testPersonalTestRepo)])
 })
 
 test('repository-crawler-for-org-installation', async () => {
@@ -112,7 +109,7 @@ test('repository-crawler-for-org-installation', async () => {
   await crawlAccountContents(appState, githubInstallationClient, cicadaTestOrgInstallation, 3)
 
   // A
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repositories'])).toEqual([
+  expect(appState.getAllFromTable('github-repositories')).toEqual([
     buildGitHubRepoItem(testOrgTestRepoOne),
     buildGitHubRepoItem(testOrgTestRepoTwo)
   ])

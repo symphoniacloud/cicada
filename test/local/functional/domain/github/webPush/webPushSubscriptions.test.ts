@@ -57,7 +57,7 @@ test('web push subscribe', async () => {
     },
     statusCode: 200
   })
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['web-push-subscriptions'])).toEqual([
+  expect(appState.getAllFromTable('web-push-subscriptions')).toEqual([
     buildWebPushSubscription(testTestUserPushSubscription)
   ])
 })
@@ -69,7 +69,7 @@ test('web push unsubscribe', async () => {
     buildWebPushSubscription(testTestUserPushSubscription)
   )
   // This should be deleted
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['web-push-subscriptions'])).toEqual([
+  expect(appState.getAllFromTable('web-push-subscriptions')).toEqual([
     buildWebPushSubscription(testTestUserPushSubscription)
   ])
 
@@ -95,5 +95,5 @@ test('web push unsubscribe', async () => {
     },
     statusCode: 200
   })
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['web-push-subscriptions'])).toEqual([])
+  expect(appState.getAllFromTable('web-push-subscriptions')).toEqual([])
 })

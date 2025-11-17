@@ -36,10 +36,8 @@ test('user-crawler-for-personal-account-installation', async () => {
   await crawlUsers(appState, cicadaTestUserInstallation, githubInstallationClient)
 
   // A
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-users'])).toEqual([
-    buildGitHubUserItem(testTestUser)
-  ])
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-account-memberships'])).toEqual([
+  expect(appState.getAllFromTable('github-users')).toEqual([buildGitHubUserItem(testTestUser)])
+  expect(appState.getAllFromTable('github-account-memberships')).toEqual([
     buildGitHubAccountMembershipItem(testTestUserMembershipOfPersonalInstallation)
   ])
 })
@@ -67,12 +65,12 @@ test('user-crawler-for-org-installation', async () => {
   await crawlUsers(appState, cicadaTestOrgInstallation, githubInstallationClient)
 
   // A
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-users'])).toEqual([
+  expect(appState.getAllFromTable('github-users')).toEqual([
     buildGitHubUserItem(testTestUser),
     buildGitHubUserItem(testMikeRobertsUser)
   ])
   // '9786' membership no longer in table
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-account-memberships'])).toEqual([
+  expect(appState.getAllFromTable('github-account-memberships')).toEqual([
     buildGitHubAccountMembershipItem(testTestUserMembershipOfOrg),
     buildGitHubAccountMembershipItem(testMikeRobertsUserMembershipOfOrg)
   ])

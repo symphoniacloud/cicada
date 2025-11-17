@@ -7,7 +7,6 @@ import { cicadaTestOrgInstallation } from '../../../../../examples/cicada/github
 import { buildGitHubInstallationItem } from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
 
 import { fromRawGithubAppId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
-import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('installation-webhook-for-org-account-installation', async () => {
   // A
@@ -21,7 +20,7 @@ test('installation-webhook-for-org-account-installation', async () => {
   await githubWebhookInstallationProcessor(appState, JSON.stringify(example_installation_created))
 
   // A
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-installations'])).toEqual([
+  expect(appState.getAllFromTable('github-installations')).toEqual([
     buildGitHubInstallationItem(cicadaTestOrgInstallation)
   ])
   expect(appState.eventBridgeBus.sentEvents.length).toEqual(1)

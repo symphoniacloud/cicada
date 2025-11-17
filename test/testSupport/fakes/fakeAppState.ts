@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { AppState } from '../../../src/app/environment/AppState.js'
 import { FakeClock } from './fakeClock.js'
 import { FakeGithubClient } from './fakeGithubClient.js'
@@ -9,18 +7,14 @@ import { FakeCicadaConfig, fakeTableNames } from './fakeCicadaConfig.js'
 import { FakeS3Wrapper } from './fakeS3Wrapper.js'
 import { FakeEventBridgeBus } from './fakeEventBridgeBus.js'
 import { FakeWebPushWrapper } from './fakeWebPushWrapper.js'
-import { FakeDynamoDBInterface } from '@symphoniacloud/dynamodb-entity-store-testutils'
-import {
-  CICADA_TABLE_IDS,
-  CicadaTableId,
-  tableConfigurations
-} from '../../../src/multipleContexts/dynamoDBTables.js'
+import { FakeCicadaDynamoDB } from './fakeCicadaDynamoDB.js'
+import { CicadaTableId } from '../../../src/multipleContexts/dynamoDBTables.js'
 
 export class FakeAppState implements AppState {
   public config: FakeCicadaConfig
   public clock: FakeClock
   public githubClient: FakeGithubClient
-  public dynamoDB: FakeDynamoDBInterface
+  public dynamoDB: FakeCicadaDynamoDB
   public entityStore: AllEntitiesStore
   public eventBridgeBus: FakeEventBridgeBus
   public s3: FakeS3Wrapper
@@ -30,7 +24,7 @@ export class FakeAppState implements AppState {
     this.config = new FakeCicadaConfig()
     this.clock = new FakeClock()
     this.githubClient = new FakeGithubClient()
-    this.dynamoDB = new FakeDynamoDBInterface(fakeTableDefs())
+    this.dynamoDB = new FakeCicadaDynamoDB()
     this.entityStore = setupEntityStore(
       fakeTableNames,
       this.clock,
@@ -41,27 +35,9 @@ export class FakeAppState implements AppState {
     this.s3 = new FakeS3Wrapper()
     this.webPushWrapper = new FakeWebPushWrapper()
   }
-}
 
-function fakeTableDefs() {
-  return Object.fromEntries(CICADA_TABLE_IDS.map((id) => [fakeTableNames[id], fakeTableDefinition(id)]))
-}
-
-function fakeTableDefinition(id: CicadaTableId) {
-  const config = tableConfigurations[id]
-  return {
-    pkName: 'PK',
-    ...(config.hasSortKey ? { skName: 'SK' } : {}),
-    ...(config.hasGSI1
-      ? {
-          gsis: {
-            GSI1: {
-              pkName: 'GSI1PK',
-              skName: 'GSI1SK'
-            }
-          }
-        }
-      : {})
+  public getAllFromTable(id: CicadaTableId) {
+    return this.dynamoDB.getAllFromTable(fakeTableNames[id])
   }
 }
 

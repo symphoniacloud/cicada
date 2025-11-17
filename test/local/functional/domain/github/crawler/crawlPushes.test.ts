@@ -16,7 +16,6 @@ import {
 } from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
 
 import { fromRawGithubInstallationId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
-import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('repo-crawler-for-personal-account-installation', async () => {
   // A
@@ -34,10 +33,10 @@ test('repo-crawler-for-personal-account-installation', async () => {
   await crawlPushes(appState, testPersonalTestRepo, githubInstallationClient)
 
   // A
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repo-activity'])).toEqual([
+  expect(appState.getAllFromTable('github-repo-activity')).toEqual([
     buildGitHubPushItemInRepoActivity(testPersonalTestRepoPush)
   ])
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-latest-pushes-per-ref'])).toEqual([
+  expect(appState.getAllFromTable('github-latest-pushes-per-ref')).toEqual([
     buildGitHubPushItemInLatestPushPerRef(testPersonalTestRepoPush)
   ])
 })
@@ -63,10 +62,10 @@ test('crawl-pushes-for-org-with-no-commits', async () => {
   await crawlPushes(appState, testOrgTestRepoOne, githubInstallationClient)
 
   // A
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repo-activity'])).toEqual([
+  expect(appState.getAllFromTable('github-repo-activity')).toEqual([
     buildGitHubPushItemInRepoActivity(testOrgTestRepoOnePushTwo)
   ])
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-latest-pushes-per-ref'])).toEqual([
+  expect(appState.getAllFromTable('github-latest-pushes-per-ref')).toEqual([
     buildGitHubPushItemInLatestPushPerRef(testOrgTestRepoOnePushTwo)
   ])
 })

@@ -9,17 +9,16 @@ import {
   buildGitHubPushItemInLatestPushPerRef,
   buildGitHubPushItemInRepoActivity
 } from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
-import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('push-webhook', async () => {
   const appState = new FakeAppState()
 
   await githubWebhookRepoPushProcessor(appState, JSON.stringify(example_push))
 
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repo-activity'])).toEqual([
+  expect(appState.getAllFromTable('github-repo-activity')).toEqual([
     buildGitHubPushItemInRepoActivity(testOrgTestRepoOnePushFC94)
   ])
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-latest-pushes-per-ref'])).toEqual([
+  expect(appState.getAllFromTable('github-latest-pushes-per-ref')).toEqual([
     buildGitHubPushItemInLatestPushPerRef(testOrgTestRepoOnePushFC94)
   ])
 
@@ -36,7 +35,7 @@ test('push-no-head-webhook', async () => {
 
   await githubWebhookRepoPushProcessor(appState, JSON.stringify(example_push_no_head))
 
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repo-activity'])).toEqual([])
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-latest-pushes-per-ref'])).toEqual([])
+  expect(appState.getAllFromTable('github-repo-activity')).toEqual([])
+  expect(appState.getAllFromTable('github-latest-pushes-per-ref')).toEqual([])
   expect(appState.eventBridgeBus.sentEvents.length).toEqual(0)
 })

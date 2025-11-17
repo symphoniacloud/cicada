@@ -17,7 +17,6 @@ import {
 import { processRawRunEvents } from '../../../../../../src/app/domain/github/githubWorkflowRunEvent.js'
 
 import { RawGithubWorkflowRunEventSchema } from '../../../../../../src/app/ioTypes/RawGitHubSchemas.js'
-import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('repo-crawler-for-personal-account-installation', async () => {
   // A
@@ -32,11 +31,11 @@ test('repo-crawler-for-personal-account-installation', async () => {
   )
 
   // A
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repo-activity'])).toEqual([
+  expect(appState.getAllFromTable('github-repo-activity')).toEqual([
     buildGitHubWorkflowRunEventItemInRepoActivity(testPersonalTestRepoWorkflowRun),
     buildGitHubWorkflowRunItemInRepoActivity(testPersonalTestRepoWorkflowRun)
   ])
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-latest-workflow-runs'])).toEqual([
+  expect(appState.getAllFromTable('github-latest-workflow-runs')).toEqual([
     buildGitHubWorkflowRunEventInLatest(testPersonalTestRepoWorkflowRun)
   ])
 })
@@ -54,11 +53,11 @@ test('repo-crawler-for-org-installation', async () => {
   )
 
   // A
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repo-activity'])).toEqual([
+  expect(appState.getAllFromTable('github-repo-activity')).toEqual([
     buildGitHubWorkflowRunEventItemInRepoActivity(testOrgTestRepoOneWorkflowFromJsonRunOne),
     buildGitHubWorkflowRunItemInRepoActivity(testOrgTestRepoOneWorkflowFromJsonRunOne)
   ])
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-latest-workflow-runs'])).toEqual([
+  expect(appState.getAllFromTable('github-latest-workflow-runs')).toEqual([
     buildGitHubWorkflowRunEventInLatest(testOrgTestRepoOneWorkflowFromJsonRunOne)
   ])
 })

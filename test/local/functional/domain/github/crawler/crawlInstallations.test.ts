@@ -10,7 +10,6 @@ import { crawlInstallations } from '../../../../../../src/app/domain/github/craw
 import { buildGitHubInstallationItem } from '../../../../../testSupport/builders/dynamoDBItemBuilders.js'
 
 import { fromRawGithubAppId } from '../../../../../../src/app/domain/github/mappings/toFromRawGitHubIds.js'
-import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 
 test('app-crawler-for-personal-account-installation', async () => {
   // A
@@ -25,7 +24,7 @@ test('app-crawler-for-personal-account-installation', async () => {
   await crawlInstallations(appState)
 
   // A
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-installations'])).toEqual([
+  expect(appState.getAllFromTable('github-installations')).toEqual([
     buildGitHubInstallationItem(cicadaTestUserInstallation)
   ])
 })
@@ -43,7 +42,7 @@ test('app-crawler-for-org-installation', async () => {
   await crawlInstallations(appState)
 
   // A
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-installations'])).toEqual([
+  expect(appState.getAllFromTable('github-installations')).toEqual([
     buildGitHubInstallationItem(cicadaTestOrgInstallation)
   ])
 })

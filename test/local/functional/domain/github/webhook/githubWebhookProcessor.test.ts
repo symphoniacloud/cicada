@@ -69,11 +69,11 @@ test('run-event', async () => {
   })
 
   // Assert
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-repo-activity'])).toEqual([
+  expect(appState.getAllFromTable('github-repo-activity')).toEqual([
     buildGitHubWorkflowRunEventItemInRepoActivity(testOrgTestWorkflowOneFromJsonRun),
     buildGitHubWorkflowRunItemInRepoActivity(testOrgTestWorkflowOneFromJsonRun)
   ])
-  expect(appState.dynamoDB.getAllFromTable(fakeTableNames['github-latest-workflow-runs'])).toEqual([
+  expect(appState.getAllFromTable('github-latest-workflow-runs')).toEqual([
     buildGitHubWorkflowRunEventInLatest(testOrgTestWorkflowOneFromJsonRun)
   ])
 
