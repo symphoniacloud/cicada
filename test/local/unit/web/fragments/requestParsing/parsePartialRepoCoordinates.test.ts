@@ -3,44 +3,44 @@ import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes
 import { buildUserScopedRefData } from '../../../../../testSupport/builders/accountStructureBuilders.js'
 import { invalidRequestResponse } from '../../../../../../src/app/web/htmlResponses.js'
 import { parsePartialRepoKeyFromQueryString } from '../../../../../../src/app/web/fragments/requestParsing/parseFragmentQueryStrings.js'
-import { changeLogLevelToError, changeLogLevelToWarn } from '../../../../../testSupport/logging.js'
+import { withSuppressedWarningLogs } from '../../../../../testSupport/logging.js'
 
 test('Fails if invalid account ID', () => {
-  changeLogLevelToError()
-  const result = parsePartialRepoKeyFromQueryString({
-    ...createStubApiGatewayProxyEvent(),
-    username: '',
-    refData: buildUserScopedRefData(),
-    queryStringParameters: {
-      accountId: 'BAD',
-      repoId: 'GHRepo456'
+  withSuppressedWarningLogs(() => {
+    const result = parsePartialRepoKeyFromQueryString({
+      ...createStubApiGatewayProxyEvent(),
+      username: '',
+      refData: buildUserScopedRefData(),
+      queryStringParameters: {
+        accountId: 'BAD',
+        repoId: 'GHRepo456'
+      }
+    })
+    if (result.isSuccessResult) {
+      throw new Error('Should have been failure')
+    } else {
+      expect(result.failureResult).toEqual(invalidRequestResponse)
     }
   })
-  if (result.isSuccessResult) {
-    throw new Error('Should have been failure')
-  } else {
-    expect(result.failureResult).toEqual(invalidRequestResponse)
-  }
-  changeLogLevelToWarn()
 })
 
 test('Fails if invalid repo ID', () => {
-  changeLogLevelToError()
-  const result = parsePartialRepoKeyFromQueryString({
-    ...createStubApiGatewayProxyEvent(),
-    username: '',
-    refData: buildUserScopedRefData(),
-    queryStringParameters: {
-      accountId: 'GHAccount123',
-      repoId: 'BAD'
+  withSuppressedWarningLogs(() => {
+    const result = parsePartialRepoKeyFromQueryString({
+      ...createStubApiGatewayProxyEvent(),
+      username: '',
+      refData: buildUserScopedRefData(),
+      queryStringParameters: {
+        accountId: 'GHAccount123',
+        repoId: 'BAD'
+      }
+    })
+    if (result.isSuccessResult) {
+      throw new Error('Should have been failure')
+    } else {
+      expect(result.failureResult).toEqual(invalidRequestResponse)
     }
   })
-  if (result.isSuccessResult) {
-    throw new Error('Should have been failure')
-  } else {
-    expect(result.failureResult).toEqual(invalidRequestResponse)
-  }
-  changeLogLevelToWarn()
 })
 
 test('Success if no Account ID and Repo ID', () => {

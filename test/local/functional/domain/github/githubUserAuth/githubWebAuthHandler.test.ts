@@ -5,7 +5,7 @@ import { handleGitHubWebAuthRequest } from '../../../../../../src/app/domain/git
 import { fakeTableNames } from '../../../../../testSupport/fakes/fakeCicadaConfig.js'
 import { buildGitHubUserItem } from '../../../../../testSupport/fakes/itemBuilders.js'
 import { testTestUser } from '../../../../../examples/cicada/githubDomainObjects.js'
-import { changeLogLevelToError, changeLogLevelToWarn } from '../../../../../testSupport/logging.js'
+import { withSuppressedWarningLogs } from '../../../../../testSupport/logging.js'
 
 test('login', async () => {
   const response = await handleGitHubWebAuthRequest(
@@ -69,21 +69,21 @@ test('oauthCallback', async () => {
 })
 
 test('failedOauthCallback', async () => {
-  changeLogLevelToError()
-  const appState = new FakeAppState()
+  await withSuppressedWarningLogs(async () => {
+    const appState = new FakeAppState()
 
-  const response = await handleGitHubWebAuthRequest(
-    appState,
-    createStubApiGatewayProxyEvent({
-      httpMethod: 'GET',
-      path: '/github/auth/callback'
-    })
-  )
+    const response = await handleGitHubWebAuthRequest(
+      appState,
+      createStubApiGatewayProxyEvent({
+        httpMethod: 'GET',
+        path: '/github/auth/callback'
+      })
+    )
 
-  // Assert
-  expect(response.statusCode).toEqual(400)
-  expect(response.multiValueHeaders).toBeUndefined()
-  expect(response.body).toEqual(`<!doctype html>
+    // Assert
+    expect(response.statusCode).toEqual(400)
+    expect(response.multiValueHeaders).toBeUndefined()
+    expect(response.body).toEqual(`<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8"></meta>
@@ -114,7 +114,7 @@ test('failedOauthCallback', async () => {
     </div>
   </body>
 </html>`)
-  changeLogLevelToWarn()
+  })
 })
 
 test('logout', async () => {
@@ -136,15 +136,15 @@ test('logout', async () => {
 })
 
 test('invalidPath', async () => {
-  changeLogLevelToError()
-  const response = await handleGitHubWebAuthRequest(
-    new FakeAppState(),
-    createStubApiGatewayProxyEvent({
-      path: '/github/auth/other'
-    })
-  )
+  await withSuppressedWarningLogs(async () => {
+    const response = await handleGitHubWebAuthRequest(
+      new FakeAppState(),
+      createStubApiGatewayProxyEvent({
+        path: '/github/auth/other'
+      })
+    )
 
-  expect(response.statusCode).toEqual(404)
-  expect(response.body).toEqual('"Not Found"')
-  changeLogLevelToWarn()
+    expect(response.statusCode).toEqual(404)
+    expect(response.body).toEqual('"Not Found"')
+  })
 })

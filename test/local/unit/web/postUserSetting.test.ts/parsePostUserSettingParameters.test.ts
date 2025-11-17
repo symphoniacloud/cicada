@@ -3,7 +3,7 @@ import { createStubApiGatewayProxyEvent } from '../../../../testSupport/fakes/aw
 import { buildUserScopedRefData } from '../../../../testSupport/builders/accountStructureBuilders.js'
 import { invalidRequestResponse } from '../../../../../src/app/web/htmlResponses.js'
 import { parsePostUserSettingParameters } from '../../../../../src/app/web/fragments/postUserSetting.js'
-import { changeLogLevelToError, changeLogLevelToWarn } from '../../../../testSupport/logging.js'
+import { withSuppressedWarningLogs } from '../../../../testSupport/logging.js'
 
 test('Successful minimal parse', () => {
   const result = parsePostUserSettingParameters({
@@ -54,16 +54,16 @@ test('Successful full parse', () => {
 })
 
 test('Fails if no values in QS', () => {
-  changeLogLevelToError()
-  const result = parsePostUserSettingParameters({
-    ...createStubApiGatewayProxyEvent(),
-    username: '',
-    refData: buildUserScopedRefData()
+  withSuppressedWarningLogs(() => {
+    const result = parsePostUserSettingParameters({
+      ...createStubApiGatewayProxyEvent(),
+      username: '',
+      refData: buildUserScopedRefData()
+    })
+    if (result.isSuccessResult) {
+      throw new Error('Should have been a valid result')
+    } else {
+      expect(result.failureResult).toEqual(invalidRequestResponse)
+    }
   })
-  if (result.isSuccessResult) {
-    throw new Error('Should have been a valid result')
-  } else {
-    expect(result.failureResult).toEqual(invalidRequestResponse)
-  }
-  changeLogLevelToWarn()
 })

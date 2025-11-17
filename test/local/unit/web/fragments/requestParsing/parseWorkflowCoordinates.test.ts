@@ -2,23 +2,23 @@ import { expect, test } from 'vitest'
 import { createStubApiGatewayProxyEvent } from '../../../../../testSupport/fakes/awsStubs.js'
 import { buildUserScopedRefData } from '../../../../../testSupport/builders/accountStructureBuilders.js'
 import { invalidRequestResponse } from '../../../../../../src/app/web/htmlResponses.js'
-import { changeLogLevelToError, changeLogLevelToWarn } from '../../../../../testSupport/logging.js'
+import { withSuppressedWarningLogs } from '../../../../../testSupport/logging.js'
 
 import { parseWorkflowKeyFromQueryString } from '../../../../../../src/app/web/fragments/requestParsing/parseFragmentQueryStrings.js'
 
 test('Fails if no IDs', () => {
-  changeLogLevelToError()
-  const result = parseWorkflowKeyFromQueryString({
-    ...createStubApiGatewayProxyEvent(),
-    username: '',
-    refData: buildUserScopedRefData()
+  withSuppressedWarningLogs(() => {
+    const result = parseWorkflowKeyFromQueryString({
+      ...createStubApiGatewayProxyEvent(),
+      username: '',
+      refData: buildUserScopedRefData()
+    })
+    if (result.isSuccessResult) {
+      throw new Error('Should have been a valid result')
+    } else {
+      expect(result.failureResult).toEqual(invalidRequestResponse)
+    }
   })
-  if (result.isSuccessResult) {
-    throw new Error('Should have been a valid result')
-  } else {
-    expect(result.failureResult).toEqual(invalidRequestResponse)
-  }
-  changeLogLevelToWarn()
 })
 
 test('Get Account ID and Repo ID', () => {
