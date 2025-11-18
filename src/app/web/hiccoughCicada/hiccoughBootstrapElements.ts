@@ -1,5 +1,5 @@
-import { HiccoughContent } from '../hiccough/hiccoughElement.js'
-import { div } from '../hiccough/hiccoughElements.js'
+import { HiccoughContent } from '@symphoniacloud/hiccough'
+import { div } from '@symphoniacloud/hiccough'
 
 export function divRow(...content: HiccoughContent[]) {
   return div({ class: 'row' }, ...content)

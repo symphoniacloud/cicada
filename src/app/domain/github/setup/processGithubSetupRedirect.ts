@@ -10,7 +10,7 @@ import {
   SsmParamName
 } from '../../../../multipleContexts/ssmParams.js'
 import { logger } from '../../../util/logging.js'
-import { a, p } from '../../../web/hiccough/hiccoughElements.js'
+import { a, p } from '@symphoniacloud/hiccough'
 import { fromRawGithubAppId } from '../mappings/toFromRawGitHubIds.js'
 
 import { GitHubAccountType, GitHubAppId } from '../../../ioTypes/GitHubTypes.js'

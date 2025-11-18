@@ -1,5 +1,5 @@
 import { fragmentViewResult } from '../../viewResultWrappers.js'
-import { h3 } from '../../hiccough/hiccoughElements.js'
+import { h3 } from '@symphoniacloud/hiccough'
 import { githubAnchor } from '../../domainComponents/genericComponents.js'
 import { githubRepoUrl } from '../../domainComponents/repoElementComponents.js'
 

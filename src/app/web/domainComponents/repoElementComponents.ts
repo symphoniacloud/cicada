@@ -1,4 +1,4 @@
-import { a, td } from '../hiccough/hiccoughElements.js'
+import { a, td } from '@symphoniacloud/hiccough'
 import { githubAnchor } from './genericComponents.js'
 import { GitHubRepoSummary } from '../../ioTypes/GitHubTypes.js'
 

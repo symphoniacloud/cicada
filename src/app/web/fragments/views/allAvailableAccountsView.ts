@@ -1,6 +1,6 @@
 import { fragmentViewResult } from '../../viewResultWrappers.js'
 import { standardTable } from '../../domainComponents/genericComponents.js'
-import { td, tr } from '../../hiccough/hiccoughElements.js'
+import { td, tr } from '@symphoniacloud/hiccough'
 import { accountCell } from '../../domainComponents/accountComponents.js'
 
 import { ORGANIZATION_ACCOUNT_TYPE } from '../../../ioTypes/GitHubSchemas.js'

@@ -1,5 +1,5 @@
 import { Clock, displayDateTime } from '../../util/dateAndTime.js'
-import { td, tr } from '../hiccough/hiccoughElements.js'
+import { td, tr } from '@symphoniacloud/hiccough'
 import { latestCommitInPush } from '../../domain/github/githubPush.js'
 import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents.js'
 import { userCell } from './userComponents.js'

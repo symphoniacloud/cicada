@@ -1,4 +1,4 @@
-import { td } from '../hiccough/hiccoughElements.js'
+import { td } from '@symphoniacloud/hiccough'
 import { githubAnchor } from './genericComponents.js'
 
 export function userCell(actor?: { userName: string }) {

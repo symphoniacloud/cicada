@@ -5,7 +5,7 @@ import { handleGithubSetupRequest } from '../../domain/github/setup/appSetupHand
 import { GithubSetupAppState, githubSetupStartup } from '../../domain/github/setup/githubSetupAppState.js'
 import { githubAppIsReady } from '../../domain/github/setup/githubAppReadyCheck.js'
 import { pageViewResponse } from '../../web/viewResultWrappers.js'
-import { p } from '../../web/hiccough/hiccoughElements.js'
+import { p } from '@symphoniacloud/hiccough'
 
 let appState: GithubSetupAppState
 

@@ -1,5 +1,5 @@
 import { fragmentViewResult } from '../../viewResultWrappers.js'
-import { h3, p } from '../../hiccough/hiccoughElements.js'
+import { h3, p } from '@symphoniacloud/hiccough'
 
 import { GitHubWorkflowRunEvent } from '../../../ioTypes/GitHubTypes.js'
 

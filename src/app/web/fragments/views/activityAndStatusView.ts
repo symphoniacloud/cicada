@@ -3,8 +3,8 @@ import { fragmentViewResult } from '../../viewResultWrappers.js'
 import { standardTable } from '../../domainComponents/genericComponents.js'
 import { pushRow, PushRowOptions } from '../../domainComponents/pushComponents.js'
 import { activityIsFullWorkflowRunActivity } from '../../../domain/github/githubActivity.js'
-import { HiccoughElement } from '../../hiccough/hiccoughElement.js'
-import { a, i, p } from '../../hiccough/hiccoughElements.js'
+import { HiccoughElement } from '@symphoniacloud/hiccough'
+import { a, i, p } from '@symphoniacloud/hiccough'
 import { workflowRow, WorkflowRowOptions } from '../../domainComponents/workflowComponents.js'
 import {
   VisibleActivity,

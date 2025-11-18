@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import { fullTestPersonalTestRepoWorkflowRun } from '../../../../examples/cicada/githubDomainObjects.js'
 import { defaultFakeClock } from '../../../../testSupport/fakes/fakeClock.js'
-import { a, td, tr } from '../../../../../src/app/web/hiccough/hiccoughElements.js'
+import { a, td, tr } from '@symphoniacloud/hiccough'
 import { githubAnchor } from '../../../../../src/app/web/domainComponents/genericComponents.js'
 import { workflowRowForMode } from '../../../../../src/app/web/fragments/views/activityAndStatusView.js'
 

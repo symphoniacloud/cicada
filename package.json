@@ -56,6 +56,7 @@
     "@octokit/rest": "20.x",
     "@symphoniacloud/dynamodb-entity-store": "2.1.0-alpha.9",
     "@symphoniacloud/dynamodb-entity-store-testutils": "2.1.0-alpha.9",
+    "@symphoniacloud/hiccough": "0.1.0-alpha.3",
     "unzipper": "0.x",
     "url-pattern": "1.x",
     "web-push": "3.x",

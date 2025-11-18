@@ -1,4 +1,4 @@
-import { a, td, tr } from '../hiccough/hiccoughElements.js'
+import { a, td, tr } from '@symphoniacloud/hiccough'
 import { Clock, displayDateTime, durationAsStringFromMs } from '../../util/dateAndTime.js'
 import { githubAnchor } from './genericComponents.js'
 import { commitCell, repoCell } from './repoElementComponents.js'

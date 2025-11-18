@@ -1,7 +1,7 @@
-import { a, body, div, head, htmlPage, link, meta, p, script, title } from './hiccough/hiccoughElements.js'
-import { html } from './hiccough/hiccoughCore.js'
-import { element, HiccoughContent } from './hiccough/hiccoughElement.js'
-import { DOCTYPE_HTML5 } from './hiccough/hiccoughPage.js'
+import { a, body, div, head, htmlPage, link, meta, p, script, title } from '@symphoniacloud/hiccough'
+import { html } from '@symphoniacloud/hiccough'
+import { element, HiccoughContent } from '@symphoniacloud/hiccough'
+import { DOCTYPE_HTML5 } from '@symphoniacloud/hiccough'
 import { htmlOkResponse } from './htmlResponses.js'
 import { adminPageRoute } from './pages/adminPage.js'
 

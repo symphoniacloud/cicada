@@ -1,5 +1,5 @@
 import { pageViewResponse } from '../../viewResultWrappers.js'
-import { button, div, form, h1, h2, input, label, td, tr } from '../../hiccough/hiccoughElements.js'
+import { button, div, form, h1, h2, input, label, td, tr } from '@symphoniacloud/hiccough'
 import { colAuto } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
 import { standardTable } from '../../domainComponents/genericComponents.js'
 import { adminAddPublicAccountPageRoute } from '../adminAddPublicAccountPage.js'

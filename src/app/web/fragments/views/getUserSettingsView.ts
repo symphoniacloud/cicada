@@ -1,6 +1,6 @@
 import { fragmentViewResult } from '../../viewResultWrappers.js'
-import { b, div, h4, input, label } from '../../hiccough/hiccoughElements.js'
-import { HiccoughElement } from '../../hiccough/hiccoughElement.js'
+import { b, div, h4, input, label } from '@symphoniacloud/hiccough'
+import { HiccoughElement } from '@symphoniacloud/hiccough'
 import { colSm, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
 import {
   GitHubAccountId,
