@@ -2,6 +2,7 @@ import { AppState } from '../../../environment/AppState.js'
 import { logger } from '../../../util/logging.js'
 import crypto from 'node:crypto'
 import { githubWebhookInstallationProcessor } from './processors/githubWebhookInstallationProcessor.js'
+import { githubWebhookInstallationRepositoriesProcessor } from './processors/githubWebhookInstallationRepositoriesProcessor.js'
 import { IGNORE_WEBHOOK_EVENT_PROCESSOR, WebhookProcessor } from './WebhookProcessor.js'
 import { githubWebhookRepoPushProcessor } from './processors/githubWebhookRepoPushProcessor.js'
 import { githubWebhookWorkflowRunProcessor } from './processors/githubWebhookWorkflowRunProcessor.js'
@@ -24,6 +25,7 @@ export async function processGitHubWebhookFromS3Event(appState: AppState, event:
 
 const processors: Record<WebhookType, WebhookProcessor> = {
   installation: githubWebhookInstallationProcessor,
+  installation_repositories: githubWebhookInstallationRepositoriesProcessor,
   push: githubWebhookRepoPushProcessor,
   workflow_run: githubWebhookWorkflowRunProcessor,
   meta: IGNORE_WEBHOOK_EVENT_PROCESSOR,

@@ -29,6 +29,15 @@ export const RawGithubUserSchema = z.object({
   type: RawGithubTargetTypeSchema
 })
 
+// Minimal repository data from installation_repositories webhook
+export const RawGithubRepoFromWebhookSchema = z.object({
+  id: RawGitHubRepoIdSchema,
+  node_id: z.string(),
+  name: z.string(),
+  full_name: z.string(),
+  private: z.boolean()
+})
+
 export const RawGithubRepoSchema = z.object({
   id: RawGitHubRepoIdSchema,
   name: z.string(),

@@ -3,12 +3,22 @@ import { z } from 'zod'
 import {
   RawGithubInstallationSchema,
   RawGithubPushFromWebhookSchemaWithPossibleNoHead,
+  RawGithubRepoFromWebhookSchema,
   RawGithubWorkflowRunEventSchema
 } from './RawGitHubSchemas.js'
 
 export const GitHubWebhookInstallationSchema = JSONFromStringSchema.pipe(
   z.object({
     installation: RawGithubInstallationSchema
+  })
+)
+
+export const GitHubWebhookInstallationRepositoriesSchema = JSONFromStringSchema.pipe(
+  z.object({
+    action: z.literal(['added', 'removed']),
+    installation: RawGithubInstallationSchema,
+    repositories_added: z.array(RawGithubRepoFromWebhookSchema),
+    repositories_removed: z.array(RawGithubRepoFromWebhookSchema)
   })
 )
 
@@ -26,6 +36,7 @@ export const GitHubWebhookWorkflowRunEventSchema = JSONFromStringSchema.pipe(
 // 'installation' is always fired for a GitHub App
 export const WebhookTypeSchema = z.literal([
   'installation',
+  'installation_repositories',
   'meta',
   'organization',
   'push',
