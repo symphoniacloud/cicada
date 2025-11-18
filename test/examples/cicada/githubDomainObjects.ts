@@ -206,6 +206,19 @@ export const testOrgTestWorkflowOneFromJson: GitHubWorkflow = {
   workflowUpdatedAt: '2024-03-05T18:01:40Z'
 }
 
+export const testOrgTestWorkflowOneFromWebhook: GitHubWorkflow = {
+  ...testOrgTestWorkflowOneFromJsonSummary,
+  workflowState: 'active',
+  workflowPath: '.github/workflows/test.yml',
+  workflowUrl: 'https://api.github.com/repos/cicada-test-org/org-test-repo-one/actions/workflows/88647110',
+  workflowHtmlUrl:
+    'https://github.com/cicada-test-org/org-test-repo-one/blob/main/.github/workflows/test.yml',
+  workflowBadgeUrl:
+    'https://github.com/cicada-test-org/org-test-repo-one/workflows/Test%20Repo%20One%20Workflow/badge.svg',
+  workflowCreatedAt: '2024-03-06T17:00:39.000Z',
+  workflowUpdatedAt: '2024-03-06T17:00:39.000Z'
+}
+
 export const testOrgTestWorkflowOneFromJsonRun: GitHubWorkflowRunEvent = {
   ...testOrgTestWorkflowOneFromJsonSummary,
   actor: {
