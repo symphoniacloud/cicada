@@ -42,13 +42,13 @@ test('get-user-settings-html', async () => {
         <div class="col-sm-6"></div>
         <div class="col-sm-3">
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&setting=visible&enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619"></input>
+            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&amp;setting=visible&amp;enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619">
             <label class="form-check-label" for="flexSwitchCheckChecked">Show</label>
           </div>
         </div>
         <div class="col-sm-3">
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&setting=notify&enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619"></input>
+            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&amp;setting=notify&amp;enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619">
             <label class="form-check-label" for="flexSwitchCheckChecked">Notify</label>
           </div>
         </div>
@@ -68,13 +68,13 @@ test('get-user-settings-html', async () => {
         <div class="col-sm-6">org-test-repo-one</div>
         <div class="col-sm-3">
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&repoId=GHRepo768206479&setting=visible&enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619-GHRepo768206479"></input>
+            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&amp;repoId=GHRepo768206479&amp;setting=visible&amp;enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619-GHRepo768206479">
             <label class="form-check-label" for="flexSwitchCheckChecked">Show</label>
           </div>
         </div>
         <div class="col-sm-3">
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&repoId=GHRepo768206479&setting=notify&enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619-GHRepo768206479"></input>
+            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&amp;repoId=GHRepo768206479&amp;setting=notify&amp;enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619-GHRepo768206479">
             <label class="form-check-label" for="flexSwitchCheckChecked">Notify</label>
           </div>
         </div>
@@ -90,13 +90,13 @@ test('get-user-settings-html', async () => {
         <div class="col-sm-4">Test Workflow</div>
         <div class="col-sm-3">
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&repoId=GHRepo768206479&workflowId=GHWorkflow88508779&setting=visible&enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619-GHRepo768206479-GHWorkflow88508779"></input>
+            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&amp;repoId=GHRepo768206479&amp;workflowId=GHWorkflow88508779&amp;setting=visible&amp;enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619-GHRepo768206479-GHWorkflow88508779">
             <label class="form-check-label" for="flexSwitchCheckChecked">Show</label>
           </div>
         </div>
         <div class="col-sm-3">
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&repoId=GHRepo768206479&workflowId=GHWorkflow88508779&setting=notify&enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619-GHRepo768206479-GHWorkflow88508779"></input>
+            <input class="form-check-input" type="checkbox" role="switch" checked="true" hx-post="/app/fragment/userSetting?accountId=GHAccount162483619&amp;repoId=GHRepo768206479&amp;workflowId=GHWorkflow88508779&amp;setting=notify&amp;enabled=false" hx-swap="outerHTML" hx-target="closest #settings-GHAccount162483619-GHRepo768206479-GHWorkflow88508779">
             <label class="form-check-label" for="flexSwitchCheckChecked">Notify</label>
           </div>
         </div>

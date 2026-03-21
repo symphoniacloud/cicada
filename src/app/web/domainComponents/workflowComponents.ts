@@ -1,4 +1,4 @@
-import { a, td, tr } from '@symphoniacloud/hiccough'
+import { a, td, tr, raw } from '@symphoniacloud/hiccough'
 import { Clock, displayDateTime, durationAsStringFromMs } from '../../util/dateAndTime.js'
 import { githubAnchor } from './genericComponents.js'
 import { commitCell, repoCell } from './repoElementComponents.js'
@@ -42,7 +42,7 @@ export function workflowRow(clock: Clock, event: FullGitHubWorkflowRunEvent, opt
     showRepo ? repoCell(event) : undefined,
     showWorkflow ? workflowCell(event) : undefined,
     showDescription ? undefined : td(statusMessage(runStatus, event)),
-    td(displayDateTime(clock, event.runEventUpdatedAt), '&nbsp;', githubAnchor(event.runHtmlUrl)),
+    td(displayDateTime(clock, event.runEventUpdatedAt), raw('&nbsp;'), githubAnchor(event.runHtmlUrl)),
     showElapsed ? td(durationAsStringFromMs(elapsedTimeMs(event))) : undefined,
     userCell(event.actor),
     commitCell({
@@ -79,7 +79,7 @@ function workflowCell(event: FullGitHubWorkflowRunEvent) {
       `/workflow?accountId=${event.accountId}&repoId=${event.repoId}&workflowId=${event.workflowId}`,
       event.workflowName
     ),
-    '&nbsp;',
+    raw('&nbsp;'),
     githubAnchor(event.workflowHtmlUrl)
   )
 }

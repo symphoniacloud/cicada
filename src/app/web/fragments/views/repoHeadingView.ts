@@ -1,5 +1,5 @@
 import { fragmentViewResult } from '../../viewResultWrappers.js'
-import { h3 } from '@symphoniacloud/hiccough'
+import { h3, raw } from '@symphoniacloud/hiccough'
 import { githubAnchor } from '../../domainComponents/genericComponents.js'
 import { githubRepoUrl } from '../../domainComponents/repoElementComponents.js'
 
@@ -10,5 +10,9 @@ export function createRepoHeadingResponse(repo: GithubRepoStructure) {
 }
 
 export function repoHeadingElement(repo: GithubRepoStructure) {
-  return h3(`Repository: ${repo.accountName}/${repo.repoName}`, `&nbsp;`, githubAnchor(githubRepoUrl(repo)))
+  return h3(
+    `Repository: ${repo.accountName}/${repo.repoName}`,
+    raw('&nbsp;'),
+    githubAnchor(githubRepoUrl(repo))
+  )
 }

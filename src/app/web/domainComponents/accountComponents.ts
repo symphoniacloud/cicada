@@ -1,4 +1,4 @@
-import { a, td } from '@symphoniacloud/hiccough'
+import { a, td, raw } from '@symphoniacloud/hiccough'
 import { githubAnchor } from './genericComponents.js'
 
 import { GitHubAccountSummary } from '../../ioTypes/GitHubTypes.js'
@@ -6,7 +6,7 @@ import { GitHubAccountSummary } from '../../ioTypes/GitHubTypes.js'
 export function accountCell(account: GitHubAccountSummary) {
   return td(
     a(`/account?id=${account.accountId}`, account.accountName),
-    '&nbsp;',
+    raw('&nbsp;'),
     accountGithubAnchor(account)
   )
 }

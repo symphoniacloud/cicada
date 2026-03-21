@@ -1,8 +1,8 @@
 import { a, table, tbody, th, thead, tr } from '@symphoniacloud/hiccough'
-import { HiccoughElement } from '@symphoniacloud/hiccough'
+import { HiccoughElement, raw } from '@symphoniacloud/hiccough'
 
 export function githubAnchor(target: string) {
-  return a(target, `<i class='bi bi-github' style='color: #6e5494'></i>`)
+  return a(target, raw(`<i class='bi bi-github' style='color: #6e5494'></i>`))
 }
 
 export function standardTable(columnTitles: string[], rows: HiccoughElement[]) {

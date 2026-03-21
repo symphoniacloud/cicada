@@ -1,5 +1,5 @@
 import { pageViewResponse } from '../../viewResultWrappers.js'
-import { button, div, form, h1, h2, input, label, td, tr } from '@symphoniacloud/hiccough'
+import { button, div, form, h1, h2, input, label, td, tr, raw } from '@symphoniacloud/hiccough'
 import { colAuto } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
 import { standardTable } from '../../domainComponents/genericComponents.js'
 import { adminAddPublicAccountPageRoute } from '../adminAddPublicAccountPage.js'
@@ -15,7 +15,9 @@ export function createAdminPageResponse(publicAccounts: GitHubAccountSummary[]) 
       standardTable(['Account', 'Type'], publicAccounts.map(accountRow)),
       div(
         { class: 'alert alert-warning', role: 'alert' },
-        '<b>Careful!</b> If you add large public accounts, or many public accounts, you may have problems with Cicada being rate limited by GitHub while accessing the GitHub API.'
+        raw(
+          '<b>Careful!</b> If you add large public accounts, or many public accounts, you may have problems with Cicada being rate limited by GitHub while accessing the GitHub API.'
+        )
       ),
       form(
         { class: 'row mt-3' },

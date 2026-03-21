@@ -1,5 +1,5 @@
 import { fragmentViewResult } from '../../viewResultWrappers.js'
-import { b, div, h4, input, label } from '@symphoniacloud/hiccough'
+import { b, div, h4, input, label, raw } from '@symphoniacloud/hiccough'
 import { HiccoughElement } from '@symphoniacloud/hiccough'
 import { colSm, divRow } from '../../hiccoughCicada/hiccoughBootstrapElements.js'
 import {
@@ -71,7 +71,7 @@ export function repoControlsRow(repoKey: GitHubRepoKey, repoSettings: Displayabl
         workflowControlsRow({ ...repoKey, workflowId: workflowId as GitHubWorkflowId }, workflowSettings)
       )
     }
-    workflowRows.push(divRow('&nbsp;'))
+    workflowRows.push(divRow(raw('&nbsp;')))
   }
 
   const { accountId, repoId } = repoKey

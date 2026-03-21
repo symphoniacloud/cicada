@@ -1,5 +1,5 @@
 import { Clock, displayDateTime } from '../../util/dateAndTime.js'
-import { td, tr } from '@symphoniacloud/hiccough'
+import { td, tr, raw } from '@symphoniacloud/hiccough'
 import { latestCommitInPush } from '../../domain/github/githubPush.js'
 import { commitCell, githubRepoUrl, repoCell } from './repoElementComponents.js'
 import { userCell } from './userComponents.js'
@@ -31,7 +31,7 @@ function repoCellForPush(push: GitHubPush) {
 
 function branchCell(push: GitHubRepoSummary & Pick<GitHubPush, 'ref'>) {
   const branchName = push.ref.split('/')[2]
-  return td(branchName, `&nbsp;`, githubAnchor(`${githubRepoUrl(push)}/tree/${branchName}`))
+  return td(branchName, raw('&nbsp;'), githubAnchor(`${githubRepoUrl(push)}/tree/${branchName}`))
 }
 
 function commitCellForPush(push: GitHubPush) {

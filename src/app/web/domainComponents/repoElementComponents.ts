@@ -1,4 +1,4 @@
-import { a, td } from '@symphoniacloud/hiccough'
+import { a, td, raw } from '@symphoniacloud/hiccough'
 import { githubAnchor } from './genericComponents.js'
 import { GitHubRepoSummary } from '../../ioTypes/GitHubTypes.js'
 
@@ -10,7 +10,11 @@ export function repoCell({
 }: GitHubRepoSummary & {
   repoHtmlUrl: string
 }) {
-  return td(a(`/repo?accountId=${accountId}&repoId=${repoId}`, repoName), '&nbsp;', githubAnchor(repoHtmlUrl))
+  return td(
+    a(`/repo?accountId=${accountId}&repoId=${repoId}`, repoName),
+    raw('&nbsp;'),
+    githubAnchor(repoHtmlUrl)
+  )
 }
 
 export function githubRepoUrl({
@@ -30,7 +34,7 @@ export function commitCell(
   const { repoHtmlUrl, message, sha } = event
   return td(
     message.length < 40 ? message : `${message.substring(0, 40)}...`,
-    '&nbsp;',
+    raw('&nbsp;'),
     githubAnchor(`${repoHtmlUrl ?? githubRepoUrl(event)}/commit/${sha}`)
   )
 }

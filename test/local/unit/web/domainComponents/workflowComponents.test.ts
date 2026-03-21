@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import { fullTestPersonalTestRepoWorkflowRun } from '../../../../examples/cicada/githubDomainObjects.js'
 import { defaultFakeClock } from '../../../../testSupport/fakes/fakeClock.js'
-import { a, td, tr } from '@symphoniacloud/hiccough'
+import { a, raw, td, tr } from '@symphoniacloud/hiccough'
 import { githubAnchor } from '../../../../../src/app/web/domainComponents/genericComponents.js'
 import { workflowRowForMode } from '../../../../../src/app/web/fragments/views/activityAndStatusView.js'
 
@@ -11,7 +11,7 @@ test('successful row, all Repos', () => {
       { class: 'table-success' },
       td(
         a(`/repo?accountId=GHAccount162360409&repoId=GHRepo767679529`, 'personal-test-repo'),
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo')
       ),
       td(
@@ -19,20 +19,20 @@ test('successful row, all Repos', () => {
           `/workflow?accountId=GHAccount162360409&repoId=GHRepo767679529&workflowId=GHWorkflow88508779`,
           'Test Workflow'
         ),
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
       td('Success'),
       td(
         '2024-03-05T18:01:40Z',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
       ),
       td('16 seconds'),
-      td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
+      td('cicada-test-user', raw('&nbsp;'), githubAnchor(`https://github.com/cicada-test-user`)),
       td(
         'Test Workflow',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor(
           'https://github.com/cicada-test-user/personal-test-repo/commit/dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c'
         )
@@ -51,18 +51,18 @@ test('successful run, repo activity', () => {
           `/workflow?accountId=GHAccount162360409&repoId=GHRepo767679529&workflowId=GHWorkflow88508779`,
           'Test Workflow'
         ),
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
       td(
         '2024-03-05T18:01:40Z',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
       ),
-      td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
+      td('cicada-test-user', raw('&nbsp;'), githubAnchor(`https://github.com/cicada-test-user`)),
       td(
         'Test Workflow',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor(
           'https://github.com/cicada-test-user/personal-test-repo/commit/dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c'
         )
@@ -82,7 +82,7 @@ test('unsuccessful run, all Repos', () => {
       { class: 'table-danger' },
       td(
         a(`/repo?accountId=GHAccount162360409&repoId=GHRepo767679529`, 'personal-test-repo'),
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo')
       ),
       td(
@@ -90,20 +90,20 @@ test('unsuccessful run, all Repos', () => {
           `/workflow?accountId=GHAccount162360409&repoId=GHRepo767679529&workflowId=GHWorkflow88508779`,
           'Test Workflow'
         ),
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
       td('Failure'),
       td(
         '2024-03-05T18:01:40Z',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
       ),
       td('16 seconds'),
-      td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
+      td('cicada-test-user', raw('&nbsp;'), githubAnchor(`https://github.com/cicada-test-user`)),
       td(
         'Test Workflow',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor(
           'https://github.com/cicada-test-user/personal-test-repo/commit/dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c'
         )
@@ -127,18 +127,18 @@ test('failed run, repo Activity', () => {
           `/workflow?accountId=GHAccount162360409&repoId=GHRepo767679529&workflowId=GHWorkflow88508779`,
           'Test Workflow'
         ),
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
       td(
         '2024-03-05T18:01:40Z',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
       ),
-      td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
+      td('cicada-test-user', raw('&nbsp;'), githubAnchor(`https://github.com/cicada-test-user`)),
       td(
         'Test Workflow',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor(
           'https://github.com/cicada-test-user/personal-test-repo/commit/dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c'
         )
@@ -159,7 +159,7 @@ test('in progress run, all repos', () => {
       { class: 'table-warning' },
       td(
         a(`/repo?accountId=GHAccount162360409&repoId=GHRepo767679529`, 'personal-test-repo'),
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo')
       ),
       td(
@@ -167,20 +167,20 @@ test('in progress run, all repos', () => {
           `/workflow?accountId=GHAccount162360409&repoId=GHRepo767679529&workflowId=GHWorkflow88508779`,
           'Test Workflow'
         ),
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/workflows/test.yml')
       ),
       td('In Progress'),
       td(
         '2024-03-05T18:01:40Z',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
       ),
       td('16 seconds'),
-      td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
+      td('cicada-test-user', raw('&nbsp;'), githubAnchor(`https://github.com/cicada-test-user`)),
       td(
         'Test Workflow',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor(
           'https://github.com/cicada-test-user/personal-test-repo/commit/dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c'
         )
@@ -202,14 +202,14 @@ test('queued run, workflow activity', () => {
       td('In Progress (queued)'),
       td(
         '2024-03-05T18:01:40Z',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
       ),
       td('16 seconds'),
-      td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
+      td('cicada-test-user', raw('&nbsp;'), githubAnchor(`https://github.com/cicada-test-user`)),
       td(
         'Test Workflow',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor(
           'https://github.com/cicada-test-user/personal-test-repo/commit/dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c'
         )
@@ -231,14 +231,14 @@ test('in progress run, workflow activity', () => {
       td('In Progress'),
       td(
         '2024-03-05T18:01:40Z',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor('https://github.com/cicada-test-user/personal-test-repo/actions/runs/8160866530')
       ),
       td('16 seconds'),
-      td('cicada-test-user', `&nbsp;`, githubAnchor(`https://github.com/cicada-test-user`)),
+      td('cicada-test-user', raw('&nbsp;'), githubAnchor(`https://github.com/cicada-test-user`)),
       td(
         'Test Workflow',
-        '&nbsp;',
+        raw('&nbsp;'),
         githubAnchor(
           'https://github.com/cicada-test-user/personal-test-repo/commit/dfb5cb80ad3ce5a19a5020b4645696b2d6b4d94c'
         )
