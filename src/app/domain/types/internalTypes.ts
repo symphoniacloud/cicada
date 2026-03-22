@@ -57,8 +57,7 @@ export interface Displayable {
 }
 
 export interface DisplayableGithubAccountSettings
-  extends CalculatedVisibleAndNotifyConfigurable,
-    Displayable {
+  extends CalculatedVisibleAndNotifyConfigurable, Displayable {
   repos: Record<GitHubRepoId, DisplayableGithubRepoSettings>
 }
 

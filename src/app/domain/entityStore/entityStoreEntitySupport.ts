@@ -1,13 +1,18 @@
 import { Entity, entityFromPkOnlyEntity, PKOnlyEntity } from '@symphoniacloud/dynamodb-entity-store'
 import { EntityType } from './entityTypes.js'
 
-export interface CicadaEntity<TItem extends TPKSource & TSKSource, TPKSource, TSKSource>
-  extends Entity<TItem, TPKSource, TSKSource> {
+export interface CicadaEntity<TItem extends TPKSource & TSKSource, TPKSource, TSKSource> extends Entity<
+  TItem,
+  TPKSource,
+  TSKSource
+> {
   type: EntityType
 }
 
-export interface CicadaPKOnlyEntity<TItem extends TPKSource, TPKSource>
-  extends PKOnlyEntity<TItem, TPKSource> {
+export interface CicadaPKOnlyEntity<TItem extends TPKSource, TPKSource> extends PKOnlyEntity<
+  TItem,
+  TPKSource
+> {
   type: EntityType
 }
 
