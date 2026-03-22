@@ -27,26 +27,23 @@ jobs:
       NO_HOTSWAP: 'true'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
-          cache: 'npm'
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE }}
           aws-region: us-east-1
 
       - name: Install dependencies
         shell: bash
-        run: >
-          npm install
+        run: npm install
 
       - name: Run all checks and deploy
         shell: bash
-        run: >
-          npm run local-checks && ./deploy.sh && npm run remote-tests
+        run: npm run local-checks && ./deploy.sh && npm run remote-tests
