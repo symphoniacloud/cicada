@@ -44,7 +44,7 @@ export class CicadaFunction extends NodejsFunction {
       entry: `../app/lambdaFunctions/${props.functionName}/lambda.ts`,
       tracing: lambda.Tracing.ACTIVE,
       bundling: {
-        target: 'es2022',
+        target: 'es2024',
         sourceMap: true,
         sourceMapMode: SourceMapMode.INLINE,
         sourcesContent: false
