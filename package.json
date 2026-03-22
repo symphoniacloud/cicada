@@ -1,6 +1,9 @@
 {
   "name": "cicada",
   "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "homepage": "https://github.com/symphoniacloud/cicada",
   "license": "MIT",
   "author": {
