@@ -23,6 +23,8 @@ export function calculateEnvironmentSettingsWithEnvironmentVariables(
     logFullEvents: !isProd,
     logLevel: isProd ? 'INFO' : 'DEBUG',
     logRetention: isProd ? RetentionDays.ONE_MONTH : RetentionDays.THREE_DAYS,
+    // If you want, change log removal policy
+    logRemovalPolicy: RemovalPolicy.DESTROY,
     parametersMaxAgeSeconds: isProd ? 300 : 5,
     storageResourceRemovalPolicy: isProd ? RemovalPolicy.RETAIN : RemovalPolicy.DESTROY,
     deployDetailedMonitoring: true // TODO - make this configurable

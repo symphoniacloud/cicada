@@ -11,6 +11,7 @@ export interface EnvironmentSettings {
   readonly logLevel: LogLevel
   readonly logFullEvents: boolean
   readonly logRetention: RetentionDays
+  readonly logRemovalPolicy: RemovalPolicy
   readonly parametersMaxAgeSeconds: number
   readonly storageResourceRemovalPolicy: RemovalPolicy
   readonly deployDetailedMonitoring: boolean

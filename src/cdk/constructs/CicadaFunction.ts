@@ -5,6 +5,7 @@ import { aws_lambda as lambda, Duration } from 'aws-cdk-lib'
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam'
 import { CicadaTableId } from '../../multipleContexts/dynamoDBTables.js'
 import { MainStackProps } from '../stacks/main/mainStackProps.js'
+import { LogGroup } from 'aws-cdk-lib/aws-logs'
 
 export interface CicadaFunctionProps extends MainStackProps {
   readonly functionName: string
@@ -33,7 +34,8 @@ export class CicadaFunction extends NodejsFunction {
 
   constructor(scope: Construct, props: CicadaFunctionProps) {
     // Full logical name starts with current scope, so capitalize first character of function name for ID
-    super(scope, `${props.functionName[0].toUpperCase()}${props.functionName.substring(1)}Function`, {
+    const id = `${props.functionName[0].toUpperCase()}${props.functionName.substring(1)}Function`
+    super(scope, id, {
       functionName: `${props.appName}-${props.functionName}`,
       memorySize: props.memorySize,
       timeout: Duration.seconds(props.timeoutSeconds),
@@ -47,6 +49,11 @@ export class CicadaFunction extends NodejsFunction {
         sourceMapMode: SourceMapMode.INLINE,
         sourcesContent: false
       },
+      logGroup: new LogGroup(scope, `${id}LogGroup`, {
+        logGroupName: `/${props.stackName}/${props.functionName}`,
+        retention: props.logRetention,
+        removalPolicy: props.logRemovalPolicy
+      }),
       environment: {
         POWERTOOLS_LOG_LEVEL: props.logLevel,
         POWERTOOLS_LOGGER_LOG_EVENT: `${props.logFullEvents}`,
@@ -54,8 +61,7 @@ export class CicadaFunction extends NodejsFunction {
         POWERTOOLS_PARAMETERS_MAX_AGE: `${props.parametersMaxAgeSeconds}`,
         POWERTOOLS_SERVICE_NAME: props.appName,
         APP_NAME: props.appName
-      },
-      logRetention: props.logRetention
+      }
     })
     this.addToRolePolicy(
       new PolicyStatement({
