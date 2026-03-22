@@ -7,7 +7,7 @@ import { AccessLogFormat, EndpointType, LogGroupLogDestination, RestApi } from '
 import { LogGroup } from 'aws-cdk-lib/aws-logs'
 import { CorsHttpMethod } from 'aws-cdk-lib/aws-apigatewayv2'
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets'
-import { HttpOrigin, S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins'
+import { HttpOrigin, S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins'
 import {
   AllowedMethods,
   BehaviorOptions,
@@ -79,10 +79,14 @@ function defineWebsiteBucket(scope: Construct, props: MainStackProps) {
     removalPolicy: RemovalPolicy.DESTROY
   })
 
-  new BucketDeployment(scope, 'DeployWebsite', {
+  new BucketDeployment(scope, 'DeployWebsiteBucketDeployment', {
     sources: [Source.asset('../../build/web')],
     destinationBucket: websiteBucket,
-    logRetention: props.logRetention
+    logGroup: new LogGroup(scope, 'DeployWebsiteLogGroup', {
+      logGroupName: `/${props.stackName}/deployWebsite`,
+      retention: props.logRetention,
+      removalPolicy: props.logRemovalPolicy
+    })
   })
 
   // Used in deploy script
@@ -117,7 +121,7 @@ function defineCloudfront(
     defaultRootObject: 'index.html',
     httpVersion: HttpVersion.HTTP2_AND_3,
     defaultBehavior: {
-      origin: new S3Origin(websiteBucket),
+      origin: S3BucketOrigin.withOriginAccessControl(websiteBucket),
       viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       // TOEventually - eventually will want caching enabled but with a default cache time
       cachePolicy: CachePolicy.CACHING_DISABLED,
