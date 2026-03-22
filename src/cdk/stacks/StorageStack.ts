@@ -28,7 +28,9 @@ function defineTable(scope: Construct, props: AllStacksProps, tableId: CicadaTab
   const table = new TableV2(scope, `${tableId}-table`, {
     tableName: `${props.appName}-${tableId}`,
     timeToLiveAttribute: 'ttl',
-    pointInTimeRecovery: true,
+    pointInTimeRecoverySpecification: {
+      pointInTimeRecoveryEnabled: true
+    },
     removalPolicy: props.storageResourceRemovalPolicy,
     partitionKey: {
       name: 'PK',
